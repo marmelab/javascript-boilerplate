@@ -70,8 +70,8 @@ test-api-functional:
 test-frontend-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/test/null-compiler,js:babel-core/register" --recursive app/{,**/}*.spec.js
 
-test-common-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive common/test/unit
+test-isomorphic-unit:
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive isomorphic/{,**/}*.spec.js
 
 start-node-server: node-server.PID
 node-server.PID:
@@ -103,7 +103,8 @@ build-test:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/webpack
 
 test-frontend-functional:
-	@NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
+	# TODO: restore when implemented
+	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 	@make build-test
 	@make start-selenium
 	@make start-node-server
@@ -117,10 +118,8 @@ test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
 	# TODO: restore when implemented
 	# make test-api-unit
+	make test-frontend-unit
 	# TODO: restore when implemented
-	# make test-frontend-unit
-	# TODO: restore when implemented
-	# make test-common-unit
+	# make test-isomorphic-unit
 	make test-api-functional
-	# TODO: restore when implemented
-	# make test-frontend-functional
+	make test-frontend-functional
