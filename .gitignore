@@ -1,0 +1,8 @@
+node_modules/*
+*.PID
+config/development.js
+config/production.js
+config/test.js
+build
+.fabricrc
+fabfile.pyc

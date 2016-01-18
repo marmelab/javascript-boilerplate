@@ -1,0 +1,36 @@
+language: node_js
+
+node_js:
+    - "4.1"
+
+env:
+    - CXX=g++-4.8
+
+sudo: false
+
+addons:
+    postgresql: "9.3"
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - gcc-4.8
+            - g++-4.8
+
+services:
+    - postgresql
+
+cache:
+    directories:
+        - node_modules
+
+before_script:
+    - psql -c 'create database travis_ci_test;' -U postgres
+    - cp -n ./config/test-dist.js ./config/test.js | true
+
+before_install:
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+
+install:
+    - "make --silent install"
