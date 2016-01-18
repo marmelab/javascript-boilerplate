@@ -1,28 +1,23 @@
-import Query from './query';
+import query from './query';
 
-export default class Manager {
-    constructor(model) {
-        this.model = model;
-        this.Query = Query;
-    }
-
+export default model => ({
     create(values) {
-        this.model.validate(values);
-        return new this.Query(this.model).create(values);
-    }
+        model.validate(values);
+        return query(model).create(values);
+    },
 
     find({selectedFields = '*', ...values}) {
-        this.model.validate(values);
-        return new this.Query(this.model).find({selectedFields, ...values});
-    }
+        model.validate(values);
+        return query(model).find({selectedFields, ...values});
+    },
 
     update(values) {
-        this.model.validate(values);
-        return new this.Query(this.modeel).update(values);
-    }
+        model.validate(values);
+        return query(model).update(values);
+    },
 
     delete(values) {
-        this.model.validate(values);
-        return new this.Query(this.model).delete(values);
-    }
-}
+        model.validate(values);
+        return query(model).delete(values);
+    },
+});

@@ -7,6 +7,6 @@ export default class DbError extends Error {
     }
 }
 
-export class ValidationError extends DbError {
+export class ValidationDbError extends DbError {
     constructor(msg) { super(msg); }
 }
