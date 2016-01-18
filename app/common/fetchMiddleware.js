@@ -1,6 +1,4 @@
-import fetch from 'isomorphic-fetch';
-
-export default store => next => action => {
+export default (fetch, sessionStorage) => store => next => action => {
     next(action);
     if (!action.request) {
         return;
@@ -15,7 +13,7 @@ export default store => next => action => {
     const config = {
         headers: {
             'Accept': 'application/json',
-            'Authorization': window.sessionStorage.getItem('token'),
+            'Authorization': sessionStorage.getItem('token'),
             'Content-Type': 'application/json; charset=utf-8',
         },
         method: 'GET',
