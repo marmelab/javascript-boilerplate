@@ -1,10 +1,14 @@
 import config from 'config';
 import path from 'path';
 import koa from 'koa';
+import koaCors from 'koa-cors';
+import koaMount from 'koa-mount';
+import koaHelmet from 'koa-helmet';
 import compress from 'koa-compressor';
 
-import db from './lib/db'
+import db from './lib/db';
 import logger from './lib/logger';
+import xdomainRoute from './lib/xdomainRoute';
 
 const env = process.env.NODE_ENV || 'development';
 const port = config.api.port;
@@ -60,7 +64,7 @@ app.context.onerror = function onError(err) {
             error: err.message,
             stack: err.stack,
             code: err.code,
-        });;
+        });
         this.type = 'json';
     } else {
         // just send the error message
@@ -83,6 +87,38 @@ app.on('error', (err, ctx = {}) => {
 });
 
 app.dbClient = db(config.db);
+
+// XmlHttpRequest shim for IE
+app.use(xdomainRoute);
+
+// Security headers
+app.use(koaHelmet());
+app.use(koaHelmet.csp({ directives: { defaultSrc: ["'self'"] } }));
+app.use(koaHelmet.frameguard('deny'));
+app.use(koaMount('/', koaCors({
+    credentials: true,
+    headers: [
+        'Authorization',
+        'Content-Disposition',
+        'Content-Type',
+        'X-Entities',
+    ],
+    methods: [
+        'DELETE',
+        'GET',
+        'POST',
+        'PUT',
+    ],
+    origin: (request) => {
+        const origin = request.get('origin');
+
+        if (!!origin.length && config.api.allowOrigin.indexOf(origin) === -1) {
+            return false;
+        }
+
+        return origin;
+    },
+})));
 
 if (env !== 'development') {
   // Hide powered-by koa
