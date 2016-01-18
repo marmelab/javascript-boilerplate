@@ -4,7 +4,7 @@ module.exports = function(appName) {
     return {
         root: path.resolve(__dirname + '/..'),
         alias: {
-            common: 'frontend/common'
+            common: 'app/common'
         },
     };
 }

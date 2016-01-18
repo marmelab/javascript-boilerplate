@@ -6,17 +6,17 @@ var sources = require('./sources');
 module.exports = {
     entry: {
         main: sources([
-        __dirname + '/../frontend/web/js/main.js',
-        __dirname + '/../frontend/web/css/main.css',
+        __dirname + '/../app/frontend/js/main.js',
+        __dirname + '/../app/frontend/css/main.css',
     ]),
     },
     module: {
-        loaders: loaders('web'),
+        loaders: loaders('frontend'),
     },
     output: {
-        filename: 'web/[name].js',
+        filename: 'frontend/[name].js',
         path: __dirname + '/../build',
     },
-    plugins: plugins('web'),
-    resolve: resolve('mobile'),
+    plugins: plugins('frontend'),
+    resolve: resolve('frontend'),
 };

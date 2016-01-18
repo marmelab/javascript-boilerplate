@@ -6,8 +6,8 @@ var sources = require('./sources');
 module.exports = {
     entry: {
         main: sources([
-        __dirname + '/../frontend/mobile/js/main.js',
-        __dirname + '/../frontend/mobile/css/main.css',
+        __dirname + '/../app/mobile/js/main.js',
+        __dirname + '/../app/mobile/css/main.css',
     ]),
     },
     module: {

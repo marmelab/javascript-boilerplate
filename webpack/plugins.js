@@ -18,7 +18,7 @@ module.exports = function(appName) {
         new HtmlWebpackPlugin({
             hash: true,
             filename: appName + 'index.html',
-            template: __dirname + '/../frontend/' + appName + 'index.html',
+            template: __dirname + '/../app/' + appName + 'index.html',
         }),
     ];
 };

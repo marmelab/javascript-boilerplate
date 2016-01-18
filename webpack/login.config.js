@@ -5,7 +5,7 @@ var sources = require('./sources');
 module.exports = {
     entry: {
         login: sources([
-            __dirname + '/../frontend/login.js',
+            __dirname + '/../app/login.js',
             'bootstrap/dist/css/bootstrap.css',
         ]),
     },

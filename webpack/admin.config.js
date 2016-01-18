@@ -5,7 +5,7 @@ var sources = require('./sources');
 module.exports = {
     entry: {
         main: sources([
-            __dirname + '/../frontend/admin/js/main.js',
+            __dirname + '/../app/admin/js/main.js',
         ]),
     },
     module: {
