@@ -6,7 +6,7 @@ import koaMount from 'koa-mount';
 import koaHelmet from 'koa-helmet';
 import compress from 'koa-compressor';
 
-import db from './lib/db';
+import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
 
@@ -86,8 +86,6 @@ app.on('error', (err, ctx = {}) => {
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
 });
 
-app.dbClient = db(config.db);
-
 // XmlHttpRequest shim for IE
 app.use(xdomainRoute);
 
@@ -119,6 +117,24 @@ app.use(koaMount('/', koaCors({
         return origin;
     },
 })));
+
+// DB connection
+app.use(function* (next) {
+    const pgConnection = yield dbClient(config.db);
+    this.client = pgConnection.client;
+
+    try {
+        yield next;
+    } catch (err) {
+        // Since there was an error somewhere down the middleware,
+        // then we need to throw this client away.
+        pgConnection.done(err);
+
+        throw err;
+    }
+
+    pgConnection.done();
+});
 
 if (env !== 'development') {
   // Hide powered-by koa

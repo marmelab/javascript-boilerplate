@@ -21,6 +21,7 @@
     "co": "~4.6.0",
     "co-body": "~4.0.0",
     "co-fs": "~1.2.0",
+    "co-pg": "~1.3.1",
     "config": "~1.16.0",
     "css-loader": "~0.16.0",
     "extract-text-webpack-plugin": "~0.8.2",
@@ -40,7 +41,11 @@
     "koa-route": "~2.4.2",
     "moment": "~2.10.6",
     "ng-admin": "marmelab/ng-admin",
+<<<<<<< c0758296ced14339b87c9da4ec7e2ff4d243ffe7
     "node-sass": "~3.4.2",
+=======
+    "node-postgres-named": "~2.4.0",
+>>>>>>> PostgreSQL connection
     "pg": "~4.4.3",
     "react": "~0.14.3",
     "react-dom": "~0.14.3",
