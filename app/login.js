@@ -1,5 +1,5 @@
 function redirect() {
-    window.location = '/frontend';
+    window.location = '/app';
 }
 
 // check for user already logged in
