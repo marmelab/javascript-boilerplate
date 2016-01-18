@@ -3,7 +3,7 @@ import path from 'path';
 import koa from 'koa';
 import compress from 'koa-compressor';
 
-import db from './lib/db'
+import dbClient from './lib/db/client';
 import logger from './lib/logger';
 
 const env = process.env.NODE_ENV || 'development';
@@ -60,7 +60,7 @@ app.context.onerror = function onError(err) {
             error: err.message,
             stack: err.stack,
             code: err.code,
-        });;
+        });
         this.type = 'json';
     } else {
         // just send the error message
@@ -82,7 +82,7 @@ app.on('error', (err, ctx = {}) => {
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
 });
 
-app.dbClient = db(config.db);
+app.dbClient = dbClient(config.db);
 
 if (env !== 'development') {
   // Hide powered-by koa
