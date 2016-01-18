@@ -1,6 +1,6 @@
 var apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
-var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
 var apiUrl = 'http://localhost:' + apiPort; // eslint-disable-line no-var
+var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
 
 module.exports = {
     admin: {
