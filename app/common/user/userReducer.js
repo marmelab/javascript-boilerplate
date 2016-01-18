@@ -1,9 +1,11 @@
-const initialState = {
-    id: window.sessionStorage.getItem('id'),
-    email: window.sessionStorage.getItem('email'),
-    token: window.sessionStorage.getItem('token'),
-};
+export default function(sessionStorage) {
+    const initialState = {
+        id: sessionStorage.getItem('id'),
+        email: sessionStorage.getItem('email'),
+        token: sessionStorage.getItem('token'),
+    };
 
-export default function actions(state = initialState, { type, payload }) {
-    return state;
+    return (state = initialState) => {
+        return state;
+    };
 }

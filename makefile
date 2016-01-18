@@ -68,7 +68,7 @@ test-api-functional:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/test/functional
 
 test-frontend-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/frontend/test/unit/null-compiler,js:babel-core/register" --recursive app/frontend/test/unit
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/test/null-compiler,js:babel-core/register" --recursive app/{,**/}*.spec.js
 
 test-common-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive common/test/unit
