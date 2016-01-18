@@ -83,21 +83,21 @@ stop-node-server: node-server.PID
 start-static-server: static-server.PID
 static-server.PID:
 	@echo "Starting static server"
-	@cd ./build && { python -m SimpleHTTPServer 8081 & echo $$! > ../$@; } && cd ..
+	@cd ./build && { ../node_modules/.bin/http-server -p 8081 & echo $$! > ../$@; } && cd ..
 stop-static-server: static-server.PID
 	@kill `cat $<` && rm $<
 
 start-selenium: selenium.PID
 selenium.PID:
 	@echo "Starting selenium server"
-	@./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
+	./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
 	@sleep 2
 stop-selenium: selenium.PID
 	@kill `cat $<` && rm $<
 	@echo "Selenium server stopped"
 
-nightwatch:
-	@NODE_ENV=test ./node_modules/.bin/babel-node ./node_modules/.bin/nightwatch --config="./app/frontend/test/nightwatch.json"
+webdriver:
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive app/{,**/}/functional/{,**/}*.js
 
 build-test:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/webpack
@@ -109,7 +109,8 @@ test-frontend-functional:
 	@make start-selenium
 	@make start-node-server
 	@make start-static-server
-	@make nightwatch
+	sleep 2
+	@make webdriver
 	@make stop-node-server
 	@make stop-static-server
 	@make stop-selenium
