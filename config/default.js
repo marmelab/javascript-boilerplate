@@ -1,13 +1,15 @@
-var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
 var apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
+var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
+var apiUrl = 'http://localhost:' + apiPort; // eslint-disable-line no-var
 
 module.exports = {
     admin: {
-        api_url: 'http://localhost:' + apiPort + '/admin/',
+        api_url: apiUrl + '/admin/',
     },
     api: {
         maxAge: 600,
         port: apiPort,
+        allowOrigin: [frontendUrl],
     },
     babel_ignore: /node_modules\/(?!admin-config|fakerest)/,
     logs: {
@@ -22,17 +24,26 @@ module.exports = {
     },
     max_event_listeners: 30,
     webpack_source: frontendUrl + '/',
-    allowOrigin: [frontendUrl],
     jwt: {
         privateKey: 'MY-VERY-PRIVATE-KEY',
     },
     frontend: {
-        api_url: 'http://localhost:' + apiPort + '/api',
+        api_url: apiUrl + '/api',
         enableDevTools: true,
     },
     security: {
         bcrypt: {
             salt_work_factor: 10, // higher is safer, but slower
+        },
+        xdomain: {
+            master: {
+                base_url: frontendUrl,
+            },
+            slave: {
+                base_url: apiUrl,
+                debug: true,
+                path: '/xdomain',
+            },
         },
     },
 };
