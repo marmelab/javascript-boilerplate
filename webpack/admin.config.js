@@ -4,8 +4,13 @@ var sources = require('./sources');
 
 module.exports = {
     entry: {
-        main: sources([
+        index: sources([
             __dirname + '/../app/admin/js/main.js',
+            __dirname + '/../app/admin/css/main.scss',
+        ]),
+        login: sources([
+            __dirname + '/../app/admin/js/login.js',
+            __dirname + '/../app/admin/css/login.scss',
         ]),
     },
     module: {

@@ -1,5 +1,5 @@
 function redirect() {
-    window.location = '/app';
+    window.location = '/admin';
 }
 
 // check for user already logged in

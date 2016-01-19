@@ -39,13 +39,17 @@ module.exports = function(appName) {
 
     if (process.env.NODE_ENV !== 'development') {
         loaders.push({
-            loader: ExtractTextPlugin.extract('css'),
-            test: /\.css$/,
+            loader: ExtractTextPlugin.extract('css!sass'),
+            test: /\.s?css$/,
         });
     } else {
         loaders.push({
-            loader: 'style!css',
+            loader: ExtractTextPlugin.extract('css'),
             test: /\.css$/,
+        });
+        loaders.push({
+            loader: ExtractTextPlugin.extract('css!sass'),
+            test: /\.scss$/,
         });
         loaders.push({
             loader: 'file?name=' + appName + '/[name].html',

@@ -5,10 +5,10 @@ var sources = require('./sources');
 
 module.exports = {
     entry: {
-        main: sources([
-        __dirname + '/../app/frontend/js/main.js',
-        __dirname + '/../app/frontend/css/main.css',
-    ]),
+        index: sources([
+            __dirname + '/../app/frontend/js/main.js',
+            __dirname + '/../app/frontend/css/main.scss',
+        ]),
     },
     module: {
         loaders: loaders('frontend'),
