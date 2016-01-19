@@ -11,9 +11,8 @@ describe('App', function() {
             .forBrowser('chrome')
             .build();
 
-        driver.get('http://localhost:8081/frontend');
-
-        driver.findElement(webdriver.By.className('title'))
+        driver.get('http://localhost:8081/frontend')
+            .then(() => driver.findElement(webdriver.By.className('title')))
             .then(element => element.getText())
             .then(text => {
                 expect(text).to.equal('New App');

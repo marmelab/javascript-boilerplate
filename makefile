@@ -90,8 +90,7 @@ stop-static-server: static-server.PID
 start-selenium: selenium.PID
 selenium.PID:
 	@echo "Starting selenium server"
-	./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
-	@sleep 2
+	xvfb-run --server-args="-screen 0, 1366x768x24" ./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
 stop-selenium: selenium.PID
 	@kill `cat $<` && rm $<
 	@echo "Selenium server stopped"
@@ -105,11 +104,11 @@ build-test:
 test-frontend-functional:
 	# TODO: restore when implemented
 	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
-	@make build-test
+	#@make build-test
 	@make start-selenium
 	@make start-node-server
 	@make start-static-server
-	sleep 2
+	@sleep 2
 	@make webdriver
 	@make stop-node-server
 	@make stop-static-server
@@ -123,4 +122,4 @@ test:
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
-	make test-frontend-functional
+	#make test-frontend-functional
