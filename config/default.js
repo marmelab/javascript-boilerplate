@@ -17,10 +17,12 @@ module.exports = {
         http: {},
     },
     db: {
+        driver: 'pg',
         host: 'DB_HOST',
+        port: 5432,
         user: 'DB_USER',
         password: 'DB_PASSWORD',
-        name: 'DB_NAME',
+        database: 'DB_NAME',
     },
     max_event_listeners: 30,
     webpack_source: frontendUrl + '/',

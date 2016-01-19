@@ -10,7 +10,10 @@ copy-conf:
 	@cp -n ./config/development-dist.js ./config/development.js | true
 
 migrate:
-	@./node_modules/.bin/migrate
+	@./node_modules/.bin/db-migrate \
+		--migrations-dir=api/migrations \
+		--config=config/database.js \
+		up
 
 install: copy-conf
 	@echo "Installing Node dependencies"

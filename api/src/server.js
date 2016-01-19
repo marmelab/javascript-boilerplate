@@ -10,6 +10,8 @@ import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
 
+import userApiRoutes from './users/userApiRoutes';
+
 const env = process.env.NODE_ENV || 'development';
 const port = config.api.port;
 
@@ -146,6 +148,8 @@ if (env !== 'development') {
   // gzip compression
     app.use(compress());
 }
+
+app.use(koaMount('/users', userApiRoutes));
 
 if (!module.parent || module.parent.filename.indexOf('api/index.js') !== -1) {
     app.listen(port);
