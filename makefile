@@ -71,9 +71,8 @@ run-frontend:
 		--hot  \
 		--inline
 
-# TODO: restore when implemented
-# test-api-unit:
-# 	@NODE_ENV=test ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/test/unit
+test-api-unit:
+	@NODE_ENV=test ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/
 
 test-api-functional:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/test/functional
@@ -127,9 +126,8 @@ test-frontend-functional:
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
-	# TODO: restore when implemented
-	# make test-api-unit
 	make test-frontend-unit
+	make test-api-unit
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
