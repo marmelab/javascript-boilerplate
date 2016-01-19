@@ -68,10 +68,10 @@ test-api-functional:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/test/functional
 
 test-frontend-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/frontend/test/unit/null-compiler,js:babel-core/register" --recursive app/frontend/test/unit
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/test/null-compiler,js:babel-core/register" --recursive app/{,**/}*.spec.js
 
-test-common-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive common/test/unit
+test-isomorphic-unit:
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive isomorphic/{,**/}*.spec.js
 
 start-node-server: node-server.PID
 node-server.PID:
@@ -83,32 +83,33 @@ stop-node-server: node-server.PID
 start-static-server: static-server.PID
 static-server.PID:
 	@echo "Starting static server"
-	@cd ./build && { python -m SimpleHTTPServer 8081 & echo $$! > ../$@; } && cd ..
+	@cd ./build && { ../node_modules/.bin/http-server -p 8081 & echo $$! > ../$@; } && cd ..
 stop-static-server: static-server.PID
 	@kill `cat $<` && rm $<
 
 start-selenium: selenium.PID
 selenium.PID:
 	@echo "Starting selenium server"
-	@./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
-	@sleep 2
+	xvfb-run --server-args="-screen 0, 1366x768x24" ./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & echo "$$!" > selenium.PID
 stop-selenium: selenium.PID
 	@kill `cat $<` && rm $<
 	@echo "Selenium server stopped"
 
-nightwatch:
-	@NODE_ENV=test ./node_modules/.bin/babel-node ./node_modules/.bin/nightwatch --config="./app/frontend/test/nightwatch.json"
+webdriver:
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive app/{,**/}/functional/{,**/}*.js
 
 build-test:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/webpack
 
 test-frontend-functional:
-	@NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
-	@make build-test
+	# TODO: restore when implemented
+	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
+	#@make build-test
 	@make start-selenium
 	@make start-node-server
 	@make start-static-server
-	@make nightwatch
+	@sleep 2
+	@make webdriver
 	@make stop-node-server
 	@make stop-static-server
 	@make stop-selenium
@@ -117,10 +118,8 @@ test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
 	# TODO: restore when implemented
 	# make test-api-unit
+	make test-frontend-unit
 	# TODO: restore when implemented
-	# make test-frontend-unit
-	# TODO: restore when implemented
-	# make test-common-unit
+	# make test-isomorphic-unit
 	make test-api-functional
-	# TODO: restore when implemented
-	# make test-frontend-functional
+	#make test-frontend-functional

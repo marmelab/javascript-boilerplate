@@ -61,6 +61,7 @@
     "xdomain": "~0.7.3"
   },
   "devDependencies": {
+    "babel-cli": "~6.4.0",
     "babel-core": "~6.4.0",
     "babel-eslint": "~5.0.0-beta6",
     "babel-loader": "~6.2.1",
@@ -76,6 +77,7 @@
     "eslint-plugin-react": "~3.5.1",
     "expect": "~1.11.1",
     "fakerest": "~1.0.1",
+    "http-server": "~0.8.5",
     "jsdom": "~6.5.1",
     "mocha": "~2.3.4",
     "nightwatch": "~0.8.4",
@@ -87,6 +89,7 @@
     "redux-devtools-log-monitor": "~1.0.2",
     "redux-mock-store": "0.0.3",
     "selenium-standalone": "~4.7.0",
+    "selenium-webdriver": "~2.48.2",
     "sinon": "2.0.0-pre",
     "webpack-dev-server": "~1.10.1"
   },

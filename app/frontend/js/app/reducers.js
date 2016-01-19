@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import { routerStateReducer as router } from 'redux-router';
 
-import user from 'common/user/userReducer';
+import userReducerFactory from 'common/user/userReducer';
 
 const rootReducer = combineReducers({
     router,
-    user,
+    user: userReducerFactory(window.sessionStorage),
 });
 
 export default rootReducer;

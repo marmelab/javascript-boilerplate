@@ -4,7 +4,8 @@ module.exports = function(appName) {
     return {
         root: path.resolve(__dirname + '/..'),
         alias: {
-            common: 'app/common'
+            common: 'app/common',
+            isomorphic: 'app/isomorphic',
         },
     };
 }
