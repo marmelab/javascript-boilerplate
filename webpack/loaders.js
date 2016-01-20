@@ -37,26 +37,18 @@ module.exports = function(appName) {
         loader: 'url-loader?limit=100000&mimetype=application/font-ttf',
     }];
 
-    if (process.env.NODE_ENV !== 'development') {
-        loaders.push({
-            loader: ExtractTextPlugin.extract('css!sass'),
-            test: /\.s?css$/,
-        });
-    } else {
-        loaders.push({
-            loader: ExtractTextPlugin.extract('css'),
-            test: /\.css$/,
-        });
-        loaders.push({
-            loader: ExtractTextPlugin.extract('css!sass'),
-            test: /\.scss$/,
-        });
+    if (process.env.NODE_ENV === 'development') {
         loaders.push({
             loader: 'file?name=' + appName + '/[name].html',
             test: /\.html$/,
             exclude: new RegExp('/node_modules|' + appName + '\/js/'),
         });
     }
+
+    loaders.push({
+        loader: ExtractTextPlugin.extract('css!sass'),
+        test: /\.s?css$/,
+    });
 
     return loaders;
 };
