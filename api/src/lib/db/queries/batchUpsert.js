@@ -14,9 +14,7 @@ export default (client, table, primaryFields, secondaryFields, autoIncrementFiel
             yield client.query_(`CREATE TEMPORARY TABLE ${tempTable} AS SELECT * FROM ${table} WHERE true = false;`);
             yield tempBatchInsert(entities);
 
-            const setQuery = secondaryFields.map(field => {
-                return `${field}=${tempTable}.${field}`;
-            });
+            const setQuery = secondaryFields.map(f => `${f}=${tempTable}.${f}`);
 
             const whereUpdateQuery = primaryFields
                 .map(field => `${table}.${field}=${tempTable}.${field}`)

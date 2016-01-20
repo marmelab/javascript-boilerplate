@@ -5,10 +5,7 @@ export default ({
             .reduce(
                 (fields, table) => {
                     if (table === 'composite') {
-                        return fields
-                            .concat(fieldMap[table].map(field => {
-                                return field.replace(/^.*AS\s+/, '');
-                            }));
+                        return fields.concat(fieldMap[table].map(f => f.replace(/^.*AS\s+/, '')));
                     }
                     return fields.concat(fieldMap[table]);
                 },
@@ -23,10 +20,7 @@ export default ({
                     if (table === 'composite') {
                         return fields.concat(fieldMap[table]);
                     }
-                    return fields
-                        .concat(fieldMap[table].map(field => {
-                            return `${table}.${field} AS ${field}`;
-                        }));
+                    return fields.concat(fieldMap[table].map(f => `${table}.${f} AS ${f}`));
                 },
                 []
             );

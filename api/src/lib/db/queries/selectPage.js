@@ -24,9 +24,7 @@ export default (client, tableName, exposedFields, searchableFields, sortableFiel
             const whereFilerParts = [];
             match = '%' + match + '%';
             params.match = match;
-            searchableFields.forEach(field => {
-                whereFilerParts.push(`${field}::text ILIKE $match`);
-            });
+            searchableFields.forEach(f => whereFilerParts.push(`${f}::text ILIKE $match`));
             whereParts.push(`(${whereFilerParts.join(' OR ')})`);
         }
 
