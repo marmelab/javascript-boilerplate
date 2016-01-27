@@ -65,7 +65,7 @@ run-api:
 
 run-frontend:
 	@./node_modules/.bin/webpack-dev-server  \
-		--quiet \
+		--no-info \
 		--colors \
 		--devtool cheap-module-inline-source-map \
 		--hot  \

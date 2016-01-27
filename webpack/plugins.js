@@ -12,16 +12,21 @@ module.exports = function(appName) {
             'FRONTEND__APP__ENABLE_DEV_TOOLS': JSON.stringify(config.frontend.enableDevTools),
         }),
         new ExtractTextPlugin(appName + '/[name].css', {
-            allChunks: true,
-        }),
-        new HtmlWebpackPlugin({
-            filename: appName + '/' + 'index.html',
-            template: __dirname + '/../app/' + appName + '/index.html',
-            hash: true,
+            allChunks: false,
         }),
     ].concat(appName === 'admin' ? [new HtmlWebpackPlugin({
+        filename: appName + '/' + 'index.html',
+        template: __dirname + '/../app/' + appName + '/index.html',
+        chunks: ['index'],
+        hash: true,
+    }), new HtmlWebpackPlugin({
         filename: appName + '/' + 'login.html',
         template: __dirname + '/../app/' + appName + '/login.html',
+        chunks: ['login'],
         hash: true,
-    })] : []);
+    })] : [new HtmlWebpackPlugin({
+        filename: appName + '/' + 'index.html',
+        template: __dirname + '/../app/' + appName + '/index.html',
+        hash: true,
+    })]);
 };
