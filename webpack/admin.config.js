@@ -1,12 +1,16 @@
 var loaders = require('./loaders');
 var plugins = require('./plugins');
-var sources = require('./sources');
 
 module.exports = {
     entry: {
-        main: sources([
+        index: [
             __dirname + '/../app/admin/js/main.js',
-        ]),
+            __dirname + '/../app/admin/css/main.scss',
+        ],
+        login: [
+            __dirname + '/../app/admin/js/login.js',
+            __dirname + '/../app/admin/css/login.scss',
+        ],
     },
     module: {
         loaders: loaders('admin'),

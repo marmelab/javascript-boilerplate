@@ -2,6 +2,10 @@
 import 'ng-admin';
 require('ng-admin/build/ng-admin.min.css');
 
+if (!window.sessionStorage.getItem('token')) {
+    window.location = '/admin/login.html';
+}
+
 const myApp = angular.module('myApp', ['ng-admin']);
 
 myApp.config(['NgAdminConfigurationProvider', (nga) => {
