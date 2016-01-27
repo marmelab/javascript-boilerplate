@@ -1,5 +1,9 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var sassOptions = [
+    'includePaths[]=./node_modules/compass-mixins/lib/',
+].join("\n");
+
 module.exports = function(appName) {
     var loaders = [{
         test: /\.jsx?$/,
@@ -37,16 +41,8 @@ module.exports = function(appName) {
         loader: 'url-loader?limit=100000&mimetype=application/font-ttf',
     }];
 
-    if (process.env.NODE_ENV === 'development') {
-        loaders.push({
-            loader: 'file?name=' + appName + '/[name].html',
-            test: /\.html$/,
-            exclude: new RegExp('/node_modules|' + appName + '\/js/'),
-        });
-    }
-
     loaders.push({
-        loader: ExtractTextPlugin.extract('css!sass'),
+        loader: ExtractTextPlugin.extract('css!sass?' + sassOptions),
         test: /\.s?css$/,
     });
 

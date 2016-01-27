@@ -6,7 +6,7 @@ module.exports = {
     entry: {
         main: [
             __dirname + '/../app/mobile/js/main.js',
-            __dirname + '/../app/mobile/css/main.css',
+            __dirname + '/../app/mobile/css/main.scss',
         ],
     },
     module: {
