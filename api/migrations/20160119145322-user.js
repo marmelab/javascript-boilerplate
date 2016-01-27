@@ -5,15 +5,13 @@
   * This enables us to not have to rely on NODE_PATH.
   */
 exports.up = function(db, callback) {
-    db.createTable.bind(db, 'users', {
+    db.createTable('users', {
         id: { type: 'int', primaryKey: true, autoIncrement: true },
         email: { type: 'string'},
         password: { type: 'string'},
-    });
-    callback();
+    }, callback);
 };
 
 exports.down = function(db, callback) {
-    db.dropTable.bind(db, 'users');
-    callback();
+    db.dropTable('users', callback);
 };
