@@ -6,9 +6,11 @@ import koaMount from 'koa-mount';
 import koaHelmet from 'koa-helmet';
 import compress from 'koa-compressor';
 
-import db from './lib/db';
+import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
+
+import userApiRoutes from './users/userApiRoutes';
 
 const env = process.env.NODE_ENV || 'development';
 const port = config.api.port;
@@ -86,8 +88,6 @@ app.on('error', (err, ctx = {}) => {
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
 });
 
-app.dbClient = db(config.db);
-
 // XmlHttpRequest shim for IE
 app.use(xdomainRoute);
 
@@ -120,6 +120,24 @@ app.use(koaMount('/', koaCors({
     },
 })));
 
+// DB connection
+app.use(function* (next) {
+    const pgConnection = yield dbClient(config.db);
+    this.client = pgConnection.client;
+
+    try {
+        yield next;
+    } catch (err) {
+        // Since there was an error somewhere down the middleware,
+        // then we need to throw this client away.
+        pgConnection.done(err);
+
+        throw err;
+    }
+
+    pgConnection.done();
+});
+
 if (env !== 'development') {
   // Hide powered-by koa
     app.use(function* hidePoweredBy(next) {
@@ -130,6 +148,8 @@ if (env !== 'development') {
   // gzip compression
     app.use(compress());
 }
+
+app.use(koaMount('/users', userApiRoutes));
 
 if (!module.parent || module.parent.filename.indexOf('api/index.js') !== -1) {
     app.listen(port);
