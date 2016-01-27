@@ -1,14 +1,13 @@
 var loaders = require('./loaders');
 var plugins = require('./plugins');
 var resolve = require('./resolve');
-var sources = require('./sources');
 
 module.exports = {
     entry: {
-        main: sources([
-        __dirname + '/../app/mobile/js/main.js',
-        __dirname + '/../app/mobile/css/main.css',
-    ]),
+        main: [
+            __dirname + '/../app/mobile/js/main.js',
+            __dirname + '/../app/mobile/css/main.css',
+        ],
     },
     module: {
         loaders: loaders('mobile'),

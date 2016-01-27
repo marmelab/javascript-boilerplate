@@ -58,7 +58,12 @@ run-api:
 	@node ./api/index.js
 
 run-frontend:
-	@./node_modules/.bin/webpack-dev-server --quiet --colors --devtool cheap-module-inline-source-map --hot --inline
+	@./node_modules/.bin/webpack-dev-server  \
+		--quiet \
+		--colors \
+		--devtool cheap-module-inline-source-map \
+		--hot  \
+		--inline
 
 # TODO: restore when implemented
 # test-api-unit:
