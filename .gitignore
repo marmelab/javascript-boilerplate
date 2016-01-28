@@ -6,3 +6,5 @@ config/test.js
 build
 .fabricrc
 fabfile.pyc
+selenium-debug.log
+app/frontend/test/functional/reports
