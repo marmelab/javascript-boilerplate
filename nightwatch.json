@@ -19,10 +19,11 @@
 
     "test_settings": {
         "default": {
-            "launch_url": "http://localhost",
+            "launch_url": "http://localhost:8081",
             "selenium_port": 4444,
             "selenium_host": "localhost",
             "silent": true,
+            "firefox_profile" : false,
             "desiredCapabilities": {
                 "browserName": "chrome",
                 "javascriptEnabled": true,
@@ -31,6 +32,11 @@
             "screenshots": {
                 "enabled": false,
                 "path": "./app/frontend/test/functional/reports"
+            },
+            "desiredCapabilities": {
+              "browserName": "firefox",
+              "javascriptEnabled": true,
+              "acceptSslCerts": true
             }
         },
         "firefox": {

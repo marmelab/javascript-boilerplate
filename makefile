@@ -85,7 +85,7 @@ test:
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
-	#make test-frontend-functional
+	make test-frontend-functional
 
 servers-show-all:
 	@node_modules/.bin/pm2 list
