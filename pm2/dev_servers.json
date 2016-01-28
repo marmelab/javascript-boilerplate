@@ -1,0 +1,21 @@
+{
+  "apps" : [{
+    "name"       : "frontend-dev",
+    "script"     : "./node_modules/.bin/webpack-dev-server",
+    "args"       : [
+        "--content-base=build",
+        "--devtool=cheap-module-inline-source-map",
+        "--hot",
+        "--inline",
+        "--quiet",
+        "--progress"
+    ],
+    "instances"  : 1
+  },
+  {
+    "name"       : "api-dev",
+    "script"     : "./api/index.js",
+    "watch"      : ["api", "config"],
+    "instances"  : 1
+  }]
+}

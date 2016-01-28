@@ -25,37 +25,23 @@ install-prod: install
 	@echo "Copy production conf"
 	@cp -n ./config/production-dist.js ./config/production.js | true
 
-run-frontend-dev: webpack.PID
-
-webpack.PID:
-	@./node_modules/.bin/webpack-dev-server \
-		--content-base=build \
-		--devtool=cheap-module-inline-source-map \
-		--hot \
-		--inline \
-		--quiet \
-		--progress \
-		& echo "$$!" > webpack.PID
-
-stop-frontend-dev: webpack.PID
-	@kill `cat $<` && rm $<
-	@echo "Webpack server stopped"
-
-run-api-dev: server.PID
-server.PID:
-	@./node_modules/.bin/nodemon --watch api --watch config api/index.js & echo "$$!" > server.PID
-stop-api-dev: server.PID
-	@kill `cat $<` && rm $<
-	@echo "Node server stopped"
-
-run-dev: run-frontend-dev run-api-dev
+run-dev:
+	@node_modules/.bin/pm2 start ./pm2/dev_servers.json
+	@echo "Webpack et node servers started"
 stop-dev: stop-frontend-dev stop-api-dev
 
+stop-frontend-dev:
+	@node_modules/.bin/pm2 stop frontend-dev
+	@echo "Webpack server stopped"
+stop-api-dev:
+	@node_modules/.bin/pm2 stop api-dev
+	@echo "Node server stopped"
+
 restart-api:
-	@make stop-api-dev && make run-api-dev
+	@node_modules/.bin/pm2 restart api-dev
 	@echo "API restarted"
 restart-frontend:
-	@make stop-frontend-dev && make run-frontend-dev
+	@node_modules/.bin/pm2 restart frontend-dev
 	@echo "Frontend app restarted"
 
 # test/production targets
@@ -88,7 +74,7 @@ test-frontend-functional:
 	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 	# @make build-test
 	@node_modules/.bin/pm2 start ./pm2/test_front_functional_servers.json
-	@node_modules/.bin/nightwatch -e firefox,chrome
+	@node_modules/.bin/nightwatch
 	@node_modules/.bin/pm2 stop node-server-test
 	@node_modules/.bin/pm2 stop static-server-test
 
@@ -100,3 +86,16 @@ test:
 	# make test-isomorphic-unit
 	make test-api-functional
 	#make test-frontend-functional
+
+servers-show-all:
+	@node_modules/.bin/pm2 list
+servers-monitor-all:
+	@node_modules/.bin/pm2 monit
+servers-kill-all:
+	@node_modules/.bin/pm2 delete all
+servers-kill-dev:
+	@node_modules/.bin/pm2 delete frontend-dev
+	@node_modules/.bin/pm2 delete api-dev
+servers-kill-test:
+	@node_modules/.bin/pm2 delete node-server-test
+	@node_modules/.bin/pm2 delete static-server-test
