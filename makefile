@@ -26,23 +26,19 @@ install-prod: install
 	@cp -n ./config/production-dist.js ./config/production.js | true
 
 run-dev:
-	@node_modules/.bin/pm2 start ./pm2/dev_servers.json
-	@echo "Webpack et node servers started"
-stop-dev: stop-frontend-dev stop-api-dev
-
-stop-frontend-dev:
-	@node_modules/.bin/pm2 stop frontend-dev
-	@echo "Webpack server stopped"
-stop-api-dev:
-	@node_modules/.bin/pm2 stop api-dev
-	@echo "Node server stopped"
-
-restart-api:
-	@node_modules/.bin/pm2 restart api-dev
-	@echo "API restarted"
-restart-frontend:
-	@node_modules/.bin/pm2 restart frontend-dev
-	@echo "Frontend app restarted"
+	@node_modules/.bin/pm2 start ./pm2_servers/dev.json
+stop-dev:
+	@node_modules/.bin/pm2 stop ./pm2_servers/dev.json
+restart-frontend-dev:
+	@node_modules/.bin/pm2 restart tp_frontend-dev
+	@echo "Webpack dev restarted"
+restart-api-dev:
+	@node_modules/.bin/pm2 restart tp_api-dev
+	@echo "API dev restarted"
+log-frontend-dev:
+	@node_modules/.bin/pm2 logs tp_frontend-dev
+log-api-dev:
+	@node_modules/.bin/pm2 logs tp_api-dev
 
 # test/production targets
 
@@ -64,7 +60,7 @@ test-api-functional:
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive api/test/functional
 
 test-frontend-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/test/null-compiler,js:babel-core/register" --recursive app/{,**/}*.spec.js
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./app/test/null-compiler,js:babel-core/register" --recursive ./app/frontend/js/**/*.spec.js
 
 test-isomorphic-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive isomorphic/{,**/}*.spec.js
@@ -73,10 +69,9 @@ test-frontend-functional:
 	# TODO: restore when implemented
 	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 	# @make build-test
-	@node_modules/.bin/pm2 start ./pm2/test_front_functional_servers.json
+	@node_modules/.bin/pm2 start ./pm2_servers/test.json
 	@node_modules/.bin/nightwatch
-	@node_modules/.bin/pm2 stop node-server-test
-	@node_modules/.bin/pm2 stop static-server-test
+	@node_modules/.bin/pm2 stop ./pm2_servers/test.json
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
@@ -87,15 +82,13 @@ test:
 	make test-api-functional
 	make test-frontend-functional
 
-servers-show-all:
-	@node_modules/.bin/pm2 list
-servers-monitor-all:
+servers-monitoring:
 	@node_modules/.bin/pm2 monit
-servers-kill-all:
+servers-list:
+	@node_modules/.bin/pm2 list
+servers-stop-all:
+	@node_modules/.bin/pm2 stop all
+servers-clear-all:
+	@node_modules/.bin/pm2 stop all
 	@node_modules/.bin/pm2 delete all
-servers-kill-dev:
-	@node_modules/.bin/pm2 delete frontend-dev
-	@node_modules/.bin/pm2 delete api-dev
-servers-kill-test:
-	@node_modules/.bin/pm2 delete node-server-test
-	@node_modules/.bin/pm2 delete static-server-test
+	@node_modules/.bin/pm2 flush
