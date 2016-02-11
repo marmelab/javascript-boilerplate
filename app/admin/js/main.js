@@ -21,15 +21,18 @@ const myApp = angular.module('myApp', ['ng-admin']);
 
 myApp.config(['NgAdminConfigurationProvider', (nga) => {
     const admin = nga
-        .application('New App')
+        .application(APP_NAME) // eslint-disable-line no-undef
         .baseApiUrl(ADMIN_API_URL); // eslint-disable-line no-undef
 
-    // admin.addEntity(nga.entity('users'));
+    admin.addEntity(nga.entity('products'));
+    admin.addEntity(nga.entity('orders'));
 
-    // require('./users/userConfig')(nga, admin);
+    require('./products/config')(nga, admin);
+    require('./orders/config')(nga, admin);
 
     admin.menu(nga.menu()
-        // .addChild(nga.menu(admin.getEntity('users')).icon('<span class="fa fa-users"></span>'))
+        .addChild(nga.menu(admin.getEntity('products')).icon('<span class="fa fa-picture-o fa-fw"></span>'))
+        .addChild(nga.menu(admin.getEntity('orders')).icon('<span class="fa fa-credit-card fa-fw"></span>'))
     );
 
     admin.dashboard(nga.dashboard());
@@ -40,6 +43,9 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
 
 myApp.config(['RestangularProvider', (RestangularProvider) => {
     RestangularProvider.addFullRequestInterceptor((element, operation, what, url, headers, params) => {
+        headers = headers || {};
+        headers['Authorization'] = window.sessionStorage.getItem('token');
+
         if (operation === 'getList') {
             if (params._page) {
                 const start = (params._page - 1) * params._perPage;

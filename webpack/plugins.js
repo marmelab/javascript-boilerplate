@@ -1,12 +1,12 @@
-var config = require('config');
-var fs = require('fs');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var webpack = require('webpack');
+var config = require('config'); // eslint-disable-line no-var
+var ExtractTextPlugin = require('extract-text-webpack-plugin'); // eslint-disable-line no-var
+var HtmlWebpackPlugin = require('html-webpack-plugin'); // eslint-disable-line no-var
+var webpack = require('webpack'); // eslint-disable-line no-var
 
 module.exports = function(appName) {
     return [
         new webpack.DefinePlugin({
+            'APP_NAME': JSON.stringify(config.appName),
             'ADMIN_API_URL': JSON.stringify(config.admin.api_url),
             'API_URL': JSON.stringify(config.frontend.api_url),
             'FRONTEND__APP__ENABLE_DEV_TOOLS': JSON.stringify(config.frontend.enableDevTools),

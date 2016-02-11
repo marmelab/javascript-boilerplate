@@ -3,6 +3,7 @@ var apiUrl = 'http://localhost:' + apiPort; // eslint-disable-line no-var
 var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
 
 module.exports = {
+    appName: 'New App',
     admin: {
         api_url: apiUrl + '/admin/',
     },
