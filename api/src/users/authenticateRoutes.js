@@ -6,16 +6,10 @@ import jwt from 'jsonwebtoken';
 import userRepositoryFactory from './userModel';
 
 const app = koa();
-let userRepository;
-
-app.use(function* init(next) {
-    userRepository = userRepositoryFactory(this.client);
-
-    yield next;
-});
 
 app.use(koaRoute.post('/', function* () {
     const { email, password } = yield coBody(this);
+    const userRepository = userRepositoryFactory(this.client);
     const user = yield userRepository.authenticate(email, password);
 
     if (!user) {
