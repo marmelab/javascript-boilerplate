@@ -21,23 +21,6 @@ export default (nga, admin) => {
             nga.field('stock', 'number')
                 .cssClasses('hidden-xs'),
         ])
-        .filters([
-            nga.field('q', 'template')
-                .label('')
-                .pinned(true)
-                .template('<div class="input-group"><input type="text" ng-model="value" placeholder="Search" class="form-control"></input><span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span></div>'),
-            nga.field('width_gte', 'number')
-                .label('Min width'),
-            nga.field('width_lte', 'number')
-                .label('Max width'),
-            nga.field('height_gte', 'number')
-                .label('Min height'),
-            nga.field('height_lte', 'number')
-                .label('Max height'),
-            nga.field('stock_lte', 'template')
-                .label('Low stock')
-                .defaultValue(10),
-        ])
         .listActions(['edit', 'delete']);
 
     products.creationView()

@@ -10,13 +10,6 @@ import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
 
-<<<<<<< 8da79d7174ff6de26818e2c2c661de52f2245fbc
-=======
-import userApiRoutes from './users/userApiRoutes';
-import productAdminApiRoutes from './products/productAdminApiRoutes';
-import orderAdminApiRoutes from './orders/orderAdminApiRoutes';
-
->>>>>>> Order admin
 const env = process.env.NODE_ENV || 'development';
 const port = config.api.port;
 
