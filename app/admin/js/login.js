@@ -16,7 +16,7 @@ document.getElementById('loginForm').addEventListener('submit', (event) => {
     event.preventDefault(); // stop form from submitting
 
     const req = new XMLHttpRequest();
-    req.open('POST', `${API_URL}/authenticate`, true); // eslint-disable-line no-undef
+    req.open('POST', `${ADMIN_API_URL}authenticate`, true); // eslint-disable-line no-undef
     req.setRequestHeader('Content-Type', 'application/json');
 
     req.onload = () => {
@@ -25,6 +25,10 @@ document.getElementById('loginForm').addEventListener('submit', (event) => {
         try {
             json = JSON.parse(req.responseText);
         } catch (error) {
+            return showError();
+        }
+
+        if (!json.id || !json.email || !json.token) {
             return showError();
         }
 
