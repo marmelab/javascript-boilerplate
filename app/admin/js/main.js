@@ -2,15 +2,26 @@
 import 'ng-admin';
 require('ng-admin/build/ng-admin.min.css');
 
-if (!window.sessionStorage.getItem('token')) {
+function redirectToLogin() {
     window.location = '/admin/login.html';
 }
+
+function logout() {
+    window.sessionStorage.removeItem('id');
+    window.sessionStorage.removeItem('email');
+    window.sessionStorage.removeItem('token');
+    redirectToLogin();
+}
+
+window.logout = logout;
+
+if (!window.sessionStorage.getItem('token')) redirectToLogin();
 
 const myApp = angular.module('myApp', ['ng-admin']);
 
 myApp.config(['NgAdminConfigurationProvider', (nga) => {
     const admin = nga
-        .application('TeamPlay')
+        .application('New App')
         .baseApiUrl(ADMIN_API_URL); // eslint-disable-line no-undef
 
     // admin.addEntity(nga.entity('users'));
@@ -22,6 +33,7 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
     );
 
     admin.dashboard(nga.dashboard());
+    admin.header(require('./header.html'));
 
     nga.configure(admin);
 }]);

@@ -11,7 +11,10 @@ module.exports = function(appName) {
         loader: 'babel-loader',
         // Options to configure babel with
         query: {
-            plugins: ['transform-runtime'],
+            plugins: [
+                'transform-runtime',
+                'add-module-exports',
+            ],
             presets: [
                 require.resolve('babel-preset-es2015'),
                 require.resolve('babel-preset-react'),
@@ -39,6 +42,9 @@ module.exports = function(appName) {
     }, {
         test: /\.ttf(\?\S*)?$/,
         loader: 'url-loader?limit=100000&mimetype=application/font-ttf',
+    }, {
+        test: /\.html$/,
+        loader: 'html',
     }];
 
     loaders.push({
