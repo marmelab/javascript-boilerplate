@@ -120,6 +120,7 @@ app.use(koaMount('/', koaCors({
 
 // DB connection
 app.use(function* (next) {
+    console.log(config.apps.api.db);
     const pgConnection = yield dbClient(config.apps.api.db);
     this.client = pgConnection.client;
 

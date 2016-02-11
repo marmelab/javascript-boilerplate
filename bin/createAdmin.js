@@ -4,8 +4,8 @@
 
 import co from 'co';
 import config from 'config';
-import dbClient from '../api/src/lib/db/client';
-import userRepositoryFactory from '../api/src/users/userModel';
+import dbClient from '../src/api/lib/db/client';
+import userRepositoryFactory from '../src/api/users/userModel';
 
 const args = process.argv.slice(2);
 

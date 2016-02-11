@@ -3,9 +3,10 @@
     "name"       : "bpm_api-dev",
     "script"     : "./src/api/index.js",
     "watch"      : ["./src/api", "./src/isomorphic", "config"],
-    "exec_mode"  : "fork",
+    "instances"   : 1,
+    "autorestart" : true,
     "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
     }
   }, {
     "name"       : "bpm_frontend-dev",
@@ -18,9 +19,10 @@
         "--quiet",
         "--progress"
     ],
-    "exec_mode"  : "fork",
+    "instances"   : 1,
+    "autorestart" : true,
     "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
     }
   }]
 }
