@@ -3,6 +3,6 @@ module.exports = {
         host: 'localhost',
         user: 'postgres',
         password: '',
-        name: 'travis_ci_test',
+        database: 'travis_ci_test',
     },
 }

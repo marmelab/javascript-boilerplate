@@ -1,5 +1,13 @@
 .PHONY: build test
 
+ADMIN_NAME ?= sheldon
+ADMIN_EMAIL ?= sheldon@newapp.com
+ADMIN_PASSWORD ?= password
+
+CLIENT_NAME ?= leonard
+CLIENT_EMAIL ?= leonard@newapp.com
+CLIENT_PASSWORD ?= supadupa42!
+
 build:
 	@./node_modules/.bin/webpack --progress
 
@@ -92,3 +100,9 @@ servers-clear-all:
 	@node_modules/.bin/pm2 stop all
 	@node_modules/.bin/pm2 delete all
 	@node_modules/.bin/pm2 flush
+
+create-admin:
+	./node_modules/babel-cli/bin/babel-node.js ./bin/createAdmin.js ${ADMIN_NAME} ${ADMIN_EMAIL} ${ADMIN_PASSWORD}
+
+create-client:
+	./node_modules/babel-cli/bin/babel-node.js ./bin/createAdmin.js ${CLIENT_NAME} ${CLIENT_EMAIL} ${CLIENT_PASSWORD}
