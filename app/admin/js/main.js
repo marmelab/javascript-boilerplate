@@ -15,7 +15,7 @@ function logout() {
 
 window.logout = logout;
 
-// if (!window.sessionStorage.getItem('token')) redirectToLogin();
+if (!window.sessionStorage.getItem('token')) redirectToLogin();
 
 const myApp = angular.module('myApp', ['ng-admin']);
 
@@ -25,11 +25,14 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
         .baseApiUrl(ADMIN_API_URL); // eslint-disable-line no-undef
 
     admin.addEntity(nga.entity('products'));
+    admin.addEntity(nga.entity('orders'));
 
     require('./products/config')(nga, admin);
+    require('./orders/config')(nga, admin);
 
     admin.menu(nga.menu()
         .addChild(nga.menu(admin.getEntity('products')).icon('<span class="fa fa-picture-o fa-fw"></span>'))
+        .addChild(nga.menu(admin.getEntity('orders')).icon('<span class="fa fa-credit-card fa-fw"></span>'))
     );
 
     admin.dashboard(nga.dashboard());
