@@ -43,6 +43,9 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
 
 myApp.config(['RestangularProvider', (RestangularProvider) => {
     RestangularProvider.addFullRequestInterceptor((element, operation, what, url, headers, params) => {
+        headers = headers || {};
+        headers['Authorization'] = window.sessionStorage.getItem('token');
+
         if (operation === 'getList') {
             if (params._page) {
                 const start = (params._page - 1) * params._perPage;
