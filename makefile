@@ -37,6 +37,8 @@ run-dev:
 	@node_modules/.bin/pm2 start ./pm2_servers/dev.json
 stop-dev:
 	@node_modules/.bin/pm2 stop ./pm2_servers/dev.json
+servers-clear-all:
+	@node_modules/.bin/pm2 delete ./pm2_servers/dev.json
 restart-frontend-dev:
 	@node_modules/.bin/pm2 restart tp_frontend-dev
 	@echo "Webpack dev restarted"
