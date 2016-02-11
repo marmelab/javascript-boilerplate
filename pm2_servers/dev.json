@@ -1,0 +1,27 @@
+{
+  "apps" : [{
+    "name"       : "bpm_frontend-dev",
+    "script"     : "./node_modules/.bin/webpack-dev-server",
+    "args"       : [
+        "--content-base=build",
+        "--devtool=cheap-module-inline-source-map",
+        "--hot",
+        "--inline",
+        "--quiet",
+        "--progress"
+    ],
+    "instances"   : 1,
+    "env": {
+        "NODE_ENV": "development"
+    }
+  },
+  {
+    "name"       : "bpm_api-dev",
+    "script"     : "./api/index.js",
+    "watch"      : ["api", "config"],
+    "instances"   : 1,
+    "env": {
+        "NODE_ENV": "development"
+    }
+  }]
+}
