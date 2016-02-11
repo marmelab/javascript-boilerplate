@@ -11,8 +11,9 @@
         "--progress"
     ],
     "instances"   : 1,
+    "autorestart" : false,
     "env": {
-        "NODE_ENV": "dev"
+        "NODE_ENV": "development"
     }
   },
   {
@@ -20,10 +21,9 @@
     "script"     : "./api/index.js",
     "watch"      : ["api", "config"],
     "instances"   : 1,
-    "autorestart" : true,
-    "max_restarts" : 5,
+    "autorestart" : false,
     "env": {
-        "NODE_ENV": "dev"
+        "NODE_ENV": "development"
     }
   }]
 }

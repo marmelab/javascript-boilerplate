@@ -4,7 +4,7 @@
     "script"     : "api/index.js",
     "instances"   : 1,
     "autorestart" : true,
-    "max_restarts" : 5,
+    "max_restarts" : 2,
     "env": {
       "NODE_ENV": "test",
       "NODE_PORT": 3010
@@ -15,6 +15,8 @@
     "script"     : "./node_modules/.bin/http-server",
     "args"       : ["./build/frontend", "-p 8081", "--silent"],
     "instances"  : 1,
+    "autorestart" : true,
+    "max_restarts" : 2,
     "env": {
         "NODE_ENV": "test"
     }
