@@ -15,21 +15,21 @@ function logout() {
 
 window.logout = logout;
 
-if (!window.sessionStorage.getItem('token')) redirectToLogin();
+// if (!window.sessionStorage.getItem('token')) redirectToLogin();
 
 const myApp = angular.module('myApp', ['ng-admin']);
 
 myApp.config(['NgAdminConfigurationProvider', (nga) => {
     const admin = nga
-        .application('New App')
+        .application(APP_NAME) // eslint-disable-line no-undef
         .baseApiUrl(ADMIN_API_URL); // eslint-disable-line no-undef
 
-    // admin.addEntity(nga.entity('users'));
+    admin.addEntity(nga.entity('products'));
 
-    // require('./users/userConfig')(nga, admin);
+    require('./products/config')(nga, admin);
 
     admin.menu(nga.menu()
-        // .addChild(nga.menu(admin.getEntity('users')).icon('<span class="fa fa-users"></span>'))
+        .addChild(nga.menu(admin.getEntity('products')).icon('<span class="fa fa-picture-o fa-fw"></span>'))
     );
 
     admin.dashboard(nga.dashboard());
