@@ -7,4 +7,4 @@ build
 .fabricrc
 fabfile.pyc
 selenium-debug.log
-app/frontend/test/functional/reports
+e2e/**/reports
