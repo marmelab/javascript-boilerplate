@@ -85,9 +85,9 @@ test-frontend-functional:
 	# TODO: restore when implemented
 	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 	# @make build-test
-	@node_modules/.bin/pm2 start ./pm2_servers/test.json
+	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
-	@node_modules/.bin/pm2 stop ./pm2_servers/test.json
+	@node_modules/.bin/pm2 stop ./config/pm2_servers/test.json
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
