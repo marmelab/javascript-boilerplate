@@ -4,7 +4,7 @@ import { ReduxRouter } from 'redux-router';
 
 const Root = ({ store }) => {
     if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef
-        const DevTools = require('common/DevTools').default;
+        const DevTools = require('./DevTools');
 
         return (
             <Provider {...{store}}>

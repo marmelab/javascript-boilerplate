@@ -14,7 +14,7 @@ export default function configureStore(reducers, routes, initialState) {
     ];
 
     if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef
-        const DevTools = require('./DevTools').default;
+        const DevTools = require('./DevTools');
         chain = [
             ...chain,
             DevTools.instrument(),

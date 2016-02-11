@@ -5,7 +5,7 @@ export default function* (next) {
     const token = this.get('Authorization');
 
     try {
-        this.user = yield jwt.verify(token, config.jwt.privateKey);
+        this.user = yield jwt.verify(token, config.apps.api.security.jwt.privateKey);
     } catch (e) {
         this.status = 401;
         return;
