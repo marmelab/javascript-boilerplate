@@ -10,8 +10,6 @@ import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
 
-import userApiRoutes from './users/userApiRoutes';
-
 const env = process.env.NODE_ENV || 'development';
 const port = config.api.port;
 
@@ -149,7 +147,8 @@ if (env !== 'development') {
     app.use(compress());
 }
 
-app.use(koaMount('/users', userApiRoutes));
+app.use(koaMount('/api', require('./api')));
+app.use(koaMount('/admin', require('./admin')));
 
 if (!module.parent || module.parent.filename.indexOf('api/index.js') !== -1) {
     app.listen(port);
