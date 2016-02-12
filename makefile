@@ -155,3 +155,13 @@ create-admin:
 create-client:
 	# TODO: ensure we create a simple user and not an admin
 	./node_modules/babel-cli/bin/babel-node.js ./bin/createAdmin.js ${CLIENT_NAME} ${CLIENT_EMAIL} ${CLIENT_PASSWORD}
+
+clear-demo-code:
+	# Remove git origin
+	# git remote rm origin
+	# Delete API demo
+	rm -r ./src/api/products ./src/api/orders
+	sed -i '7,8 s/^/\/\//; 15,16 s/^/\/\//' ./src/api/admin.js
+	# Delete Admin demo
+	rm -r ./src/admin/js/products ./src/admin/js/orders
+	sed -i '27,31 s/^/\/\//g' ./src/admin/js/main.js
