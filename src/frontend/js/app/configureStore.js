@@ -1,26 +1,28 @@
+/* globals FRONTEND__APP__ENABLE_DEV_TOOLS */
 import { applyMiddleware, compose, createStore } from 'redux';
-import { reduxReactRouter } from 'redux-router';
-import { createHashHistory } from 'history';
+import history from './history';
+import { syncHistory } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import fetch from 'isomorphic-fetch';
 import fetchMiddlewareFactory from './fetchMiddleware';
 
-const history = createHashHistory();
-
 export default function configureStore(reducers, routes, initialState) {
-    let chain = [
-        reduxReactRouter({ history, routes }),
-        applyMiddleware(thunkMiddleware, fetchMiddlewareFactory(fetch, window.sessionStorage)),
+    let enhancers = [
+        applyMiddleware(
+            thunkMiddleware,
+            syncHistory(history),
+            fetchMiddlewareFactory(fetch, window.sessionStorage)
+        ),
     ];
 
-    if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef
+    if (FRONTEND__APP__ENABLE_DEV_TOOLS) {
         const DevTools = require('./DevTools');
-        chain = [
-            ...chain,
+        enhancers = [
+            ...enhancers,
             DevTools.instrument(),
             require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
         ];
     }
 
-    return compose(...chain)(createStore)(reducers, initialState);
+    return createStore(reducers, initialState, compose(...enhancers));
 }

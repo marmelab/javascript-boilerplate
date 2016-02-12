@@ -1,10 +1,14 @@
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+/* globals FRONTEND_URL */
+import App from './App';
+import productRoutes from '../product/productRoutes';
 
-import App from './App.js';
-
-export default (
-    <Route path="/">
-        <IndexRoute component={App} />
-    </Route>
-);
+export default {
+    component: 'div',
+    childRoutes: [{
+        path: '/',
+        component: App,
+        childRoutes: [
+            productRoutes,
+        ],
+    }],
+};
