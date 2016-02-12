@@ -8,6 +8,7 @@ CLIENT_NAME ?= leonard
 CLIENT_EMAIL ?= leonard@newapp.com
 CLIENT_PASSWORD ?= supadupa42!
 
+
 # Initialization ===============================================================
 copy-conf:
 	@cp -n ./config/development-dist.js ./config/development.js | true
@@ -25,9 +26,40 @@ build:
 clean:
 	git clean -nxdf
 
-install-prod: install
+install-aws:
+	curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+	unzip awscli-bundle.zip
+	sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+	rm -rf ./awscli-bundle/ awscli-bundle.zip
+	aws configure
+
+install-prod:
+	@echo "Installing Node dependencies"
+	@npm install
 	@echo "Copy production conf"
 	@cp -n ./config/production-dist.js ./config/production.js | true
+
+setup-staging:
+	fab --config=.fabricrc-staging setup_api check
+
+setup-prod:
+	fab --config=.fabricrc setup_api check
+
+deploy-staging-api:
+	fab --config=.fabricrc-staging deploy_api
+
+deploy-staging-frontend:
+	fab --config=.fabricrc-staging deploy_static
+
+deploy-staging: deploy-staging-api deploy-staging-frontend
+
+deploy-prod-api:
+	fab --config=.fabricrc deploy_api
+
+deploy-prod-frontend:
+	fab --config=.fabricrc deploy_static
+
+deploy-prod: deploy-prod-api deploy-prod-frontend
 
 # Development ==================================================================
 run-dev:

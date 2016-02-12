@@ -1,0 +1,16 @@
+# Remote server infos
+hosts=newapp-api-staging.marmelab.com
+user=ubuntu
+home=/home/ubuntu
+api_name=newapp-staging
+api_pwd=newapp-staging
+
+# Supervisor configuration
+supervisord_source=config/supervisor/newapp_staging.conf
+supervisord_dest=newapp_staging.conf
+
+# NODE_ENV
+environment=staging
+
+# S3 static server
+s3_bucket=newapp-staging

@@ -1,0 +1,16 @@
+# Remote server infos
+hosts=newapp-api.marmelab.com
+user=ubuntu
+home=/home/ubuntu
+api_name=newapp
+api_pwd=newapp
+
+# Supervisor configuration
+supervisord_source=config/supervisor/newapp.conf
+supervisord_dest=newapp.conf
+
+# NODE_ENV
+environment=production
+
+# S3 static server
+s3_bucket=newapp
