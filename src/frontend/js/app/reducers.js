@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import { routerStateReducer as router } from 'redux-router';
-
+import { routeReducer } from 'react-router-redux'
 import userReducerFactory from '../user/userReducer';
+import product from '../product/productReducer';
 
 const rootReducer = combineReducers({
-    router,
+    routing: routeReducer,
     user: userReducerFactory(window.sessionStorage),
+    product,
 });
 
 export default rootReducer;

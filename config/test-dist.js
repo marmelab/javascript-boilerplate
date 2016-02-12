@@ -8,5 +8,8 @@ module.exports = {
                 database: 'travis_ci_test',
             },
         },
+        frontend: {
+            history: 'createHashHistory',
+        },
     },
 };
