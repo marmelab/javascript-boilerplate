@@ -45,21 +45,21 @@ setup-staging:
 setup-prod:
 	fab --config=.fabricrc setup_api check
 
-deploy-frontend:
-	make build
-	aws --region=eu-west-1 s3 sync ./build/ s3://${S3_BUCKET}/
-
 deploy-staging-api:
 	fab --config=.fabricrc-staging deploy_api
+
+deploy-staging-frontend:
+	fab --config=.fabricrc-staging deploy_static
+
+deploy-staging: deploy-staging-api deploy-staging-frontend
 
 deploy-prod-api:
 	fab --config=.fabricrc deploy_api
 
-deploy-staging: deploy-staging-api
-	NODE_ENV=staging S3_BUCKET=marmelab-newapp make deploy-frontend
+deploy-prod-frontend:
+	fab --config=.fabricrc deploy_static
 
-deploy-prod: deploy-prod-api
-	NODE_ENV=production S3_BUCKET=newapp make deploy-frontend
+deploy-prod: deploy-prod-api deploy-prod-frontend
 
 # Development ==================================================================
 run-dev:

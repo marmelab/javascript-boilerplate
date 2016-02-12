@@ -6,3 +6,4 @@ user=ubuntu
 supervisord_source=config/supervisor/newapp_staging.conf
 supervisord_dest=newapp_staging.conf
 environment=staging
+s3_bucket=newapp-staging

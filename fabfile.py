@@ -1,7 +1,6 @@
 from fabric.api import cd, env, run, task, sudo, put
-from fabric.colors import green, red
-
-import time
+from fabric.colors import green
+from fabric.operations import local
 
 env.use_ssh_config = True
 env.forward_agent = True
@@ -20,7 +19,6 @@ def setup_api():
     sudo('apt --yes install supervisor')
     sudo('apt --yes install git htop vim')
     run('npm set progress=false')
-    run("npm config set save-prefix='~'")
 
     run('git clone %s %s/%s' % (gitUrl, env.home, env.api_pwd))
 
@@ -41,3 +39,12 @@ def deploy_api(branch='master'):
         put(env.supervisord_source, '/etc/supervisor/conf.d/%s' % env.supervisord_dest, use_sudo=True)
 
     sudo('supervisorctl restart %s' % env.api_name)
+
+@task
+def deploy_static(branch='master'):
+    local('git fetch')
+    local('git checkout %s' % branch)
+    local('git pull')
+    local('rm -rf build/*')
+    local('NODE_ENV=%s make build' % env.environment)
+    local('aws --region=eu-west-1 s3 sync ./build/ s3://%s/' % env.s3_bucket)

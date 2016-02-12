@@ -6,3 +6,4 @@ user=ubuntu
 supervisord_source=config/supervisor/newapp.conf
 supervisord_dest=newapp.conf
 environment=production
+s3_bucket=newapp
