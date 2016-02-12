@@ -1,4 +1,3 @@
-/* globals FRONTEND_URL */
 import App from './App';
 import productRoutes from '../product/productRoutes';
 

@@ -1,14 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
 import { Link } from 'react-router';
+import HelmetTitle from './HelmetTitle';
 
 export class App extends Component {
     render() {
         return (
             <div className="app container-fluid">
-                <Helmet title="New App" />
+                <HelmetTitle />
                 <div className="row">
                     <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
                         <a className="navbar-brand" href="#">New App</a>
@@ -29,7 +29,7 @@ export class App extends Component {
 }
 
 App.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
 };

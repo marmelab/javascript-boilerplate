@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
-import Helmet from 'react-helmet';
 import { Link } from 'react-router';
+import HelmetTitle from '../app/HelmetTitle';
 import ProductItem from './ProductItem';
 
 const ProductDetails = ({ product: { id, name, description, price, imageUrl }}) => (
     <div className="row product-details">
-        <Helmet title={`New App - ${name}`} />
+        <HelmetTitle title={name} />
         <div className="col-xs-12 col-md-4 col-lg-3">
             <img src={imageUrl} className="img-thumbnail" />
         </div>
