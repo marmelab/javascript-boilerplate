@@ -8,7 +8,7 @@ export default {
         path: '/',
         component: App,
         childRoutes: [
-            productRoutes,
+            ...productRoutes,
         ],
     }],
 };

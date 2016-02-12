@@ -1,6 +1,10 @@
-import Products from './Products';
+import ProductList from './ProductList';
+import ProductDetails from './ProductDetails';
 
-module.exports = {
+module.exports = [{
     path: '/products',
-    component: Products,
-};
+    component: ProductList,
+}, {
+    path: '/products/:id',
+    component: ProductDetails,
+}];

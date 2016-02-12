@@ -7,29 +7,29 @@ import { Link } from 'react-router';
 export class App extends Component {
     render() {
         return (
-            <div className="container">
+            <div className="app container-fluid">
                 <Helmet title="New App" />
-                <div className="main_screen row">
-                    <div className="col-xs-12">
-                        <div className="row">
-                            <nav className="title-bar">
-                                <span className="title">
-                                    <strong>New App</strong>
-                                    <Link to="products">Products</Link>
-                                </span>
-                            </nav>
-                        </div>
-                        <div className="row">
-                            {this.props.children}
-                        </div>
-                    </div>
+                <div className="row">
+                    <nav className="navbar navbar-fixed-top navbar-light bg-faded">
+                        <a className="navbar-brand" href="#">New App</a>
+                        <ul className="nav navbar-nav">
+                            <li className="nav-item active">
+                                <Link className="nav-link" to="/">Home</Link>
+                            </li>
+                            <li className="nav-item active">
+                                <Link className="nav-link" to="/products">Products</Link>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
+                {this.props.children}
             </div>
         );
     }
 }
 
 App.propTypes = {
+    children: PropTypes.node.isRequired,
     user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
 };
