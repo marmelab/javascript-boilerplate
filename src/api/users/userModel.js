@@ -5,7 +5,7 @@ import insertOneQuery from '../lib/db/queries/insertOne';
 import queriesFactory from '../lib/db/queries/index';
 
 export default client => {
-    const tableName = 'users';
+    const tableName = 'user';
     const exposedFields = [
         'id',
         'email',

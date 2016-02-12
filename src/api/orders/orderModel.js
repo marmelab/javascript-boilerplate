@@ -1,7 +1,7 @@
 import queriesFactory from '../lib/db/queries/index';
 
 export default client => {
-    const tableName = 'orders';
+    const tableName = 'order';
     const exposedFields = [
         'id',
         'reference',

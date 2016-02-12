@@ -5,7 +5,7 @@
   * This enables us to not have to rely on NODE_PATH.
   */
 exports.up = function(db, callback) {
-    db.createTable('users', {
+    db.createTable('user', {
         id: { type: 'int', primaryKey: true, autoIncrement: true },
         email: { type: 'string'},
         password: { type: 'string'},
@@ -13,5 +13,5 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-    db.dropTable('users', callback);
+    db.dropTable('user', callback);
 };
