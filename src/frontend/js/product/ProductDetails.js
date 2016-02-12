@@ -7,15 +7,15 @@ import { Link } from 'react-router';
 import ProductItem from './ProductItem';
 
 const ProductDetails = ({ product: { id, name, description, price, imageUrl }}) => (
-    <div className="row">
+    <div className="row product-details">
         <Helmet title={`New App - ${name}`} />
         <div className="col-xs-12 col-md-4 col-lg-3">
             <img src={imageUrl} className="img-thumbnail" />
         </div>
         <div className="col-xs-12 col-md-8 col-lg-9">
             <h2>{name}</h2>
-            <p>{description}</p>
-            <p>Price: {numeral(price).format('$0.00')}</p>
+            <p className="description">{description}</p>
+            <p className="price">Price: {numeral(price).format('$0.00')}</p>
             <p>
                 <Link to={`/order/${id}`} className="btn btn-primary">Buy</Link>
                 <Link to="/products" className="btn btn-link">Return to product list</Link>

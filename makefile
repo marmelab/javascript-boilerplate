@@ -69,6 +69,9 @@ log-api-dev:
 	@node_modules/.bin/pm2 logs bpm_api-dev
 
 # Tests ========================================================================
+build-test:
+	@NODE_ENV=test ./node_modules/.bin/webpack --progress
+
 test-api-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
 
@@ -84,7 +87,7 @@ test-isomorphic-unit:
 test-frontend-functional:
 	# TODO: restore when implemented
 	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
-	# @make build-test
+	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
 	@node_modules/.bin/pm2 stop ./config/pm2_servers/test.json
