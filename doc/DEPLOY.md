@@ -13,13 +13,13 @@ RDS or whatever you need, apart migrations, we do not manage the database with d
 
 ### First deployment
 
-The makefile offer you some functions to easily start an ubuntu server with all needed dependencies.
+The makefile offers you some functions to easily start an ubuntu server with all needed dependencies.
 
 Be sure to have the same `hosts` in your `.fabricrc` or `.fabricrc-staging` than in you `.ssh/config`.
 Example :
 ```bash
 Host newapp-api.marmelab.com
-    Hostname 127.0.0.1  # IP address or DNS
+    Hostname 127.0.0.1  # IP address or domain name
     IdentityFile ~/.ssh/keys/super_secure_key.pem
     User ubuntu
 ```
@@ -33,9 +33,9 @@ make setup-staging
 make setup-prod
 ```
 
-This will be update system and install all dependencies like : `Node.js`, `git`, `supervisor` ...
+It updates system and installs all dependencies like: `Node.js`, `git`, `supervisor`...
 
-At the end of installation, you will see the version of what you have installed on the server.
+At the end of the installation, you will see the version of what you have installed on the server.
 
 ### Deployment
 
@@ -46,27 +46,27 @@ make deploy-staging-api
 make deploy-prod-api
 ```
 
-This will:
-- Pull the specified branch
-- Install node dependencies (from your `package.json`)
-- Update supervisor configuration file (from `config/supervisor`)
-- Restart your app
+It:
+- Pulls the specified branch
+- Installs node dependencies (from your `package.json`)
+- Updates supervisor configuration file (from `config/supervisor`)
+- Restarts your app
 
 
 ## Frontend
 
-The frontend deployment consist in two steps:
-- Local build of your application
-- Send your build to a S3 bucket
+The frontend deployment consists in two steps:
+- Builind locally your(s) application(s)
+- Sending your builds to a S3 bucket
 
 To do that, you need to install the [AWS client](https://aws.amazon.com/cli/) on your workstation.
 ```bash
 make install-aws
 ```
 
-At the end, it will run `aws configure` to help you to configure the client. But you can skip this part if you want.
+At the end, it will run `aws configure` to help you to configuring the client. But you can skip this part if you want.
 
-The deployment it-self:
+The deployment itself:
 ```bash
 # Staging deployment
 make deploy-staging-frontend
@@ -76,7 +76,7 @@ make deploy-prod-frontend
 AWS_ACCESS_KEY_ID=XXXXXXXXXXXXX AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYY make deploy-prod-frontend
 ```
 
-All there commands will do:
-- :warning: Checkout to your master branch (be sure to stash your non-commited work)
+All these commands:
+- :warning: Checkout on master branch (be sure to stash non-commited work)
 - Make a local production or staging build
-- Synchronize your `build` folder with the configured S3 bucket
+- Synchronize `build` folder with configured S3 bucket
