@@ -13,10 +13,10 @@ export class App extends Component {
                     <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
                         <a className="navbar-brand" href="#">New App</a>
                         <ul className="nav navbar-nav">
-                            <li className="nav-item active">
+                            <li className="nav-item">
                                 <Link className="nav-link" to="/">Home</Link>
                             </li>
-                            <li className="nav-item active">
+                            <li className="nav-item">
                                 <Link className="nav-link" to="/products">Products</Link>
                             </li>
                         </ul>
