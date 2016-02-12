@@ -1,0 +1,8 @@
+home=/home/ubuntu
+api_name=newapp-staging
+api_pwd=newapp-staging
+hosts=newapp-api-staging.marmelab.com
+user=ubuntu
+supervisord_source=config/supervisor/newapp_staging.conf
+supervisord_dest=newapp_staging.conf
+environment=staging

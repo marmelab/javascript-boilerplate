@@ -4,7 +4,7 @@
 
 Requirements:
 
-* Node.js V4
+* Node.js V5
 * PostgreSQL
 
 ```sh
@@ -15,7 +15,7 @@ make install
 ## Develop
 
 ```sh
-# start servers (node and webpack)
+# start servers (node and webpack via pm2)
 make run-dev
 # both servers will run in the background
 # the Node server uses nodemon and will restart on code change
@@ -48,8 +48,7 @@ make test-api-unit
 make test-api-functional
 make test-frontend-unit
 make test-frontend-functional
-make test-mobile-unit
-make test-mobile-functional
+make test-isomorphic-unit
 ```
 
 API (and common lib) unit tests using:
@@ -74,3 +73,7 @@ to test redux action creators (as explain in [redux documentation](http://rackt.
 Frontend fonctional tests using:
 
 * [Nightwatch.js](http://nightwatchjs.org/)
+
+## Deployment
+
+See [deployment instructions](DEPLOY.md).

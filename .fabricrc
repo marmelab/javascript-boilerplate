@@ -1,0 +1,8 @@
+home=/home/ubuntu
+api_name=newapp
+api_pwd=newapp
+hosts=newapp-api.marmelab.com
+user=ubuntu
+supervisord_source=config/supervisor/newapp.conf
+supervisord_dest=newapp.conf
+environment=production

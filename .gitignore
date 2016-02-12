@@ -4,7 +4,6 @@ config/development.js
 config/production.js
 config/test.js
 build
-.fabricrc
 fabfile.pyc
 selenium-debug.log
 e2e/**/reports
