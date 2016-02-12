@@ -158,10 +158,15 @@ create-client:
 
 clear-demo-code:
 	# Remove git origin
-	# git remote rm origin
+	git remote rm origin
 	# Delete API demo
 	rm -r ./src/api/products ./src/api/orders
 	sed -i '15,16d;7,8d' ./src/api/admin.js
 	# Delete Admin demo
 	rm -r ./src/admin/js/products ./src/admin/js/orders
 	sed -i '27,31d' ./src/admin/js/main.js
+	# Delete Frontend demo
+	rm -r ./src/frontend/js/product ./e2e/frontend/products.js
+	sed -i '9d;4d' ./src/frontend/js/app/reducers.js
+	sed -i '10d;2d' ./src/frontend/js/app/routes.js
+	sed -i '19,21d' ./src/frontend/js/app/App.js
