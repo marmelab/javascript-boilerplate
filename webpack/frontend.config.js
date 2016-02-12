@@ -15,7 +15,11 @@ module.exports = {
     output: {
         filename: 'frontend/[name].js',
         path: __dirname + '/../build',
+        publicPath: '/',
     },
     plugins: plugins('frontend'),
     resolve: resolve('frontend'),
+    devServer: {
+        historyApiFallback: true,
+    },
 };

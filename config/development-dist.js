@@ -8,6 +8,9 @@ module.exports = {
                 database: 'boilerplate',
             },
         },
+        frontend: {
+            history: 'createHashHistory',
+        },
     },
     logs: {
         app: {

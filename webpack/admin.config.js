@@ -18,6 +18,10 @@ module.exports = {
     output: {
         filename: 'admin/[name].js',
         path: __dirname + '/../build',
+        publicPath: '/',
     },
     plugins: plugins('admin'),
+    devServer: {
+        historyApiFallback: true,
+    },
 };
