@@ -47,6 +47,7 @@
     "ng-admin": "marmelab/ng-admin",
     "node-postgres-named": "~2.4.0",
     "node-sass": "~3.4.2",
+    "numeral": "~1.5.3",
     "pg": "~4.4.3",
     "react": "~0.14.3",
     "react-dom": "~0.14.3",

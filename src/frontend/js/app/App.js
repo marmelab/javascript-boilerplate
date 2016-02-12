@@ -10,7 +10,7 @@ export class App extends Component {
             <div className="app container-fluid">
                 <Helmet title="New App" />
                 <div className="row">
-                    <nav className="navbar navbar-fixed-top navbar-light bg-faded">
+                    <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
                         <a className="navbar-brand" href="#">New App</a>
                         <ul className="nav navbar-nav">
                             <li className="nav-item active">

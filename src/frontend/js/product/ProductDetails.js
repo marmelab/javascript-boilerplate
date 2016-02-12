@@ -1,13 +1,26 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import numeral from 'numeral';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router';
 import ProductItem from './ProductItem';
 
-const ProductDetails = ({ product}) => (
-    <div className="list-group">
-        <Helmet title={`New App - ${product.name}`} />
-        <ProductItem key={product.id} {...product} />
+const ProductDetails = ({ product: { id, name, description, price, imageUrl }}) => (
+    <div className="row">
+        <Helmet title={`New App - ${name}`} />
+        <div className="col-xs-12 col-md-4 col-lg-3">
+            <img src={imageUrl} className="img-thumbnail" />
+        </div>
+        <div className="col-xs-12 col-md-8 col-lg-9">
+            <h2>{name}</h2>
+            <p>{description}</p>
+            <p>Price: {numeral(price).format('$0.00')}</p>
+            <p>
+                <Link to={`/order/${id}`} className="btn btn-primary">Buy</Link>
+                <Link to="/products" className="btn btn-link">Return to product list</Link>
+            </p>
+        </div>
     </div>
 );
 

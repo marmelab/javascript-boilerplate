@@ -5,9 +5,13 @@ import Helmet from 'react-helmet';
 import ProductItem from './ProductItem';
 
 const ProductList = ({ products }) => (
-    <div className="list-group">
+    <div className="row">
         <Helmet title="New App - Products" />
-        {products.map(product => <ProductItem key={product.id} {...product} />)}
+        {products.map(product => (
+            <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
+                <ProductItem {...product} />
+            </div>
+        ))}
     </div>
 );
 
