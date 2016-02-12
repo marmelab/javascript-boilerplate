@@ -11,7 +11,7 @@ describe('User Model', () => {
 
     it('should show basic infos', () => {
         const model = userRepository(client);
-        assert.deepEqual(model.tableName, 'users');
+        assert.deepEqual(model.tableName, 'user');
         assert.deepEqual(model.exposedFields, [
             'id',
             'email',
