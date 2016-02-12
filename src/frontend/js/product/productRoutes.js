@@ -1,7 +1,7 @@
 import ProductList from './ProductList';
 import ProductDetails from './ProductDetails';
 
-module.exports = [{
+export default [{
     path: '/products',
     component: ProductList,
 }, {
