@@ -161,7 +161,7 @@ clear-demo-code:
 	# git remote rm origin
 	# Delete API demo
 	rm -r ./src/api/products ./src/api/orders
-	sed -i '7,8 s/^/\/\//; 15,16 s/^/\/\//' ./src/api/admin.js
+	sed -i '15,16d;7,8d' ./src/api/admin.js
 	# Delete Admin demo
 	rm -r ./src/admin/js/products ./src/admin/js/orders
-	sed -i '27,31 s/^/\/\//g' ./src/admin/js/main.js
+	sed -i '27,31d' ./src/admin/js/main.js
