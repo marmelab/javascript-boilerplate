@@ -76,4 +76,4 @@ Frontend fonctional tests using:
 
 ## Deployment
 
-See [deployment instructions](DEPLOY.md).
+See [deployment instructions](doc/DEPLOY.md).

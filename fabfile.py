@@ -32,10 +32,15 @@ def check():
 @task
 def deploy_api(branch='master'):
     with cd('%s/%s' % (env.home, env.api_pwd)):
+        # Git
         run('git fetch')
         run('git checkout %s' % branch)
         run('git pull')
+        # Install dependencies
         run('make install-prod')
+        # DB migrations
+        run('NODE_ENV=%s make migration' % env.environment)
+        # Update supervisor configuration
         put(env.supervisord_source, '/etc/supervisor/conf.d/%s' % env.supervisord_dest, use_sudo=True)
 
     sudo('supervisorctl restart %s' % env.api_name)
