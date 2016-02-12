@@ -11,11 +11,11 @@ import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
 
 const env = process.env.NODE_ENV || 'development';
-const port = config.api.port;
+const port = config.apps.api.port;
 
 const app = koa();
-const appLogger = logger(config.logs.app);
-const httpLogger = logger(config.logs.http);
+const appLogger = logger(config.apps.api.logs.app);
+const httpLogger = logger(config.apps.api.logs.http);
 
 // Server logs
 app.use(function* logHttp(next) {
@@ -110,7 +110,7 @@ app.use(koaMount('/', koaCors({
     origin: (request) => {
         const origin = request.get('origin');
 
-        if (!!origin.length && config.api.allowOrigin.indexOf(origin) === -1) {
+        if (!!origin.length && config.apps.api.allowOrigin.indexOf(origin) === -1) {
             return false;
         }
 
@@ -120,7 +120,7 @@ app.use(koaMount('/', koaCors({
 
 // DB connection
 app.use(function* (next) {
-    const pgConnection = yield dbClient(config.db);
+    const pgConnection = yield dbClient(config.apps.api.db);
     this.client = pgConnection.client;
 
     try {

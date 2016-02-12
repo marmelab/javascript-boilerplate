@@ -5,8 +5,8 @@ var resolve = require('./resolve');
 module.exports = {
     entry: {
         index: [
-            __dirname + '/../app/frontend/js/main.js',
-            __dirname + '/../app/frontend/css/main.scss',
+            __dirname + '/../src/frontend/js/main.js',
+            __dirname + '/../src/frontend/css/main.scss',
         ],
     },
     module: {

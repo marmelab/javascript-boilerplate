@@ -16,7 +16,7 @@ export default client => {
     const baseInsertOne = insertOneQuery(client, tableName, exposedFields);
 
     queries.insertOne = function*(user, isWhitelisted) {
-        user.password = bcrypt.hashSync(user.password, config.security.bcrypt.salt_work_factor);
+        user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
 
         return yield baseInsertOne(user, isWhitelisted);
     };

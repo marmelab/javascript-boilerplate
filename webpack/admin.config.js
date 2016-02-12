@@ -4,12 +4,12 @@ var plugins = require('./plugins');
 module.exports = {
     entry: {
         index: [
-            __dirname + '/../app/admin/js/main.js',
-            __dirname + '/../app/admin/css/main.scss',
+            __dirname + '/../src/admin/js/main.js',
+            __dirname + '/../src/admin/css/main.scss',
         ],
         login: [
-            __dirname + '/../app/admin/js/login.js',
-            __dirname + '/../app/admin/css/login.scss',
+            __dirname + '/../src/admin/js/login.js',
+            __dirname + '/../src/admin/css/login.scss',
         ],
     },
     module: {

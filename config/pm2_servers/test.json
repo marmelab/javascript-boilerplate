@@ -1,8 +1,8 @@
 {
   "apps" : [{
     "name"       : "bpm_api-test",
-    "script"     : "api/index.js",
-    "instances"   : 1,
+    "script"     : "./src/api/index.js",
+    "exec_mode"  : "fork",
     "env": {
       "NODE_ENV": "test",
       "NODE_PORT": 3010
@@ -12,7 +12,7 @@
     "name"       : "bpm_frontend-test",
     "script"     : "./node_modules/.bin/http-server",
     "args"       : ["./build/frontend", "-p 8081", "--silent"],
-    "instances"  : 1,
+    "exec_mode"  : "fork",
     "env": {
         "NODE_ENV": "test"
     }

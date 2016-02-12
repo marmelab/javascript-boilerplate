@@ -20,7 +20,7 @@ app.use(koaRoute.post('/', function* () {
     this.body = {
         id: user.id,
         email: user.email,
-        token: jwt.sign(user, config.jwt.privateKey),
+        token: jwt.sign(user, config.apps.api.security.jwt.privateKey),
     };
 }));
 

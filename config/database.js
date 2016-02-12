@@ -3,5 +3,5 @@
 var config = require('config');
 
 module.exports = {
-    dev: config.db // "dev" is for default db-migrate environment, do not touch
+    api: config.apps.api.db // "dev" is for default db-migrate environment, do not touch
 };

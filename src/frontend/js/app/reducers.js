@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerStateReducer as router } from 'redux-router';
 
-import userReducerFactory from 'common/user/userReducer';
+import userReducerFactory from '../user/userReducer';
 
 const rootReducer = combineReducers({
     router,

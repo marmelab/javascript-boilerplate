@@ -1,8 +1,12 @@
 module.exports = {
-    db: {
-        host: 'localhost',
-        user: 'postgres',
-        password: '',
-        database: 'travis_ci_test',
+    apps: {
+        api: {
+            db: {
+                host: 'localhost',
+                user: 'postgres',
+                password: '',
+                database: 'travis_ci_test',
+            },
+        },
     },
-}
+};
