@@ -37,27 +37,6 @@ Browse the app:
 make stop-dev
 ```
 
-## Managing servers with PM2
-
-dev and tests servers are managed with PM2. So, It's possible to :
-
-```sh
-# display the 'front dev' server's logs
-make log-frontend-dev
-# display the 'api dev' server's logs
-make log-api-dev:
-
-# display the list of all servers
-make servers-list
-# display the monitoring for all servers
-make servers-monitoring
-# stop all servers
-make servers-stop-all
-# stop all servers, delete them, and clear their logs.
-make servers-clear-all
-```
-
-
 ## Test
 
 ```sh
@@ -95,6 +74,28 @@ Frontend fonctional tests using:
 
 * [Nightwatch.js](http://nightwatchjs.org/)
 
+
 ## Deployment
 
 See [deployment instructions](doc/DEPLOY.md).
+
+
+## Managing servers with PM2
+
+dev and tests servers are managed with PM2. So, It's possible to :
+
+```sh
+# display the 'front dev' server's logs
+make log-frontend-dev
+# display the 'api dev' server's logs
+make log-api-dev
+
+# display the list of all servers
+make servers-list
+# display the monitoring for all servers
+make servers-monitoring
+# stop all servers
+make servers-stop-all
+# stop all servers, delete them, and clear their logs.
+make servers-clear-all
+```
