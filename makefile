@@ -65,7 +65,7 @@ deploy-prod: deploy-prod-api deploy-prod-frontend
 run-dev:
 	@node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
 stop-dev:
-	@node_modules/.bin/pm2 stop ./config/pm2_servers/dev.json
+	@node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
 
 restart-frontend-dev:
 	@node_modules/.bin/pm2 restart bpm_frontend-dev
@@ -122,7 +122,7 @@ test-frontend-functional:
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
-	@node_modules/.bin/pm2 stop ./config/pm2_servers/test.json
+	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
