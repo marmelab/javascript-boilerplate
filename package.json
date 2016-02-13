@@ -88,6 +88,7 @@
     "eslint-plugin-mocha": "~1.0.0",
     "eslint-plugin-react": "~3.5.1",
     "expect": "~1.11.1",
+    "faker": "~3.0.1",
     "fakerest": "~1.0.1",
     "http-server": "~0.8.5",
     "jsdom": "~6.5.1",
