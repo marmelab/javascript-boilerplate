@@ -1,18 +1,21 @@
 import coBody from 'co-body';
 import config from 'config';
+import jwt from 'jsonwebtoken';
 import koa from 'koa';
 import koaRoute from 'koa-route';
-import jwt from 'jsonwebtoken';
+import methodFilter from '../lib/middlewares/methodFilter';
 import userRepositoryFactory from './userModel';
 
 const app = koa();
+
+app.use(methodFilter(['POST']));
 
 app.use(koaRoute.post('/', function* () {
     const { email, password } = yield coBody(this);
     const userRepository = userRepositoryFactory(this.client);
     const user = yield userRepository.authenticate(email, password);
-
     if (!user) {
+        // already done in userRepository.authenticate. Not sure that it must be done twice ?
         this.status = 401;
         return;
     }

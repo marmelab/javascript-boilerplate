@@ -9,7 +9,7 @@
             "thumbnail" : "http://lorempixel.com/60/60/",
             "image" : "http://lorempixel.com/400/400/",
             "description": "John the zoo",
-            "stock": 1
+            "stock": 10
         },
         {
             "reference": "efg",
@@ -19,7 +19,7 @@
             "thumbnail" : "http://lorempixel.com/60/60/",
             "image" : "http://lorempixel.com/400/400/",
             "description": "Frank on toilet",
-            "stock": 1
+            "stock": 10
         },
         {
             "reference": "hij",
@@ -29,8 +29,13 @@
             "thumbnail" : "http://lorempixel.com/60/60/",
             "image" : "http://lorempixel.com/400/400/",
             "description": "Miles in the kitchen",
-            "stock": 1
+            "stock": 10
         }
     ],
-    "users" : null
+    "users" : [
+        {
+            "email": "none@sorry.com",
+            "password": "password"
+        }
+    ]
 }
