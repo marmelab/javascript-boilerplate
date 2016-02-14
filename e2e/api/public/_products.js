@@ -5,14 +5,14 @@ describe('/api/products', () => {
         before(function* addFixtures() {
             yield fixtureLoader.loadDefaultFixtures();
         });
-        it('should not require authentification', function* shouldNotRequireAuthentification() {
+        it('should not require authentification', function* () {
             const { statusCode } = yield request({
                 method: 'GET',
                 url: '/api/products',
             });
             assert.equal(statusCode, 200);
         });
-        it('should return a list of all products', function* shouldReturnAllProductsList() {
+        it('should return a list of all products', function* () {
             const { body } = yield request({
                 method: 'GET',
                 url: '/api/products',

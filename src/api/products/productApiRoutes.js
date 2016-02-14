@@ -1,4 +1,14 @@
-import Product from './productModel';
-import crud from '../lib/crud';
+import crud from '../middlewares/pgCrud';
+import koa from 'koa';
+import koaMount from 'koa-mount';
+import methodFilter from '../middlewares/methodFilter';
+import product from './productModel';
 
-export default crud(Product, ['GET']);
+const app = koa();
+const allowedMethods = ['GET'];
+
+app.use(methodFilter(allowedMethods));
+
+app.use(koaMount('/', crud(product, allowedMethods)));
+
+export default app;
