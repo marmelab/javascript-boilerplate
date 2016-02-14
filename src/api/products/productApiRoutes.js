@@ -1,7 +1,7 @@
-import crud from '../middlewares/pgCrud';
+import crud from '../lib/middlewares/pgCrud';
 import koa from 'koa';
 import koaMount from 'koa-mount';
-import methodFilter from '../middlewares/methodFilter';
+import methodFilter from '../lib/middlewares/methodFilter';
 import product from './productModel';
 
 const app = koa();

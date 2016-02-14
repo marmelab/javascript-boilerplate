@@ -3,7 +3,7 @@ import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
 
 import authenticateRoutes from './users/authenticateRoutes';
-import methodFilter from './middlewares/methodFilter';
+import methodFilter from './lib/middlewares/methodFilter';
 import orderApiRoutes from './orders/orderApiRoutes';
 import productApiRoutes from './products/productApiRoutes';
 
