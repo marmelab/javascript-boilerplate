@@ -43,7 +43,7 @@ describe.only('/api/authenticate', () => {
                 method: 'POST',
                 url: '/api/authenticate',
                 body: {
-                    email: 'none@sorry.com',
+                    email: 'user1@marmelab.io',
                     password: '',
                 },
             });
@@ -54,7 +54,7 @@ describe.only('/api/authenticate', () => {
                 method: 'POST',
                 url: '/api/authenticate',
                 body: {
-                    email: 'one@sorry.com',
+                    email: 'none@marmelab.io',
                     password: 'password',
                 },
             });
@@ -65,7 +65,7 @@ describe.only('/api/authenticate', () => {
                 method: 'POST',
                 url: '/api/authenticate',
                 body: {
-                    email: 'none@sorry.com',
+                    email: 'user1@marmelab.io',
                     password: 'wrongpassword',
                 },
             });
@@ -76,7 +76,7 @@ describe.only('/api/authenticate', () => {
                 method: 'POST',
                 url: '/api/authenticate',
                 body: {
-                    email: 'none@sorry.com',
+                    email: 'user1@marmelab.io',
                     password: 'password',
                 },
             });

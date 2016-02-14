@@ -1,5 +1,4 @@
 {
-    "orders": null,
     "products" : [
         {
             "reference": "abc",
@@ -34,8 +33,26 @@
     ],
     "users" : [
         {
-            "email": "none@sorry.com",
+            "email": "user1@marmelab.io",
             "password": "password"
+        },
+        {
+            "email": "user2@marmelab.io",
+            "password": "password"
+        }
+    ],
+    "orders" : [
+        {
+            "reference": "ref1",
+            "customer_id": "user1@marmelab.io",
+            "total": 6.80,
+            "status": "valid"
+        },
+        {
+            "reference": "ref2",
+            "customer_id": "user2@marmelab.io",
+            "total": 6.80,
+            "status": "valid"
         }
     ]
 }
