@@ -2,7 +2,7 @@
 
 import userFactory from '../../../src/api/users/userModel';
 
-describe.only('/api/orders', () => {
+describe('/api/orders', () => {
     describe('GET', () => {
         let user;
         let userToken;
