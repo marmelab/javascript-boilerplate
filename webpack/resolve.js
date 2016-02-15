@@ -1,6 +1,6 @@
-var path = require('path');
+import path from 'path';
 
-module.exports = function(appName) {
+export default function() {
     return {
         root: path.resolve(__dirname + '/..'),
         alias: {

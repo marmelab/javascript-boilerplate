@@ -1,5 +1,5 @@
-var loaders = require('./loaders');
-var plugins = require('./plugins');
+import loaders from './loaders';
+import plugins from './plugins';
 
 module.exports = {
     entry: {

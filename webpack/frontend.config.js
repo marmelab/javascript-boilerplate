@@ -1,6 +1,6 @@
-var loaders = require('./loaders');
-var plugins = require('./plugins');
-var resolve = require('./resolve');
+import loaders from './loaders';
+import plugins from './plugins';
+import resolve from './resolve';
 
 module.exports = {
     entry: {

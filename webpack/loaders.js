@@ -1,11 +1,11 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-var sassOptions = [
+const sassOptions = [
     'includePaths[]=./node_modules/compass-mixins/lib/',
-].join("\n");
+].join(`\n`);
 
-module.exports = function(appName) {
-    var loaders = [{
+export default function() {
+    const loaders = [{
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
