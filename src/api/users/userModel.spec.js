@@ -1,3 +1,5 @@
+/* eslint func-names:0 */
+
 import { assert } from 'chai';
 import sinon from 'sinon';
 import userRepository from './userModel';
@@ -11,7 +13,7 @@ describe('User Model', () => {
 
     it('should show basic infos', () => {
         const model = userRepository(client);
-        assert.deepEqual(model.tableName, 'users');
+        assert.deepEqual(model.tableName, 'user_account');
         assert.deepEqual(model.exposedFields, [
             'id',
             'email',

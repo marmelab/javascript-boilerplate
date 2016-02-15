@@ -65,7 +65,7 @@ deploy-prod: deploy-prod-api deploy-prod-frontend
 run-dev:
 	@node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
 stop-dev:
-	@node_modules/.bin/pm2 stop ./config/pm2_servers/dev.json
+	@node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
 
 restart-frontend-dev:
 	@node_modules/.bin/pm2 restart bpm_frontend-dev
@@ -107,7 +107,7 @@ build-test:
 test-api-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
 
-test-api-functional:
+test-api-functional: reset-test-database
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit:
@@ -122,7 +122,7 @@ test-frontend-functional:
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
-	@node_modules/.bin/pm2 stop ./config/pm2_servers/test.json
+	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
@@ -132,6 +132,18 @@ test:
 	# make test-isomorphic-unit
 	make test-api-functional
 	make test-frontend-functional
+
+reset-test-database:
+	@NODE_ENV=test ./node_modules/.bin/db-migrate \
+		--migrations-dir=./src/api/lib/migrations \
+		--config=config/database.js \
+		-e api \
+		reset
+	@NODE_ENV=test ./node_modules/.bin/db-migrate \
+		--migrations-dir=./src/api/lib/migrations \
+		--config=config/database.js \
+		-e api \
+		up
 
 # Migrations ===================================================================
 migrate:

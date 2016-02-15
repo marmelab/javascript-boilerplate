@@ -1,7 +1,7 @@
 import koa from 'koa';
 import koaMount from 'koa-mount';
 
-import tokenCheckerMiddleware from './middlewares/tokenChecker';
+import tokenCheckerMiddleware from './lib/middlewares/tokenChecker';
 
 import authenticateRoutes from './users/authenticateRoutes';
 import productAdminApiRoutes from './products/productAdminApiRoutes';

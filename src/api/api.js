@@ -1,15 +1,23 @@
 import koa from 'koa';
 import koaMount from 'koa-mount';
-
-import tokenCheckerMiddleware from './middlewares/tokenChecker';
+import koaRoute from 'koa-route';
 
 import authenticateRoutes from './users/authenticateRoutes';
-import userApiRoutes from './users/userApiRoutes';
+import methodFilter from './lib/middlewares/methodFilter';
+import orderApiRoutes from './orders/orderApiRoutes';
+import productApiRoutes from './products/productApiRoutes';
 
 const app = koa();
 
 app.use(koaMount('/authenticate', authenticateRoutes));
-app.use(tokenCheckerMiddleware);
-app.use(koaMount('/users', userApiRoutes));
+app.use(koaMount('/products', productApiRoutes));
+app.use(koaMount('/orders', orderApiRoutes));
+
+
+app.use(methodFilter(['GET']));
+app.use(koaRoute.get('/', function* primaryEntryPoint() {
+    this.status = 200;
+    this.body = {status: 'ok'};
+}));
 
 export default app;
