@@ -12,7 +12,8 @@ export function fetchLogin(email, password) {
         }),
     }).then(response => ({
         status: response.status,
-        user: response.json(),
+        user: response.status === 200 && response.json(),
+        error: response.status !== 200 && new Error(response.statusText),
     }), error => ({
         error,
     }));

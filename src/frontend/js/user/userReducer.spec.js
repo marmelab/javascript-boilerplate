@@ -24,7 +24,7 @@ describe('user reducer', () => {
         });
     });
 
-    it('should handle the SIGNED_IN action', () => {
+    it('should handle the successfull SIGNED_IN action', () => {
         const getItem = sinon.stub().returns(undefined);
         const sessionStorage = {
             getItem,
@@ -37,9 +37,26 @@ describe('user reducer', () => {
             token: 'bar',
         }})).to.deep.equal({
             authenticated: true,
+            error: false,
             id: 'foo',
             email: 'foo@bar.com',
             token: 'bar',
+        });
+    });
+
+    it('should handle the failed SIGNED_IN action', () => {
+        const getItem = sinon.stub().returns(undefined);
+        const sessionStorage = {
+            getItem,
+        };
+        const reducer = reducerFactory(sessionStorage);
+        const error = new Error('Run you fools!');
+        expect(reducer(undefined, { type: SIGNED_IN, payload: error, error: true } )).to.deep.equal({
+            id: undefined,
+            email: undefined,
+            token: undefined,
+            authenticated: false,
+            error,
         });
     });
 

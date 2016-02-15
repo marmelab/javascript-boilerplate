@@ -4,9 +4,9 @@ import { reduxForm, propTypes } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 import HelmetTitle from '../app/HelmetTitle';
 import { Link } from 'react-router';
-import { login as loginAction } from './userActions';
+import { signIn as signInAction } from './userActions';
 
-const loginSchema = buildSchema({
+const signInSchema = buildSchema({
     email: {
         required: true,
         type: 'email',
@@ -17,14 +17,19 @@ const loginSchema = buildSchema({
     },
 });
 
-const Login = ({ login, previousRoute, fields: { email, password }, handleSubmit, submitting, submitFailed }) => (
-    <div className="container login">
+const Login = ({ signInError, signIn, previousRoute, fields: { email, password }, handleSubmit, submitting, submitFailed }) => (
+    <div className="container signIn">
         <HelmetTitle title="Login" />
         <div className="row">
             <div className="col-xs-12">
                 <div className="jumbotron">
                     <h2 className="display-4">Authentication</h2>
-                    <form onSubmit={handleSubmit(login.bind(null, previousRoute))}>
+                    {signInError &&
+                        <div className="alert alert-danger" role="alert">
+                            {signInError.message}
+                        </div>
+                    }
+                    <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
                         <div className={classNames('form-group', {
                             'has-error': email.touched && email.error,
                         })}>
@@ -48,7 +53,7 @@ const Login = ({ login, previousRoute, fields: { email, password }, handleSubmit
                             {password.touched && password.error && <span className="help-block">{password.error}</span>}
                         </div>
                         <button type="submit" className={classNames('btn btn-lg btn-primary', {
-                            'btn-danger': submitFailed,
+                            'btn-danger': signInError || submitFailed,
                         })} disabled={submitting}>
                             Login
                         </button>
@@ -63,18 +68,19 @@ const Login = ({ login, previousRoute, fields: { email, password }, handleSubmit
 
 Login.propTypes = {
     ...propTypes,
-    login: PropTypes.func.isRequired,
+    signIn: PropTypes.func.isRequired,
     previousRoute: PropTypes.string,
 };
 
 export default reduxForm({
-    form: 'login',
-    fields: loginSchema.fields,
-    validate: loginSchema.validate,
+    form: 'signIn',
+    fields: signInSchema.fields,
+    validate: signInSchema.validate,
     destroyOnUnmount: false,
 },
 state => ({
     previousRoute: state.routing.location.state && state.routing.location.state.nextPathname,
+    signInError: state.user.error,
 }), {
-    login: loginAction,
+    signIn: signInAction,
 })(Login);

@@ -1,11 +1,11 @@
 import { call, fork, put, take } from 'redux-saga';
-import { LOGIN, LOGOUT, loginError, signedIn, signedOut } from './userActions';
+import { SIGN_IN, SIGN_OUT, signedIn, signedOut } from './userActions';
 import { routeActions } from 'react-router-redux';
 import { fetchLogin as apiFetchLogin, storeLocalUser as apiStoreLocalUser, removeLocalUser as apiRemoveLocalUser } from './userApi';
 
-export const login = function* login(fetchLogin, storeLocalUser) {
+export const signIn = function* signIn(fetchLogin, storeLocalUser) {
     while (true) {
-        const { payload: { email, password, previousRoute }} = yield take(LOGIN);
+        const { payload: { email, password, previousRoute }} = yield take(SIGN_IN);
         const { error, user, status } = yield call(fetchLogin, email, password);
 
         if (status === 200) {
@@ -13,14 +13,14 @@ export const login = function* login(fetchLogin, storeLocalUser) {
             yield put(signedIn(user));
             yield put(routeActions.push(previousRoute));
         } else {
-            yield put(loginError(error));
+            yield put(signedIn(error));
         }
     }
 };
 
-export const logout = function* logout(removeLocalUser) {
+export const signOut = function* signOut(removeLocalUser) {
     while (true) {
-        yield take(LOGOUT);
+        yield take(SIGN_OUT);
         yield call(removeLocalUser);
         yield put(signedOut());
         yield put(routeActions.push('/'));
@@ -28,8 +28,8 @@ export const logout = function* logout(removeLocalUser) {
 };
 
 const sagas = function* sagas() {
-    yield fork(login, apiFetchLogin, apiStoreLocalUser);
-    yield fork(logout, apiRemoveLocalUser);
+    yield fork(signIn, apiFetchLogin, apiStoreLocalUser);
+    yield fork(signOut, apiRemoveLocalUser);
 };
 
 export default sagas;

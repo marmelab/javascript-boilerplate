@@ -3,11 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import HelmetTitle from './HelmetTitle';
-import { logout as logoutAction } from '../user/userActions';
+import { signOut as signOutAction } from '../user/userActions';
 
 export class App extends Component {
     render() {
-        const { user, logout } = this.props;
+        const { user, signOut } = this.props;
 
         return (
             <div className="app container-fluid">
@@ -29,7 +29,7 @@ export class App extends Component {
                         {user && user.authenticated &&
                             <ul className="nav navbar-nav pull-xs-right">
                                 <li className="nav-item">
-                                    <a href="#" onClick={() => logout()} className="nav-link">Log out</a>
+                                    <a href="#" onClick={() => signOut()} className="nav-link">Log out</a>
                                 </li>
                             </ul>
                         }
@@ -45,7 +45,7 @@ App.propTypes = {
     children: PropTypes.node,
     user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    logout: PropTypes.func.isRequired,
+    signOut: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -56,7 +56,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        logout: logoutAction,
+        signOut: signOutAction,
     }, dispatch);
 }
 

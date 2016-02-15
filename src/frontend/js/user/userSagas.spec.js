@@ -1,24 +1,24 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { call, fork, put, take } from 'redux-saga';
-import { login as loginSaga, logout as logoutSaga } from './userSagas';
-import { LOGIN, LOGOUT, login, logout, loginError, signedIn, signedOut } from './userActions';
+import { call, put, take } from 'redux-saga';
+import { signIn as signInSaga, signOut as signOutSaga } from './userSagas';
+import { SIGN_IN, SIGN_OUT, signIn, signOut, signedIn, signedOut } from './userActions';
 import { routeActions } from 'react-router-redux';
 
 describe('userSagas', () => {
-    describe('login', () => {
-        it('should starts on LOGIN action', () => {
-            const saga = loginSaga();
+    describe('signIn', () => {
+        it('should starts on SIGN_IN action', () => {
+            const saga = signInSaga();
 
-            expect(saga.next(login('/next-route', {
+            expect(saga.next(signIn('/next-route', {
                 email: 'test_email',
                 password: 'test_password',
-            })).value).to.deep.equal(take(LOGIN));
+            })).value).to.deep.equal(take(SIGN_IN));
         });
 
-        it('should call the fetchLogin function after a LOGIN action', () => {
+        it('should call the fetchLogin function after a SIGN_IN action', () => {
             const fetchLogin = sinon.spy();
-            const saga = loginSaga(fetchLogin);
+            const saga = signInSaga(fetchLogin);
 
             saga.next();
 
@@ -28,14 +28,14 @@ describe('userSagas', () => {
                     email: 'test_email',
                     password: 'test_password',
                 },
-                type: LOGIN,
+                type: SIGN_IN,
             }).value).to.deep.equal(call(fetchLogin, 'test_email', 'test_password'));
         });
 
-        it('should call the storeLocalUser function after a succesfull login', () => {
+        it('should call the storeLocalUser function after a succesfull signIn', () => {
             const fetchLogin = sinon.spy();
             const storeLocalUser = sinon.spy();
-            const saga = loginSaga(fetchLogin, storeLocalUser);
+            const saga = signInSaga(fetchLogin, storeLocalUser);
 
             saga.next();
             saga.next({
@@ -44,7 +44,7 @@ describe('userSagas', () => {
                     email: 'test_email',
                     password: 'test_password',
                 },
-                type: LOGIN,
+                type: SIGN_IN,
             });
 
             expect(saga.next({
@@ -53,10 +53,10 @@ describe('userSagas', () => {
             }).value).to.deep.equal(call(storeLocalUser, { id: 'foo'}));
         });
 
-        it('should put the routeActions.push action after a succesfull login', () => {
+        it('should put the routeActions.push action after a succesfull signIn', () => {
             const fetchLogin = sinon.spy();
             const storeLocalUser = sinon.spy();
-            const saga = loginSaga(fetchLogin, storeLocalUser);
+            const saga = signInSaga(fetchLogin, storeLocalUser);
 
             saga.next();
             saga.next({
@@ -65,7 +65,7 @@ describe('userSagas', () => {
                     email: 'test_email',
                     password: 'test_password',
                 },
-                type: LOGIN,
+                type: SIGN_IN,
             });
             saga.next({
                 status: 200,
@@ -75,10 +75,10 @@ describe('userSagas', () => {
             expect(saga.next().value).to.deep.equal(put(signedIn({ id: 'foo'})));
         });
 
-        it('should put the signedIn action after a succesfull login', () => {
+        it('should put the signedIn action after a succesfull signIn', () => {
             const fetchLogin = sinon.spy();
             const storeLocalUser = sinon.spy();
-            const saga = loginSaga(fetchLogin, storeLocalUser);
+            const saga = signInSaga(fetchLogin, storeLocalUser);
 
             saga.next();
             saga.next({
@@ -87,7 +87,7 @@ describe('userSagas', () => {
                     email: 'test_email',
                     password: 'test_password',
                 },
-                type: LOGIN,
+                type: SIGN_IN,
             });
             saga.next({
                 status: 200,
@@ -98,10 +98,11 @@ describe('userSagas', () => {
             expect(saga.next().value).to.deep.equal(put(routeActions.push('/next-route')));
         });
 
-        it('should put the loginError action after a failed login', () => {
+        it('should put the signIn action with error after a failed signIn', () => {
             const fetchLogin = sinon.spy();
             const storeLocalUser = sinon.spy();
-            const saga = loginSaga(fetchLogin, storeLocalUser);
+            const saga = signInSaga(fetchLogin, storeLocalUser);
+            const error = new Error('Run you fools!');
 
             saga.next();
             saga.next({
@@ -110,26 +111,26 @@ describe('userSagas', () => {
                     email: 'test_email',
                     password: 'test_password',
                 },
-                type: LOGIN,
+                type: SIGN_IN,
             });
 
             expect(saga.next({
                 status: 500,
-                error: 'Run you fools!',
-            }).value).to.deep.equal(put(loginError('Run you fools!')));
+                error,
+            }).value).to.deep.equal(put(signedIn(error)));
         });
     });
 
-    describe('logout', () => {
-        it('should starts on LOGOUT action', () => {
-            const saga = logoutSaga();
+    describe('signOut', () => {
+        it('should starts on SIGN_OUT action', () => {
+            const saga = signOutSaga();
 
-            expect(saga.next(logout()).value).to.deep.equal(take(LOGOUT));
+            expect(saga.next(signOut()).value).to.deep.equal(take(SIGN_OUT));
         });
 
         it('should call the removeLocalUser function', () => {
             const removeLocalUser = sinon.spy();
-            const saga = logoutSaga(removeLocalUser);
+            const saga = signOutSaga(removeLocalUser);
 
             saga.next();
             expect(saga.next().value).to.deep.equal(call(removeLocalUser));
@@ -137,7 +138,7 @@ describe('userSagas', () => {
 
         it('should put the signedOut action', () => {
             const removeLocalUser = sinon.spy();
-            const saga = logoutSaga(removeLocalUser);
+            const saga = signOutSaga(removeLocalUser);
 
             saga.next();
             saga.next();
@@ -147,7 +148,7 @@ describe('userSagas', () => {
 
         it('should put the routeActions.push action', () => {
             const removeLocalUser = sinon.spy();
-            const saga = logoutSaga(removeLocalUser);
+            const saga = signOutSaga(removeLocalUser);
 
             saga.next();
             saga.next();

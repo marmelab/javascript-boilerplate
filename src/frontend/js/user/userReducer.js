@@ -8,13 +8,22 @@ export default function(sessionStorage) {
         authenticated: !!sessionStorage.getItem('token'),
     };
 
-    return (state = initialState, { type, payload }) => {
+    return (state = initialState, { type, payload, error }) => {
         switch (type) {
         case SIGNED_IN:
+            if (!error) {
+                return {
+                    ...state,
+                    ...payload,
+                    authenticated: true,
+                    error: false,
+                };
+            }
+
             return {
                 ...state,
-                ...payload,
-                authenticated: true,
+                authenticated: false,
+                error: payload,
             };
         case SIGNED_OUT:
             return {
