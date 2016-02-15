@@ -1,6 +1,6 @@
 /* eslint func-names:0 */
 
-describe('/api/authenticate', () => {
+describe('/api/sign-in', () => {
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();
     });
@@ -9,7 +9,7 @@ describe('/api/authenticate', () => {
         it('should not allow GET request', function* () {
             const { statusCode } = yield request({
                 method: 'PUT',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
             });
             assert.equal(statusCode, 405);
         });
@@ -19,7 +19,7 @@ describe('/api/authenticate', () => {
         it('should return 401 with an empty email and password', function* () {
             const { statusCode } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: '',
                     password: '',
@@ -30,7 +30,7 @@ describe('/api/authenticate', () => {
         it('should return 401 with an empty email', function* () {
             const { statusCode } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: '',
                     password: 'password',
@@ -41,7 +41,7 @@ describe('/api/authenticate', () => {
         it('should return 401 with an empty password', function* () {
             const { statusCode } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: 'user1@marmelab.io',
                     password: '',
@@ -52,7 +52,7 @@ describe('/api/authenticate', () => {
         it('should return 401 with a wrong email', function* () {
             const { statusCode } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: 'none@marmelab.io',
                     password: 'password',
@@ -63,7 +63,7 @@ describe('/api/authenticate', () => {
         it('should return 401 with a wrong password', function* () {
             const { statusCode } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: 'user1@marmelab.io',
                     password: 'wrongpassword',
@@ -74,7 +74,7 @@ describe('/api/authenticate', () => {
         it('should return 200 with a valid email and password', function* () {
             const { statusCode, body } = yield request({
                 method: 'POST',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
                 body: {
                     email: 'user1@marmelab.io',
                     password: 'password',
@@ -87,7 +87,7 @@ describe('/api/authenticate', () => {
         it('should not allow PUT request', function* () {
             const { statusCode } = yield request({
                 method: 'PUT',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
             });
             assert.equal(statusCode, 405);
         });
@@ -96,7 +96,7 @@ describe('/api/authenticate', () => {
         it('should not allow DELETE request', function* () {
             const { statusCode } = yield request({
                 method: 'DELETE',
-                url: '/api/authenticate',
+                url: '/api/sign-in',
             });
             assert.equal(statusCode, 405);
         });

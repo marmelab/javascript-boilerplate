@@ -16,9 +16,9 @@ app.use(function* init(next) {
     yield next;
 });
 
-app.use(koaRoute.post('/authenticate', rateLimiter(config.apps.api.security.rateLimitOptions)));
+app.use(koaRoute.post('/sign-in', rateLimiter(config.apps.api.security.rateLimitOptions)));
 
-app.use(koaRoute.post('/authenticate', function* login() {
+app.use(koaRoute.post('/sign-in', function* signIn() {
     const { email, password } = yield coBody(this);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
@@ -34,7 +34,7 @@ app.use(koaRoute.post('/authenticate', function* login() {
     };
 }));
 
-app.use(koaRoute.post('/sign-up', function* signIn() {
+app.use(koaRoute.post('/sign-up', function* signUp() {
     const { email, password } = yield coBody(this);
     const user = yield userRepository.insertOne({email, password});
 
