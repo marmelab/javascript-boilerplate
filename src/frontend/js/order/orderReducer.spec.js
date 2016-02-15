@@ -8,6 +8,7 @@ describe('order reducer', () => {
             orders: [],
             order: {},
             error: false,
+            loading: false,
         });
     });
 
@@ -16,6 +17,7 @@ describe('order reducer', () => {
             error: false,
             order: {},
             orders: [{ id: 1 }],
+            loading: false,
         });
     });
 
@@ -25,6 +27,7 @@ describe('order reducer', () => {
             order: {},
             orders: [],
             error,
+            loading: false,
         });
     });
 });

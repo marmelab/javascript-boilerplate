@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { call, put, take } from 'redux-saga';
+import { call, put, take } from 'redux-saga/effects';
 import { signIn as signInSaga, signOut as signOutSaga } from './userSagas';
 import { SIGN_IN, SIGN_OUT, signIn, signOut, signedIn, signedOut } from './userActions';
 import { routeActions } from 'react-router-redux';
