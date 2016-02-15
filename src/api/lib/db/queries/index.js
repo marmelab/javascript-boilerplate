@@ -47,7 +47,6 @@ const base = (client, tableName, exposedFields, searchableFieldsList, sortableFi
 
     return {
         selectAll: select.selectAll,
-        selectOne: select.selectOneById, // Not sure that's a great id !!!
         selectOneById: select.selectOneById,
         countAll: select.countAll,
         refresh: select.refresh,
