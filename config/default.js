@@ -41,6 +41,7 @@ module.exports = {
                         path: '/xdomain',
                     },
                 },
+                rateLimitOptions: {},
             },
         },
         frontend: {
