@@ -21,6 +21,12 @@ app.use(function* getUser(next) {
     yield next;
 });
 
+app.use(function* setQueries(next) {
+    this.orderQueries = orderFactory(this.client);
+
+    yield next;
+});
+
 app.use(koaRoute.post('/', function* postUserOrder(next) {
     this.data = yield coBody(this);
     this.data.reference = uuid.v1();
@@ -38,9 +44,11 @@ app.use(koaMount('/', crud(orderFactory, {
 })));
 
 app.use(koaRoute.get('/', function* getUserOrders() {
-    const orderQueries = orderFactory(this.client);
+    this.body = yield this.orderQueries.selectByUserId(this.userData.id);
+}));
 
-    this.body = yield orderQueries.selectByUserId(this.userData.id);
+app.use(koaRoute.get('/:id', function* getUserOrder(id) {
+    this.body = yield this.orderQueries.selectOneById(id);
 }));
 
 export default app;
