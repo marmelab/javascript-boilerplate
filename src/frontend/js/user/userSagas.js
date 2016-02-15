@@ -6,14 +6,14 @@ import { fetchLogin as apiFetchLogin, storeLocalUser as apiStoreLocalUser, remov
 export const signIn = function* signIn(fetchLogin, storeLocalUser) {
     while (true) {
         const { payload: { email, password, previousRoute }} = yield take(SIGN_IN);
-        const { error, user, status } = yield call(fetchLogin, email, password);
+        const { error, user } = yield call(fetchLogin, email, password);
 
-        if (status === 200) {
+        if (error) {
+            yield put(signedIn(error));
+        } else {
             yield call(storeLocalUser, user);
             yield put(signedIn(user));
             yield put(routeActions.push(previousRoute));
-        } else {
-            yield put(signedIn(error));
         }
     }
 };

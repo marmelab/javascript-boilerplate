@@ -28,8 +28,13 @@ export class App extends Component {
                         </ul>
                         {user && user.authenticated &&
                             <ul className="nav navbar-nav pull-xs-right">
-                                <li className="nav-item">
-                                    <a href="#" onClick={() => signOut()} className="nav-link">Log out</a>
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {user.email}
+                                    </a>
+                                    <div className="dropdown-menu">
+                                        <a className="dropdown-item" onClick={() => signOut()}>Sign out</a>
+                                    </div>
                                 </li>
                             </ul>
                         }

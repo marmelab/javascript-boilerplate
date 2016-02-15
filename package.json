@@ -34,6 +34,7 @@
     "html-loader": "~0.4.0",
     "html-webpack-plugin": "~2.7.2",
     "isomorphic-fetch": "~2.2.0",
+    "jquery": "~2.2.0",
     "json-loader": "~0.5.4",
     "jsonwebtoken": "~5.4.1",
     "koa": "~1.0.0",
@@ -92,6 +93,7 @@
     "eslint-plugin-mocha": "~1.0.0",
     "eslint-plugin-react": "~3.5.1",
     "expect": "~1.11.1",
+    "expose-loader": "~0.7.1",
     "faker": "~3.0.1",
     "fakerest": "~1.0.1",
     "http-server": "~0.8.5",
@@ -107,6 +109,7 @@
     "redux-mock-store": "0.0.3",
     "selenium-standalone": "~4.8.0",
     "sinon": "2.0.0-pre",
+    "tether": "~1.1.1",
     "webpack-dev-server": "~1.14.1"
   },
   "scripts": {

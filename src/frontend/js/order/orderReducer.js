@@ -1,15 +1,5 @@
 import { ORDERS_LOADED } from './orderActions';
 
-// [{
-//     id: 'order1',
-//     reference: 'O1',
-//     date: new Date(),
-//     customer_id: 1,
-//     total: 29.99,
-//     status: 'pending',
-//
-// }]
-
 const initialState = {
     orders: [],
     order: {},
