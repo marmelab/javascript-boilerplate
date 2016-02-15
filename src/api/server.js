@@ -137,13 +137,7 @@ app.use(function* (next) {
 });
 
 if (env !== 'development') {
-  // Hide powered-by koa
-    app.use(function* hidePoweredBy(next) {
-        this.remove('X-Powered-By');
-        yield next;
-    });
-
-  // gzip compression
+    // gzip compression
     app.use(compress());
 }
 

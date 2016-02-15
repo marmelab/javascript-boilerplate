@@ -5,10 +5,12 @@ import koa from 'koa';
 import koaRoute from 'koa-route';
 import methodFilter from '../lib/middlewares/methodFilter';
 import userRepositoryFactory from './userModel';
+import rateLimiter from './rateLimiter';
 
 const app = koa();
 
 app.use(methodFilter(['POST']));
+app.use(koaRoute.post('/', rateLimiter(config.apps.api.security.rateLimitOptions)));
 
 app.use(koaRoute.post('/', function* () {
     const { email, password } = yield coBody(this);
