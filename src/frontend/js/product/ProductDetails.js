@@ -6,14 +6,14 @@ import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import ProductItem from './ProductItem';
 
-const ProductDetails = ({ product: { id, name, description, price, imageUrl }}) => (
+const ProductDetails = ({ product: { id, reference, description, price, thumbnail }}) => (
     <div className="row product-details">
         <HelmetTitle title={name} />
         <div className="col-xs-12 col-md-4 col-lg-3">
-            <img src={imageUrl} className="img-thumbnail" />
+            <img src={thumbnail} className="img-thumbnail" />
         </div>
         <div className="col-xs-12 col-md-8 col-lg-9">
-            <h2>{name}</h2>
+            <h2>{reference}</h2>
             <p className="description">{description}</p>
             <p className="price">Price: {numeral(price).format('$0.00')}</p>
             <p>
