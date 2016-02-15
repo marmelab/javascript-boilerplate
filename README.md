@@ -37,6 +37,9 @@ Browse the app:
 make stop-dev
 ```
 
+Note: for stability purposes, it's a good practice to not upgrade your project dependencies using major updates.
+It's why you should locally run `npm set prefix='~'` and not add dependencies prefixed with a carret `^` without good reason.
+
 ## Test
 
 ```sh
