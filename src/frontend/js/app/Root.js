@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import history from './history';
-import routes from './routes';
+import routesFactory from './routes';
 
 const Root = ({ store }) => {
     if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef
@@ -11,7 +11,7 @@ const Root = ({ store }) => {
         return (
             <Provider {...{store}}>
                 <div>
-                    <Router history={history} routes={routes} />
+                    <Router history={history} routes={routesFactory(store)} />
                     <DevTools />
                 </div>
             </Provider>
@@ -20,7 +20,7 @@ const Root = ({ store }) => {
 
     return (
         <Provider {...{store}}>
-            <Router history={history} routes={routes} />
+            <Router history={history} routes={routesFactory(store)} />
         </Provider>
     );
 };

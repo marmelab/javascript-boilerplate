@@ -10,7 +10,7 @@ import userRepositoryFactory from '../src/api/users/userModel';
 const args = process.argv.slice(2);
 
 co(function* () {
-    const connection = yield dbClient(config.db);
+    const connection = yield dbClient(config.apps.api.db);
     const userRepository = userRepositoryFactory(connection.client);
 
     const user = yield userRepository.insertOne({

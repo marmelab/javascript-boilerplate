@@ -3,9 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import HelmetTitle from './HelmetTitle';
+import { signOut as signOutAction } from '../user/userActions';
 
 export class App extends Component {
     render() {
+        const { user, signOut } = this.props;
+
         return (
             <div className="app container-fluid">
                 <HelmetTitle />
@@ -19,7 +22,22 @@ export class App extends Component {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/products">Products</Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/orders">Orders</Link>
+                            </li>
                         </ul>
+                        {user && user.authenticated &&
+                            <ul className="nav navbar-nav pull-xs-right">
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {user.email}
+                                    </a>
+                                    <div className="dropdown-menu">
+                                        <a className="dropdown-item" onClick={() => signOut()}>Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        }
                     </nav>
                 </div>
                 {this.props.children}
@@ -32,6 +50,7 @@ App.propTypes = {
     children: PropTypes.node,
     user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+    signOut: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -41,7 +60,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        signOut: signOutAction,
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

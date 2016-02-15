@@ -1,13 +1,19 @@
 import App from './App';
 import productRoutes from '../product/productRoutes';
+import orderRoutesFactory from '../order/orderRoutes';
+import userRoutes from '../user/userRoutes';
 
-export default {
-    component: 'div',
-    childRoutes: [{
-        path: '/',
-        component: App,
-        childRoutes: [
-            ...productRoutes,
-        ],
-    }],
+export default store => {
+    return {
+        component: 'div',
+        childRoutes: [{
+            path: '/',
+            component: App,
+            childRoutes: [
+                ...productRoutes,
+                ...orderRoutesFactory(store),
+                ...userRoutes,
+            ],
+        }],
+    };
 };

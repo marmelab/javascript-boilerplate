@@ -2,14 +2,14 @@ import koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
 
-import authenticateRoutes from './users/authenticateRoutes';
+import authenticateApiRoutes from './authentication/authenticateApiRoutes';
 import methodFilter from './lib/middlewares/methodFilter';
 import orderApiRoutes from './orders/orderApiRoutes';
 import productApiRoutes from './products/productApiRoutes';
 
 const app = koa();
 
-app.use(koaMount('/authenticate', authenticateRoutes));
+app.use(koaMount('/', authenticateApiRoutes));
 app.use(koaMount('/products', productApiRoutes));
 app.use(koaMount('/orders', orderApiRoutes));
 

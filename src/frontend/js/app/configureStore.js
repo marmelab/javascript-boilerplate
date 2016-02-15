@@ -5,12 +5,15 @@ import { syncHistory } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import fetch from 'isomorphic-fetch';
 import fetchMiddlewareFactory from './fetchMiddleware';
+import createSagaMiddleware from 'redux-saga';
+import sagas from './sagas';
 
 export default function configureStore(reducers, routes, initialState) {
     let enhancers = [
         applyMiddleware(
             thunkMiddleware,
             syncHistory(history),
+            createSagaMiddleware(sagas),
             fetchMiddlewareFactory(fetch, window.sessionStorage)
         ),
     ];
