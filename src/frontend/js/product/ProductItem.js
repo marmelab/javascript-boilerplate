@@ -3,7 +3,7 @@ import numeral from 'numeral';
 import { Link } from 'react-router';
 
 const ProductItem = ({ id, reference, description, price, thumbnail }) => (
-    <div className="card">
+    <div className="card product-item">
         <img src={thumbnail} className="card-img-top img-fluid" />
         <div className="card-block">
             <h4 className="card-title">{reference}</h4>
@@ -19,7 +19,7 @@ const ProductItem = ({ id, reference, description, price, thumbnail }) => (
 
 ProductItem.propTypes = {
     description: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     price: PropTypes.number.isRequired,
     reference: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,

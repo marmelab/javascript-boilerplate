@@ -24,7 +24,7 @@ class ProductList extends Component {
                 }
                 {!loading &&
                     products.map(product => (
-                        <div key={product.id} className="product-item col-xs-12 col-md-6 col-lg-3">
+                        <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
                             <ProductItem {...product} />
                         </div>
                     ))

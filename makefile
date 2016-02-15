@@ -116,13 +116,15 @@ test-frontend-unit:
 test-isomorphic-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive ./src/isomorphic/{,**/}*.spec.js
 
-test-frontend-functional:
-	# TODO: restore when implemented
-	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
+test-frontend-functional: reset-test-database
+	@NODE_ENV=test make load-fixtures
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
 	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+
+load-fixtures:
+	@./node_modules/.bin/babel-node ./bin/loadFixtures.js
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
