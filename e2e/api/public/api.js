@@ -3,11 +3,11 @@
 describe('/api', () => {
     describe('GET', () => {
         it('should not require authentification', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'GET',
                 url: '/api',
             });
-            assert.equal(statusCode, 200);
+            assert.equal(statusCode, 200, body);
         });
     });
     describe('POST', () => {

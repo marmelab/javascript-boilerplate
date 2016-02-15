@@ -47,7 +47,7 @@ describe('/api/orders/{id}', () => {
                 url: `/api/orders/${orders.orderUser1.id}`,
             }, user1Token);
 
-            assert.equal(statusCode, 200);
+            assert.equal(statusCode, 200, body);
             delete body.id;
             delete body.date;
             assert.deepEqual(body, {
@@ -76,12 +76,12 @@ describe('/api/orders/{id}', () => {
             });
             let userOrders = yield orderQueries.selectByUserId(user1.id);
             assert.equal(userOrders.length, 2);
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${newOrder.id}`,
             }, user1Token);
 
-            assert.equal(statusCode, 200);
+            assert.equal(statusCode, 200, body);
             userOrders = yield orderQueries.selectByUserId(user1.id);
             assert.equal(userOrders.length, 1);
         });

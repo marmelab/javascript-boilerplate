@@ -72,7 +72,7 @@ describe('/api/authenticate', () => {
             assert.equal(statusCode, 401);
         });
         it('should return 200 with a valid email and password', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'POST',
                 url: '/api/authenticate',
                 body: {
@@ -80,7 +80,7 @@ describe('/api/authenticate', () => {
                     password: 'password',
                 },
             });
-            assert.equal(statusCode, 200);
+            assert.equal(statusCode, 200, body);
         });
     });
     describe('PUT', () => {
