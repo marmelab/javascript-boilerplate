@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
-import userRepository from '../userModel';
+import userRepository from './userModel';
 
 describe('User Model', () => {
     let client;
