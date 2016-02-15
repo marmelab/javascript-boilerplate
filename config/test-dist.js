@@ -12,6 +12,7 @@ module.exports = {
                     max: 99,
                 },
             },
+            rateLimit: false,
         },
         frontend: {
             history: 'createHashHistory',

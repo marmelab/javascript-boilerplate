@@ -24,6 +24,10 @@ module.exports = {
             },
             maxAge: 600,
             port: apiPort,
+            rateLimit: {
+                windowMs: 601000, // milliseconds - how long to keep records of requests in memory
+                max: 5, // max number of recent connections during `window` miliseconds before sending a 429 response
+            },
             security: {
                 bcrypt: {
                     salt_work_factor: 10, // higher is safer, but slower
