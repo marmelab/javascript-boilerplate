@@ -18,6 +18,43 @@ describe('/api/products', () => {
                 url: '/api/products',
             });
             assert.equal(body.length, 3);
+            const requestedProducts = body.map(product => {
+                delete product.id;
+                delete product.totalcount;
+                return product;
+            });
+            assert.deepEqual(requestedProducts, [
+                {
+                    reference: 'abc',
+                    width: 30,
+                    height: 40,
+                    price: 3.40,
+                    thumbnail: 'http://lorempixel.com/60/60/',
+                    image: 'http://lorempixel.com/400/400/',
+                    description: 'John the zoo',
+                    stock: 10,
+                },
+                {
+                    reference: 'efg',
+                    width: 30,
+                    height: 40,
+                    price: 3.40,
+                    thumbnail: 'http://lorempixel.com/60/60/',
+                    image: 'http://lorempixel.com/400/400/',
+                    description: 'Frank on toilet',
+                    stock: 10,
+                },
+                {
+                    reference: 'hij',
+                    width: 30,
+                    height: 40,
+                    price: 3.40,
+                    thumbnail: 'http://lorempixel.com/60/60/',
+                    image: 'http://lorempixel.com/400/400/',
+                    description: 'Miles in the kitchen',
+                    stock: 10,
+                },
+            ]);
         });
         after(function* removeFixtures() {
             yield fixtureLoader.removeAllFixtures();
