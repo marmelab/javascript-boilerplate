@@ -1,6 +1,6 @@
 /* eslint func-names:0 no-undef:0*/
 
-describe.only('/api/authenticate', () => {
+describe('/api/authenticate', () => {
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();
     });
@@ -95,7 +95,7 @@ describe.only('/api/authenticate', () => {
     describe('DELETE', () => {
         it('should not allow DELETE request', function* () {
             const { statusCode } = yield request({
-                method: 'PUT',
+                method: 'DELETE',
                 url: '/api/authenticate',
             });
             assert.equal(statusCode, 405);

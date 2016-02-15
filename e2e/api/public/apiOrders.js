@@ -1,17 +1,25 @@
 /* eslint func-names:0 no-undef:0*/
 
 import userFactory from '../../../src/api/users/userModel';
+import orderFactory from '../../../src/api/orders/orderModel';
 
 describe('/api/orders', () => {
-    describe('GET', () => {
-        let user;
-        let userToken;
-        before(function* addFixtures() {
-            yield fixtureLoader.loadDefaultFixtures();
-            const userRepository = userFactory(db.client);
-            user = yield userRepository.findByEmail('user1@marmelab.io');
-            userToken = yield fixtureLoader.getTokenFor('user1@marmelab.io');
+    let user;
+    let userToken;
+    before(function* addFixtures() {
+        yield fixtureLoader.loadDefaultFixtures();
+        const userRepository = userFactory(db.client);
+        user = yield userRepository.findByEmail('user1@marmelab.io');
+        userToken = yield fixtureLoader.getTokenFor('user1@marmelab.io');
+        yield orderFactory(db.client).insertOne({
+            reference: 'ref1',
+            date: new Date(),
+            customer_id: user.id,
+            total: 6.8,
+            status: 'valid',
         });
+    });
+    describe('GET', () => {
         it('should require authentification', function* () {
             const { statusCode } = yield request({
                 method: 'GET',
@@ -35,8 +43,33 @@ describe('/api/orders', () => {
                 status: 'valid',
             });
         });
-        after(function* removeFixtures() {
-            yield fixtureLoader.removeAllFixtures();
+    });
+    describe('POST', () => {
+        it('should require authentification', function* () {
+            const { statusCode } = yield request({
+                method: 'POST',
+                url: '/api/orders',
+                body: {
+                    total: 6.80,
+                    status: 'valid',
+                },
+            });
+            assert.equal(statusCode, 401);
+        });
+        it('should create a order', function* () {
+            let userOrders = yield orderFactory(db.client).selectByUserId(user.id);
+            assert.equal(userOrders.length, 1);
+            const { statusCode } = yield request({
+                method: 'POST',
+                url: '/api/orders',
+                body: {
+                    total: 6.80,
+                    status: 'valid',
+                },
+            }, userToken);
+            assert.equal(statusCode, 200);
+            userOrders = yield orderFactory(db.client).selectByUserId(user.id);
+            assert.equal(userOrders.length, 2);
         });
     });
     describe('PUT', () => {
@@ -47,5 +80,8 @@ describe('/api/orders', () => {
             });
             assert.equal(statusCode, 405);
         });
+    });
+    after(function* removeFixtures() {
+        yield fixtureLoader.removeAllFixtures();
     });
 });
