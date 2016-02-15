@@ -14,7 +14,8 @@
     "args"       : ["./build", "-p 8081", "--silent"],
     "exec_mode"  : "fork",
     "env": {
-        "NODE_ENV": "test"
+        "NODE_ENV": "test",
+        "NODE_PORT": 3020
     }
   }]
 }
