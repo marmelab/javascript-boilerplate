@@ -1,9 +1,9 @@
-var config = require('config'); // eslint-disable-line no-var
-var ExtractTextPlugin = require('extract-text-webpack-plugin'); // eslint-disable-line no-var
-var HtmlWebpackPlugin = require('html-webpack-plugin'); // eslint-disable-line no-var
-var webpack = require('webpack'); // eslint-disable-line no-var
+import config from 'config'; // eslint-disable-line no-var
+import ExtractTextPlugin from 'extract-text-webpack-plugin'; // eslint-disable-line no-var
+import HtmlWebpackPlugin from 'html-webpack-plugin'; // eslint-disable-line no-var
+import webpack from 'webpack'; // eslint-disable-line no-var
 
-module.exports = function(appName) {
+export default function(appName) {
     return [
         new webpack.DefinePlugin({
             'APP_NAME': JSON.stringify(config.appName),
@@ -30,4 +30,4 @@ module.exports = function(appName) {
         template: __dirname + '/../src/' + appName + '/index.html',
         hash: true,
     })]);
-};
+}
