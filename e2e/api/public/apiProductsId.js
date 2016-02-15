@@ -7,11 +7,11 @@ describe('/api/products/{id}', () => {
     });
     describe('GET', () => {
         it('should not require authentification', function* shouldNotRequireAuthentification() {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'GET',
                 url: `/api/products/${product.id}`,
             });
-            assert.equal(statusCode, 200);
+            assert.equal(statusCode, 200, body);
         });
         it('should return information about a specific products', function* shouldReturnAllProductsList() {
             const { body } = yield request({
