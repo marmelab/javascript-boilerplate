@@ -4,14 +4,19 @@ import koa from 'koa';
 import coBody from 'co-body';
 import koaRoute from 'koa-route';
 
-export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELETE']) => {
+export default (queriesFactory, configuredMethods = {}) => {
     const app = koa();
+    const defaultMethods = {
+        GET: 'managed',
+        POST: 'managed',
+        PUT: 'managed',
+        DELETE: 'managed',
+    };
+
     let queries;
 
     app.use(function* (next) {
-        const clean = method => method.toLowerCase().trim();
-        const method = clean(this.method);
-        this.isAllowed = availableMethods.map(clean).indexOf(method) !== -1;
+        this.availableMethods = { ...defaultMethods, ...configuredMethods };
 
         yield next;
     });
@@ -23,7 +28,7 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
 
     // GET /
     app.use(koaRoute.get('/', function* (next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.GET) {
             const query = this.request.query;
             const excludedQueryParams = ['limit', 'offset', 'filter', '_sort', '_sortDir'];
             const other = {};
@@ -38,12 +43,14 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
             this.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }
 
-        yield next;
+        if (this.availableMethods.GET !== 'managed') {
+            yield next;
+        }
     }));
 
     // GET /:id
     app.use(koaRoute.get('/:id', function* (id, next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.GET) {
             try {
                 this.body = yield queries.selectOneById(id);
             } catch (e) {
@@ -54,32 +61,38 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
                 }
             }
         }
-        yield next;
+        if (this.availableMethods.GET !== 'managed') {
+            yield next;
+        }
     }));
 
     // POST /
     app.use(koaRoute.post('/', function* (next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.POST) {
             const data = this.data || (yield coBody(this));
             this.body = yield queries.insertOne(data);
         }
 
-        yield next;
+        if (this.availableMethods.POST !== 'managed') {
+            yield next;
+        }
     }));
 
     // POST /multi
     app.use(koaRoute.post('/multi', function* (next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.POST) {
             const data = this.data || (yield coBody(this));
             this.body = yield queries.batchInsert(data);
         }
 
-        yield next;
+        if (this.availableMethods.POST !== 'managed') {
+            yield next;
+        }
     }));
 
     // DELETE /
     app.use(koaRoute.delete('/:id', function* (id, next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.DELETE) {
             try {
                 this.body = yield queries.removeOne(id);
             } catch (e) {
@@ -91,22 +104,25 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
             }
         }
 
-        yield next;
+        if (this.availableMethods.DELETE !== 'managed') {
+            yield next;
+        }
     }));
 
     // DELETE /multi
     app.use(koaRoute.delete('/multi', function* (next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.DELETE) {
             const ids = this.query.id;
             this.body = yield queries.batchDelete(ids);
         }
-
-        yield next;
+        if (this.availableMethods.DELETE !== 'managed') {
+            yield next;
+        }
     }));
 
     // PUT /:id
     app.use(koaRoute.put('/:id', function* (id, next) {
-        if (this.isAllowed) {
+        if (this.availableMethods.PUT) {
             const data = this.data || (yield coBody(this));
             let modifiedEntity;
             try {
@@ -122,7 +138,9 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
             this.body = modifiedEntity;
         }
 
-        yield next;
+        if (this.availableMethods.PUT !== 'managed') {
+            yield next;
+        }
     }));
 
     return app;

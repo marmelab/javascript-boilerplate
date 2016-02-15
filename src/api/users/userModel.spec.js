@@ -1,3 +1,5 @@
+/* eslint func-names:0 */
+
 import { assert } from 'chai';
 import sinon from 'sinon';
 import userRepository from './userModel';
