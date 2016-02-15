@@ -1,4 +1,4 @@
-/* eslint func-names:0 no-undef:0*/
+/* eslint func-names:0 */
 
 import userFactory from '../../../src/api/users/userModel';
 import orderFactory from '../../../src/api/orders/orderModel';

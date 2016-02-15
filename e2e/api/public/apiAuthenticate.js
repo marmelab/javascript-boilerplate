@@ -1,4 +1,4 @@
-/* eslint func-names:0 no-undef:0*/
+/* eslint func-names:0 */
 
 describe('/api/authenticate', () => {
     before(function* addFixtures() {
