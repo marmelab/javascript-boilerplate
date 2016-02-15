@@ -74,7 +74,7 @@ export default reduxForm({
     destroyOnUnmount: false,
 },
 state => ({
-    previousRoute: state.routing.location.state.nextPathname,
+    previousRoute: state.routing.location.state && state.routing.location.state.nextPathname,
 }), {
     login: loginAction,
 })(Login);

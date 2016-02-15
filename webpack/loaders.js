@@ -16,9 +16,9 @@ module.exports = function(appName) {
                 'add-module-exports',
             ],
             presets: [
-                require.resolve('babel-preset-es2015'),
-                require.resolve('babel-preset-react'),
-                require.resolve('babel-preset-stage-0'),
+                'es2015',
+                'react',
+                'stage-0',
             ],
         },
     }, {

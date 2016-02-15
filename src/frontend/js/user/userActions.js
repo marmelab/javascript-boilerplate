@@ -1,33 +1,19 @@
-import { routeActions } from 'react-router-redux';
+import { createAction } from 'redux-actions';
+
+export const LOGIN = 'LOGIN';
+export const login = createAction(LOGIN, (previousRoute, credentials) => ({
+    previousRoute,
+    ...credentials,
+}));
+
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const loginError = createAction(LOGIN_ERROR);
+
+export const LOGOUT = 'LOGOUT';
+export const logout = createAction(LOGOUT);
 
 export const SIGNED_IN = 'SIGNED_IN';
-export const signedIn = user => ({
-    type: SIGNED_IN,
-    user,
-});
-
-export const login = (previousRoute, credentials) => dispatch => {
-    sessionStorage.setItem('id', 1);
-    sessionStorage.setItem('email', 'toto@toto.com');
-    sessionStorage.setItem('token', 'aaaaaaa');
-
-    dispatch(signedIn({
-        token: 'aaaaaaa',
-        email: 'toto@toto.com',
-    }));
-
-    dispatch(routeActions.push(previousRoute));
-};
+export const signedIn = createAction(SIGNED_IN, user => user);
 
 export const SIGNED_OUT = 'SIGNED_OUT';
-export const logout = () => dispatch => {
-    sessionStorage.removeItem('id');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('token');
-
-    dispatch({
-        type: SIGNED_OUT,
-    });
-
-    dispatch(routeActions.push('/'));
-};
+export const signedOut = createAction(SIGNED_OUT);

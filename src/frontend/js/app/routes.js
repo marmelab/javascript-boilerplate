@@ -1,7 +1,7 @@
 import App from './App';
 import productRoutes from '../product/productRoutes';
 import orderRoutesFactory from '../order/orderRoutes';
-import userRoutesFactory from '../user/userRoutes';
+import userRoutes from '../user/userRoutes';
 
 export default store => {
     return {
@@ -12,7 +12,7 @@ export default store => {
             childRoutes: [
                 ...productRoutes,
                 ...orderRoutesFactory(store),
-                ...userRoutesFactory(store),
+                ...userRoutes,
             ],
         }],
     };

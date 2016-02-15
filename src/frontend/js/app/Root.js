@@ -20,7 +20,7 @@ const Root = ({ store }) => {
 
     return (
         <Provider {...{store}}>
-            <Router history={history} routes={routes} />
+            <Router history={history} routes={routesFactory(store)} />
         </Provider>
     );
 };
