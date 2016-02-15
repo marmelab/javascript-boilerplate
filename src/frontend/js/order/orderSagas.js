@@ -6,12 +6,12 @@ export const loadOrders = function* loadOrders(fetchOrders, getState) {
     while(true) {
         yield take(LOAD_ORDERS);
         const state = getState();
-        const { error, orders, status } = yield call(fetchOrders, state.user.token);
+        const { error, orders } = yield call(fetchOrders, state.user.token);
 
-        if (status === 200) {
-            yield put(ordersLoaded(orders));
-        } else {
+        if (error) {
             yield put(ordersLoaded(error));
+        } else {
+            yield put(ordersLoaded(orders));
         }
     }
 };

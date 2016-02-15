@@ -13,7 +13,7 @@ export function fetchOrders(authorizationToken) {
             return Promise.reject(new Error(response.statusText));
         }
 
-        return { user: json };
+        return { orders: json };
     }, error => ({
         error,
     }));
