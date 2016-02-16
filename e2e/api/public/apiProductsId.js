@@ -11,7 +11,7 @@ describe('/api/products/{id}', () => {
                 method: 'GET',
                 url: `/api/products/${product.id}`,
             });
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
         });
         it('should return information about a specific products', function* shouldReturnAllProductsList() {
             const { body } = yield request({

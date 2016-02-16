@@ -80,7 +80,7 @@ describe('/api/authenticate', () => {
                     password: 'password',
                 },
             });
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
         });
     });
     describe('PUT', () => {
