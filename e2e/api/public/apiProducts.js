@@ -10,7 +10,7 @@ describe('/api/products', () => {
                 method: 'GET',
                 url: '/api/products',
             });
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
         });
         it('should return a list of all products', function* () {
             const { body } = yield request({

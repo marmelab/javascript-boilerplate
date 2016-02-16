@@ -7,7 +7,7 @@ describe('/api', () => {
                 method: 'GET',
                 url: '/api',
             });
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
         });
     });
     describe('POST', () => {

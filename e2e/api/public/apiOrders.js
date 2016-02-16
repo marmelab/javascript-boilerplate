@@ -32,7 +32,7 @@ describe('/api/orders', () => {
                 url: `/api/orders`,
             }, userToken);
 
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
             assert.equal(body.length, 1);
             delete body[0].id;
             delete body[0].date;
@@ -67,7 +67,7 @@ describe('/api/orders', () => {
                     status: 'valid',
                 },
             }, userToken);
-            assert.equal(statusCode, 200, body);
+            assert.equal(statusCode, 200, JSON.stringify(body));
             userOrders = yield orderFactory(db.client).selectByUserId(user.id);
             assert.equal(userOrders.length, 2);
         });
