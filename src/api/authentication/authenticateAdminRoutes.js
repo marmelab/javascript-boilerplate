@@ -17,9 +17,9 @@ app.use(koaRoute.post('/', function* login() {
     const userRepository = userRepositoryFactory(this.client);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
-        // already done in userRepository.authenticate. Not sure that it must be done twice ?
-        this.status = 401;
-        return;
+        const err = new Error('Invalid credentials.');
+        err.status = 401;
+        throw err;
     }
 
     this.body = {

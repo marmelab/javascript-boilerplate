@@ -46,13 +46,9 @@ export default client => {
 
     queries.authenticate = function* authenticate(email, password) {
         const foundUser = yield this.findByEmail(email);
-
         if (!foundUser || !bcrypt.compareSync(password, foundUser.password)) {
-            const err = new Error('Invalid credentials.');
-            err.status = 401;
-            throw err;
+            return false;
         }
-
         return {
             id: foundUser.id,
             email: foundUser.email,

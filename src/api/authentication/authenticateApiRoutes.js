@@ -3,7 +3,6 @@ import config from 'config';
 import jwt from 'jsonwebtoken';
 import koa from 'koa';
 import koaRoute from 'koa-route';
-import methodFilter from '../lib/middlewares/methodFilter';
 import rateLimiter from '../lib/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
 
@@ -22,9 +21,9 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     const { email, password } = yield coBody(this);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
-        // already done in userRepository.authenticate. Not sure that it must be done twice ?
-        this.status = 401;
-        return;
+        const err = new Error('Invalid credentials.');
+        err.status = 401;
+        throw err;
     }
 
     this.body = {
