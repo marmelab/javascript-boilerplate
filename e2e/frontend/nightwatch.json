@@ -31,10 +31,7 @@
                 "rotatable": true,
                 "nativeEvents": true,
                 "loggingPrefs": { "browser": "ALL" },
-                "webStorageEnabled": true,
-                "chromeOptions" : {
-                    "args" : ["no-sandbox"]
-                }
+                "webStorageEnabled": true
             },
             "screenshots": {
                 "enabled": false,

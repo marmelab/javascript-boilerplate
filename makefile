@@ -133,7 +133,8 @@ test:
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
-	make test-frontend-functional
+	# TODO: restore when implemented
+	# make test-frontend-functional
 
 reset-test-database:
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
