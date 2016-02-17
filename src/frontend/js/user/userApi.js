@@ -1,6 +1,6 @@
 /* globals API_URL */
 export function fetchLogin(email, password) {
-    return fetch(`${API_URL}/authenticate`, {
+    return fetch(`${API_URL}/sign-in`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
