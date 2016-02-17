@@ -1,15 +1,16 @@
 module.exports = {
     after: function(client) {
-        client.end();
+        // client.end();
     },
 
     'Products - user should see the product list': function(client) {
         client
             .url('http://localhost:8081/frontend#/products')
             .waitForElementVisible('body', 1000)
-            .waitForElementVisible('.product-item', 5000)
-            .elements('class name', 'product-item', function(result) {
-                client.expect(result.value.length).to.equal(3);
+            .waitForElementVisible('.product-item', 1000, false, function() {
+                client.getLog('browser', function(result) {
+                    console.log(result.filter(r => r.level === 'SEVERE'));
+                });
             });
     },
 

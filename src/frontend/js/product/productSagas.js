@@ -8,6 +8,7 @@ export const loadProducts = function* loadProducts(fetchProducts) {
         const { error, products } = yield call(fetchProducts);
 
         if (error) {
+            console.log(error.message);
             yield put(productsLoaded(error));
         } else {
             yield put(productsLoaded(products));
@@ -21,6 +22,7 @@ export const loadProduct = function* loadProduct(fetchProduct) {
         const { error, product } = yield call(fetchProduct, payload);
 
         if (error) {
+            console.log(error.message);
             yield put(productLoaded(error));
         } else {
             yield put(productLoaded(product));

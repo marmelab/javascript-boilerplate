@@ -26,28 +26,19 @@
             "desiredCapabilities": {
                 "browserName": "chrome",
                 "javascriptEnabled": true,
-                "acceptSslCerts": true
+                "acceptSslCerts": true,
+                "loggingPrefs": { "browser": "ALL" }
             },
             "screenshots": {
                 "enabled": false,
                 "path": "./e2e/frontend/reports"
-            },
-            "desiredCapabilities": {
-              "browserName": "firefox",
-              "javascriptEnabled": true,
-              "acceptSslCerts": true
-            }
-        },
-        "firefox": {
-            "desiredCapabilities": {
-                "browserName": "firefox",
-                "javascriptEnabled": true
             }
         },
         "chrome": {
             "desiredCapabilities": {
                 "browserName": "chrome",
-                "javascriptEnabled": true
+                "javascriptEnabled": true,
+                "loggingPrefs": { "browser": "ALL" }
             }
         }
     }
