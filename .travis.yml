@@ -5,7 +5,6 @@ node_js:
 
 env:
     - CXX=g++-4.8
-    - NODE_ENV=test
 
 sudo: false
 
@@ -28,6 +27,7 @@ cache:
 before_script:
     - psql -c 'create database travis_ci_test;' -U postgres
     - cp -n ./config/test-dist.js ./config/test.js | true
+    - "export NODE_ENV=test"
 
 before_install:
     - "export DISPLAY=:99.0"
