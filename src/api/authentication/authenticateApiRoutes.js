@@ -21,9 +21,7 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     const { email, password } = yield coBody(this);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
-        const err = new Error('Invalid credentials.');
-        err.status = 401;
-        throw err;
+        this.throw('Invalid credentials.', 401);
     }
 
     this.body = {
