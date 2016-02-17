@@ -1,8 +1,13 @@
 module.exports = {
+    after: function(client) {
+        client.end();
+    },
+
     'Products - user should see the product list': function(client) {
         client
             .url('http://localhost:8081/frontend#/products')
             .waitForElementVisible('body', 1000)
+            .waitForElementVisible('.product-item', 5000)
             .elements('class name', 'product-item', function(result) {
                 client.expect(result.value.length).to.equal(3);
             });
@@ -11,7 +16,7 @@ module.exports = {
     'Products - user should see the product details': function(client) {
         client
             .url('http://localhost:8081/frontend#/products/1')
-            .waitForElementVisible('.product-details', 2000);
+            .waitForElementVisible('.product-details', 5000);
 
         client.expect.element('.img-thumbnail').to.be.visible;
         client.expect.element('.img-thumbnail').to.have.attribute('src', 'http://lorempixel.com/400/400/');
