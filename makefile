@@ -17,7 +17,7 @@ install: copy-conf
 	@echo "Installing Node dependencies"
 	@npm install
 	@echo "Installing Selenium server"
-	@./node_modules/.bin/selenium-standalone install --version=2.48.2
+	@./node_modules/.bin/selenium-standalone install --version=2.50.1
 
 # Deployment ===================================================================
 build:
