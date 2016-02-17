@@ -9,7 +9,7 @@ module.exports = {
             .waitForElementVisible('body', 1000)
             .waitForElementVisible('.product-item', 1000, false, function() {
                 client.getLog('browser', function(result) {
-                    console.log(result.filter(r => r.level === 'SEVERE'));
+                    console.log(result);
                 });
             });
     },

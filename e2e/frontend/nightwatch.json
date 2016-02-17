@@ -25,20 +25,20 @@
             "firefox_profile" : false,
             "desiredCapabilities": {
                 "browserName": "chrome",
+                "browserConnectionEnabled": true,
                 "javascriptEnabled": true,
                 "acceptSslCerts": true,
-                "loggingPrefs": { "browser": "ALL" }
+                "rotatable": true,
+                "nativeEvents": true,
+                "loggingPrefs": { "browser": "ALL" },
+                "webStorageEnabled": true,
+                "chromeOptions" : {
+                    "args" : ["no-sandbox"]
+                }
             },
             "screenshots": {
                 "enabled": false,
                 "path": "./e2e/frontend/reports"
-            }
-        },
-        "chrome": {
-            "desiredCapabilities": {
-                "browserName": "chrome",
-                "javascriptEnabled": true,
-                "loggingPrefs": { "browser": "ALL" }
             }
         }
     }

@@ -17,9 +17,9 @@ export default function(client) {
     }
 
     function* removeAllFixtures() {
-        yield client.query_('DELETE FROM product');
-        yield client.query_('DELETE FROM user_order');
-        yield client.query_('DELETE FROM user_account');
+        yield client.query_('TRUNCATE product RESTART IDENTITY');
+        yield client.query_('TRUNCATE user_order RESTART IDENTITY');
+        yield client.query_('TRUNCATE user_account RESTART IDENTITY');
     }
 
     function* getTokenFor(email) {
