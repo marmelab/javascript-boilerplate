@@ -1,37 +1,61 @@
+import { LOAD_PRODUCT, PRODUCT_LOADED, LOAD_PRODUCTS, PRODUCTS_LOADED } from './productActions';
+
 const initialState = {
-    products: [{
-        id: 'foo',
-        name: 'Foo',
-        description: 'Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.',
-        price: 29.99,
-        imageUrl: 'http://lorempixel.com/640/480/sports',
-    }, {
-        id: 'foo2',
-        name: 'Foo2',
-        description: 'Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.',
-        price: 29.99,
-        imageUrl: 'http://lorempixel.com/640/480/nature',
-    }, {
-        id: 'foo3',
-        name: 'Foo2',
-        description: 'Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.',
-        price: 29.99,
-        imageUrl: 'http://lorempixel.com/640/480/animals',
-    }, {
-        id: 'foo4',
-        name: 'Foo2',
-        description: 'Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.',
-        price: 29.99,
-        imageUrl: 'http://lorempixel.com/640/480/business',
-    }, {
-        id: 'foo5',
-        name: 'Foo2',
-        description: 'Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.',
-        price: 29.99,
-        imageUrl: 'http://lorempixel.com/640/480/fashion',
-    }],
+    products: [],
+    product: undefined,
+    error: false,
+    loading: false,
 };
 
-export default (state = initialState) => {
-    return state;
+export default (state = initialState, { type, payload, error }) => {
+    switch (type) {
+    case LOAD_PRODUCTS:
+        return {
+            ...state,
+            loading: true,
+        };
+
+    case PRODUCTS_LOADED:
+        if (!error) {
+            return {
+                ...state,
+                products: payload,
+                error: false,
+                loading: false,
+            };
+        }
+
+        return {
+            ...state,
+            products: [],
+            error: payload,
+            loading: false,
+        };
+
+    case LOAD_PRODUCT:
+        return {
+            ...state,
+            loading: true,
+        };
+
+    case PRODUCT_LOADED:
+        if (!error) {
+            return {
+                ...state,
+                product: payload,
+                error: false,
+                loading: false,
+            };
+        }
+
+        return {
+            ...state,
+            product: undefined,
+            error: payload,
+            loading: false,
+        };
+
+    default:
+        return state;
+    }
 };

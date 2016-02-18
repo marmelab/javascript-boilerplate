@@ -7,12 +7,14 @@ export function fetchOrders(authorizationToken) {
             'Authorization': authorizationToken,
         },
     })
-    .then(response => response.json().then(json => ({ json, response })))
-    .then(({ json, response }) => {
+    .then(response => {
         if (!response.ok) {
-            return Promise.reject(new Error(response.statusText));
+            return response.text().then(result => Promise.reject(new Error(result)));
         }
 
+        return response.json();
+    })
+    .then(json => {
         return { orders: json };
     }, error => ({
         error,

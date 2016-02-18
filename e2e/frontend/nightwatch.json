@@ -6,12 +6,12 @@
     "globals_path": "",
     "selenium": {
         "start_process": true,
-        "server_path": "./node_modules/selenium-standalone/.selenium/selenium-server/2.48.2-server.jar",
+        "server_path": "./node_modules/selenium-standalone/.selenium/selenium-server/2.50.1-server.jar",
         "log_path": "",
         "host": "127.0.0.1",
         "port": 4444,
         "cli_args": {
-            "webdriver.chrome.driver": "./node_modules/selenium-standalone/.selenium/chromedriver/2.20-x64-chromedriver",
+            "webdriver.chrome.driver": "./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver",
             "webdriver.ie.driver": ""
         }
     },
@@ -25,29 +25,17 @@
             "firefox_profile" : false,
             "desiredCapabilities": {
                 "browserName": "chrome",
+                "browserConnectionEnabled": true,
                 "javascriptEnabled": true,
-                "acceptSslCerts": true
+                "acceptSslCerts": true,
+                "rotatable": true,
+                "nativeEvents": true,
+                "loggingPrefs": { "browser": "ALL" },
+                "webStorageEnabled": true
             },
             "screenshots": {
                 "enabled": false,
                 "path": "./e2e/frontend/reports"
-            },
-            "desiredCapabilities": {
-              "browserName": "firefox",
-              "javascriptEnabled": true,
-              "acceptSslCerts": true
-            }
-        },
-        "firefox": {
-            "desiredCapabilities": {
-                "browserName": "firefox",
-                "javascriptEnabled": true
-            }
-        },
-        "chrome": {
-            "desiredCapabilities": {
-                "browserName": "chrome",
-                "javascriptEnabled": true
             }
         }
     }

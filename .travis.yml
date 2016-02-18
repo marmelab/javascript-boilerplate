@@ -27,10 +27,11 @@ cache:
 before_script:
     - psql -c 'create database travis_ci_test;' -U postgres
     - cp -n ./config/test-dist.js ./config/test.js | true
+    - "export NODE_ENV=test"
 
 before_install:
-    - "export DISPLAY=:99.0"
-    - "sh -e /etc/init.d/xvfb start"
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
 
 install:
     - "make --silent install"

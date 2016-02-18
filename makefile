@@ -17,7 +17,7 @@ install: copy-conf
 	@echo "Installing Node dependencies"
 	@npm install
 	@echo "Installing Selenium server"
-	@./node_modules/.bin/selenium-standalone install --version=2.48.2
+	@./node_modules/.bin/selenium-standalone install --version=2.50.1
 
 # Deployment ===================================================================
 build:
@@ -116,13 +116,15 @@ test-frontend-unit:
 test-isomorphic-unit:
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive ./src/isomorphic/{,**/}*.spec.js
 
-test-frontend-functional:
-	# TODO: restore when implemented
-	# @NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
+test-frontend-functional: reset-test-database
+	make load-fixtures
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
 	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+
+load-fixtures:
+	@NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 
 test:
 	@cp -n ./config/test-dist.js ./config/test.js | true
@@ -131,7 +133,8 @@ test:
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
-	make test-frontend-functional
+	# TODO: restore when implemented
+	# make test-frontend-functional
 
 reset-test-database:
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \

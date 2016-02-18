@@ -34,6 +34,7 @@ class OrderList extends Component {
 
 OrderList.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape(OrderItem.propTypes)),
+    loading: PropTypes.bool.isRequired,
     loadOrders: PropTypes.func.isRequired,
 };
 
