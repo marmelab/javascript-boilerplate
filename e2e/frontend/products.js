@@ -1,6 +1,6 @@
 module.exports = {
     after: function(client) {
-        // client.end();
+        client.end();
     },
 
     'Products - user should see the product list': function(client) {
