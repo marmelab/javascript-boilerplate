@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import ProductItem from './ProductItem';
-import { loadProducts as loadProductsAction } from './productActions';
+import productActions from './productActions';
 
 class ProductList extends Component {
     componentDidMount() {
@@ -43,13 +43,13 @@ ProductList.propTypes = {
 function mapStateToProps(state) {
     return {
         loading: state.product.loading,
-        products: state.product.products,
+        products: state.product.list,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        loadProducts: loadProductsAction,
+        loadProducts: productActions.list.request,
     }, dispatch);
 }
 

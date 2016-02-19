@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import OrderItem from './OrderItem';
-import { loadOrders as actionLoadOrders } from './orderActions';
+import orderActions from './orderActions';
 
 class OrderList extends Component {
     componentDidMount() {
@@ -41,13 +41,13 @@ OrderList.propTypes = {
 function mapStateToProps(state) {
     return {
         loading: state.order.loading,
-        orders: state.order.orders,
+        orders: state.order.list,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        loadOrders: actionLoadOrders,
+        loadOrders: orderActions.list.request,
     }, dispatch);
 }
 

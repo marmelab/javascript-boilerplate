@@ -1,13 +1,20 @@
 import { createAction } from 'redux-actions';
+import createRequestActionTypes from '../app/entities/createRequestActionTypes';
 
-export const LOAD_PRODUCTS = 'LOAD_PRODUCTS';
-export const loadProducts = createAction(LOAD_PRODUCTS);
+export const productActionTypes = {
+    list: createRequestActionTypes('PRODUCTS'),
+    item: createRequestActionTypes('PRODUCT'),
+};
 
-export const LOAD_PRODUCT = 'LOAD_PRODUCT';
-export const loadProduct = createAction(LOAD_PRODUCT);
-
-export const PRODUCTS_LOADED = 'PRODUCTS_LOADED';
-export const productsLoaded = createAction(PRODUCTS_LOADED);
-
-export const PRODUCT_LOADED = 'PRODUCT_LOADED';
-export const productLoaded = createAction(PRODUCT_LOADED);
+export default {
+    list: {
+        request: createAction(productActionTypes.list.REQUEST),
+        success: createAction(productActionTypes.list.SUCCESS),
+        failure: createAction(productActionTypes.list.FAILURE),
+    },
+    item: {
+        request: createAction(productActionTypes.item.REQUEST),
+        success: createAction(productActionTypes.item.SUCCESS),
+        failure: createAction(productActionTypes.item.FAILURE),
+    },
+};

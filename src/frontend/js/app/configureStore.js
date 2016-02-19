@@ -3,8 +3,6 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import history from './history';
 import { syncHistory } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
-import fetch from 'isomorphic-fetch';
-import fetchMiddlewareFactory from './fetchMiddleware';
 import createSagaMiddleware from 'redux-saga';
 import sagas from './sagas';
 
@@ -14,7 +12,6 @@ export default function configureStore(reducers, routes, initialState) {
             thunkMiddleware,
             syncHistory(history),
             createSagaMiddleware(sagas),
-            fetchMiddlewareFactory(fetch, window.sessionStorage)
         ),
     ];
 

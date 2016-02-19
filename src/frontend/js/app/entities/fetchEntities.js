@@ -1,0 +1,54 @@
+/* globals API_URL */
+export const fetchEntitiesFactory = path => jwt => {
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+    };
+
+    if (jwt) {
+        headers['Authorization'] = jwt;
+    }
+
+    return fetch(`${API_URL}/${path}`, {
+        headers,
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(result => Promise.reject(new Error(result)));
+        }
+
+        return response.json();
+    })
+    .then(json => {
+        return { list: json };
+    }, error => ({
+        error,
+    }));
+};
+
+export const fetchEntityFactory = path => (id, jwt) => {
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+    };
+
+    if (jwt) {
+        headers['Authorization'] = jwt;
+    }
+
+    return fetch(`${API_URL}/${path}/${id}`, {
+        headers,
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(result => Promise.reject(new Error(result)));
+        }
+
+        return response.json();
+    })
+    .then(json => {
+        return { item: json };
+    }, error => ({
+        error,
+    }));
+};

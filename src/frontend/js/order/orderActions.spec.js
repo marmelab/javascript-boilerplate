@@ -1,18 +1,27 @@
 import { expect } from 'chai';
-import { LOAD_ORDERS, loadOrders, ORDERS_LOADED, ordersLoaded } from './orderActions';
+import orderActions, { orderActionTypes } from './orderActions';
 
 describe('orderActions', () => {
-    it('loadOrders should return the correct action', () => {
-        expect(loadOrders()).to.deep.equal({
-            type: LOAD_ORDERS,
+    it('orderActions.list.request should return the correct action', () => {
+        expect(orderActions.list.request()).to.deep.equal({
+            type: orderActionTypes.list.REQUEST,
             payload: undefined,
         });
     });
 
-    it('ordersLoaded should return the correct action', () => {
-        expect(ordersLoaded([ { id: 1 } ])).to.deep.equal({
-            type: ORDERS_LOADED,
+    it('orderActions.list.success should return the correct action', () => {
+        expect(orderActions.list.success([ { id: 1 } ])).to.deep.equal({
+            type: orderActionTypes.list.SUCCESS,
             payload: [ { id: 1 } ],
+        });
+    });
+
+    it('orderActions.list.failure should return the correct action', () => {
+        const error = new Error('Run you fools !');
+        expect(orderActions.list.failure(error)).to.deep.equal({
+            type: orderActionTypes.list.FAILURE,
+            payload: error,
+            error: true,
         });
     });
 });
