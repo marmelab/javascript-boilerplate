@@ -1,3 +1,4 @@
+/* globals ADMIN_API_URL */
 function redirect() {
     window.location = '/admin';
 }
@@ -16,7 +17,8 @@ document.getElementById('loginForm').addEventListener('submit', (event) => {
     event.preventDefault(); // stop form from submitting
 
     const req = new XMLHttpRequest();
-    req.open('POST', `${ADMIN_API_URL}authenticate`, true); // eslint-disable-line no-undef
+    req.withCredentials = true;
+    req.open('POST', `${ADMIN_API_URL}authenticate`, true);
     req.setRequestHeader('Content-Type', 'application/json');
 
     req.onload = () => {

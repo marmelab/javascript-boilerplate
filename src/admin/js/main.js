@@ -42,6 +42,7 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
 }]);
 
 myApp.config(['RestangularProvider', (RestangularProvider) => {
+    RestangularProvider.setDefaultHttpFields({ withCredentials: true });
     RestangularProvider.addFullRequestInterceptor((element, operation, what, url, headers, params) => {
         headers = headers || {};
         headers['Authorization'] = window.sessionStorage.getItem('token');

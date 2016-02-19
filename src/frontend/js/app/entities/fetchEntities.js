@@ -11,6 +11,9 @@ export const fetchEntitiesFactory = path => jwt => {
 
     return fetch(`${API_URL}/${path}`, {
         headers,
+        // Allows API to set http-only cookies with AJAX calls
+        // @see http://www.redotheweb.com/2015/11/09/api-security.html
+        credentials: 'include',
     })
     .then(response => {
         if (!response.ok) {
@@ -38,6 +41,9 @@ export const fetchEntityFactory = path => (id, jwt) => {
 
     return fetch(`${API_URL}/${path}/${id}`, {
         headers,
+        // Allows API to set http-only cookies with AJAX calls
+        // @see http://www.redotheweb.com/2015/11/09/api-security.html
+        credentials: 'include',
     })
     .then(response => {
         if (!response.ok) {

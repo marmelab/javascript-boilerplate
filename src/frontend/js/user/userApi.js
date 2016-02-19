@@ -10,6 +10,9 @@ export function fetchSignIn(email, password) {
             email,
             password,
         }),
+        // Allows API to set http-only cookies with AJAX calls
+        // @see http://www.redotheweb.com/2015/11/09/api-security.html
+        credentials: 'include',
     })
     .then(response => {
         if (!response.ok) {
