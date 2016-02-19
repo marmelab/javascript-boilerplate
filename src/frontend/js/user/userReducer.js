@@ -12,6 +12,7 @@ export default function(sessionStorage) {
     return (state = initialState, { type, payload }) => {
         switch (type) {
         case userActionTypes.signIn.REQUEST:
+        case userActionTypes.signUp.REQUEST:
             return {
                 ...state,
                 authenticated: false,
@@ -19,6 +20,7 @@ export default function(sessionStorage) {
                 loading: true,
             };
         case userActionTypes.signIn.SUCCESS:
+        case userActionTypes.signUp.SUCCESS:
             return {
                 ...state,
                 ...payload,
@@ -28,6 +30,7 @@ export default function(sessionStorage) {
             };
 
         case userActionTypes.signIn.FAILURE:
+        case userActionTypes.signUp.FAILURE:
             return {
                 ...state,
                 authenticated: false,

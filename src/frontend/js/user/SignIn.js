@@ -17,13 +17,13 @@ const signInSchema = buildSchema({
     },
 });
 
-const Login = ({ signInError, signIn, previousRoute, fields: { email, password }, handleSubmit, submitting, submitFailed }) => (
+const SignIn = ({ signInError, signIn, previousRoute, fields: { email, password }, handleSubmit, submitting, submitFailed }) => (
     <div className="container signIn">
-        <HelmetTitle title="Login" />
+        <HelmetTitle title="Sign in" />
         <div className="row">
             <div className="col-xs-12">
                 <div className="jumbotron">
-                    <h2 className="display-4">Authentication</h2>
+                    <h2 className="display-4">Sign in</h2>
                     {signInError &&
                         <div className="alert alert-danger" role="alert">
                             {signInError.message}
@@ -55,9 +55,9 @@ const Login = ({ signInError, signIn, previousRoute, fields: { email, password }
                         <button type="submit" className={classNames('btn btn-lg btn-primary', {
                             'btn-danger': signInError || submitFailed,
                         })} disabled={submitting}>
-                            Login
+                            Sign in
                         </button>
-                        <Link to="/sign-up" className="btn btn-lg btn-link">Sign-up</Link>
+                        <Link to={{ pathname: '/sign-up', state: { nextPathname: previousRoute }}} className="btn btn-lg btn-link">No account ? Sign up !</Link>
                         <Link to="/forgot-password" className="btn btn-lg btn-link">Forgot your password ?</Link>
                     </form>
                 </div>
@@ -66,7 +66,7 @@ const Login = ({ signInError, signIn, previousRoute, fields: { email, password }
     </div>
 );
 
-Login.propTypes = {
+SignIn.propTypes = {
     ...propTypes,
     signIn: PropTypes.func.isRequired,
     previousRoute: PropTypes.string,
@@ -83,4 +83,4 @@ state => ({
     signInError: state.user.error,
 }), {
     signIn: signInActions.request,
-})(Login);
+})(SignIn);

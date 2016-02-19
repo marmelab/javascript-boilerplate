@@ -1,6 +1,10 @@
-import Login from './Login';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 export default [{
-    path: '/login',
-    component: Login,
+    path: '/sign-in',
+    component: SignIn,
+}, {
+    path: '/sign-up',
+    component: SignUp,
 }];

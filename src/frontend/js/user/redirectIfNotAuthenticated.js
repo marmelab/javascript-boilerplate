@@ -4,7 +4,7 @@ export default (store) => {
 
         if (!authenticated) {
             replace({
-                pathname: '/login',
+                pathname: '/sign-in',
                 state: { nextPathname: nextState.location.pathname },
             });
         }
