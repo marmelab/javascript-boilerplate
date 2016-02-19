@@ -4,7 +4,7 @@ import { reduxForm, propTypes } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 import HelmetTitle from '../app/HelmetTitle';
 import { Link } from 'react-router';
-import { signIn as signInAction } from './userActions';
+import { signIn as signInActions } from './userActions';
 
 const signInSchema = buildSchema({
     email: {
@@ -82,5 +82,5 @@ state => ({
     previousRoute: state.routing.location.state && state.routing.location.state.nextPathname,
     signInError: state.user.error,
 }), {
-    signIn: signInAction,
+    signIn: signInActions.request,
 })(Login);

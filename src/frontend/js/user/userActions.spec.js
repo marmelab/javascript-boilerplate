@@ -1,10 +1,10 @@
 import { expect } from 'chai';
-import { signIn, SIGN_IN, signOut, SIGN_OUT, signedIn, SIGNED_IN, signedOut, SIGNED_OUT } from './userActions';
+import { signIn, signOut, userActionTypes } from './userActions';
 
 describe('userActions', () => {
-    it('signIn should return the correct action', () => {
-        expect(signIn('/route', { email: 'test_email', password: 'test_password' })).to.deep.equal({
-            type: SIGN_IN,
+    it('signIn.request should return the correct action', () => {
+        expect(signIn.request('/route', { email: 'test_email', password: 'test_password' })).to.deep.equal({
+            type: userActionTypes.signIn.REQUEST,
             payload: {
                 previousRoute: '/route',
                 email: 'test_email',
@@ -13,24 +13,34 @@ describe('userActions', () => {
         });
     });
 
-    it('signOut should return the correct action', () => {
-        expect(signOut()).to.deep.equal({
-            type: SIGN_OUT,
+    it('signIn.success should return the correct action', () => {
+        expect(signIn.success({ id: 'id_test', email: 'test_email', token: 'test_token' })).to.deep.equal({
+            type: userActionTypes.signIn.SUCCESS,
+            payload: { id: 'id_test', email: 'test_email', token: 'test_token' },
+        });
+    });
+
+    it('signIn.failure should return the correct action', () => {
+        const error = new Error('Run you fools !');
+
+        expect(signIn.failure(error)).to.deep.equal({
+            type: userActionTypes.signIn.FAILURE,
+            payload: error,
+            error: true,
+        });
+    });
+
+    it('signOut.request should return the correct action', () => {
+        expect(signOut.request()).to.deep.equal({
+            type: userActionTypes.signOut.REQUEST,
             payload: undefined,
         });
     });
 
-    it('signedOut should return the correct action', () => {
-        expect(signedOut()).to.deep.equal({
-            type: SIGNED_OUT,
+    it('signOut.success should return the correct action', () => {
+        expect(signOut.success()).to.deep.equal({
+            type: userActionTypes.signOut.SUCCESS,
             payload: undefined,
-        });
-    });
-
-    it('signedIn should return the correct action', () => {
-        expect(signedIn({ id: 'foo' })).to.deep.equal({
-            type: SIGNED_IN,
-            payload: { id: 'foo' },
         });
     });
 });

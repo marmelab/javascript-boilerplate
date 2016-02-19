@@ -1,23 +1,14 @@
-import { call, fork, put, take } from 'redux-saga/effects';
-import { LOAD_ORDERS, ordersLoaded } from './orderActions'
-import { fetchOrders as apiFetchOrders } from './orderApi';
+import { fork } from 'redux-saga/effects';
+import orderActions, { orderActionTypes } from './orderActions';
+import { fetchOrder, fetchOrders } from './orderApi';
+import { loadListFactory, loadItemFactory } from '../app/entities/sagas';
 
-export const loadOrders = function* loadOrders(fetchOrders, getState) {
-    while(true) {
-        yield take(LOAD_ORDERS);
-        const state = getState();
-        const { error, orders } = yield call(fetchOrders, state.user.token);
-
-        if (error) {
-            yield put(ordersLoaded(error));
-        } else {
-            yield put(ordersLoaded(orders));
-        }
-    }
-};
+export const loadOrders = loadListFactory(orderActionTypes, orderActions);
+export const loadOrder = loadItemFactory(orderActionTypes, orderActions);
 
 const sagas = function* sagas(getState) {
-    yield fork(loadOrders, apiFetchOrders, getState);
+    yield fork(loadOrders, fetchOrders, () => getState().user.token);
+    yield fork(loadOrder, fetchOrder, () => getState().user.token);
 };
 
 export default sagas;

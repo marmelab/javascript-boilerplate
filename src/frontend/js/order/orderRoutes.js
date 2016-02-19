@@ -1,6 +1,5 @@
 import NewOrder from './NewOrder';
 import OrderList from './OrderList';
-import OrderDetails from './OrderDetails';
 import redirectIfNotAuthenticatedFactory from '../user/redirectIfNotAuthenticated';
 
 export default store => {
@@ -14,9 +13,5 @@ export default store => {
         path: '/orders/new',
         onEnter: redirectIfNotAuthenticated,
         component: NewOrder,
-    }, {
-        path: '/orders/:id',
-        onEnter: redirectIfNotAuthenticated,
-        component: OrderDetails,
     }];
 };

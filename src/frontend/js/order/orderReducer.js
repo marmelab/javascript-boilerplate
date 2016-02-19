@@ -1,33 +1,49 @@
-import { LOAD_ORDERS, ORDERS_LOADED } from './orderActions';
+import { orderActionTypes } from './orderActions';
 
 const initialState = {
-    orders: [],
-    order: {},
-    error: false,
+    list: [],
+    item: null,
+    error: null,
     loading: false,
 };
 
-export default (state = initialState, { type, payload, error }) => {
+export default (state = initialState, { type, payload }) => {
     switch (type) {
-    case LOAD_ORDERS:
+    case orderActionTypes.list.REQUEST:
+    case orderActionTypes.item.REQUEST:
         return {
             ...state,
             loading: true,
         };
 
-    case ORDERS_LOADED:
-        if (!error) {
-            return {
-                ...state,
-                orders: payload,
-                error: false,
-                loading: false,
-            };
-        }
-
+    case orderActionTypes.list.SUCCESS:
         return {
             ...state,
-            orders: [],
+            list: payload,
+            error: null,
+            loading: false,
+        };
+
+    case orderActionTypes.list.FAILURE:
+        return {
+            ...state,
+            list: [],
+            error: payload,
+            loading: false,
+        };
+
+    case orderActionTypes.item.SUCCESS:
+        return {
+            ...state,
+            item: payload,
+            error: null,
+            loading: false,
+        };
+
+    case orderActionTypes.item.FAILURE:
+        return {
+            ...state,
+            item: null,
             error: payload,
             loading: false,
         };

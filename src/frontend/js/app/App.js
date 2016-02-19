@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import HelmetTitle from './HelmetTitle';
-import { signOut as signOutAction } from '../user/userActions';
+import { signOut as signOutActions } from '../user/userActions';
 
 export class App extends Component {
     render() {
@@ -61,7 +61,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        signOut: signOutAction,
+        signOut: signOutActions.request,
     }, dispatch);
 }
 

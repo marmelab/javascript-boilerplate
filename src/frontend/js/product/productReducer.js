@@ -1,56 +1,49 @@
-import { LOAD_PRODUCT, PRODUCT_LOADED, LOAD_PRODUCTS, PRODUCTS_LOADED } from './productActions';
+import { productActionTypes } from './productActions';
 
 const initialState = {
-    products: [],
-    product: undefined,
-    error: false,
+    list: [],
+    item: null,
+    error: null,
     loading: false,
 };
 
-export default (state = initialState, { type, payload, error }) => {
+export default (state = initialState, { type, payload }) => {
     switch (type) {
-    case LOAD_PRODUCTS:
+    case productActionTypes.list.REQUEST:
+    case productActionTypes.item.REQUEST:
         return {
             ...state,
             loading: true,
         };
 
-    case PRODUCTS_LOADED:
-        if (!error) {
-            return {
-                ...state,
-                products: payload,
-                error: false,
-                loading: false,
-            };
-        }
-
+    case productActionTypes.list.SUCCESS:
         return {
             ...state,
-            products: [],
+            list: payload,
+            error: null,
+            loading: false,
+        };
+
+    case productActionTypes.list.FAILURE:
+        return {
+            ...state,
+            list: [],
             error: payload,
             loading: false,
         };
 
-    case LOAD_PRODUCT:
+    case productActionTypes.item.SUCCESS:
         return {
             ...state,
-            loading: true,
+            item: payload,
+            error: null,
+            loading: false,
         };
 
-    case PRODUCT_LOADED:
-        if (!error) {
-            return {
-                ...state,
-                product: payload,
-                error: false,
-                loading: false,
-            };
-        }
-
+    case productActionTypes.item.FAILURE:
         return {
             ...state,
-            product: undefined,
+            item: null,
             error: payload,
             loading: false,
         };

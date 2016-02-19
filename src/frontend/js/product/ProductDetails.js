@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import ProductItem from './ProductItem';
-import { loadProduct as loadProductAction } from './productActions';
+import productActions from './productActions';
 
 class ProductDetails extends Component {
     componentDidMount() {
@@ -61,13 +61,13 @@ function mapStateToProps(state, ownProps) {
     return {
         productId,
         loading: state.product.loading,
-        product: state.product.product ? state.product.product : (state.product.products.length > 0 ? state.product.products.find(p => p.id === productId) : null),
+        product: state.product.item ? state.product.item : (state.product.list.length > 0 ? state.product.list.find(p => p.id === productId) : null),
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        loadProduct: loadProductAction,
+        loadProduct: productActions.item.request,
     }, dispatch);
 }
 
