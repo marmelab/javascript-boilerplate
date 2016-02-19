@@ -47,4 +47,27 @@ describe('productActions', () => {
             error: true,
         });
     });
+
+    it('productActions.order.request should return the correct action', () => {
+        expect(productActions.order.request()).to.deep.equal({
+            type: productActionTypes.order.REQUEST,
+            payload: undefined,
+        });
+    });
+
+    it('productActions.order.success should return the correct action', () => {
+        expect(productActions.order.success({ id: 1 })).to.deep.equal({
+            type: productActionTypes.order.SUCCESS,
+            payload: { id: 1 },
+        });
+    });
+
+    it('productActions.order.failure should return the correct action', () => {
+        const error = new Error('Run you fools !');
+        expect(productActions.order.failure(error)).to.deep.equal({
+            type: productActionTypes.order.FAILURE,
+            payload: error,
+            error: true,
+        });
+    });
 });
