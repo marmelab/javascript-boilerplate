@@ -30,7 +30,6 @@ describe('orderSagas', () => {
 
             expect(saga.next({
                 list: [ { id: 42 } ],
-                status: 200,
             }).value).to.deep.equal(put(orderActions.list.success([ { id: 42 } ])));
         });
 
@@ -44,7 +43,6 @@ describe('orderSagas', () => {
 
             expect(saga.next({
                 error,
-                status: 500,
             }).value).to.deep.equal(put(orderActions.list.failure(error)));
         });
     });

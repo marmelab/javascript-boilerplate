@@ -1,4 +1,4 @@
-import { SIGNED_IN, SIGNED_OUT } from './userActions';
+import { userActionTypes } from './userActions';
 
 export default function(sessionStorage) {
     const initialState = {
@@ -6,32 +6,46 @@ export default function(sessionStorage) {
         email: sessionStorage.getItem('email'),
         token: sessionStorage.getItem('token'),
         authenticated: !!sessionStorage.getItem('token'),
+        loading: false,
     };
 
-    return (state = initialState, { type, payload, error }) => {
+    return (state = initialState, { type, payload }) => {
         switch (type) {
-        case SIGNED_IN:
-            if (!error) {
-                return {
-                    ...state,
-                    ...payload,
-                    authenticated: true,
-                    error: false,
-                };
-            }
-
+        case userActionTypes.signIn.REQUEST:
             return {
                 ...state,
                 authenticated: false,
-                error: payload,
+                error: false,
+                loading: true,
             };
-        case SIGNED_OUT:
+        case userActionTypes.signIn.SUCCESS:
             return {
                 ...state,
-                id: undefined,
-                email: undefined,
-                token: undefined,
+                ...payload,
+                authenticated: true,
+                error: false,
+                loading: false,
+            };
+
+        case userActionTypes.signIn.FAILURE:
+            return {
+                ...state,
                 authenticated: false,
+                email: null,
+                error: payload,
+                id: null,
+                loading: false,
+                token: null,
+            };
+
+        case userActionTypes.signOut.SUCCESS:
+            return {
+                ...state,
+                authenticated: false,
+                email: null,
+                id: null,
+                loading: false,
+                token: null,
             };
         default:
             return state;

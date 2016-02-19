@@ -2,8 +2,8 @@ import { orderActionTypes } from './orderActions';
 
 const initialState = {
     list: [],
-    item: undefined,
-    error: false,
+    item: null,
+    error: null,
     loading: false,
 };
 
@@ -20,7 +20,7 @@ export default (state = initialState, { type, payload }) => {
         return {
             ...state,
             list: payload,
-            error: false,
+            error: null,
             loading: false,
         };
 
@@ -36,14 +36,14 @@ export default (state = initialState, { type, payload }) => {
         return {
             ...state,
             item: payload,
-            error: false,
+            error: null,
             loading: false,
         };
 
     case orderActionTypes.item.FAILURE:
         return {
             ...state,
-            item: undefined,
+            item: null,
             error: payload,
             loading: false,
         };

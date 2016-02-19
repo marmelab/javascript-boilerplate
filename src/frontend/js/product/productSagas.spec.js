@@ -30,7 +30,6 @@ describe('productSagas', () => {
 
             expect(saga.next({
                 list: [ { id: 42 } ],
-                status: 200,
             }).value).to.deep.equal(put(productActions.list.success([ { id: 42 } ])));
         });
 
@@ -44,7 +43,6 @@ describe('productSagas', () => {
 
             expect(saga.next({
                 error,
-                status: 500,
             }).value).to.deep.equal(put(productActions.list.failure(error)));
         });
     });
@@ -74,7 +72,6 @@ describe('productSagas', () => {
 
             expect(saga.next({
                 item: { id: 42 },
-                status: 200,
             }).value).to.deep.equal(put(productActions.item.success({ id: 42 })));
         });
 
@@ -88,7 +85,6 @@ describe('productSagas', () => {
 
             expect(saga.next({
                 error,
-                status: 500,
             }).value).to.deep.equal(put(productActions.item.failure(error)));
         });
     });
