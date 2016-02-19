@@ -2,6 +2,7 @@ import config from 'config';
 import jwt from 'jsonwebtoken';
 import faker from 'faker';
 import uuid from 'uuid';
+import crypto from 'crypto';
 
 import data from '../fixtures/demo_fixtures.json';
 import productFactory from '../../src/api/products/productModel';
@@ -30,6 +31,14 @@ export default function(client) {
         return jwt.sign(user, config.apps.api.security.jwt.privateKey);
     }
 
+    function* getCookieTokenFor(email) {
+        let token = yield getTokenFor(email);
+
+        return crypto.createHmac('sha256', config.apps.api.security.secret)
+            .update(token)
+            .digest('hex');
+    }
+
     function* addProduct(productData) {
         // const causes an error! don't know why
         let defaultProductData = {
@@ -51,6 +60,7 @@ export default function(client) {
         loadDefaultFixtures,
         removeAllFixtures,
         getTokenFor,
+        getCookieTokenFor,
         addProduct,
     };
 }
