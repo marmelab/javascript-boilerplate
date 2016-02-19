@@ -31,7 +31,7 @@ module.exports = {
             },
             port: apiPort,
             security: {
-                expirationTokenDelay: 1800,
+                expirationTokenDelay: 1800, // in seconds
                 bcrypt: {
                     salt_work_factor: 10, // higher is safer, but slower
                 },

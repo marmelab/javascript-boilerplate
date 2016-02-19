@@ -6,6 +6,15 @@ import HelmetTitle from './HelmetTitle';
 import { signOut as signOutActions } from '../user/userActions';
 
 export class App extends Component {
+    componentWillReceiveProps(nextProps) {
+        const { user, signOut } = nextProps;
+        const currentTime = (new Date()).getTime();
+
+        if (user.token && user.expires && user.expires < currentTime) {
+            signOut();
+        }
+    }
+
     render() {
         const { user, signOut } = this.props;
 

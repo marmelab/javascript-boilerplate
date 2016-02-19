@@ -8,7 +8,7 @@ import { reducer as form } from 'redux-form';
 const rootReducer = combineReducers({
     form,
     routing: routeReducer,
-    user: userReducerFactory(window.sessionStorage),
+    user: userReducerFactory(window.localStorage),
     order,
     product,
 });

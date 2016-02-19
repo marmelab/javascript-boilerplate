@@ -5,16 +5,18 @@ import { signIn, signOut, signUp } from './userActions';
 
 describe('user reducer', () => {
     const getItemWithUser = sinon.stub();
+    const expireTokenTime = (new Date()).getTime() + 30 * 1000;
     getItemWithUser.withArgs('id').returns('foo');
     getItemWithUser.withArgs('email').returns('foo@bar.com');
     getItemWithUser.withArgs('token').returns('bar');
+    getItemWithUser.withArgs('expires').returns(expireTokenTime);
 
-    const sessionStorageWithUser = {
+    const localStorageWithUser = {
         getItem: getItemWithUser,
     };
 
-    it('should return the user saved in sessionStorage as its initial state', () => {
-        const reducer = reducerFactory(sessionStorageWithUser);
+    it('should return the user saved in localStorage as its initial state', () => {
+        const reducer = reducerFactory(localStorageWithUser);
 
         expect(reducer(undefined, { type: 'foo' })).to.deep.equal({
             authenticated: true,
@@ -22,20 +24,22 @@ describe('user reducer', () => {
             id: 'foo',
             loading: false,
             token: 'bar',
+            expires: expireTokenTime,
         });
     });
 
     it('should handle the signIn.success action', () => {
         const getItem = sinon.stub().returns(undefined);
-        const sessionStorage = {
+        const localStorage = {
             getItem,
         };
-        const reducer = reducerFactory(sessionStorage);
+        const reducer = reducerFactory(localStorage);
 
         expect(reducer(undefined, signIn.success({
             email: 'foo@bar.com',
             id: 'foo',
             token: 'bar',
+            expires: expireTokenTime,
         }))).to.deep.equal({
             authenticated: true,
             error: false,
@@ -43,20 +47,22 @@ describe('user reducer', () => {
             email: 'foo@bar.com',
             loading: false,
             token: 'bar',
+            expires: expireTokenTime,
         });
     });
 
     it('should handle the signIn.failure action', () => {
         const getItem = sinon.stub().returns(undefined);
-        const sessionStorage = {
+        const localStorage = {
             getItem,
         };
-        const reducer = reducerFactory(sessionStorage);
+        const reducer = reducerFactory(localStorage);
         const error = new Error('Run you fools!');
         expect(reducer(undefined, signIn.failure(error))).to.deep.equal({
             id: null,
             email: null,
             token: null,
+            expires: null,
             authenticated: false,
             loading: false,
             error,
@@ -65,15 +71,16 @@ describe('user reducer', () => {
 
     it('should handle the signUp.success action', () => {
         const getItem = sinon.stub().returns(undefined);
-        const sessionStorage = {
+        const localStorage = {
             getItem,
         };
-        const reducer = reducerFactory(sessionStorage);
+        const reducer = reducerFactory(localStorage);
 
         expect(reducer(undefined, signUp.success({
             email: 'foo@bar.com',
             id: 'foo',
             token: 'bar',
+            expires: expireTokenTime,
         }))).to.deep.equal({
             authenticated: true,
             error: false,
@@ -81,20 +88,22 @@ describe('user reducer', () => {
             email: 'foo@bar.com',
             loading: false,
             token: 'bar',
+            expires: expireTokenTime,
         });
     });
 
     it('should handle the signUp.failure action', () => {
         const getItem = sinon.stub().returns(undefined);
-        const sessionStorage = {
+        const localStorage = {
             getItem,
         };
-        const reducer = reducerFactory(sessionStorage);
+        const reducer = reducerFactory(localStorage);
         const error = new Error('Run you fools!');
         expect(reducer(undefined, signUp.failure(error))).to.deep.equal({
             id: null,
             email: null,
             token: null,
+            expires: null,
             authenticated: false,
             loading: false,
             error,
@@ -102,7 +111,7 @@ describe('user reducer', () => {
     });
 
     it('should handle the signOut.success action', () => {
-        const reducer = reducerFactory(sessionStorageWithUser);
+        const reducer = reducerFactory(localStorageWithUser);
 
         expect(reducer(undefined, signOut.success())).to.deep.equal({
             authenticated: false,
@@ -110,6 +119,7 @@ describe('user reducer', () => {
             email: null,
             loading: false,
             token: null,
+            expires: null,
         });
     });
 });

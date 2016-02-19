@@ -25,15 +25,19 @@ app.use(koaRoute.post('/', function* login() {
     const cookieToken = crypto.createHmac('sha256', config.apps.api.security.secret)
         .update(token)
         .digest('hex');
+    const delay = config.apps.api.security.expirationTokenDelay * 1000;
+    const tokenExpires = (new Date((new Date()).getTime() + delay));
 
     this.cookies.set('token', cookieToken, {
         ...config.apps.api.cookies,
+        expires: tokenExpires,
         httpOnly: true,
     });
 
     this.body = {
         id: user.id,
         email: user.email,
+        expires: tokenExpires.getTime(),
         token,
     };
 }));

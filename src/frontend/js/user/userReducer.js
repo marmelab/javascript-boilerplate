@@ -1,11 +1,12 @@
 import { userActionTypes } from './userActions';
 
-export default function(sessionStorage) {
+export default function(localStorage) {
     const initialState = {
-        id: sessionStorage.getItem('id'),
-        email: sessionStorage.getItem('email'),
-        token: sessionStorage.getItem('token'),
-        authenticated: !!sessionStorage.getItem('token'),
+        id: localStorage.getItem('id'),
+        email: localStorage.getItem('email'),
+        token: localStorage.getItem('token'),
+        expires: localStorage.getItem('expires'),
+        authenticated: !!localStorage.getItem('token') && localStorage.getItem('expires') > (new Date()).getTime(),
         loading: false,
     };
 
@@ -39,6 +40,7 @@ export default function(sessionStorage) {
                 id: null,
                 loading: false,
                 token: null,
+                expires: null,
             };
 
         case userActionTypes.signOut.SUCCESS:
@@ -49,6 +51,7 @@ export default function(sessionStorage) {
                 id: null,
                 loading: false,
                 token: null,
+                expires: null,
             };
         default:
             return state;

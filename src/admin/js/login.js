@@ -4,7 +4,7 @@ function redirect() {
 }
 
 // check for user already logged in
-if (window.sessionStorage.getItem('token')) {
+if (window.localStorage.getItem('token')) {
     redirect();
 }
 
@@ -34,9 +34,10 @@ document.getElementById('loginForm').addEventListener('submit', (event) => {
             return showError();
         }
 
-        window.sessionStorage.setItem('id', json.id);
-        window.sessionStorage.setItem('email', json.email);
-        window.sessionStorage.setItem('token', json.token);
+        window.localStorage.setItem('id', json.id);
+        window.localStorage.setItem('email', json.email);
+        window.localStorage.setItem('token', json.token);
+        window.localStorage.setItem('expires', json.expires);
         redirect();
     };
     req.onerror = showError;
