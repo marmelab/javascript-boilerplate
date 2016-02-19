@@ -7,6 +7,7 @@ describe('/api/orders/{id}', () => {
     let user1;
     let user2;
     let user1Token;
+    let user1CookieToken;
     let orderQueries;
     let orders;
 
@@ -17,6 +18,7 @@ describe('/api/orders/{id}', () => {
         user1 = yield userRepository.findByEmail('user1@marmelab.io');
         user2 = yield userRepository.findByEmail('user2@marmelab.io');
         user1Token = yield fixtureLoader.getTokenFor('user1@marmelab.io');
+        user1CookieToken = yield fixtureLoader.getCookieTokenFor('user1@marmelab.io');
         orders = yield {
             orderUser1: orderQueries.insertOne({
                 reference: 'ref1',
@@ -42,10 +44,24 @@ describe('/api/orders/{id}', () => {
             });
             assert.equal(statusCode, 401);
         });
+        it('should require authentification without cookie token', function* () {
+            const { statusCode } = yield request({
+                method: 'GET',
+                url: `/api/orders/${orders.orderUser1.id}`,
+            }, user1Token);
+            assert.equal(statusCode, 401);
+        });
+        it('should require authentification with only cookie token', function* () {
+            const { statusCode } = yield request({
+                method: 'GET',
+                url: `/api/orders/${orders.orderUser1.id}`,
+            }, null, {'token': user1CookieToken});
+            assert.equal(statusCode, 401);
+        });
         it('should return data about a specific order', function* () {
             const { statusCode, body } = yield request({
                 url: `/api/orders/${orders.orderUser1.id}`,
-            }, user1Token);
+            }, user1Token, {'token': user1CookieToken});
 
             assert.equal(statusCode, 200, JSON.stringify(body));
             delete body.id;
@@ -66,6 +82,20 @@ describe('/api/orders/{id}', () => {
             });
             assert.equal(statusCode, 401);
         });
+        it('should require authentification without cookie token', function* () {
+            const { statusCode } = yield request({
+                method: 'DELETE',
+                url: `/api/orders/${orders.orderUser1.id}`,
+            });
+            assert.equal(statusCode, 401);
+        }, user1Token);
+        it('should require authentification with onlycookie token', function* () {
+            const { statusCode } = yield request({
+                method: 'DELETE',
+                url: `/api/orders/${orders.orderUser1.id}`,
+            });
+            assert.equal(statusCode, 401);
+        }, null, {'token': user1CookieToken});
         it('should delete a specific order', function* () {
             const newOrder = yield orderQueries.insertOne({
                 reference: 'ref1',
@@ -79,7 +109,7 @@ describe('/api/orders/{id}', () => {
             const { statusCode, body } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${newOrder.id}`,
-            }, user1Token);
+            }, user1Token, {'token': user1CookieToken});
 
             assert.equal(statusCode, 200, JSON.stringify(body));
             userOrders = yield orderQueries.selectByUserId(user1.id);

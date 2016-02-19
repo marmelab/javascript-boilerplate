@@ -10,6 +10,9 @@ export function fetchSignIn(email, password) {
             email,
             password,
         }),
+        // Allows API to set http-only cookies with AJAX calls
+        // @see http://www.redotheweb.com/2015/11/09/api-security.html
+        credentials: 'include',
     })
     .then(response => {
         if (!response.ok) {
@@ -36,6 +39,9 @@ export function fetchSignUp(email, password) {
             email,
             password,
         }),
+        // Allows API to set http-only cookies with AJAX calls
+        // @see http://www.redotheweb.com/2015/11/09/api-security.html
+        credentials: 'include',
     })
     .then(response => {
         if (!response.ok) {
@@ -51,14 +57,16 @@ export function fetchSignUp(email, password) {
     }));
 }
 
-export const storeLocalUser = ({ id, email, token }) => {
-    sessionStorage.setItem('id', id);
-    sessionStorage.setItem('email', email);
-    sessionStorage.setItem('token', token);
+export const storeLocalUser = ({ id, email, token, expires }) => {
+    localStorage.setItem('id', id);
+    localStorage.setItem('email', email);
+    localStorage.setItem('token', token);
+    localStorage.setItem('expires', expires);
 };
 
 export const removeLocalUser = () => {
-    sessionStorage.removeItem('id');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('token');
+    localStorage.removeItem('expires');
 };

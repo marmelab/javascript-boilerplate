@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import coBody from 'co-body';
 import config from 'config';
 import jwt from 'jsonwebtoken';
@@ -20,10 +21,24 @@ app.use(koaRoute.post('/', function* login() {
         this.throw('Invalid credentials.', 401);
     }
 
+    const token = jwt.sign(user, config.apps.api.security.jwt.privateKey);
+    const cookieToken = crypto.createHmac('sha256', config.apps.api.security.secret)
+        .update(token)
+        .digest('hex');
+    const delay = config.apps.api.security.expirationTokenDelay * 1000;
+    const tokenExpires = (new Date((new Date()).getTime() + delay));
+
+    this.cookies.set('token', cookieToken, {
+        ...config.apps.api.cookies,
+        expires: tokenExpires,
+        httpOnly: true,
+    });
+
     this.body = {
         id: user.id,
         email: user.email,
-        token: jwt.sign(user, config.apps.api.security.jwt.privateKey),
+        expires: tokenExpires.getTime(),
+        token,
     };
 }));
 

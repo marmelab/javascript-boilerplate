@@ -7,15 +7,16 @@ function redirectToLogin() {
 }
 
 function logout() {
-    window.sessionStorage.removeItem('id');
-    window.sessionStorage.removeItem('email');
-    window.sessionStorage.removeItem('token');
+    window.localStorage.removeItem('id');
+    window.localStorage.removeItem('email');
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('expires');
     redirectToLogin();
 }
 
 window.logout = logout;
 
-if (!window.sessionStorage.getItem('token')) redirectToLogin();
+if (!window.localStorage.getItem('token')) redirectToLogin();
 
 const myApp = angular.module('myApp', ['ng-admin']);
 
@@ -42,9 +43,18 @@ myApp.config(['NgAdminConfigurationProvider', (nga) => {
 }]);
 
 myApp.config(['RestangularProvider', (RestangularProvider) => {
+    RestangularProvider.setDefaultHttpFields({ withCredentials: true });
     RestangularProvider.addFullRequestInterceptor((element, operation, what, url, headers, params) => {
+        const currentTime = (new Date()).getTime();
+        const tokenExpires = window.localStorage.getItem('expires');
+
+        if (tokenExpires && tokenExpires < currentTime) {
+            logout();
+            redirectToLogin();
+        }
+
         headers = headers || {};
-        headers['Authorization'] = window.sessionStorage.getItem('token');
+        headers['Authorization'] = window.localStorage.getItem('token');
 
         if (operation === 'getList') {
             if (params._page) {

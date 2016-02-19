@@ -22,15 +22,23 @@ module.exports = {
                 app: {Console: { timestamp: true, colorize: true, level: 'error' }},
                 http: {},
             },
-            maxAge: 600,
+            cookies: {
+                secure: false,
+                secureProxy: false,
+                httpOnly: false,
+                signed: false,
+                overwrite: true,
+            },
             port: apiPort,
             security: {
+                expirationTokenDelay: 1800, // in seconds
                 bcrypt: {
                     salt_work_factor: 10, // higher is safer, but slower
                 },
                 jwt: {
                     privateKey: 'MY-VERY-PRIVATE-KEY',
                 },
+                secret: 'MY-VERY-SECRET-CRYPTO-KEY-DIFFERENT-FROM-JWT',
                 xdomain: {
                     master: {
                         base_url: frontendUrl,
