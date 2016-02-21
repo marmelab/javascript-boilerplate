@@ -1,4 +1,8 @@
-import { ADD_PRODUCT_TO_SHOPPING_CART, REMOVE_PRODUCT_FROM_SHOPPING_CART, SET_SHOPPING_CART_ITEM_QUANTITY } from './shoppingCartActions';
+import {
+    ADD_PRODUCT_TO_SHOPPING_CART,
+    REMOVE_PRODUCT_FROM_SHOPPING_CART,
+    SET_SHOPPING_CART_ITEM_QUANTITY,
+} from './shoppingCartActions';
 
 const initialState = {
     products: [],
