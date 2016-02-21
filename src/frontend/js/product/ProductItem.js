@@ -13,7 +13,7 @@ const ProductItem = ({ id, reference, description, price, thumbnail, orderProduc
         <div className="card-block">
             <p className="card-text">{description}</p>
             <Link to={`/products/${id}`} className="card-link">Details</Link>
-            <a onClick={orderProduct} className="card-link btn btn-link">Order</a>
+            <a onClick={orderProduct.bind(this, { id, reference, description, price, thumbnail })} className="card-link btn btn-link">Buy</a>
         </div>
     </div>
 );

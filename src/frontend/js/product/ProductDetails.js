@@ -5,9 +5,9 @@ import numeral from 'numeral';
 import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
-import ProductItem from './ProductItem';
 import productActions from './productActions';
 import { ProductPropType } from './productPropTypes';
+import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 class ProductDetails extends Component {
     componentDidMount() {
@@ -27,7 +27,7 @@ class ProductDetails extends Component {
             );
         }
 
-        const { id, reference, description, price, image } = product;
+        const { reference, description, price, image } = product;
 
         return (
             <div className="row product-details">
@@ -40,7 +40,7 @@ class ProductDetails extends Component {
                     <p className="description">{description}</p>
                     <p className="price">Price: {numeral(price).format('$0.00')}</p>
                     <p>
-                        <button onClick={orderProduct} className="btn btn-primary">Buy</button>
+                        <button onClick={orderProduct.bind(this, { ...product })} className="btn btn-primary">Buy</button>
                         <Link to="/products" className="btn btn-link">Return to product list</Link>
                     </p>
                 </div>
@@ -72,7 +72,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         loadProduct: productActions.item.request,
-        orderProduct: productActions.order.request,
+        orderProduct: addProductToShoppingCart,
     }, dispatch);
 }
 

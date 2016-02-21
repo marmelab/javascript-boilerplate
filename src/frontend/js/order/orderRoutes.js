@@ -1,4 +1,5 @@
 import OrderList from './OrderList';
+import NewOrder from './NewOrder';
 import redirectIfNotAuthenticatedFactory from '../user/redirectIfNotAuthenticated';
 
 export default store => {
@@ -8,5 +9,9 @@ export default store => {
         path: '/orders',
         onEnter: redirectIfNotAuthenticated,
         component: OrderList,
+    }, {
+        path: '/orders/new',
+        onEnter: redirectIfNotAuthenticated,
+        component: NewOrder,
     }];
 };

@@ -4,7 +4,6 @@ import createRequestActionTypes from '../app/entities/createRequestActionTypes';
 export const productActionTypes = {
     item: createRequestActionTypes('PRODUCT'),
     list: createRequestActionTypes('PRODUCTS'),
-    order: createRequestActionTypes('ORDER_PRODUCT'),
 };
 
 export default {
@@ -17,10 +16,5 @@ export default {
         request: createAction(productActionTypes.list.REQUEST),
         success: createAction(productActionTypes.list.SUCCESS),
         failure: createAction(productActionTypes.list.FAILURE),
-    },
-    order: {
-        request: createAction(productActionTypes.order.REQUEST),
-        success: createAction(productActionTypes.order.SUCCESS),
-        failure: createAction(productActionTypes.order.FAILURE),
     },
 };
