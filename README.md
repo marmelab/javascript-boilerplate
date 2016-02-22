@@ -1,5 +1,36 @@
 # marmelab-boilerplate
 
+A starter kit for new apps, based on:
+
+* ES6 everywhere (with some bits of ES7, e.g. spread operator on objects)
+* React.js, React Router, and Redux (for the frontend)
+* Angular.js and ng-afmin (for the admin)
+* Node.js and Koa.js and PostgreSQL (for the API server)
+* Makefile, webpack and Mocha (for the build)
+
+Features:
+
+* Node.js API built on top of Koa.js (successor of Express) for cleaner async code
+* Automated CRUD resources based on a PostgreSQL database (using `pg` and `co-pg`)
+* State-of the art robustness and security for the API (JWT, rate limiting, secure headers, based on `helmet`)
+* Separated API for the admin, with different security settings (and login form)
+* Built-in database migration handling (using `db-migrate`)
+* Production-level logging (using `winston`)
+* CORS support (including on IE8, thanks to `xDomain`)
+* Fully automated start and stop (see `Makefile`)
+* Frontend app built with React, `redux`, `redux-saga`, `react-router`
+* Using `react-dev-tools` for easier debugging in development
+* SASS preprocessor (using `node-sass`)
+* Including a non-trivial example with several routes, Ajax calls, and functional tests
+* Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target
+* Admin app built with Angular and `ng-admin`
+* Including a full-featured admin panel with references
+* Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`
+* AWS deployment automated by Fabric
+* Sensible `eslint` defaults, based on rbnb's rules
+
+The boilerplate contains a sample app with three domains: users, products, and orders. Feel free to remove the corresponding files once you start implementing your own domain.
+
 ## Install
 
 Requirements:

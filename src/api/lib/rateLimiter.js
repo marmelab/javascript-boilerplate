@@ -1,5 +1,8 @@
 /**
  * Simple in-memory rate limiter
+ *
+ * WARNING: DO NOT USE IN PRODUCTION, IT EXPOSES THE APP TO DDOS
+ * Use Memcache, Redis, or a Database for scalable storage
  */
 export default function rateLimiter(userOptions = {}) {
     const options = Object.assign({
