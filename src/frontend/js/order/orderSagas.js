@@ -2,6 +2,7 @@ import { call, fork, put, take } from 'redux-saga/effects';
 import orderActions, { orderActionTypes } from './orderActions';
 import { fetchOrder, fetchOrders, fetchNewOrder as fetchNewOrderAPI } from './orderApi';
 import { loadListFactory, loadItemFactory } from '../app/entities/sagas';
+import { routeActions } from 'react-router-redux';
 
 export const loadOrders = loadListFactory(orderActionTypes, orderActions);
 export const loadOrder = loadItemFactory(orderActionTypes, orderActions);
@@ -17,6 +18,7 @@ export const newOrder = function* (fetchNewOrder, getState) {
         yield put(orderActions.order.failure(error));
     } else {
         yield put(orderActions.order.success(order));
+        yield put(routeActions.push(`/orders/${order.id}`));
     }
 };
 

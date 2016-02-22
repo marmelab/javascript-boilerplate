@@ -4,7 +4,7 @@ import { fetchEntitiesFactory, fetchEntityFactory } from '../app/entities/fetchE
 export const fetchOrders = fetchEntitiesFactory('orders');
 export const fetchOrder = fetchEntityFactory('orders');
 
-export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/order`, {
+export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/orders`, {
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=utf-8',

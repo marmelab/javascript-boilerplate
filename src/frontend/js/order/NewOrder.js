@@ -9,9 +9,9 @@ import NewOrderItem from './NewOrderItem';
 import { removeProductFromShoppingCart as removeProductFromShoppingCartAction, setShoppingCartItemQuantity as setShoppingCartItemQuantityAction } from '../shoppingcart/shoppingCartActions';
 import { ProductPropType } from '../product/productPropTypes';
 
-class OrderList extends Component {
+class NewOrder extends Component {
     render() {
-        const { order, products, removeProductFromShoppingCart, setShoppingCartItemQuantity, total } = this.props;
+        const { loading, order, products, removeProductFromShoppingCart, setShoppingCartItemQuantity, total } = this.props;
 
         return (
             <div className="shopping-cart list-group">
@@ -35,7 +35,7 @@ class OrderList extends Component {
                 }
                     <div className="list-group-item">
                         {products.length > 0 &&
-                            <button onClick={order} className="btn btn-primary">Order</button>
+                            <button onClick={order} disabled={loading} className="btn btn-primary">Order</button>
                         }
                         <Link to="/products" className="btn btn-link">Continue shopping</Link>
                     </div>
@@ -44,7 +44,8 @@ class OrderList extends Component {
     }
 }
 
-OrderList.propTypes = {
+NewOrder.propTypes = {
+    loading: PropTypes.bool.isRequired,
     products: PropTypes.arrayOf(PropTypes.shape({
         ...ProductPropType,
         quantity: PropTypes.number.isRequired,
@@ -55,7 +56,10 @@ OrderList.propTypes = {
 };
 
 function mapStateToProps(state) {
-    return state.shoppingCart;
+    return {
+        ...state.shoppingCart,
+        loading: state.order.loading,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -66,4 +70,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderList);
+export default connect(mapStateToProps, mapDispatchToProps)(NewOrder);

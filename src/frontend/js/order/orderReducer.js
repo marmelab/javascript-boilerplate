@@ -11,6 +11,7 @@ export default (state = initialState, { type, payload }) => {
     switch (type) {
     case orderActionTypes.list.REQUEST:
     case orderActionTypes.item.REQUEST:
+    case orderActionTypes.order.REQUEST:
         return {
             ...state,
             loading: true,
@@ -33,6 +34,7 @@ export default (state = initialState, { type, payload }) => {
         };
 
     case orderActionTypes.item.SUCCESS:
+    case orderActionTypes.order.SUCCESS:
         return {
             ...state,
             item: payload,
@@ -41,6 +43,7 @@ export default (state = initialState, { type, payload }) => {
         };
 
     case orderActionTypes.item.FAILURE:
+    case orderActionTypes.order.FAILURE:
         return {
             ...state,
             item: null,
