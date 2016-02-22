@@ -4,6 +4,7 @@ import { call, put, take } from 'redux-saga/effects';
 import { loadOrder as loadOrderSaga, loadOrders as loadOrdersSaga, newOrder as newOrderSaga } from './orderSagas';
 import orderActions, { orderActionTypes } from './orderActions';
 import { routeActions } from 'react-router-redux';
+import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 describe('orderSagas', () => {
     describe('loadOrders', () => {
@@ -129,6 +130,17 @@ describe('orderSagas', () => {
             }).value).to.deep.equal(put(orderActions.order.success({ id: 42 })));
         });
 
+        it('should put the clearShoppingCart action with order on successfull fetch', () => {
+            const saga = newOrderSaga(fetchNewOrder, getState);
+            saga.next();
+            saga.next();
+            saga.next({
+                order: { id: 42 },
+            });
+
+            expect(saga.next().value).to.deep.equal(put(clearShoppingCart()));
+        });
+
         it('should put the routeActions.push action with orders on successfull fetch', () => {
             const saga = newOrderSaga(fetchNewOrder, getState);
 
@@ -137,6 +149,7 @@ describe('orderSagas', () => {
             saga.next({
                 order: { id: 42 },
             });
+            saga.next();
 
             expect(saga.next().value).to.deep.equal(put(routeActions.push('/orders/42')));
         });

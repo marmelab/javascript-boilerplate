@@ -8,3 +8,6 @@ export const removeProductFromShoppingCart = createAction(REMOVE_PRODUCT_FROM_SH
 
 export const SET_SHOPPING_CART_ITEM_QUANTITY = 'SET_SHOPPING_CART_ITEM_QUANTITY';
 export const setShoppingCartItemQuantity = createAction(SET_SHOPPING_CART_ITEM_QUANTITY, (id, quantity) => ({ id, quantity }));
+
+export const CLEAR_SHOPPING_CART = 'CLEAR_SHOPPING_CART';
+export const clearShoppingCart = createAction(CLEAR_SHOPPING_CART);

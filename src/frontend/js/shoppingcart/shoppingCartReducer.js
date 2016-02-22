@@ -1,5 +1,6 @@
 import {
     ADD_PRODUCT_TO_SHOPPING_CART,
+    CLEAR_SHOPPING_CART,
     REMOVE_PRODUCT_FROM_SHOPPING_CART,
     SET_SHOPPING_CART_ITEM_QUANTITY,
 } from './shoppingCartActions';
@@ -29,6 +30,9 @@ export default (state = initialState, { type, payload }) => {
 
         productToAdd.quantity += payload.quantity;
         return { ...state, products, total: computeShoppingCartTotal(products) };
+
+    case CLEAR_SHOPPING_CART:
+        return initialState;
 
     case REMOVE_PRODUCT_FROM_SHOPPING_CART:
         const newproducts = products.filter(p => p.id !== payload);
