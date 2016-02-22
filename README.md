@@ -43,6 +43,13 @@ Requirements:
 make install
 ```
 
+You can run the following to remove all demo code:
+```bash
+# Be aware !
+# This command also removes the git reference to the marmelab/javascript-boilerplate repository
+make clear-demo-code
+```
+
 ## Develop
 
 ```sh
