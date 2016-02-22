@@ -3,6 +3,7 @@ import {
     ADD_PRODUCT_TO_SHOPPING_CART, addProductToShoppingCart,
     REMOVE_PRODUCT_FROM_SHOPPING_CART, removeProductFromShoppingCart,
     SET_SHOPPING_CART_ITEM_QUANTITY, setShoppingCartItemQuantity,
+    CLEAR_SHOPPING_CART, clearShoppingCart,
 } from './shoppingCartActions';
 
 describe('orderActions', () => {
@@ -27,6 +28,13 @@ describe('orderActions', () => {
                 id: 42,
                 quantity: 100,
             },
+        });
+    });
+
+    it('clearShoppingCart should return the correct action', () => {
+        expect(clearShoppingCart()).to.deep.equal({
+            type: CLEAR_SHOPPING_CART,
+            payload: undefined,
         });
     });
 });
