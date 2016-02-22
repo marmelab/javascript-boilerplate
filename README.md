@@ -4,9 +4,9 @@ A starter kit for new apps, based on:
 
 * ES6 everywhere (with some bits of ES7, e.g. spread operator on objects)
 * React.js, React Router, and Redux (for the frontend)
-* Angular.js and ng-afmin (for the admin)
-* Node.js and Koa.js and PostgreSQL (for the API server)
-* Makefile, webpack and Mocha (for the build)
+* Angular.js and ng-admin (for the admin)
+* Node.js, Koa.js and PostgreSQL (for the API server)
+* Makefile, webpack and Mocha (for the build and test)
 
 Features:
 
@@ -18,14 +18,14 @@ Features:
 * Production-level logging (using `winston`)
 * CORS support (including on IE8, thanks to `xDomain`)
 * Fully automated start and stop (see `Makefile`)
-* Frontend app built with React, `redux`, `redux-saga`, `react-router`
+* Frontend app built with React, `redux`, `redux-saga`, `react-router`, and `redux-form`
 * Using `react-dev-tools` for easier debugging in development
 * SASS preprocessor (using `node-sass`)
 * Including a non-trivial example with several routes, Ajax calls, and functional tests
 * Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target
 * Admin app built with Angular and `ng-admin`
 * Including a full-featured admin panel with references
-* Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`
+* Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`, and `nightwatch`
 * AWS deployment automated by Fabric
 * Sensible `eslint` defaults, based on rbnb's rules
 
