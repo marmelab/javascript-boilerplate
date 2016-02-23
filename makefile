@@ -75,7 +75,7 @@ restart-api-dev:
 	@echo "API dev restarted"
 
 run-api:
-	@node ./api/index.js
+	@node ./src/api/index.js
 run-frontend:
 	@./node_modules/.bin/webpack-dev-server  \
 		--no-info \
