@@ -10,6 +10,7 @@ A starter kit for new apps, based on:
 
 Features:
 
+* Babel transpilation (es2015, react, stage-0) for both client and server code
 * Node.js API built on top of Koa.js (successor of Express) for cleaner async code
 * Automated CRUD resources based on a PostgreSQL database (using `pg` and `co-pg`)
 * State-of the art robustness and security for the API (JWT, rate limiting, secure headers, based on `helmet`)
@@ -18,11 +19,12 @@ Features:
 * Production-level logging (using `winston`)
 * CORS support (including on IE8, thanks to `xDomain`)
 * Fully automated start and stop (see `Makefile`)
+* Auto-reload of Node.js code upon modification (using `pm2`)
 * Frontend app built with React, `redux`, `redux-saga`, `react-router`, and `redux-form`
-* Using `react-dev-tools` for easier debugging in development
+* Using `react-dev-tools` and hot reload for easier development
 * SASS preprocessor (using `node-sass`)
 * Including a non-trivial example with several routes, Ajax calls, and functional tests
-* Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target
+* Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target (minified)
 * Admin app built with Angular and `ng-admin`
 * Including a full-featured admin panel with references
 * Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`, and `nightwatch`
