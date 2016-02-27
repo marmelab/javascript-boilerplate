@@ -79,7 +79,7 @@ It's why you should locally run `npm set prefix='~'` and not add dependencies pr
 # tests run in the "test" environment and don't empty the "development" database
 make test
 
-# alternately, you can run any of the individual test suites:
+# alternatively, you can run any of the individual test suites:
 make test-api-unit
 make test-api-functional
 make test-frontend-unit
