@@ -86,6 +86,8 @@ app.on('error', (err, ctx = {}) => {
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
 });
 
+app.use(koaMount('/healthcare', require('./healthcare')));
+
 // XmlHttpRequest shim for IE
 app.use(xdomainRoute);
 

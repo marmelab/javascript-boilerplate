@@ -10,6 +10,13 @@ module.exports = {
         },
         api: {
             allowOrigin: [frontendUrl],
+            cookies: {
+                secure: false,
+                secureProxy: false,
+                httpOnly: false,
+                signed: false,
+                overwrite: true,
+            },
             db: {
                 driver: 'pg',
                 host: 'DB_HOST',
@@ -18,26 +25,24 @@ module.exports = {
                 password: 'DB_PASSWORD',
                 database: 'DB_NAME',
             },
+            healthcare: {
+                // internetUrl: 'http://google.com',
+                apiUrl: apiUrl + '/api/products',
+            },
             logs: {
                 app: {Console: { timestamp: true, colorize: true, level: 'error' }},
                 http: {},
             },
-            cookies: {
-                secure: false,
-                secureProxy: false,
-                httpOnly: false,
-                signed: false,
-                overwrite: true,
-            },
             port: apiPort,
             security: {
-                expirationTokenDelay: 1800, // in seconds
                 bcrypt: {
                     salt_work_factor: 10, // higher is safer, but slower
                 },
+                expirationTokenDelay: 1800, // in seconds
                 jwt: {
                     privateKey: 'MY-VERY-PRIVATE-KEY',
                 },
+                rateLimitOptions: {},
                 secret: 'MY-VERY-SECRET-CRYPTO-KEY-DIFFERENT-FROM-JWT',
                 xdomain: {
                     master: {
@@ -49,7 +54,6 @@ module.exports = {
                         path: '/xdomain',
                     },
                 },
-                rateLimitOptions: {},
             },
         },
         frontend: {
