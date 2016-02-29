@@ -40,6 +40,7 @@ class OrderDetails extends Component {
                     {products.map(product => (
                         <OrderProductItem
                             key={product.product_id}
+                            id={product.product_id}
                             {...product}
                         />
                     ))}
