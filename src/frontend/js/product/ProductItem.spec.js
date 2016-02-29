@@ -1,12 +1,10 @@
-import chai, { assert } from 'chai';
+import { assert } from 'chai';
 import { shallow } from 'enzyme';
-import chaiEnzyme from 'chai-enzyme';
 import React from 'react';
+import { Link } from 'react-router';
 
 import '../test/setupJsdom';
 import ProductItem from './ProductItem';
-
-chai.use(chaiEnzyme());
 
 describe('Component ProductItem', () => {
     const props = {
@@ -34,6 +32,16 @@ describe('Component ProductItem', () => {
 
     it('should display the correct thumbnail', () => {
         const wrapper = shallow(<ProductItem {...props} />);
-        assert.deepEqual(wrapper.find('img').node.props.src, 'http://google.fr/image.jpg');
+        assert.deepEqual(wrapper.find('img').prop('src'), 'http://google.fr/image.jpg');
+    });
+
+    it('should contain correct product details link', () => {
+        const wrapper = shallow(<ProductItem {...props} />);
+        assert(wrapper.contains(<Link to={'/products/42'} className="card-link">Details</Link>));
+    });
+
+    it('should contain correct order link', () => {
+        const wrapper = shallow(<ProductItem {...props} />);
+        assert(wrapper.contains(<Link to={'/order/42'} className="card-link">Order</Link>));
     });
 });
