@@ -7,6 +7,10 @@ module.exports = {
                 password: 'DB_PASSWORD',
                 database: 'DB_NAME',
             },
+            logs: {
+                app: {Console: { timestamp: true, level: 'info' }},
+                http: {Console: { timestamp: true }},
+            },
         },
     },
 };
