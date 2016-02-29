@@ -37,8 +37,7 @@ describe('Healthcare', () => {
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result.valid).to.equal(true);
-            expect(result.message).to.equal('OK');
+            expect(result).to.equal(true);
         });
 
         it('should return an invalid result when db client factory fail', function* () {
@@ -47,8 +46,7 @@ describe('Healthcare', () => {
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result.valid).to.equal(false);
-            expect(result.message).to.equal('KO - Unable to connect to database');
+            expect(result).to.equal(false);
         });
 
         it('should return an invalid result when db client query fail', function* () {
@@ -61,8 +59,7 @@ describe('Healthcare', () => {
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result.valid).to.equal(false);
-            expect(result.message).to.equal('KO - Unable to connect to database');
+            expect(result).to.equal(false);
         });
 
         it('should return an invalid result when db query does not return rows', function* () {
@@ -75,8 +72,7 @@ describe('Healthcare', () => {
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result.valid).to.equal(false);
-            expect(result.message).to.equal('KO - Invalid response from database');
+            expect(result).to.equal(false);
         });
     });
 });

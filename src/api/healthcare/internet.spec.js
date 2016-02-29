@@ -24,8 +24,7 @@ describe('Healthcare', () => {
                 internetUrl: 'foo',
             }, fetch);
 
-            expect(result.valid).to.equal(true);
-            expect(result.message).to.equal('OK');
+            expect(result).to.equal(true);
         });
 
         it('should return an invalid result when fetch response is not ok', function* () {
@@ -35,8 +34,7 @@ describe('Healthcare', () => {
                 internetUrl: 'foo',
             }, fetch);
 
-            expect(result.valid).to.equal(false);
-            expect(result.message).to.equal('KO - foo');
+            expect(result).to.equal(false);
         });
     });
 });

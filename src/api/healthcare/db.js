@@ -1,6 +1,3 @@
-import buildCheckResult from './buildCheckResult';
-
-// config.apps.api.healthcare.internetAccessUrl
 export default function* (config, dbClientFactory) {
     let pgConnection;
 
@@ -9,10 +6,10 @@ export default function* (config, dbClientFactory) {
         const client = pgConnection.client;
         const result = yield client.query_('SELECT current_schemas(false)');
 
-        if (result.rows.length <= 0) return buildCheckResult(false, 'Invalid response from database');
+        if (result.rows.length <= 0) return false;
     } catch (err) {
-        return buildCheckResult(false, 'Unable to connect to database');
+        return false;
     }
 
-    return buildCheckResult();
+    return true;
 }

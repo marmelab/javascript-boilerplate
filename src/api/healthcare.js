@@ -8,7 +8,6 @@ import dbClient from './lib/db/client';
 import internetAccessCheck from './healthcare/internet';
 import dbCheck from './healthcare/db';
 import apiCheck from './healthcare/api';
-import buildCheckResult from './healthcare/buildCheckResult';
 
 const app = koa();
 
@@ -21,26 +20,26 @@ app.use(koaRoute.get('/', function* primaryEntryPoint() {
     try {
         internetAccess = yield internetAccessCheck(config.apps.api.healthcare, fetch);
     } catch (err) {
-        internetAccess = buildCheckResult(false, err.message);
+        internetAccess = false;
     }
 
     try {
         db = yield dbCheck(config.apps.api.db, dbClient);
     } catch (err) {
-        db = buildCheckResult(false, err.message);
+        db = false;
     }
 
     try {
         api = yield apiCheck(config.apps.api.healthcare, fetch);
     } catch (err) {
-        api = buildCheckResult(false, err.message);
+        api = false;
     }
 
-    this.status = internetAccess.valid && db.valid && api.valid ? 200 : 500;
+    this.status = internetAccess && db && api ? 200 : 500;
     this.body = {
-        internetAccess: internetAccess.message,
-        db: db.message,
-        api: api.message,
+        internetAccess: internetAccess ? 'OK' : 'KO',
+        db: db ? 'OK' : 'KO',
+        api: api ? 'OK' : 'KO',
     };
 }));
 
