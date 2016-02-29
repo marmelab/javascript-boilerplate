@@ -10,6 +10,9 @@ export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/orders`, {
         'Content-Type': 'application/json; charset=utf-8',
         'Authorization': jwt,
     },
+    // Allows API to set http-only cookies with AJAX calls
+    // @see http://www.redotheweb.com/2015/11/09/api-security.html
+    credentials: 'include',
     method: 'POST',
     body: JSON.stringify({
         products,
