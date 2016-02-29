@@ -5,6 +5,16 @@ const sassOptions = [
 ].join(`\n`);
 
 export default function() {
+    const presets = [
+        'es2015',
+        'react',
+        'stage-0',
+    ];
+
+    if (process.env.NODE_ENV === 'development') {
+        presets.push('react-hmre');
+    }
+
     const loaders = [{
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -15,11 +25,7 @@ export default function() {
                 'transform-runtime',
                 'add-module-exports',
             ],
-            presets: [
-                'es2015',
-                'react',
-                'stage-0',
-            ],
+            presets,
         },
     }, {
         test: /\.json$/,
