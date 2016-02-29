@@ -109,7 +109,7 @@
     "redux-devtools-log-monitor": "~1.0.2",
     "redux-mock-store": "0.0.3",
     "selenium-standalone": "~4.9.0",
-    "sinon": "2.0.0-pre",
+    "sinon": "~1.17.3",
     "tether": "~1.1.1",
     "webpack-dev-server": "~1.14.1"
   },

@@ -107,13 +107,8 @@ log-api-dev: ## Display the logs of the API with PM2
 build-test: ## Build all front applications defined with webpack for test environment
 	@NODE_ENV=test ./node_modules/.bin/webpack --progress
 
-<<<<<<< Updated upstream
-test-api-unit:
-	@NODE_ENV=test ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
-=======
 test-api-unit: ## Run the API unit tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
->>>>>>> Stashed changes
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
