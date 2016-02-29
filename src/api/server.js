@@ -120,20 +120,29 @@ app.use(koaMount('/', koaCors({
 
 // DB connection
 app.use(function* (next) {
-    const pgConnection = yield dbClient(config.apps.api.db);
-    this.client = pgConnection.client;
+    let pgConnection;
+    let error;
+
+    try {
+        pgConnection = yield dbClient(config.apps.api.db);
+        this.client = pgConnection.client;
+    } catch (err) {
+        appLogger.log('error', `Unable to connect to database: ${err.message}`, {err});
+        this.throw(503, 'Unable to connect to database');
+    }
 
     try {
         yield next;
     } catch (err) {
         // Since there was an error somewhere down the middleware,
         // then we need to throw this client away.
-        pgConnection.done(err);
+        error = err;
 
         throw err;
+    } finally {
+        appLogger.log('debug', 'Closing DB connection');
+        pgConnection.done(error);
     }
-
-    pgConnection.done();
 });
 
 if (env !== 'development') {
