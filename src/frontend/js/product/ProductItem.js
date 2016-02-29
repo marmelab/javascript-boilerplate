@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
+import { ProductPropType } from './productPropTypes';
 
-const ProductItem = ({ id, reference, description, price, thumbnail }) => (
+const ProductItem = ({ id, reference, description, price, thumbnail, orderProduct }) => (
     <div className="card product-item">
         <img src={thumbnail} className="card-img-top img-fluid" />
         <div className="card-block">
@@ -12,17 +13,14 @@ const ProductItem = ({ id, reference, description, price, thumbnail }) => (
         <div className="card-block">
             <p className="card-text">{description}</p>
             <Link to={`/products/${id}`} className="card-link">Details</Link>
-            <Link to={`/order/${id}`} className="card-link">Order</Link>
+            <a onClick={orderProduct.bind(this, { id, reference, description, price, thumbnail })} className="card-link btn btn-link">Buy</a>
         </div>
     </div>
 );
 
 ProductItem.propTypes = {
-    description: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-    reference: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
+    ...ProductPropType,
+    orderProduct: PropTypes.func.isRequired,
 };
 
 export default ProductItem;

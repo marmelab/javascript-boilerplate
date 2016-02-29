@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import HelmetTitle from './HelmetTitle';
 import { signOut as signOutActions } from '../user/userActions';
+import ShoppingCart from '../shoppingcart/ShoppingCart';
 
 export class App extends Component {
     componentWillReceiveProps(nextProps) {
@@ -49,7 +50,14 @@ export class App extends Component {
                         }
                     </nav>
                 </div>
-                {this.props.children}
+                <div className="row">
+                    <div className="col-xs-12 col-md-10 col-lg-9">
+                    {this.props.children}
+                    </div>
+                    <div className="col-xs-12 col-md-2 col-lg-3">
+                        <ShoppingCart />
+                    </div>
+                </div>
             </div>
         );
     }

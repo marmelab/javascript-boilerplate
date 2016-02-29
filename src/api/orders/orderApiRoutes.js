@@ -1,10 +1,12 @@
 import coBody from 'co-body';
+import co from 'co';
 import crud from '../lib/middlewares/pgCrud';
 import koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
 import methodFilter from '../lib/middlewares/methodFilter';
-import orderFactory from './orderModel';
+import orderFactory, { OrderStatus } from './orderModel';
+import productFactory from '../products/productModel';
 import tokenCheckerMiddleware from '../lib/middlewares/tokenChecker';
 import userFactory from '../users/userModel';
 import uuid from 'uuid';
@@ -23,15 +25,33 @@ app.use(function* getUser(next) {
 
 app.use(function* setQueries(next) {
     this.orderQueries = orderFactory(this.client);
+    this.productQueries = productFactory(this.client);
 
     yield next;
 });
 
 app.use(koaRoute.post('/', function* postUserOrder(next) {
-    this.data = yield coBody(this);
-    this.data.reference = uuid.v1();
-    this.data.customer_id = this.userData.id;
-    this.data.date = new Date();
+    const orderData = yield coBody(this);
+    const productQueries = this.productQueries;
+    const products = yield orderData.products.map(co.wrap(function* getProduct(p) {
+        const product = yield productQueries.selectOneById(p.id);
+
+        return {
+            ...p,
+            ...product,
+        };
+    }));
+
+    const total = products.reduce((t, p) => t + p.price * (p.quantity || 1), 0);
+
+    this.data = {
+        customer_id: this.userData.id,
+        date: new Date(),
+        products,
+        reference: uuid.v1(),
+        status: OrderStatus.pending,
+        total,
+    };
 
     yield next;
 }));

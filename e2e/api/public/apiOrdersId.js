@@ -26,6 +26,7 @@ describe('/api/orders/{id}', () => {
                 customer_id: user1.id,
                 total: 6.8,
                 status: 'valid',
+                products: [],
             }),
             orderUser2: orderQueries.insertOne({
                 reference: 'ref1',
@@ -33,6 +34,7 @@ describe('/api/orders/{id}', () => {
                 customer_id: user2.id,
                 total: 6.8,
                 status: 'valid',
+                products: [],
             }),
         };
     });
@@ -71,6 +73,7 @@ describe('/api/orders/{id}', () => {
                 customer_id: user1.id,
                 total: 6.80,
                 status: 'valid',
+                products: [],
             });
         });
     });
@@ -103,6 +106,7 @@ describe('/api/orders/{id}', () => {
                 customer_id: user1.id,
                 total: 6.8,
                 status: 'valid',
+                products: [],
             });
             let userOrders = yield orderQueries.selectByUserId(user1.id);
             assert.equal(userOrders.length, 2);

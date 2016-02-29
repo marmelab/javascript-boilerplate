@@ -5,6 +5,8 @@ import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import ProductItem from './ProductItem';
 import productActions from './productActions';
+import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
+import { ProductPropType } from './productPropTypes';
 
 class ProductList extends Component {
     componentDidMount() {
@@ -12,7 +14,7 @@ class ProductList extends Component {
     }
 
     render() {
-        const { loading, products } = this.props;
+        const { loading, orderProduct, products } = this.props;
 
         return (
             <div className="row product-list">
@@ -25,7 +27,7 @@ class ProductList extends Component {
                 {!loading &&
                     products.map(product => (
                         <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
-                            <ProductItem {...product} />
+                            <ProductItem {...product} orderProduct={orderProduct} />
                         </div>
                     ))
                 }
@@ -35,9 +37,10 @@ class ProductList extends Component {
 }
 
 ProductList.propTypes = {
-    products: PropTypes.arrayOf(PropTypes.shape(ProductItem.propTypes)),
+    products: PropTypes.arrayOf(PropTypes.shape(ProductPropType)),
     loading: PropTypes.bool.isRequired,
     loadProducts: PropTypes.func.isRequired,
+    orderProduct: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -50,6 +53,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         loadProducts: productActions.list.request,
+        orderProduct: addProductToShoppingCart,
     }, dispatch);
 }
 

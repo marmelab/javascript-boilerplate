@@ -19,6 +19,7 @@ describe('/api/orders', () => {
             customer_id: user.id,
             total: 6.8,
             status: 'valid',
+            products: [],
         });
     });
     describe('GET', () => {
@@ -68,6 +69,7 @@ describe('/api/orders', () => {
                 body: {
                     total: 6.80,
                     status: 'valid',
+                    products: [],
                 },
             });
             assert.equal(statusCode, 401);
@@ -102,7 +104,8 @@ describe('/api/orders', () => {
                 url: '/api/orders',
                 body: {
                     total: 6.80,
-                    status: 'valid',
+                    status: 'pending',
+                    products: [],
                 },
             }, userToken, {'token': userCookieToken});
             assert.equal(statusCode, 200, JSON.stringify(body));

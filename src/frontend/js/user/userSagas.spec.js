@@ -45,7 +45,7 @@ describe('userSagas', () => {
             }).value).to.deep.equal(call(storeLocalUser, { id: 'foo'}));
         });
 
-        it('should put the routeActions.push action after a succesfull signIn', () => {
+        it('should put the signedIn action after a succesfull signIn', () => {
             const fetchSignIn = sinon.spy();
             const storeLocalUser = sinon.spy();
             const saga = signInSaga(fetchSignIn, storeLocalUser);
@@ -62,7 +62,7 @@ describe('userSagas', () => {
             expect(saga.next().value).to.deep.equal(put(signInActions.success({ id: 'foo'})));
         });
 
-        it('should put the signedIn action after a succesfull signIn', () => {
+        it('should put the routeActions.push action after a succesfull signIn', () => {
             const fetchSignIn = sinon.spy();
             const storeLocalUser = sinon.spy();
             const saga = signInSaga(fetchSignIn, storeLocalUser);

@@ -5,8 +5,9 @@ import numeral from 'numeral';
 import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
-import ProductItem from './ProductItem';
 import productActions from './productActions';
+import { ProductPropType } from './productPropTypes';
+import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 class ProductDetails extends Component {
     componentDidMount() {
@@ -16,7 +17,7 @@ class ProductDetails extends Component {
     }
 
     render() {
-        const { loading, product } = this.props;
+        const { loading, orderProduct, product } = this.props;
 
         if (loading || !product) {
             return (
@@ -26,7 +27,7 @@ class ProductDetails extends Component {
             );
         }
 
-        const { id, reference, description, price, image } = product;
+        const { reference, description, price, image } = product;
 
         return (
             <div className="row product-details">
@@ -39,7 +40,7 @@ class ProductDetails extends Component {
                     <p className="description">{description}</p>
                     <p className="price">Price: {numeral(price).format('$0.00')}</p>
                     <p>
-                        <Link to={`/order/${id}`} className="btn btn-primary">Buy</Link>
+                        <button onClick={orderProduct.bind(this, { ...product })} className="btn btn-primary">Buy</button>
                         <Link to="/products" className="btn btn-link">Return to product list</Link>
                     </p>
                 </div>
@@ -51,23 +52,27 @@ class ProductDetails extends Component {
 ProductDetails.propTypes = {
     productId: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
-    product: PropTypes.shape(ProductItem.propTypes),
+    product: PropTypes.shape(ProductPropType),
     loadProduct: PropTypes.func.isRequired,
+    orderProduct: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
     const productId = parseInt(ownProps.params.id, 10);
+    const productFromState = state.product.item;
+    const productFromList = state.product.list.length > 0 ? state.product.list.find(p => p.id === productId) : null;
 
     return {
-        productId,
         loading: state.product.loading,
-        product: state.product.item ? state.product.item : (state.product.list.length > 0 ? state.product.list.find(p => p.id === productId) : null),
+        productId,
+        product: productFromState || productFromList,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         loadProduct: productActions.item.request,
+        orderProduct: addProductToShoppingCart,
     }, dispatch);
 }
 
