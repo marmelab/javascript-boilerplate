@@ -26,7 +26,7 @@ module.exports = {
                 database: 'DB_NAME',
             },
             healthcare: {
-                // internetUrl: 'http://google.com',
+                internetUrl: 'http://google.com',
                 apiUrl: apiUrl + '/api/products',
             },
             logs: {
