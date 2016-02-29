@@ -87,8 +87,6 @@
     "babel-preset-react-hmre": "~1.1.0",
     "babel-preset-stage-0": "~6.3.13",
     "chai": "~3.3.0",
-    "chai-enzyme": "~0.4.1",
-    "cheerio": "~0.20.0",
     "co-mocha": "~1.1.2",
     "enzyme": "~2.0.0",
     "eslint": "~1.6.0",
