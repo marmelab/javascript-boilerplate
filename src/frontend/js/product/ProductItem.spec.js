@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import React from 'react';
 import { Link } from 'react-router';
@@ -13,6 +14,7 @@ describe('Component ProductItem', () => {
         reference: 'REF-654564',
         thumbnail: 'http://google.fr/image.jpg',
         description: 'Best product ever',
+        orderProduct: sinon.spy(),
     };
 
     it('should display the correct reference', () => {
@@ -37,11 +39,18 @@ describe('Component ProductItem', () => {
 
     it('should contain correct product details link', () => {
         const wrapper = shallow(<ProductItem {...props} />);
-        assert(wrapper.contains(<Link to={'/products/42'} className="card-link">Details</Link>));
+        assert(
+            wrapper.contains(<Link to={'/products/42'} className="card-link">Details</Link>),
+            'ProductItem should contains a link to specified product',
+        );
     });
 
     it('should contain correct order link', () => {
         const wrapper = shallow(<ProductItem {...props} />);
-        assert(wrapper.contains(<Link to={'/order/42'} className="card-link">Order</Link>));
+        const link = wrapper.find('a');
+        assert(link, 'ProductItem should contains a link to buy product');
+
+        link.simulate('click');
+        assert(props.orderProduct.called, 'orderProduct func should be called');
     });
 });
