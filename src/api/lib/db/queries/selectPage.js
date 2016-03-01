@@ -14,7 +14,7 @@ export default (client, tableName, exposedFields, searchableFields, sortableFiel
     searchableFields = searchableFields || exposedFields;
     sortableFields = sortableFields || exposedFields;
 
-    return function* selectPage(limit, offset, match, sort, sortDir, other) {
+    return function* selectPage(limit = 30, offset = 0, match, sort, sortDir, other) {
         let query = baseQuery;
         const params = {};
         const whereParts = [];
@@ -86,11 +86,9 @@ export default (client, tableName, exposedFields, searchableFields, sortableFiel
         }
         query += ` ORDER BY ${sortQuery.join(', ')}`;
 
-        if (limit) {
-            query += ' LIMIT $limit OFFSET $offset';
-            params.limit = limit || 30;
-            params.offset = offset || 0;
-        }
+        query += ' LIMIT $limit OFFSET $offset';
+        params.limit = limit;
+        params.offset = offset;
 
         return (yield client.query_(query, params)).rows;
     };
