@@ -25,6 +25,9 @@
             "firefox_profile" : false,
             "desiredCapabilities": {
                 "browserName": "chrome",
+                "chromeOptions" : {
+                    "args" : ["--no-sandbox"]
+                },
                 "browserConnectionEnabled": true,
                 "javascriptEnabled": true,
                 "acceptSslCerts": true,

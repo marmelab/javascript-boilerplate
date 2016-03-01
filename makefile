@@ -20,7 +20,7 @@ install: copy-conf ## Install npm dependencies for the api, admin, and frontend 
 	@echo "Installing Node dependencies"
 	@npm install
 	@echo "Installing Selenium server"
-	@./node_modules/.bin/selenium-standalone install --version=2.50.1
+	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.21
 
 # Deployment ===================================================================
 build: ## Build all front applications defined with webpack
@@ -135,8 +135,7 @@ test: ## Run all tests
 	# TODO: restore when implemented
 	# make test-isomorphic-unit
 	make test-api-functional
-	# TODO: restore when implemented
-	# make test-frontend-functional
+	make test-frontend-functional
 
 reset-test-database: ## Reset the test database and run all migrations
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
