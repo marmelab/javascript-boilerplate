@@ -110,6 +110,8 @@ Browse the app:
 * [http://localhost:8080/frontend](http://localhost:8080/frontend) for the frontend app
 * [http://localhost:3000](http://localhost:3000) for the API
 
+**Tip**: You can change the API port by running `NODE_PORT=3001 make run-dev`. Or, for persistent change, you can add this environment variable into the [PM2 configuration file](config/pm2_servers/dev.json).
+
 ```sh
 # stop servers (node and webpack)
 make stop-dev
