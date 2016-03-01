@@ -33,6 +33,7 @@ Features:
 
 The boilerplate contains a sample app with three domains: users, products, and orders. Feel free to remove the corresponding files once you start implementing your own domain.
 
+
 ## Install
 
 Requirements:
