@@ -38,7 +38,7 @@ install-aws: ## Install the aws cli
 
 install-prod: ## Install npm dependencies for the api, admin, and frontend apps in production environment
 	@echo "Installing Node dependencies"
-	@npm install
+	@npm install --production
 	@echo "Copy production conf"
 	@cp -n ./config/production-dist.js ./config/production.js | true
 
