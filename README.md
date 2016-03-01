@@ -45,7 +45,52 @@ Requirements:
 make install
 ```
 
+## Understand
+
+The project directory structure is as follows:
+
+```
+bin/ # CLI tasks
+build/ # compiled JS and CSS files for the admin and frontend app. The web root in production.
+config/ # Project configuration
+doc/
+e2e/ # Functional tests
+src/
+  api/ # The server API code (Node.js, Koa.js)
+  admin/ # The admin dashboard code (Angular.js, ng-admin)
+  frontend/ # The frontend code (React.js, Redux)
+  isomorphic/ # Code common to several apps
+webpack/ # Webpack configuration (for admin and frontend compilation)
+```
+
+The entire code (api, admin, and frontend) is written in ES6 and transpiled to ES5 by babel.
+
+**Tip**: In production, the compiled JS and CSS files (under `build/`) are served by the Node.js server. In development, it's done by webpack-dev-server.
+
+The main entry point for understanding the code is probably `src/api/server.js`.
+
+## Project Configuration
+
+This projects supports various runtime environments. This means that you can switch to an entirely different configuration based on the `NODE_ENV` environment variable:
+
+```sh
+# run the API server in development mode (default)
+$ node ./src/api/index.js
+# run the API server in test mode
+$ NODE_ENV=test node ./src/api/index.js
+# run the API server in production mode
+$ NODE_ENV=production node ./src/api/index.js
+```
+
+**Tip**: On the production servers, you should set the `NODE_ENV` variable using supervisor.
+
+It uses [node-config](https://github.com/lorenwest/node-config) to let you configure the project for the development, test, and production environments. `node-config` supports configuration cascade, so the actual configuration for a given environment is the combination of `config/default.js` and `config/[NODE_ENV].js` (the configuration settings for a given environment override the default settings).
+
+Before running the app in development, you must copy the `config/development-dist.js` into `config/development.js` (this is done by the `make install` command), and edit the server and database settings to your development environment. Same for the `test-dist.js` if you intend to run unit tests.
+
 ## Develop
+
+This project uses [pm2](https://github.com/Unitech/pm2) to manage its processes. Configuration files for pm2 can be found in the `./config/pm2_servers/` directory.
 
 ```sh
 # start servers (node and webpack via pm2)
