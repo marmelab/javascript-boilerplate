@@ -48,10 +48,7 @@ myApp.config(['RestangularProvider', (RestangularProvider) => {
         const currentTime = (new Date()).getTime();
         const tokenExpires = window.localStorage.getItem('expires');
 
-        if (tokenExpires && tokenExpires < currentTime) {
-            logout();
-            redirectToLogin();
-        }
+        if (tokenExpires && tokenExpires < currentTime) logout();
 
         headers = headers || {};
         headers['Authorization'] = window.localStorage.getItem('token');
