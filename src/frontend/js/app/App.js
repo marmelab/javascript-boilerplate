@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { RouteTransition } from 'react-router-transition';
 import HelmetTitle from './HelmetTitle';
 import { signOut as signOutActions } from '../user/userActions';
 import ShoppingCart from '../shoppingcart/ShoppingCart';
@@ -52,7 +53,18 @@ export class App extends Component {
                 </div>
                 <div className="row">
                     <div className="col-xs-12 col-md-10 col-lg-9">
-                    {this.props.children}
+                        <RouteTransition
+                            pathname={this.props.location.pathname}
+                            atEnter={{ translateX: 100 }}
+                            atLeave={{ translateX: -100 }}
+                            atActive={{ translateX: 0 }}
+                            mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
+                            style={{position: 'relative'}}
+                        >
+                            <div style={{position: 'absolute', width: '100%'}}>
+                                {this.props.children}
+                            </div>
+                        </RouteTransition>
                     </div>
                     <div className="col-xs-12 col-md-2 col-lg-3">
                         <ShoppingCart />
@@ -65,9 +77,10 @@ export class App extends Component {
 
 App.propTypes = {
     children: PropTypes.node,
-    user: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     signOut: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
