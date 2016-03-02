@@ -117,7 +117,7 @@ Browse the app:
 make stop-dev
 ```
 
-**Note:** for stability purposes dependencies versions are *exact* and production dependencies are locked down using `npm shrinkwrap`. To keep fixed version update npm configuration with `npm set save-exact 1` command or append your `npm install` command with `--save-exact`.
+**Note:** for stability purposes dependencies versions are *exact* and production dependencies are locked down using `npm shrinkwrap --dev`. To keep fixed version update npm configuration with `npm set save-exact 1` command or append your `npm install` command with `--save-exact`.
 
 **Tip:** because versions are *exact* you can run your `npm install` faster by running `npm set cache-min Infinity` (even without internet connection if packages are already cached).
 
