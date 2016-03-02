@@ -26,8 +26,8 @@ install: copy-conf ## Install npm dependencies for the api, admin, and frontend 
 build: ## Build all front applications defined with webpack
 	@./node_modules/.bin/webpack --progress
 
-clean: ## Clean the local cloned repository
-	git clean -nxdf
+clean: ## Remove only files ignored by Git
+	git clean --force -d -X
 
 install-aws: ## Install the aws cli
 	curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
