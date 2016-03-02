@@ -1,3 +1,4 @@
+.PHONY: build test help
 .DEFAULT_GOAL := help
 
 ADMIN_NAME ?= sheldon
@@ -268,47 +269,3 @@ create-admin: ## Create a new admin user in the database (you may define the NOD
 create-client: ## Create a new user in the database (you may define the NODE_ENV to select a specific configuration)
 	# TODO: ensure we create a simple user and not an admin
 	./node_modules/babel-cli/bin/babel-node.js ./bin/createAdmin.js ${CLIENT_NAME} ${CLIENT_EMAIL} ${CLIENT_PASSWORD}
-
-.PHONY: \
-	build \
-	build-test \
-	clean \
-	copy-conf \
-	create-admin \
-	create-client
-	create-migration \
-	createdb \
-	deploy-prod \
-	deploy-prod-api \
-	deploy-prod-frontend \
-	deploy-staging \
-	deploy-staging-api \
-	deploy-staging-frontend \
-	dropdb \
-	install \
-	install-aws \
-	install-prod \
-	load-fixtures \
-	load-test-fixtures \
-	log-api-dev \
-	log-frontend-dev \
-	migrate \
-	reset-test-database \
-	restart-api-dev \
-	restart-frontend-dev \
-	run-api \
-	run-dev \
-	run-frontend \
-	servers-clear-all \
-	servers-list \
-	servers-monitoring \
-	servers-stop-all \
-	setup-prod \
-	setup-staging \
-	stop-dev \
-	test \
-	test-api-functional \
-	test-api-unit \
-	test-frontend-functional \
-	test-frontend-unit \
-	test-isomorphic-unit
