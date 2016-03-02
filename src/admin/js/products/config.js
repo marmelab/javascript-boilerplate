@@ -21,6 +21,13 @@ export default (nga, admin) => {
             nga.field('stock', 'number')
                 .cssClasses('hidden-xs'),
         ])
+        .filters([
+            nga.field('reference'),
+            nga.field('price', 'float'),
+            nga.field('width', 'float'),
+            nga.field('height', 'float'),
+            nga.field('stock', 'number'),
+        ])
         .listActions(['edit', 'delete']);
 
     products.creationView()

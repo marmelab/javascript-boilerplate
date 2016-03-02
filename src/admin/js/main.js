@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular APP_NAME ADMIN_API_URL */
 import 'ng-admin';
 require('ng-admin/build/ng-admin.min.css');
 
@@ -22,8 +22,8 @@ const myApp = angular.module('myApp', ['ng-admin']);
 
 myApp.config(['NgAdminConfigurationProvider', (nga) => {
     const admin = nga
-        .application(APP_NAME) // eslint-disable-line no-undef
-        .baseApiUrl(ADMIN_API_URL); // eslint-disable-line no-undef
+        .application(APP_NAME)
+        .baseApiUrl(ADMIN_API_URL);
 
     admin.addEntity(nga.entity('products'));
     admin.addEntity(nga.entity('orders'));
@@ -72,7 +72,10 @@ myApp.config(['RestangularProvider', (RestangularProvider) => {
             }
 
             if (params._filters) {
-                params.filter = params._filters;
+                Object.keys(params._filters).forEach(filter => {
+                    if (filter === 'q') params.filter = params._filters.q;
+                    else params[filter] = params._filters[filter];
+                });
                 delete params._filters;
             }
         }
