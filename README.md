@@ -43,6 +43,8 @@ Requirements:
 ```sh
 # install npm dependencies and Selenium (for tests)
 make install
+# create database based on params found in `.envrc` file
+make createdb
 ```
 
 ## Understand
