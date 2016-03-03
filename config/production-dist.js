@@ -11,6 +11,14 @@ module.exports = {
                 app: {Console: { timestamp: true, level: 'info' }},
                 http: {Console: { timestamp: true }},
             },
+            security: {
+                rateLimitOptions: {
+                    adapter: 'redis',
+                    redis: {
+                        // see https://github.com/NodeRedis/node_redis#rediscreateclient for available options
+                    },
+                },
+            },
         },
     },
 };
