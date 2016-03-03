@@ -24,7 +24,7 @@
     "node-postgres-named": "2.4.0",
     "pg": "4.5.1",
     "uuid": "2.0.1",
-    "winston": "1.0.2",
+    "winston": "2.2.0",
     "xdomain": "0.7.3"
   },
   "devDependencies": {

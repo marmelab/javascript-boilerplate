@@ -9,6 +9,6 @@ export default function logger(loggersConfig) {
     }
 
     return new (winston.Logger)({
-        transports: transports,
+        transports,
     });
 }
