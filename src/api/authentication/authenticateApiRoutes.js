@@ -4,7 +4,6 @@ import config from 'config';
 import jwt from 'jsonwebtoken';
 import koa from 'koa';
 import koaRoute from 'koa-route';
-import rateLimiter from '../lib/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
 
 const app = koa();
@@ -15,8 +14,6 @@ app.use(function* init(next) {
 
     yield next;
 });
-
-app.use(koaRoute.post('/sign-in', rateLimiter(config.apps.api.security.rateLimitOptions)));
 
 app.use(koaRoute.post('/sign-in', function* signIn() {
     const { email, password } = yield coBody(this);

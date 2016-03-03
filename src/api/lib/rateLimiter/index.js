@@ -7,7 +7,6 @@ export default (userOptions = {}) => {
         max: 5, // max number of recent connections during `window` miliseconds before sending a 429 response
     }, options);
 
-
     const adapterImplementation = require(`./${adapter}`);
 
     return adapterImplementation(options);
