@@ -5810,9 +5810,9 @@
       "resolved": "https://registry.npmjs.org/sax/-/sax-1.1.5.tgz"
     },
     "selenium-standalone": {
-      "version": "4.9.0",
-      "from": "selenium-standalone@4.9.0",
-      "resolved": "https://registry.npmjs.org/selenium-standalone/-/selenium-standalone-4.9.0.tgz",
+      "version": "5.0.0",
+      "from": "selenium-standalone@5.0.0",
+      "resolved": "http://registry.npmjs.org/selenium-standalone/-/selenium-standalone-5.0.0.tgz",
       "dependencies": {
         "asn1": {
           "version": "0.1.11",
