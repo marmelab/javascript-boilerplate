@@ -52,7 +52,7 @@
     "eslint-plugin-react": "4.1.0",
     "expect": "1.14.0",
     "expose-loader": "0.7.1",
-    "extract-text-webpack-plugin": "0.8.2",
+    "extract-text-webpack-plugin": "1.0.1",
     "faker": "3.0.1",
     "fakerest": "1.1.4",
     "fastclick": "1.0.6",
