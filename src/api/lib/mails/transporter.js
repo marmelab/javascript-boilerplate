@@ -12,11 +12,10 @@ const transporterFactory = config => {
     case 'smtp':
         transporter = nodemailer.createTransport(smtpTransport(config.auth || {}));
         break;
-    default:  // eslint-disable-line no-case-declarations
-        const transportName = (config.transport) ? config.transport : 'console';
-        const transport = require(`./transporters/${transportName}`);
+    default: {
+        const transport = require(`./transporters/${config.transport}`);
         transporter = nodemailer.createTransport(transport(config.transport_options));
-    }
+    }}
 
     transporter.use('compile', htmlToText());
     transporter.sendMail_ = thunkify(transporter.sendMail);
