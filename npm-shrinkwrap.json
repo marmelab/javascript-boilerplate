@@ -3093,9 +3093,9 @@
       "resolved": "https://registry.npmjs.org/hide-powered-by/-/hide-powered-by-1.0.0.tgz"
     },
     "history": {
-      "version": "1.17.0",
-      "from": "history@1.17.0",
-      "resolved": "https://registry.npmjs.org/history/-/history-1.17.0.tgz"
+      "version": "2.0.1",
+      "from": "history@latest",
+      "resolved": "http://registry.npmjs.org/history/-/history-2.0.1.tgz"
     },
     "hoek": {
       "version": "2.16.3",
