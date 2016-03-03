@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import { Link } from 'react-router';
 
-import '../test/setupJsdom';
 import ProductItem from './ProductItem';
 
 describe('Component ProductItem', () => {
@@ -41,7 +40,7 @@ describe('Component ProductItem', () => {
         const wrapper = shallow(<ProductItem {...props} />);
         assert(
             wrapper.contains(<Link to={'/products/42'} className="card-link">Details</Link>),
-            'ProductItem should contains a link to specified product',
+            'ProductItem should contains a link to specified product'
         );
     });
 
