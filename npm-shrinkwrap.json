@@ -2318,11 +2318,6 @@
       "from": "ee-first@1.1.1",
       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
     },
-    "ejs": {
-      "version": "2.4.1",
-      "from": "ejs@latest",
-      "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.4.1.tgz"
-    },
     "encoding": {
       "version": "0.1.12",
       "from": "encoding@>=0.1.11 <0.2.0",
