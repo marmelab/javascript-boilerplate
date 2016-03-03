@@ -33,6 +33,15 @@ module.exports = {
                 app: {Console: { timestamp: true, colorize: true, level: 'error' }},
                 http: {},
             },
+            mails: {
+                defaultOptions: {
+                    emitter: { name: 'marmelab', address: 'info@marmelab.com' },
+                },
+                transporter: {
+                    transport: 'console',
+                    transport_options: {},
+                },
+            },
             port: apiPort,
             security: {
                 bcrypt: {

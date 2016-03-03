@@ -35,6 +35,11 @@
       "from": "acorn-to-esprima@>=2.0.4 <3.0.0",
       "resolved": "https://registry.npmjs.org/acorn-to-esprima/-/acorn-to-esprima-2.0.8.tgz"
     },
+    "addressparser": {
+      "version": "1.0.1",
+      "from": "addressparser@1.0.1",
+      "resolved": "https://registry.npmjs.org/addressparser/-/addressparser-1.0.1.tgz"
+    },
     "agent-base": {
       "version": "2.0.1",
       "from": "agent-base@>=2.0.0 <3.0.0",
@@ -1478,6 +1483,11 @@
       "from": "buffers@>=0.1.1 <0.2.0",
       "resolved": "https://registry.npmjs.org/buffers/-/buffers-0.1.1.tgz"
     },
+    "buildmail": {
+      "version": "3.5.2",
+      "from": "buildmail@3.5.2",
+      "resolved": "https://registry.npmjs.org/buildmail/-/buildmail-3.5.2.tgz"
+    },
     "builtin-modules": {
       "version": "1.1.1",
       "from": "builtin-modules@>=1.0.0 <2.0.0",
@@ -2309,9 +2319,9 @@
       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
     },
     "ejs": {
-      "version": "0.8.8",
-      "from": "ejs@>=0.8.3 <0.9.0",
-      "resolved": "https://registry.npmjs.org/ejs/-/ejs-0.8.8.tgz"
+      "version": "2.4.1",
+      "from": "ejs@latest",
+      "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.4.1.tgz"
     },
     "encoding": {
       "version": "0.1.12",
@@ -3156,10 +3166,20 @@
         }
       }
     },
+    "html-to-text": {
+      "version": "1.6.2",
+      "from": "html-to-text@>=1.3.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/html-to-text/-/html-to-text-1.6.2.tgz"
+    },
     "html-webpack-plugin": {
       "version": "2.9.0",
       "from": "html-webpack-plugin@2.9.0",
       "resolved": "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-2.9.0.tgz"
+    },
+    "htmlparser": {
+      "version": "1.7.7",
+      "from": "htmlparser@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/htmlparser/-/htmlparser-1.7.7.tgz"
     },
     "htmlparser2": {
       "version": "3.8.3",
@@ -3790,6 +3810,21 @@
       "from": "levn@>=0.3.0 <0.4.0",
       "resolved": "https://registry.npmjs.org/levn/-/levn-0.3.0.tgz"
     },
+    "libbase64": {
+      "version": "0.1.0",
+      "from": "libbase64@0.1.0",
+      "resolved": "https://registry.npmjs.org/libbase64/-/libbase64-0.1.0.tgz"
+    },
+    "libmime": {
+      "version": "2.0.3",
+      "from": "libmime@2.0.3",
+      "resolved": "https://registry.npmjs.org/libmime/-/libmime-2.0.3.tgz"
+    },
+    "libqp": {
+      "version": "1.1.0",
+      "from": "libqp@1.1.0",
+      "resolved": "https://registry.npmjs.org/libqp/-/libqp-1.1.0.tgz"
+    },
     "line-numbers": {
       "version": "0.2.0",
       "from": "line-numbers@>=0.2.0 <0.3.0",
@@ -4084,6 +4119,11 @@
       "from": "lru-cache@>=4.0.0 <5.0.0",
       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.0.tgz"
     },
+    "mailcomposer": {
+      "version": "3.6.3",
+      "from": "mailcomposer@3.6.3",
+      "resolved": "https://registry.npmjs.org/mailcomposer/-/mailcomposer-3.6.3.tgz"
+    },
     "map-obj": {
       "version": "1.0.1",
       "from": "map-obj@>=1.0.0 <2.0.0",
@@ -4361,6 +4401,11 @@
       "from": "nightwatch@0.8.16",
       "resolved": "https://registry.npmjs.org/nightwatch/-/nightwatch-0.8.16.tgz",
       "dependencies": {
+        "ejs": {
+          "version": "0.8.8",
+          "from": "ejs@>=0.8.3 <0.9.0",
+          "resolved": "https://registry.npmjs.org/ejs/-/ejs-0.8.8.tgz"
+        },
         "lru-cache": {
           "version": "2.7.3",
           "from": "lru-cache@>=2.0.0 <3.0.0",
@@ -4477,6 +4522,46 @@
       "version": "1.4.7",
       "from": "node-uuid@>=1.4.7 <1.5.0",
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.7.tgz"
+    },
+    "nodemailer": {
+      "version": "2.3.0",
+      "from": "nodemailer@latest",
+      "resolved": "https://registry.npmjs.org/nodemailer/-/nodemailer-2.3.0.tgz"
+    },
+    "nodemailer-direct-transport": {
+      "version": "3.0.6",
+      "from": "nodemailer-direct-transport@3.0.6",
+      "resolved": "https://registry.npmjs.org/nodemailer-direct-transport/-/nodemailer-direct-transport-3.0.6.tgz"
+    },
+    "nodemailer-fetch": {
+      "version": "1.3.0",
+      "from": "nodemailer-fetch@1.3.0",
+      "resolved": "https://registry.npmjs.org/nodemailer-fetch/-/nodemailer-fetch-1.3.0.tgz"
+    },
+    "nodemailer-html-to-text": {
+      "version": "1.0.2",
+      "from": "nodemailer-html-to-text@latest",
+      "resolved": "https://registry.npmjs.org/nodemailer-html-to-text/-/nodemailer-html-to-text-1.0.2.tgz"
+    },
+    "nodemailer-shared": {
+      "version": "1.0.4",
+      "from": "nodemailer-shared@1.0.4",
+      "resolved": "https://registry.npmjs.org/nodemailer-shared/-/nodemailer-shared-1.0.4.tgz"
+    },
+    "nodemailer-smtp-pool": {
+      "version": "2.5.1",
+      "from": "nodemailer-smtp-pool@2.5.1",
+      "resolved": "https://registry.npmjs.org/nodemailer-smtp-pool/-/nodemailer-smtp-pool-2.5.1.tgz"
+    },
+    "nodemailer-smtp-transport": {
+      "version": "2.4.1",
+      "from": "nodemailer-smtp-transport@latest",
+      "resolved": "https://registry.npmjs.org/nodemailer-smtp-transport/-/nodemailer-smtp-transport-2.4.1.tgz"
+    },
+    "nodemailer-wellknown": {
+      "version": "0.1.7",
+      "from": "nodemailer-wellknown@0.1.7",
+      "resolved": "https://registry.npmjs.org/nodemailer-wellknown/-/nodemailer-wellknown-0.1.7.tgz"
     },
     "nopt": {
       "version": "3.0.6",
@@ -6165,6 +6250,11 @@
       "from": "smart-mixin@>=1.2.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/smart-mixin/-/smart-mixin-1.2.1.tgz"
     },
+    "smtp-connection": {
+      "version": "2.3.1",
+      "from": "smtp-connection@2.3.1",
+      "resolved": "https://registry.npmjs.org/smtp-connection/-/smtp-connection-2.3.1.tgz"
+    },
     "snake-case": {
       "version": "1.1.2",
       "from": "snake-case@>=1.1.0 <2.0.0",
@@ -6619,6 +6709,11 @@
       "version": "1.8.3",
       "from": "underscore@>=1.8.3 <2.0.0",
       "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
+    },
+    "underscore.string": {
+      "version": "2.4.0",
+      "from": "underscore.string@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
     },
     "union": {
       "version": "0.4.4",

@@ -80,7 +80,7 @@ app.on('error', (err, ctx = {}) => {
         status: ctx.status,
         error: err.message,
         stack: err.stack,
-        err: err,
+        err,
     };
 
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
@@ -129,7 +129,7 @@ app.use(function* (next) {
         pgConnection = yield dbClient(config.apps.api.db);
         this.client = pgConnection.client;
     } catch (err) {
-        appLogger.log('error', `Unable to connect to database: ${err.message}`, {err});
+        appLogger.log('error', `Unable to connect to database: ${err.message}`, { err });
         this.throw(503, 'Unable to connect to database');
     }
 

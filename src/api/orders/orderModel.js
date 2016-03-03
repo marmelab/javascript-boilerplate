@@ -83,7 +83,6 @@ export default client => {
         });
 
         const insertOrderProduct = co.wrap(function* insertOrderProduct(order, orderProduct) {
-            console.log({order, orderProduct});
             const {
                 quantity,
                 reference,
