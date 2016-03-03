@@ -5588,9 +5588,9 @@
       }
     },
     "redux-devtools-dock-monitor": {
-      "version": "1.0.1",
-      "from": "redux-devtools-dock-monitor@1.0.1",
-      "resolved": "https://registry.npmjs.org/redux-devtools-dock-monitor/-/redux-devtools-dock-monitor-1.0.1.tgz"
+      "version": "1.1.0",
+      "from": "redux-devtools-dock-monitor@latest",
+      "resolved": "http://registry.npmjs.org/redux-devtools-dock-monitor/-/redux-devtools-dock-monitor-1.1.0.tgz"
     },
     "redux-devtools-log-monitor": {
       "version": "1.0.5",

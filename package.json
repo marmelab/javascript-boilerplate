@@ -84,7 +84,7 @@
     "redux": "3.3.1",
     "redux-actions": "0.9.1",
     "redux-devtools": "3.1.1",
-    "redux-devtools-dock-monitor": "1.0.1",
+    "redux-devtools-dock-monitor": "1.1.0",
     "redux-devtools-log-monitor": "1.0.5",
     "redux-form": "4.2.0",
     "redux-form-schema": "0.0.3",

@@ -1,22 +1,10 @@
 {
-    "extends": "airbnb",
     "env": {
         "mocha": true,
     },
+    "extends": "airbnb",
     "rules": {
         "indent": [2, 4],
-    },
-    "globals": {
-      "after": false,
-      "afterEach": false,
-      "assert": false,
-      "before": false,
-      "beforeEach": false,
-      "db": false,
-      "describe": false,
-      "document": false,
-      "fixtureLoader": false,
-      "it": false,
-      "request": false,
+        "react/jsx-indent-props": [2, 4],
     }
 }

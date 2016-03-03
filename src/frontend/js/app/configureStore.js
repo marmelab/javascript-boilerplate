@@ -11,7 +11,7 @@ export default function configureStore(reducers, routes, initialState) {
         applyMiddleware(
             thunkMiddleware,
             syncHistory(history),
-            createSagaMiddleware(sagas),
+            createSagaMiddleware(sagas)
         ),
     ];
 
