@@ -68,7 +68,6 @@
     "moment": "2.11.2",
     "ng-admin": "0.9.1",
     "nightwatch": "0.8.16",
-    "nock": "3.4.0",
     "node-sass": "3.4.2",
     "numeral": "1.5.3",
     "pm2": "1.0.1",
