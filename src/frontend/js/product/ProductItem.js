@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
-import { ProductPropType } from './productPropTypes';
+import ProductPropType from './productPropTypes';
 
 const ProductItem = ({ id, reference, description, price, thumbnail, orderProduct }) => (
     <div className="card product-item">

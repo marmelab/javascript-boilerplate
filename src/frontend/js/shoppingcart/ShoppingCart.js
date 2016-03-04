@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import ShoppingCartItem from './ShoppingCartItem';
 import { removeProductFromShoppingCart as removeProductFromShoppingCartAction } from './shoppingCartActions';
-import { ProductPropType } from '../product/productPropTypes';
+import ProductPropType from '../product/productPropTypes';
 import numeral from 'numeral';
 
 class ShoppingCart extends Component {

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
-import { ProductPropType } from '../product/productPropTypes';
+import ProductPropType from '../product/productPropTypes';
 
 class OrderProductItem extends Component {
     render() {

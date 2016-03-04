@@ -6,7 +6,7 @@ import Loading from '../app/Loading';
 import ProductItem from './ProductItem';
 import productActions from './productActions';
 import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
-import { ProductPropType } from './productPropTypes';
+import ProductPropType from './productPropTypes';
 
 class ProductList extends Component {
     componentDidMount() {

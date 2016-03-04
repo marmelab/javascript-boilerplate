@@ -7,7 +7,7 @@ import HelmetTitle from '../app/HelmetTitle';
 import orderActions from './orderActions';
 import NewOrderItem from './NewOrderItem';
 import { removeProductFromShoppingCart as removeProductFromShoppingCartAction, setShoppingCartItemQuantity as setShoppingCartItemQuantityAction } from '../shoppingcart/shoppingCartActions';
-import { ProductPropType } from '../product/productPropTypes';
+import ProductPropType from '../product/productPropTypes';
 
 class NewOrder extends Component {
     render() {
