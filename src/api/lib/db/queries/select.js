@@ -7,7 +7,7 @@ export default (client, tableName, fields, idFieldName) => {
             throw new Error('No id specified for selecting ' + tableName + ' entity.');
         }
 
-        const result = yield client.query_(queryById, {id: id});
+        const result = yield client.query_(queryById, { id: id });
         const entity = result.rows[0];
 
         if (!entity) {

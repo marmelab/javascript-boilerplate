@@ -28,12 +28,12 @@ describe('User Model', () => {
 
                 return {
                     rowCount: 1,
-                    rows: [{id: 42, email: 'email@example.org'}],
+                    rows: [{ id: 42, email: 'email@example.org' }],
                 };
             },
         };
 
         const res = yield userRepository(client).findByEmail('email@example.org');
-        assert.deepEqual(res, {id: 42, email: 'email@example.org'});
+        assert.deepEqual(res, { id: 42, email: 'email@example.org' });
     });
 });

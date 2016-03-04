@@ -30,7 +30,7 @@ module.exports = {
                 apiUrl: apiUrl + '/api/products',
             },
             logs: {
-                app: {Console: { timestamp: true, colorize: true, level: 'error' }},
+                app: { Console: { timestamp: true, colorize: true, level: 'error' } },
                 http: {},
             },
             mails: {

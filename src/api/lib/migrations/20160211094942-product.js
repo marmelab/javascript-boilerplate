@@ -1,6 +1,6 @@
 'use strict';
 
-exports.up = function(db, callback) {
+exports.up = function (db, callback) {
     db.createTable('product', {
         id: { type: 'int', primaryKey: true, autoIncrement: true },
         reference: { type: 'string' },
@@ -14,6 +14,6 @@ exports.up = function(db, callback) {
     }, callback);
 };
 
-exports.down = function(db, callback) {
+exports.down = function (db, callback) {
     db.dropTable('product', callback);
 };

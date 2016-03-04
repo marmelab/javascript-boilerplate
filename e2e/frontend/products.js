@@ -1,20 +1,20 @@
 module.exports = {
-    after: function(client) {
+    after: function (client) {
         client.end();
     },
 
-    'Products - user should see the product list': function(client) {
+    'Products - user should see the product list': function (client) {
         client
             .url('http://localhost:8081/frontend#/products')
             .waitForElementVisible('body', 1000)
-            .waitForElementVisible('.product-item', 1000, false, function() {
-                client.getLog('browser', function(result) {
+            .waitForElementVisible('.product-item', 1000, false, function () {
+                client.getLog('browser', function (result) {
                     console.error(result);
                 });
             });
     },
 
-    'Products - user should see the product details': function(client) {
+    'Products - user should see the product details': function (client) {
         client
             .url('http://localhost:8081/frontend#/products/1')
             .waitForElementVisible('.product-details', 5000);

@@ -1,7 +1,7 @@
 import { call, put, take } from 'redux-saga/effects';
 
 export const loadListFactory = (actionTypes, actions) => function* loadList(fetchList, jwtAccessor) {
-    while(true) {
+    while (true) {
         yield take(actionTypes.list.REQUEST);
         const { error, list } = yield call(fetchList, typeof jwtAccessor === 'function' ? jwtAccessor() : undefined);
 
@@ -15,7 +15,7 @@ export const loadListFactory = (actionTypes, actions) => function* loadList(fetc
 };
 
 export const loadItemFactory = (actionTypes, actions) => function* loadItem(fetchItem, jwtAccessor) {
-    while(true) {
+    while (true) {
         const { payload } = yield take(actionTypes.item.REQUEST);
         const { error, item } = yield call(fetchItem, payload, typeof jwtAccessor === 'function' ? jwtAccessor() : undefined);
 

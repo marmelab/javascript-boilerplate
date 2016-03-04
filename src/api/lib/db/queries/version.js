@@ -42,7 +42,7 @@ export default (client, table, historyTable, fields, idFieldName, idAutoGenerate
 
     const getColumnNames = function* getColumnNames() {
         const columnNamesQuery = 'SELECT column_name FROM information_schema.columns WHERE table_name = $tableName';
-        const entities = yield client.query_(columnNamesQuery, {tableName: table});
+        const entities = yield client.query_(columnNamesQuery, { tableName: table });
 
         return entities.rows.map(row => row.column_name);
     };
@@ -70,6 +70,6 @@ export default (client, table, historyTable, fields, idFieldName, idAutoGenerate
         const subSelect = `SELECT ${columnNames.join(', ')}, '${trigger}', '${numVersion}' FROM ${table} WHERE id = $id`;
         const query = `INSERT INTO ${historyTable} (${columnNames.join(', ')}, version_trigger, version) (${subSelect})`;
 
-        yield client.query_(query, {id: entity.id});
+        yield client.query_(query, { id: entity.id });
     };
 };

@@ -2,7 +2,7 @@ import pg from 'pg';
 import coPg from 'co-pg';
 import named from 'node-postgres-named';
 
-export default function* dbClient({host, port, user, password, database}) {
+export default function* dbClient({ host, port, user, password, database }) {
     const postgresql = coPg(pg);
     const connection = `postgres://${user}:${password}@${host}:${port}/${database}`;
     const connectionResponse = yield postgresql.connect_(connection);

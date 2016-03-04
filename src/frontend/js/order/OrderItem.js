@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Link } from 'react-router';
 import OrderStatusBadge from './OrderStatusBadge';
 
-const OrderItem = ({id, reference, date, total, status }) => (
+const OrderItem = ({ id, reference, date, total, status }) => (
     <Link to={`/orders/${id}`} className="list-group-item">
         <OrderStatusBadge status={status} />
         <span className="label label-default pull-xs-right">{numeral(total).format('$0.00')}</span>

@@ -40,7 +40,7 @@ const base = (client, tableName, exposedFields, searchableFieldsList, sortableFi
     const removeOne = removeOneQuery(client, tableName, exposedFields, idFieldName, version);
 
     function* exists(entityId) {
-        const result = yield client.query_(`SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE ${idFieldName} = $entityId)`, {entityId});
+        const result = yield client.query_(`SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE ${idFieldName} = $entityId)`, { entityId });
 
         return result.rows[0].exists;
     }
