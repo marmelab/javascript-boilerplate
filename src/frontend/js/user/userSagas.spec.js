@@ -1,9 +1,19 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
+import { routerActions } from 'react-router-redux';
 import { call, put, take } from 'redux-saga/effects';
-import { signIn as signInSaga, signOut as signOutSaga, signUp as signUpSaga } from './userSagas';
-import { userActionTypes, signIn as signInActions, signOut as signOutActions, signUp as signUpActions } from './userActions';
-import { routeActions } from 'react-router-redux';
+import sinon from 'sinon';
+
+import {
+    signIn as signInSaga,
+    signOut as signOutSaga,
+    signUp as signUpSaga,
+} from './userSagas';
+import {
+    signIn as signInActions,
+    signOut as signOutActions,
+    signUp as signUpActions,
+    userActionTypes,
+} from './userActions';
 
 describe('userSagas', () => {
     describe('signIn', () => {
@@ -42,7 +52,7 @@ describe('userSagas', () => {
 
             expect(saga.next({
                 user: { id: 'foo' },
-            }).value).to.deep.equal(call(storeLocalUser, { id: 'foo'}));
+            }).value).to.deep.equal(call(storeLocalUser, { id: 'foo' }));
         });
 
         it('should put the signedIn action after a succesfull signIn', () => {
@@ -56,13 +66,13 @@ describe('userSagas', () => {
                 password: 'test_password',
             }));
             saga.next({
-                user: { id: 'foo'},
+                user: { id: 'foo' },
             });
 
-            expect(saga.next().value).to.deep.equal(put(signInActions.success({ id: 'foo'})));
+            expect(saga.next().value).to.deep.equal(put(signInActions.success({ id: 'foo' })));
         });
 
-        it('should put the routeActions.push action after a succesfull signIn', () => {
+        it('should put the routerActions.push action after a succesfull signIn', () => {
             const fetchSignIn = sinon.spy();
             const storeLocalUser = sinon.spy();
             const saga = signInSaga(fetchSignIn, storeLocalUser);
@@ -73,11 +83,11 @@ describe('userSagas', () => {
                 password: 'test_password',
             }));
             saga.next({
-                user: { id: 'foo'},
+                user: { id: 'foo' },
             });
             saga.next();
 
-            expect(saga.next().value).to.deep.equal(put(routeActions.push('/next-route')));
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/next-route')));
         });
 
         it('should put the signIn action with error after a failed signIn', () => {
@@ -134,10 +144,10 @@ describe('userSagas', () => {
 
             expect(saga.next({
                 user: { id: 'foo' },
-            }).value).to.deep.equal(call(storeLocalUser, { id: 'foo'}));
+            }).value).to.deep.equal(call(storeLocalUser, { id: 'foo' }));
         });
 
-        it('should put the routeActions.push action after a succesfull signUp', () => {
+        it('should put the routerActions.push action after a succesfull signUp', () => {
             const fetchSignUp = sinon.spy();
             const storeLocalUser = sinon.spy();
             const saga = signUpSaga(fetchSignUp, storeLocalUser);
@@ -148,10 +158,10 @@ describe('userSagas', () => {
                 password: 'test_password',
             }));
             saga.next({
-                user: { id: 'foo'},
+                user: { id: 'foo' },
             });
 
-            expect(saga.next().value).to.deep.equal(put(signUpActions.success({ id: 'foo'})));
+            expect(saga.next().value).to.deep.equal(put(signUpActions.success({ id: 'foo' })));
         });
 
         it('should put the signedIn action after a succesfull signUp', () => {
@@ -165,11 +175,11 @@ describe('userSagas', () => {
                 password: 'test_password',
             }));
             saga.next({
-                user: { id: 'foo'},
+                user: { id: 'foo' },
             });
             saga.next();
 
-            expect(saga.next().value).to.deep.equal(put(routeActions.push('/next-route')));
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/next-route')));
         });
 
         it('should put the signUp action with error after a failed signUp', () => {
@@ -215,7 +225,7 @@ describe('userSagas', () => {
             expect(saga.next().value).to.deep.equal(put(signOutActions.success()));
         });
 
-        it('should put the routeActions.push action', () => {
+        it('should put the routerActions.push action', () => {
             const removeLocalUser = sinon.spy();
             const saga = signOutSaga(removeLocalUser);
 
@@ -223,7 +233,7 @@ describe('userSagas', () => {
             saga.next();
             saga.next();
 
-            expect(saga.next().value).to.deep.equal(put(routeActions.push('/')));
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/')));
         });
     });
 });

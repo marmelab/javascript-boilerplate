@@ -1,8 +1,13 @@
+import { routerActions } from 'react-router-redux';
 import { call, fork, put, take } from 'redux-saga/effects';
+
 import orderActions, { orderActionTypes } from './orderActions';
-import { fetchOrder, fetchOrders, fetchNewOrder as fetchNewOrderAPI } from './orderApi';
+import {
+    fetchOrder,
+    fetchOrders,
+    fetchNewOrder as fetchNewOrderAPI,
+} from './orderApi';
 import { loadListFactory, loadItemFactory } from '../app/entities/sagas';
-import { routeActions } from 'react-router-redux';
 import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 export const loadOrders = loadListFactory(orderActionTypes, orderActions);
@@ -12,7 +17,10 @@ export const newOrder = function* (fetchNewOrder, getState) {
     yield take(orderActionTypes.order.REQUEST);
 
     const state = getState();
-    const { error, order } = yield call(fetchNewOrder, state.shoppingCart.products, state.user.token);
+    const {
+        error,
+        order,
+    } = yield call(fetchNewOrder, state.shoppingCart.products, state.user.token);
 
     if (error) {
         console.error(error.message);
@@ -20,7 +28,7 @@ export const newOrder = function* (fetchNewOrder, getState) {
     } else {
         yield put(orderActions.order.success(order));
         yield put(clearShoppingCart());
-        yield put(routeActions.push(`/orders/${order.id}`));
+        yield put(routerActions.push(`/orders/${order.id}`));
     }
 };
 

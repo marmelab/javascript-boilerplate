@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import routesFactory from './routes';
 
 const Root = ({ store }) => {
-    const history = syncHistoryWithStore(require(`react-router/lib/${FRONTEND_HISTORY}History`), store); // eslint-disable-line max-len, no-undef
+    const history = syncHistoryWithStore(hashHistory, store);
     const routes = routesFactory(store);
 
     if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef

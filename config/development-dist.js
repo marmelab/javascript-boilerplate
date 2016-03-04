@@ -8,12 +8,9 @@ module.exports = {
                 database: 'boilerplate',
             },
             logs: {
-                app: {Console: { timestamp: true, colorize: true, level: 'info' }},
-                http: {Console: { timestamp: true, colorize: true }},
+                app: { Console: { timestamp: true, colorize: true, level: 'info' } },
+                http: { Console: { timestamp: true, colorize: true } },
             },
-        },
-        frontend: {
-            history: 'createHashHistory',
         },
     },
 };

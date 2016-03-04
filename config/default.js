@@ -68,7 +68,6 @@ module.exports = {
         frontend: {
             api_url: apiUrl + '/api',
             enableDevTools: true,
-            history: 'browser',
         },
     },
     babel_ignore: /node_modules\/(?!admin-config|fakerest)/,
