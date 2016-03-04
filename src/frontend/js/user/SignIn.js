@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
 import classNames from 'classnames';
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import { reduxForm, propTypes } from 'redux-form';
 import buildSchema from 'redux-form-schema';
+
 import HelmetTitle from '../app/HelmetTitle';
-import { Link } from 'react-router';
 import { signIn as signInActions } from './userActions';
 
 const signInSchema = buildSchema({
@@ -11,7 +12,6 @@ const signInSchema = buildSchema({
         required: true,
         type: 'email',
     },
-
     password: {
         required: true,
     },
@@ -57,8 +57,18 @@ const SignIn = ({ signInError, signIn, previousRoute, fields: { email, password 
                         })} disabled={submitting}>
                             Sign in
                         </button>
-                        <Link to={{ pathname: '/sign-up', state: { nextPathname: previousRoute }}} className="btn btn-lg btn-link">No account ? Sign up !</Link>
-                        <Link to="/forgot-password" className="btn btn-lg btn-link">Forgot your password ?</Link>
+                        <Link
+                            className="btn btn-lg btn-link"
+                            to={{ pathname: '/sign-up', state: { nextPathname: previousRoute }}}
+                        >
+                            No account? Sign up!
+                        </Link>
+                        <Link
+                            className="btn btn-lg btn-link"
+                            to="/forgot-password"
+                        >
+                            Forgot your password?
+                        </Link>
                     </form>
                 </div>
             </div>
@@ -77,10 +87,18 @@ export default reduxForm({
     fields: signInSchema.fields,
     validate: signInSchema.validate,
     destroyOnUnmount: false,
-},
-state => ({
-    previousRoute: state.routing.location.state && state.routing.location.state.nextPathname,
-    signInError: state.user.error,
-}), {
+}, state => {
+    let previousRoute;
+    try {
+        previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
+    } catch(error) {
+        previousRoute = '/';
+    }
+
+    return {
+        previousRoute,
+        signInError: state.user.error,
+    };
+}, {
     signIn: signInActions.request,
 })(SignIn);

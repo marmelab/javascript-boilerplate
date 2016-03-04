@@ -17,6 +17,6 @@ const store = configureStore(rootReducer);
 FastClick.attach(document.body);
 
 render(
-    <Root { ...{ store } } />,
+    <Root {...{ store }} />,
     document.getElementById('root')
 );

@@ -5490,9 +5490,9 @@
       }
     },
     "react-router-redux": {
-      "version": "3.0.0",
-      "from": "react-router-redux@3.0.0",
-      "resolved": "https://registry.npmjs.org/react-router-redux/-/react-router-redux-3.0.0.tgz"
+      "version": "4.0.0",
+      "from": "react-router-redux@latest",
+      "resolved": "http://registry.npmjs.org/react-router-redux/-/react-router-redux-4.0.0.tgz"
     },
     "react-router-transition": {
       "version": "0.0.4",

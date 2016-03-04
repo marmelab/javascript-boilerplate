@@ -12,12 +12,10 @@ const signUpSchema = buildSchema({
         required: true,
         type: 'email',
     },
-
     password: {
         label: 'password',
         required: true,
     },
-
     confirmPassword: {
         label: 'password confirmation',
         required: true,
@@ -79,7 +77,12 @@ const SignUp = ({ signUpError, signUp, previousRoute, fields: { email, password,
                         })} disabled={submitting}>
                             Sign up
                         </button>
-                        <Link to={{ pathname: '/sign-in', state: { nextPathname: previousRoute }}} className="btn btn-lg btn-link">Already have an account ? Sign in !</Link>
+                        <Link
+                            className="btn btn-lg btn-link"
+                            to={{ pathname: '/sign-in', state: { nextPathname: previousRoute }}}
+                        >
+                            Already have an account ? Sign in !
+                        </Link>
                     </form>
                 </div>
             </div>
@@ -98,10 +101,18 @@ export default reduxForm({
     fields: signUpSchema.fields,
     validate: signUpSchema.validate,
     destroyOnUnmount: false,
-},
-state => ({
-    previousRoute: state.routing.location.state && state.routing.location.state.nextPathname,
-    signUpError: state.user.error,
-}), {
+}, state => {
+    let previousRoute;
+    try {
+        previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
+    } catch(error) {
+        previousRoute = '/';
+    }
+
+    return {
+        previousRoute,
+        signInError: state.user.error,
+    };
+}, {
     signUp: signUpActions.request,
 })(SignUp);
