@@ -9,10 +9,10 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import Root from './app/Root';
-import reducers from './app/reducers';
+import rootReducer from './app/reducers';
 import configureStore from './app/configureStore';
 
-const store = configureStore(reducers);
+const store = configureStore(rootReducer);
 
 FastClick.attach(document.body);
 
