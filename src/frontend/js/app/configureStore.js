@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import sagas from './sagas';
 
-export default function configureStore(reducers, routes, initialState) {
+export default function configureStore(reducers, initialState) {
     let enhancers = [
         applyMiddleware(
             thunkMiddleware,

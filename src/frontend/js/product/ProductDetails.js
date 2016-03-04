@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import productActions from './productActions';
-import { ProductPropType } from './productPropTypes';
+import ProductPropType from './productPropTypes';
 import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 class ProductDetails extends Component {

@@ -18,7 +18,7 @@ export class App extends Component {
     }
 
     render() {
-        const { user, signOut } = this.props;
+        const { children, location, user, signOut } = this.props;
 
         return (
             <div className="app container-fluid">
@@ -40,11 +40,18 @@ export class App extends Component {
                         {user && user.authenticated &&
                             <ul className="nav navbar-nav pull-xs-right">
                                 <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a
+                                        className="nav-link dropdown-toggle"
+                                        data-toggle="dropdown"
+                                        href="#"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
                                         {user.email}
                                     </a>
                                     <div className="dropdown-menu">
-                                        <a className="dropdown-item" onClick={() => signOut()}>Sign out</a>
+                                        <a className="dropdown-item" onClick={signOut}>Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -54,15 +61,15 @@ export class App extends Component {
                 <div className="row">
                     <div className="col-xs-12 col-md-10 col-lg-9">
                         <RouteTransition
-                            pathname={this.props.location.pathname}
+                            pathname={location.pathname}
                             atEnter={{ translateX: 100 }}
                             atLeave={{ translateX: -100 }}
                             atActive={{ translateX: 0 }}
-                            mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
-                            style={{position: 'relative'}}
+                            mapStyles={s => ({ transform: `translateX(${s.translateX}%)` })}
+                            style={{ position: 'relative' }}
                         >
-                            <div style={{position: 'absolute', width: '100%'}}>
-                                {this.props.children}
+                            <div style={{ position: 'absolute', width: '100%' }}>
+                                {children}
                             </div>
                         </RouteTransition>
                     </div>
