@@ -11,7 +11,7 @@ import userRepositoryFactory from '../users/userModel';
 const app = koa();
 
 app.use(methodFilter(['POST']));
-app.use(koaRoute.post('/', rateLimiter(config.apps.api.security.rateLimitOptions)));
+app.use(koaRoute.post('/', rateLimiter(config.apps.api.security.rateLimitOptions.auth)));
 
 app.use(koaRoute.post('/', function* login() {
     const { email, password } = yield coBody(this);

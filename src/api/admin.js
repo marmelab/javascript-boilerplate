@@ -11,8 +11,8 @@ import orderAdminApiRoutes from './orders/orderAdminApiRoutes';
 
 const app = koa();
 
-app.use(rateLimiterMiddleware(config.apps.api.security.rateLimitOptions));
 app.use(koaMount('/authenticate', authenticateAdminRoutes));
+app.use(rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.api));
 app.use(tokenCheckerMiddleware);
 
 app.use(koaMount('/products', productAdminApiRoutes));
