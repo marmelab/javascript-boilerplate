@@ -23,9 +23,7 @@ class NewOrder extends Component {
                 {products.map(product => (
                     <NewOrderItem
                         key={product.id}
-                        {...product}
-                        removeProductFromShoppingCart={removeProductFromShoppingCart}
-                        setShoppingCartItemQuantity={setShoppingCartItemQuantity}
+                        { ...{ removeProductFromShoppingCart, setShoppingCartItemQuantity, ...product } }
                     />
                 ))}
                 {products.length > 0 &&

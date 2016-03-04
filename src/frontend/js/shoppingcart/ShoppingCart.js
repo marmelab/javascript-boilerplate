@@ -17,7 +17,7 @@ class ShoppingCart extends Component {
                     <div className="list-group-item">Your shopping cart is empty</div>
                 }
                 {products.map(product => (
-                    <ShoppingCartItem key={product.id} {...product} removeProductFromShoppingCart={removeProductFromShoppingCart} />
+                    <ShoppingCartItem key={product.id} { ...{ removeProductFromShoppingCart, ...product } } />
                 ))}
                 {products.length > 0 &&
                     <div className="list-group-item text-xs-right lead">
