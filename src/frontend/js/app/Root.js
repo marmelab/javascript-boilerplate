@@ -1,17 +1,21 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
-import history from './history';
+import { Router, hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
+
 import routesFactory from './routes';
 
 const Root = ({ store }) => {
+    const history = syncHistoryWithStore(hashHistory, store);
+    const routes = routesFactory(store);
+
     if (FRONTEND__APP__ENABLE_DEV_TOOLS) { // eslint-disable-line no-undef
         const DevTools = require('./DevTools');
 
         return (
-            <Provider {...{store}}>
+            <Provider {...{ store }}>
                 <div>
-                    <Router history={history} routes={routesFactory(store)} />
+                    <Router {...{ history, routes }} />
                     <DevTools />
                 </div>
             </Provider>
@@ -19,8 +23,8 @@ const Root = ({ store }) => {
     }
 
     return (
-        <Provider {...{store}}>
-            <Router history={history} routes={routesFactory(store)} />
+        <Provider {...{ store }}>
+            <Router {...{ history, routes }} />
         </Provider>
     );
 };

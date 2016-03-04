@@ -1,9 +1,14 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
+import { routerActions } from 'react-router-redux';
 import { call, put, take } from 'redux-saga/effects';
-import { loadOrder as loadOrderSaga, loadOrders as loadOrdersSaga, newOrder as newOrderSaga } from './orderSagas';
+import sinon from 'sinon';
+
 import orderActions, { orderActionTypes } from './orderActions';
-import { routeActions } from 'react-router-redux';
+import {
+    loadOrder as loadOrderSaga,
+    loadOrders as loadOrdersSaga,
+    newOrder as newOrderSaga,
+} from './orderSagas';
 import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 describe('orderSagas', () => {
@@ -11,7 +16,7 @@ describe('orderSagas', () => {
         it('should starts on orderActionTypes.list.REQUEST action', () => {
             const saga = loadOrdersSaga(undefined, () => ({ user: { token: 'blublu' } }));
 
-            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.list.REQUEST));
+            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.list.REQUEST)); // eslint-disable-line max-len
         });
 
         it('should call the fetchOrders function', () => {
@@ -23,7 +28,7 @@ describe('orderSagas', () => {
             expect(saga.next().value).to.deep.equal(call(fetchOrders, 'blublu'));
         });
 
-        it('should put the orderActions.list.success action with orders on successfull fetch', () => {
+        it('should put the orderActions.list.success action with orders on successfull fetch', () => { // eslint-disable-line max-len
             const fetchOrders = sinon.spy();
             const saga = loadOrdersSaga(fetchOrders, () => 'blublu');
 
@@ -31,8 +36,8 @@ describe('orderSagas', () => {
             saga.next();
 
             expect(saga.next({
-                list: [ { id: 42 } ],
-            }).value).to.deep.equal(put(orderActions.list.success([ { id: 42 } ])));
+                list: [{ id: 42 }],
+            }).value).to.deep.equal(put(orderActions.list.success([{ id: 42 }])));
         });
 
         it('should put the orderActions.list.failure action with error on failed fetch', () => {
@@ -53,7 +58,7 @@ describe('orderSagas', () => {
         it('should starts on orderActionTypes.item.REQUEST action', () => {
             const saga = loadOrderSaga(undefined);
 
-            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(take(orderActionTypes.item.REQUEST));
+            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(take(orderActionTypes.item.REQUEST)); // eslint-disable-line max-len
         });
 
         it('should call the fetchProduct function', () => {
@@ -62,10 +67,10 @@ describe('orderSagas', () => {
 
             saga.next();
 
-            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(call(fetchProduct, 'order_id', undefined));
+            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(call(fetchProduct, 'order_id', undefined)); // eslint-disable-line max-len
         });
 
-        it('should put the orderActions.item.success action with products on successfull fetch', () => {
+        it('should put the orderActions.item.success action with products on successfull fetch', () => { // eslint-disable-line max-len
             const fetchProduct = sinon.spy();
             const saga = loadOrderSaga(fetchProduct);
 
@@ -106,7 +111,7 @@ describe('orderSagas', () => {
 
         it('should starts on orderActionTypes.order.REQUEST action', () => {
             const saga = newOrderSaga(fetchNewOrder, getState);
-            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.order.REQUEST));
+            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.order.REQUEST)); // eslint-disable-line max-len
         });
 
         it('should call the fetchOrders function', () => {
@@ -120,7 +125,7 @@ describe('orderSagas', () => {
             }], 'blublu'));
         });
 
-        it('should put the orderActions.order.success action with order on successfull fetch', () => {
+        it('should put the orderActions.order.success action with order on successfull fetch', () => { // eslint-disable-line max-len
             const saga = newOrderSaga(fetchNewOrder, getState);
             saga.next();
             saga.next();
@@ -141,7 +146,7 @@ describe('orderSagas', () => {
             expect(saga.next().value).to.deep.equal(put(clearShoppingCart()));
         });
 
-        it('should put the routeActions.push action with orders on successfull fetch', () => {
+        it('should put the routerActions.push action with orders on successfull fetch', () => {
             const saga = newOrderSaga(fetchNewOrder, getState);
 
             saga.next();
@@ -151,7 +156,7 @@ describe('orderSagas', () => {
             });
             saga.next();
 
-            expect(saga.next().value).to.deep.equal(put(routeActions.push('/orders/42')));
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/orders/42')));
         });
 
         it('should put the orderActions.order.failure action with error on failed fetch', () => {

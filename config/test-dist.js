@@ -27,7 +27,7 @@ module.exports = {
         },
         frontend: {
             api_url: apiUrl + '/api',
-            history: 'createHashHistory',
+            history: 'hash',
         },
     },
 };

@@ -9,7 +9,6 @@ export default function (appName) {
             APP_NAME: JSON.stringify(config.appName),
             ADMIN_API_URL: JSON.stringify(config.apps.admin.api_url),
             API_URL: JSON.stringify(config.apps.frontend.api_url),
-            FRONTEND_HISTORY: JSON.stringify(config.apps.frontend.history),
             FRONTEND__APP__ENABLE_DEV_TOOLS: JSON.stringify(config.apps.frontend.enableDevTools),
         }),
         new ExtractTextPlugin(`${appName}/[name].css`, {

@@ -8,8 +8,8 @@ module.exports = {
                 database: 'DB_NAME',
             },
             logs: {
-                app: {Console: { timestamp: true, level: 'info' }},
-                http: {Console: { timestamp: true }},
+                app: { Console: { timestamp: true, level: 'info' } },
+                http: { Console: { timestamp: true } },
             },
             security: {
                 rateLimitOptions: {
