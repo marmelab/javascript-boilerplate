@@ -10,9 +10,9 @@ describe('orderActions', () => {
     });
 
     it('orderActions.list.success should return the correct action', () => {
-        expect(orderActions.list.success([ { id: 1 } ])).to.deep.equal({
+        expect(orderActions.list.success([{ id: 1 }])).to.deep.equal({
             type: orderActionTypes.list.SUCCESS,
-            payload: [ { id: 1 } ],
+            payload: [{ id: 1 }],
         });
     });
 
@@ -33,9 +33,9 @@ describe('orderActions', () => {
     });
 
     it('orderActions.item.success should return the correct action', () => {
-        expect(orderActions.item.success([ { id: 1 } ])).to.deep.equal({
+        expect(orderActions.item.success([{ id: 1 }])).to.deep.equal({
             type: orderActionTypes.item.SUCCESS,
-            payload: [ { id: 1 } ],
+            payload: [{ id: 1 }],
         });
     });
 
@@ -56,9 +56,9 @@ describe('orderActions', () => {
     });
 
     it('orderActions.order.success should return the correct action', () => {
-        expect(orderActions.order.success([ { id: 1 } ])).to.deep.equal({
+        expect(orderActions.order.success([{ id: 1 }])).to.deep.equal({
             type: orderActionTypes.order.SUCCESS,
-            payload: [ { id: 1 } ],
+            payload: [{ id: 1 }],
         });
     });
 

@@ -1,4 +1,4 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import reducerFactory from './userReducer';
 import { signIn, signOut, signUp } from './userActions';

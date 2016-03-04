@@ -77,6 +77,6 @@ myApp.config(['RestangularProvider', (RestangularProvider) => {
             }
         }
 
-        return {params};
+        return { params };
     });
 }]);

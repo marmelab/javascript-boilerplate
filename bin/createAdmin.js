@@ -18,10 +18,10 @@ co(function* () {
         password: args[2],
     });
 
-    console.log("\n");
+    console.log('\n');
     console.log(user);
     process.exit();
-}).catch(function(err) {
+}).catch(function (err) {
     console.error(err.message);
     process.exit();
 });

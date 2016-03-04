@@ -1,6 +1,6 @@
 'use strict';
 
-exports.up = function(db, callback) {
+exports.up = function (db, callback) {
     db.createTable('order_product', {
         order_id: { type: 'int' },
         product_id: { type: 'int' },
@@ -15,6 +15,6 @@ exports.up = function(db, callback) {
     }, callback);
 };
 
-exports.down = function(db, callback) {
+exports.down = function (db, callback) {
     db.dropTable('order_product', callback);
 };

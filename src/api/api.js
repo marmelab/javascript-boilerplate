@@ -19,7 +19,7 @@ app.use(koaMount('/orders', orderApiRoutes));
 app.use(methodFilter(['GET']));
 app.use(koaRoute.get('/', function* primaryEntryPoint() {
     this.status = 200;
-    this.body = {status: 'ok'};
+    this.body = { status: 'ok' };
 }));
 
 export default app;

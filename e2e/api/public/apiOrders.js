@@ -41,13 +41,13 @@ describe('/api/orders', () => {
             const { statusCode } = yield request({
                 method: 'GET',
                 url: '/api/orders',
-            }, null, {'token': userCookieToken});
+            }, null, { 'token': userCookieToken });
             assert.equal(statusCode, 401);
         });
         it('should return all connected user\'s orders', function* () {
             const { statusCode, body } = yield request({
-                url: `/api/orders`,
-            }, userToken, {'token': userCookieToken});
+                url: '/api/orders',
+            }, userToken, { 'token': userCookieToken });
 
             assert.equal(statusCode, 200, JSON.stringify(body));
             assert.equal(body.length, 1);
@@ -93,7 +93,7 @@ describe('/api/orders', () => {
                     total: 6.80,
                     status: 'valid',
                 },
-            }, null, {'token': userCookieToken});
+            }, null, { 'token': userCookieToken });
             assert.equal(statusCode, 401);
         });
         it('should create a order', function* () {
@@ -107,7 +107,7 @@ describe('/api/orders', () => {
                     status: 'pending',
                     products: [],
                 },
-            }, userToken, {'token': userCookieToken});
+            }, userToken, { 'token': userCookieToken });
             assert.equal(statusCode, 200, JSON.stringify(body));
             userOrders = yield orderFactory(db.client).selectByUserId(user.id);
             assert.equal(userOrders.length, 2);

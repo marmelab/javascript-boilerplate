@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-const OrderStatusBadge = ({status }) => (
+const OrderStatusBadge = ({ status }) => (
     <span className={classNames('label label-default pull-xs-right', {
         'label-info': status === 'pending',
         'label-success': status === 'sent',

@@ -10,9 +10,9 @@ describe('productActions', () => {
     });
 
     it('productActions.list.success should return the correct action', () => {
-        expect(productActions.list.success([ { id: 1 } ])).to.deep.equal({
+        expect(productActions.list.success([{ id: 1 }])).to.deep.equal({
             type: productActionTypes.list.SUCCESS,
-            payload: [ { id: 1 } ],
+            payload: [{ id: 1 }],
         });
     });
 

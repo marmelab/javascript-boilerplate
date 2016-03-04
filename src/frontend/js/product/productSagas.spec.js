@@ -29,8 +29,8 @@ describe('productSagas', () => {
             saga.next();
 
             expect(saga.next({
-                list: [ { id: 42 } ],
-            }).value).to.deep.equal(put(productActions.list.success([ { id: 42 } ])));
+                list: [{ id: 42 }],
+            }).value).to.deep.equal(put(productActions.list.success([{ id: 42 }])));
         });
 
         it('should put the productActions.list.failure action with error on failed fetch', () => {
