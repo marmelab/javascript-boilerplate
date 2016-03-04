@@ -1,18 +1,18 @@
-var apiUrl = 'http://localhost:3010'; // eslint-disable-line no-var
-var frontendUrl = 'http://localhost:8081'; // eslint-disable-line no-var
+const apiUrl = 'http://localhost:3010';
+const frontendUrl = 'http://localhost:8081';
 
 module.exports = {
     apps: {
         admin: {
-            api_url: apiUrl + '/admin/',
+            api_url: `${apiUrl}/admin/`,
         },
         api: {
             allowOrigin: [frontendUrl],
             db: {
-                host: 'localhost',
-                user: 'postgres',
-                password: '',
                 database: 'travis_ci_test',
+                host: 'localhost',
+                password: '',
+                user: 'postgres',
             },
             security: {
                 rateLimitOptions: {
@@ -26,8 +26,7 @@ module.exports = {
             },
         },
         frontend: {
-            api_url: apiUrl + '/api',
-            history: 'hash',
+            api_url: `${apiUrl}/api`,
         },
     },
 };
