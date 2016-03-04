@@ -1,13 +1,16 @@
-import crypto from 'crypto';
 import coBody from 'co-body';
 import config from 'config';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import koa from 'koa';
 import koaRoute from 'koa-route';
+import rateLimiterMiddleware from '../lib/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
 
 const app = koa();
 let userRepository;
+
+app.use(koaRoute.post('/', rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.auth)));
 
 app.use(function* init(next) {
     userRepository = userRepositoryFactory(this.client);

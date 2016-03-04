@@ -51,7 +51,16 @@ module.exports = {
                 jwt: {
                     privateKey: 'MY-VERY-PRIVATE-KEY',
                 },
-                rateLimitOptions: {},
+                rateLimitOptions: {
+                    auth: {
+                        duration: 60000,
+                        max: 5,
+                    },
+                    api: {
+                        duration: 3600000,
+                        max: 2500,
+                    },
+                },
                 secret: 'MY-VERY-SECRET-CRYPTO-KEY-DIFFERENT-FROM-JWT',
                 xdomain: {
                     master: {
