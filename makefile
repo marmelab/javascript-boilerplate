@@ -23,7 +23,10 @@ install: copy-conf ## Install npm dependencies for the api, admin, and frontend 
 	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.21
 
 # Deployment ===================================================================
-build: ## Build all front applications defined with webpack
+clear-build:  ## Remove precedent build files
+	@rm -rf ./build/*
+
+build: clear-build ## Build all front applications defined with webpack
 	@./node_modules/.bin/webpack --progress
 
 clean: ## Remove only files ignored by Git
@@ -105,7 +108,7 @@ log-api-dev: ## Display the logs of the API with PM2
 
 # Tests ========================================================================
 build-test: ## Build all front applications defined with webpack for test environment
-	@NODE_ENV=test ./node_modules/.bin/webpack --progress
+	@NODE_ENV=test make build
 
 test-api-unit: ## Run the API unit tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
