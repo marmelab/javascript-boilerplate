@@ -1,4 +1,4 @@
-# marmelab-boilerplate
+# marmelab-boilerplate [![Build Status](https://travis-ci.org/marmelab/javascript-boilerplate.svg?branch=master)](https://travis-ci.org/marmelab/javascript-boilerplate)
 
 A starter kit for new apps, based on:
 
