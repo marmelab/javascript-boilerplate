@@ -9,6 +9,16 @@ env.output_prefix = False
 gitUrl = 'https://github.com/marmelab/javascript-boilerplate.git'
 
 @task
+def install_swap():
+    """Install a swapfile on the server, very useful to `npm install` on a t2.micro"""
+    print(green('Installing a 1Go swap file at /swapfile'))
+    sudo('dd if=/dev/zero of=/swapfile bs=1024 count=1048576')
+    sudo('chown root:root /swapfile')
+    sudo('chmod 0600 /swapfile')
+    sudo('mkswap /swapfile')
+    sudo('swapon /swapfile')
+
+@task
 def setup_api():
     print(green('Installing dependencies ...'))
     sudo('apt --yes update && apt --yes upgrade')
@@ -39,11 +49,12 @@ def deploy_api(branch='master'):
         # Install dependencies
         run('make install-prod')
         # DB migrations
-        run('NODE_ENV=%s make migration' % env.environment)
+        run('NODE_ENV=%s make migrate' % env.environment)
         # Update supervisor configuration
         put(env.supervisord_source, '/etc/supervisor/conf.d/%s' % env.supervisord_dest, use_sudo=True)
 
-    sudo('supervisorctl restart %s' % env.api_name)
+    sudo('service supervisor restart')
+    sudo('supervisorctl start %s' % env.api_name)
 
 @task
 def deploy_static(branch='master'):
