@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -10,7 +10,7 @@ export default function configureStore(rootReducer, initialState) {
     let enhancers = [
         applyMiddleware(
             createSagaMiddleware(sagas),
-            routerMiddleware(hashHistory),
+            routerMiddleware(browserHistory),
             thunkMiddleware
         ),
     ];

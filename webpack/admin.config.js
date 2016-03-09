@@ -1,15 +1,16 @@
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import loaders from './loaders';
-import plugins from './plugins';
+import { definePlugin, extractTextPlugin } from './plugins';
 
-module.exports = {
+export default {
     entry: {
         index: [
-            __dirname + '/../src/admin/js/main.js',
-            __dirname + '/../src/admin/css/main.scss',
+            `${__dirname}/../src/admin/js/main.js`,
+            `${__dirname}/../src/admin/css/main.scss`,
         ],
         login: [
-            __dirname + '/../src/admin/js/login.js',
-            __dirname + '/../src/admin/css/login.scss',
+            `${__dirname}/../src/admin/js/login.js`,
+            `${__dirname}/../src/admin/css/login.scss`,
         ],
     },
     module: {
@@ -17,10 +18,24 @@ module.exports = {
     },
     output: {
         filename: 'admin/[name].js',
-        path: __dirname + '/../build',
+        path: `${__dirname}/../build`,
         publicPath: '/',
     },
-    plugins: plugins('admin'),
+    plugins: [
+        definePlugin(),
+        extractTextPlugin('admin'),
+        new HtmlWebpackPlugin({
+            filename: 'admin/index.html',
+            template: `${__dirname}/../src/admin/index.html`,
+            chunks: ['index'],
+            hash: true,
+        }), new HtmlWebpackPlugin({
+            filename: 'admin/login.html',
+            template: `${__dirname}/../src/admin/login.html`,
+            chunks: ['login'],
+            hash: true,
+        }),
+    ],
     devServer: {
         historyApiFallback: true,
     },

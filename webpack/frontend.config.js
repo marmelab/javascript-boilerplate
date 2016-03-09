@@ -1,23 +1,35 @@
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import loaders from './loaders';
-import plugins from './plugins';
 import resolve from './resolve';
+import { definePlugin } from './plugins';
 
-module.exports = {
+export default {
     entry: {
         index: [
-            __dirname + '/../src/frontend/js/main.js',
-            __dirname + '/../src/frontend/css/main.scss',
+            `${__dirname}/../src/frontend/js/main.js`,
+            `${__dirname}/../src/frontend/css/main.scss`,
         ],
     },
     module: {
         loaders: loaders('frontend'),
     },
     output: {
-        filename: 'frontend/[name].js',
-        path: __dirname + '/../build',
+        filename: '[name].js',
+        path: `${__dirname}/../build/frontend`,
         publicPath: '/',
     },
-    plugins: plugins('frontend'),
+    plugins: [
+        definePlugin(),
+        new ExtractTextPlugin('[name].css', {
+            allChunks: false,
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: `${__dirname}/../src/frontend/index.html`,
+            hash: true,
+        }),
+    ],
     resolve: resolve('frontend'),
     devServer: {
         historyApiFallback: true,
