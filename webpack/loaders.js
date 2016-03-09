@@ -2,7 +2,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 
-export default function(appName) {
+export default function (appName) {
     const loaders = [{
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -44,7 +44,7 @@ export default function(appName) {
         test: /\.html$/,
         loader: 'html',
     }, {
-        loader: ExtractTextPlugin.extract('css!sass?' + sassOptions),
+        loader: ExtractTextPlugin.extract(`css!sass?${sassOptions}`),
         test: /\.s?css$/,
     }];
 
