@@ -5,7 +5,7 @@ module.exports = {
 
     'Products - user should see the product list': function (client) {
         client
-            .url('http://localhost:8081/frontend#/products')
+            .url('http://localhost:8081/#/products')
             .waitForElementVisible('body', 1000)
             .waitForElementVisible('.product-item', 1000, false, function () {
                 client.getLog('browser', function (result) {
@@ -16,7 +16,7 @@ module.exports = {
 
     'Products - user should see the product details': function (client) {
         client
-            .url('http://localhost:8081/frontend#/products/1')
+            .url('http://localhost:8081/#/products/1')
             .waitForElementVisible('.product-details', 5000);
 
         client.expect.element('.img-thumbnail').to.be.visible;
