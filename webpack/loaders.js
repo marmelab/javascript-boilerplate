@@ -3,6 +3,11 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 
 export default function (appName) {
+    let prefix = '';
+    if (appName) {
+        prefix = `${appName}/`;
+    }
+
     const loaders = [{
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -24,7 +29,7 @@ export default function (appName) {
         loader: 'json-loader',
     }, {
         test: /\.jpe?g$|\.gif$|\.png$/,
-        loader: `url-loader?limit=10000&name=/${appName}/[hash].[ext]`,
+        loader: `url-loader?limit=10000&name=/${prefix}[hash].[ext]`,
     }, {
         test: /\.(otf|svg)(\?.+)?$/,
         loader: 'url-loader?limit=8192',
