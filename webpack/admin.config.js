@@ -29,7 +29,8 @@ export default {
             template: `${__dirname}/../src/admin/index.html`,
             chunks: ['index'],
             hash: true,
-        }), new HtmlWebpackPlugin({
+        }),
+        new HtmlWebpackPlugin({
             filename: 'admin/login.html',
             template: `${__dirname}/../src/admin/login.html`,
             chunks: ['login'],
