@@ -53,10 +53,12 @@ module.exports = {
                 },
                 rateLimitOptions: {
                     auth: {
+                        adapter: 'null',
                         duration: 60000,
                         max: 5,
                     },
                     api: {
+                        adapter: 'null',
                         duration: 3600000,
                         max: 2500,
                     },

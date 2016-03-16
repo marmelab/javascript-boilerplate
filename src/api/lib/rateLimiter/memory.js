@@ -1,3 +1,3 @@
-import { memoryRateLimit } from 'koa-ratelimit';
+import { memoryRateLimit } from 'koa-ratelimiter';
 
 export default memoryRateLimit;

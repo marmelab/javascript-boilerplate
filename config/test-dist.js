@@ -15,9 +15,6 @@ module.exports = {
                 user: 'postgres',
             },
             security: {
-                rateLimitOptions: {
-                    max: 99,
-                },
                 xdomain: {
                     master: {
                         base_url: frontendUrl,

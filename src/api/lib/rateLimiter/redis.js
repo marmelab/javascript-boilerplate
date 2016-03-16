@@ -1,9 +1,12 @@
-import { redisRateLimit } from 'koa-ratelimit';
+import { redisRateLimit } from 'koa-ratelimiter';
 import { createClient } from 'redis';
 
-export default (userOptions) => {
-    const { redis, ...options } = userOptions;
-    const client = createClient(redis);
+export default (options) => {
+    const { redis, ...limiterOptions } = options;
+    const db = createClient(redis);
 
-    redisRateLimit(client);
+    return redisRateLimit({
+        ...limiterOptions,
+        db,
+    });
 };
