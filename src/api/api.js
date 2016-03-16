@@ -9,7 +9,6 @@ import orderApiRoutes from './orders/orderApiRoutes';
 import productApiRoutes from './products/productApiRoutes';
 import rateLimiterMiddleware from './lib/rateLimiter';
 
-
 const app = koa();
 
 app.use(koaMount('/', authenticateApiRoutes));
