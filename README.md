@@ -49,6 +49,8 @@ make install
 
 The project directory structure is as follows:
 
+![architecture](doc/api-centric-architecture.png)
+
 ```
 bin/ # CLI tasks
 build/ # compiled JS and CSS files for the admin and frontend app. The web root in production.
@@ -87,6 +89,13 @@ $ NODE_ENV=production node ./src/api/index.js
 It uses [node-config](https://github.com/lorenwest/node-config) to let you configure the project for the development, test, and production environments. `node-config` supports configuration cascade, so the actual configuration for a given environment is the combination of `config/default.js` and `config/[NODE_ENV].js` (the configuration settings for a given environment override the default settings).
 
 Before running the app in development, you must copy the `config/development-dist.js` into `config/development.js` (this is done by the `make install` command), and edit the server and database settings to your development environment. Same for the `test-dist.js` if you intend to run unit tests.
+
+**Note**: You need to remove all the demo code before to start your project. A [pull request is in progress](https://github.com/marmelab/javascript-boilerplate/pull/22) to do so, but this will take some time to finish it. Meanwhile, take a look on these folders to manually clean the code:
+- [src/api](src/api)
+- [src/frontend](src/frontend)
+- [src/admin](src/admin)
+- [e2e/api](e2e/api)
+- [e2e/frontend](e2e/frontend)
 
 ## Develop
 
