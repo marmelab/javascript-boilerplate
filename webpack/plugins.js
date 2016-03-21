@@ -1,6 +1,6 @@
-import config from 'config'; // eslint-disable-line no-var
-import ExtractTextPlugin from 'extract-text-webpack-plugin'; // eslint-disable-line no-var
-import webpack from 'webpack'; // eslint-disable-line no-var
+import config from 'config';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import webpack from 'webpack';
 
 export function definePlugin() {
     return new webpack.DefinePlugin({
