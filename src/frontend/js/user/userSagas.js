@@ -1,5 +1,7 @@
 import { routerActions } from 'react-router-redux';
-import { call, fork, put, take } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
+
 import {
     fetchSignIn as fetchSignInApi,
     fetchSignUp as fetchSignUpApi,
@@ -13,51 +15,44 @@ import {
     userActionTypes,
 } from './userActions';
 
-export const signIn = function* signIn(fetchSignIn, storeLocalUser) {
-    while (true) { // eslint-disable-line no-constant-condition
-        const {
-            payload: { email, password, previousRoute },
-        } = yield take(userActionTypes.signIn.REQUEST);
-        const { error, user } = yield call(fetchSignIn, email, password);
-        if (error) {
-            yield put(signInActions.failure(error));
-        } else {
-            yield call(storeLocalUser, user);
-            yield put(signInActions.success(user));
-            yield put(routerActions.push(previousRoute));
-        }
+export const signIn = (fetchSignIn, storeLocalUser) => function* signInSaga({
+    payload: { email, password, previousRoute },
+}) {
+    const { error, user } = yield call(fetchSignIn, email, password);
+    if (error) {
+        yield put(signInActions.failure(error));
+    } else {
+        yield call(storeLocalUser, user);
+        yield put(signInActions.success(user));
+        yield put(routerActions.push(previousRoute));
     }
 };
 
-export const signUp = function* signUp(fetchSignUp, storeLocalUser) {
-    while (true) { // eslint-disable-line no-constant-condition
-        const {
-            payload: { email, password, previousRoute },
-        } = yield take(userActionTypes.signUp.REQUEST);
-        const { error, user } = yield call(fetchSignUp, email, password);
-        if (error) {
-            yield put(signUpActions.failure(error));
-        } else {
-            yield call(storeLocalUser, user);
-            yield put(signUpActions.success(user));
-            yield put(routerActions.push(previousRoute));
-        }
+export const signUp = (fetchSignUp, storeLocalUser) => function* signUpSaga({
+    payload: { email, password, previousRoute },
+}) {
+    const { error, user } = yield call(fetchSignUp, email, password);
+    if (error) {
+        yield put(signUpActions.failure(error));
+    } else {
+        yield call(storeLocalUser, user);
+        yield put(signUpActions.success(user));
+        yield put(routerActions.push(previousRoute));
     }
 };
 
-export const signOut = function* signOut(removeLocalUser) {
-    while (true) { // eslint-disable-line no-constant-condition
-        yield take(userActionTypes.signOut.REQUEST);
-        yield call(removeLocalUser);
-        yield put(signOutActions.success());
-        yield put(routerActions.push('/'));
-    }
+export const signOut = removeLocalUser => function* signOutSaga() {
+    yield call(removeLocalUser);
+    yield put(signOutActions.success());
+    yield put(routerActions.push('/'));
 };
 
 const sagas = function* sagas() {
-    yield fork(signIn, fetchSignInApi, storeLocalUserApi);
-    yield fork(signUp, fetchSignUpApi, storeLocalUserApi);
-    yield fork(signOut, removeLocalUserApi);
+    yield [
+        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSignInApi, storeLocalUserApi)),
+        takeLatest(userActionTypes.signUp.REQUEST, signUp(fetchSignUpApi, storeLocalUserApi)),
+        takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
+    ];
 };
 
 export default sagas;
