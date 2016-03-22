@@ -1,38 +1,32 @@
 import { expect } from 'chai';
 import { routerActions } from 'react-router-redux';
-import { call, put, take } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import sinon from 'sinon';
 
-import orderActions, { orderActionTypes } from './orderActions';
+import orderActions from './orderActions';
+
 import {
-    loadOrder as loadOrderSaga,
-    loadOrders as loadOrdersSaga,
-    newOrder as newOrderSaga,
+    loadOrder as loadOrderSagaFactory,
+    loadOrders as loadOrdersSagaFactory,
+    newOrder as newOrderSagaFactory,
 } from './orderSagas';
+
 import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 describe('orderSagas', () => {
     describe('loadOrders', () => {
-        it('should starts on orderActionTypes.list.REQUEST action', () => {
-            const saga = loadOrdersSaga(undefined, () => ({ user: { token: 'blublu' } }));
-
-            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.list.REQUEST)); // eslint-disable-line max-len
-        });
+        const fetchOrders = sinon.spy();
+        const loadOrdersSaga = loadOrdersSagaFactory(fetchOrders, () => 'blublu');
 
         it('should call the fetchOrders function', () => {
-            const fetchOrders = sinon.spy();
-            const saga = loadOrdersSaga(fetchOrders, () => 'blublu');
-
-            saga.next();
+            const saga = loadOrdersSaga(orderActions.list.request());
 
             expect(saga.next().value).to.deep.equal(call(fetchOrders, 'blublu'));
         });
 
         it('should put the orderActions.list.success action with orders on successfull fetch', () => { // eslint-disable-line max-len
-            const fetchOrders = sinon.spy();
-            const saga = loadOrdersSaga(fetchOrders, () => 'blublu');
+            const saga = loadOrdersSaga(orderActions.list.request());
 
-            saga.next();
             saga.next();
 
             expect(saga.next({
@@ -41,11 +35,9 @@ describe('orderSagas', () => {
         });
 
         it('should put the orderActions.list.failure action with error on failed fetch', () => {
-            const fetchOrders = sinon.spy();
-            const saga = loadOrdersSaga(fetchOrders, () => 'blublu');
+            const saga = loadOrdersSaga(orderActions.list.request());
             const error = new Error('Run you fools');
 
-            saga.next();
             saga.next();
 
             expect(saga.next({
@@ -55,26 +47,19 @@ describe('orderSagas', () => {
     });
 
     describe('loadOrder', () => {
-        it('should starts on orderActionTypes.item.REQUEST action', () => {
-            const saga = loadOrderSaga(undefined);
+        const fetchOrder = sinon.spy();
+        const loadOrderSaga = loadOrderSagaFactory(fetchOrder, () => 'blublu');
 
-            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(take(orderActionTypes.item.REQUEST)); // eslint-disable-line max-len
-        });
+        it('should call the fetchOrder function', () => {
+            const saga = loadOrderSaga(orderActions.item.request('order_id'));
 
-        it('should call the fetchProduct function', () => {
-            const fetchProduct = sinon.spy();
-            const saga = loadOrderSaga(fetchProduct);
-
-            saga.next();
-
-            expect(saga.next(orderActions.item.request('order_id')).value).to.deep.equal(call(fetchProduct, 'order_id', undefined)); // eslint-disable-line max-len
+            expect(saga.next().value).to
+                .deep.equal(call(fetchOrder, 'order_id', 'blublu'));
         });
 
         it('should put the orderActions.item.success action with products on successfull fetch', () => { // eslint-disable-line max-len
-            const fetchProduct = sinon.spy();
-            const saga = loadOrderSaga(fetchProduct);
+            const saga = loadOrderSaga(orderActions.item.request('order_id'));
 
-            saga.next();
             saga.next(orderActions.item.request('order_id'));
 
             expect(saga.next({
@@ -83,11 +68,9 @@ describe('orderSagas', () => {
         });
 
         it('should put the orderActions.item.failure action with error on failed fetch', () => {
-            const fetchProduct = sinon.spy();
-            const saga = loadOrderSaga(fetchProduct);
+            const saga = loadOrderSaga(orderActions.item.request('order_id'));
             const error = new Error('Run you fools');
 
-            saga.next();
             saga.next(orderActions.item.request('order_id'));
 
             expect(saga.next({
@@ -108,15 +91,10 @@ describe('orderSagas', () => {
                 }],
             },
         });
-
-        it('should starts on orderActionTypes.order.REQUEST action', () => {
-            const saga = newOrderSaga(fetchNewOrder, getState);
-            expect(saga.next(orderActions.list.request()).value).to.deep.equal(take(orderActionTypes.order.REQUEST)); // eslint-disable-line max-len
-        });
+        const newOrderSaga = newOrderSagaFactory(fetchNewOrder, getState);
 
         it('should call the fetchOrders function', () => {
-            const saga = newOrderSaga(fetchNewOrder, getState);
-            saga.next();
+            const saga = newOrderSaga(orderActions.list.request());
 
             expect(saga.next().value).to.deep.equal(call(fetchNewOrder, [{
                 id: 42,
@@ -126,8 +104,8 @@ describe('orderSagas', () => {
         });
 
         it('should put the orderActions.order.success action with order on successfull fetch', () => { // eslint-disable-line max-len
-            const saga = newOrderSaga(fetchNewOrder, getState);
-            saga.next();
+            const saga = newOrderSaga(orderActions.list.request());
+
             saga.next();
 
             expect(saga.next({
@@ -136,8 +114,8 @@ describe('orderSagas', () => {
         });
 
         it('should put the clearShoppingCart action with order on successfull fetch', () => {
-            const saga = newOrderSaga(fetchNewOrder, getState);
-            saga.next();
+            const saga = newOrderSaga(orderActions.list.request());
+
             saga.next();
             saga.next({
                 order: { id: 42 },
@@ -147,9 +125,8 @@ describe('orderSagas', () => {
         });
 
         it('should put the routerActions.push action with orders on successfull fetch', () => {
-            const saga = newOrderSaga(fetchNewOrder, getState);
+            const saga = newOrderSaga(orderActions.list.request());
 
-            saga.next();
             saga.next();
             saga.next({
                 order: { id: 42 },
@@ -161,9 +138,8 @@ describe('orderSagas', () => {
 
         it('should put the orderActions.order.failure action with error on failed fetch', () => {
             const error = new Error('Run you fools');
-            const saga = newOrderSaga(fetchNewOrder, getState);
+            const saga = newOrderSaga(orderActions.list.request());
 
-            saga.next();
             saga.next();
 
             expect(saga.next({

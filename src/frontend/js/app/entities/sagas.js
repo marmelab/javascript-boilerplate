@@ -1,9 +1,9 @@
-import { call, put, take } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
-export const loadListFactory = (actionTypes, actions) => function* loadList(fetchList, jwtAccessor) {
-    while (true) {
-        yield take(actionTypes.list.REQUEST);
-        const { error, list } = yield call(fetchList, typeof jwtAccessor === 'function' ? jwtAccessor() : undefined);
+export const loadListFactory = (actionTypes, actions, fetchList, jwtAccessor) =>
+    function* loadList() {
+        const jwt = typeof jwtAccessor === 'function' ? jwtAccessor() : undefined;
+        const { error, list } = yield call(fetchList, jwt);
 
         if (error) {
             console.error(error.message);
@@ -11,13 +11,12 @@ export const loadListFactory = (actionTypes, actions) => function* loadList(fetc
         } else {
             yield put(actions.list.success(list));
         }
-    }
-};
+    };
 
-export const loadItemFactory = (actionTypes, actions) => function* loadItem(fetchItem, jwtAccessor) {
-    while (true) {
-        const { payload } = yield take(actionTypes.item.REQUEST);
-        const { error, item } = yield call(fetchItem, payload, typeof jwtAccessor === 'function' ? jwtAccessor() : undefined);
+export const loadItemFactory = (actionTypes, actions, fetchItem, jwtAccessor) =>
+    function* loadItem({ payload }) {
+        const jwt = typeof jwtAccessor === 'function' ? jwtAccessor() : undefined;
+        const { error, item } = yield call(fetchItem, payload, jwt);
 
         if (error) {
             console.error(error.message);
@@ -25,5 +24,4 @@ export const loadItemFactory = (actionTypes, actions) => function* loadItem(fetc
         } else {
             yield put(actions.item.success(item));
         }
-    }
-};
+    };
