@@ -2,16 +2,8 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 
-export default (appName) => {
-    const presets = [
-        'es2015',
-        'react',
-        'stage-0',
-    ];
-
-    if (process.env.NODE_ENV === 'development') {
-        presets.push('react-hmre');
-    }
+export default function (appName) {
+    const prefix = appName ? `${appName}/` : '';
 
     const loaders = [{
         test: /\.jsx?$/,
@@ -23,14 +15,18 @@ export default (appName) => {
                 'transform-runtime',
                 'add-module-exports',
             ],
-            presets,
+            presets: [
+                'es2015',
+                'react',
+                'stage-0',
+            ],
         },
     }, {
         test: /\.json$/,
         loader: 'json-loader',
     }, {
         test: /\.jpe?g$|\.gif$|\.png$/,
-        loader: `url-loader?limit=10000&name=${appName}/[hash].[ext]`,
+        loader: `url-loader?limit=10000&name=/${prefix}[hash].[ext]`,
     }, {
         test: /\.(otf|svg)(\?.+)?$/,
         loader: 'url-loader?limit=8192',
@@ -55,4 +51,4 @@ export default (appName) => {
     }];
 
     return loaders;
-};
+}

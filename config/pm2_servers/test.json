@@ -11,7 +11,7 @@
         },
         {
             "args": [
-                "./build",
+                "./build/frontend",
                 "-p 8081",
                 "--silent"
             ],
