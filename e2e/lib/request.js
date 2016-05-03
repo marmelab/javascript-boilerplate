@@ -1,7 +1,6 @@
 import http from 'http';
 import request from 'request';
 import app from '../../src/api/server';
-import { _extend } from 'util';
 
 export default function myRequest(params, authToken = null, cookies = {}) {
     return (callback) => {
@@ -23,7 +22,7 @@ export default function myRequest(params, authToken = null, cookies = {}) {
             baseUrl,
             gzip: true,
             json: true,
-            headers: _extend(headers, authToken ? { authorization: `${authToken}` } : {}),
+            headers: Object.assign({}, headers, authToken ? { authorization: `${authToken}` } : {}),
             jar,
         });
 

@@ -1,15 +1,15 @@
 var apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
-var apiUrl = 'http://localhost:' + apiPort; // eslint-disable-line no-var
-var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
+var apiUrl = `http://localhost:${apiPort}`; // eslint-disable-line no-var
+const allowUrls = ['http://localhost:8080', `${apiUrl}/api`]; // eslint-disable-line no-var
 
 module.exports = {
     appName: 'New App',
     apps: {
         admin: {
-            api_url: apiUrl + '/admin/',
+            api_url: `${apiUrl}/admin/`,
         },
         api: {
-            allowOrigin: [frontendUrl],
+            allowOrigin: allowUrls,
             cookies: {
                 secure: false,
                 secureProxy: false,
@@ -27,7 +27,7 @@ module.exports = {
             },
             healthcare: {
                 internetUrl: 'http://google.com',
-                apiUrl: apiUrl + '/api/products',
+                apiUrl: `${apiUrl}/api/products`,
             },
             logs: {
                 app: { Console: { timestamp: true, colorize: true, level: 'error' } },
@@ -66,7 +66,7 @@ module.exports = {
                 secret: 'MY-VERY-SECRET-CRYPTO-KEY-DIFFERENT-FROM-JWT',
                 xdomain: {
                     master: {
-                        base_url: frontendUrl,
+                        base_url: allowUrls[0],
                     },
                     slave: {
                         base_url: apiUrl,
@@ -77,7 +77,7 @@ module.exports = {
             },
         },
         frontend: {
-            api_url: apiUrl + '/api',
+            api_url: `${apiUrl}/api`,
             enableDevTools: true,
         },
     },

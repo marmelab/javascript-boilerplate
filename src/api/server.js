@@ -119,7 +119,7 @@ app.use(koaMount('/', koaCors({
     origin: (request) => {
         const origin = request.get('origin');
 
-        if ((!origin.length || config.apps.api.allowOrigin.indexOf(origin) === -1) && !request.url === '/api') { // eslint-disable-line max-len
+        if (!origin.length || config.apps.api.allowOrigin.indexOf(origin) === -1) {
             return false;
         }
 
