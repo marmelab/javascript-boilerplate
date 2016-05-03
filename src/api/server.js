@@ -159,6 +159,7 @@ if (env !== 'development') {
     app.use(compress());
 }
 
+app.use(koaMount('/healthcare', require('./healthcare')));
 app.use(koaMount('/api', require('./api')));
 app.use(koaMount('/admin', require('./admin')));
 

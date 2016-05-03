@@ -1,5 +1,5 @@
 const apiUrl = 'http://localhost:3010';
-const allowUrls = ['http://localhost:8081', `${apiUrl}/api`];
+const allowUrls = ['http://localhost:8081', `${apiUrl}/api/products`];
 
 module.exports = {
     apps: {
