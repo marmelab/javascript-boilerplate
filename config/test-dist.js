@@ -1,5 +1,6 @@
 const apiUrl = 'http://localhost:3010';
-const allowUrls = ['http://localhost:8081', `${apiUrl}/api/products`];
+const frontendUrl = 'http://localhost:8081';
+const allowUrls = [frontendUrl, apiUrl];
 
 module.exports = {
     apps: {
@@ -17,7 +18,7 @@ module.exports = {
             security: {
                 xdomain: {
                     master: {
-                        base_url: allowUrls[0],
+                        base_url: frontendUrl,
                     },
                 },
             },
