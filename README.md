@@ -29,7 +29,7 @@ Features:
 * Including a full-featured admin panel with references
 * Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`, and `nightwatch`
 * AWS deployment automated by Fabric
-* Sensible `eslint` defaults, based on rbnb's rules
+* Sensible `eslint` defaults, based on Airbnb's rules
 
 The boilerplate contains a sample app with three domains: users, products, and orders. Feel free to remove the corresponding files once you start implementing your own domain.
 
