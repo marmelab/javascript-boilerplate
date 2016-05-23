@@ -86,6 +86,13 @@ app.on('error', (err, ctx = {}) => {
     httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
 });
 
+process.on('unhandledRejection', (error, promise) => {
+    console.error('unhandled promise rejection:', { // eslint-disable-line no-console
+        error,
+        promise,
+    });
+});
+
 app.use(koaMount('/healthcare', require('./healthcare')));
 
 // XmlHttpRequest shim for IE
