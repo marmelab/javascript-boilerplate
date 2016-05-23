@@ -1,31 +1,25 @@
+import { takeEvery } from 'redux-saga';
 import { routerActions } from 'react-router-redux';
-import { takeLatest } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, fork, put } from 'redux-saga/effects';
 
 import orderActions, { orderActionTypes } from './orderActions';
-import {
-    fetchOrder as fetchOrderApi,
-    fetchOrders as fetchOrdersApi,
-    fetchNewOrder as fetchNewOrderAPI,
-} from './orderApi';
-import { loadListFactory, loadItemFactory } from '../app/entities/sagas';
 import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
+import { entityFactory } from '../app/entities/sagas';
 
-export const loadOrders = (fetchOrders, jwtAccessor) =>
-    loadListFactory(orderActionTypes, orderActions, fetchOrders, jwtAccessor);
+import {
+    fetchOrder,
+    fetchOrders,
+    fetchNewOrder as fetchNewOrderApi,
+} from './orderApi';
 
-export const loadOrder = (fetchOrder, jwtAccessor) =>
-    loadItemFactory(orderActionTypes, orderActions, fetchOrder, jwtAccessor);
-
-export const newOrder = (fetchNewOrder, getState) => function* newOrderSaga() {
-    const state = getState();
+export const newOrder = (fetchNewOrder, jwtAccessor) => function* newOrderSaga({ payload }) {
     const {
         error,
         order,
-    } = yield call(fetchNewOrder, state.shoppingCart.products, state.user.token);
+    } = yield call(fetchNewOrder, payload, jwtAccessor());
 
     if (error) {
-        console.error(error.message);
+        console.error({ error }); // eslint-disable-line no-console
         yield put(orderActions.order.failure(error));
     } else {
         yield put(orderActions.order.success(order));
@@ -36,11 +30,8 @@ export const newOrder = (fetchNewOrder, getState) => function* newOrderSaga() {
 
 const sagas = function* sagas(getState) {
     const jwtAccessor = () => getState().user.token;
-    yield [
-        takeLatest(orderActionTypes.list.REQUEST, loadOrders(fetchOrdersApi, jwtAccessor)),
-        takeLatest(orderActionTypes.item.REQUEST, loadOrder(fetchOrderApi, jwtAccessor)),
-        takeLatest(orderActionTypes.order.REQUEST, newOrder(fetchNewOrderAPI, getState)),
-    ];
+    yield fork(entityFactory(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtAccessor));
+    yield* takeEvery(orderActionTypes.order.REQUEST, newOrder(fetchNewOrderApi, jwtAccessor));
 };
 
 export default sagas;
