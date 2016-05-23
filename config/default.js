@@ -1,7 +1,7 @@
-var apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
-var apiUrl = `http://localhost:${apiPort}`; // eslint-disable-line no-var
-const frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
-const allowUrls = [frontendUrl, apiUrl]; // eslint-disable-line no-var
+const apiPort = process.env.NODE_PORT || 3000;
+const apiUrl = `http://localhost:${apiPort}`;
+const frontendUrl = 'http://localhost:8080';
+const allowUrls = [frontendUrl, apiUrl];
 
 module.exports = {
     appName: 'New App',
