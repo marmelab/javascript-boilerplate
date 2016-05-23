@@ -1,16 +1,24 @@
-export default (client, table, primaryFields, secondaryFields, autoIncrementField, returningFields = secondaryFields) => {
+export default (
+    client,
+    table,
+    primaryFields,
+    secondaryFields,
+    autoIncrementField,
+    returningFields = secondaryFields
+) => {
     const fields = primaryFields.concat(secondaryFields);
     const insertFields = fields.filter(f => f !== autoIncrementField);
 
     return function* upsertOne(entity) {
         const setQuery = secondaryFields.map(field => `${field}=$${field}`);
+        const sanitizedEntity = Object.assign({}, entity);
 
         if (autoIncrementField) {
-            entity[autoIncrementField] = entity[autoIncrementField] || null;
+            sanitizedEntity[autoIncrementField] = entity[autoIncrementField] || null;
         }
 
         const valuesQuery = Object
-            .keys(entity)
+            .keys(sanitizedEntity)
             .filter(key => key !== autoIncrementField)
             .map(key => `$${key}`);
 
@@ -30,8 +38,11 @@ export default (client, table, primaryFields, secondaryFields, autoIncrementFiel
             SELECT * FROM upsert
         )`;
 
-        yield client.query_(query, entity);
+        yield client.query_(query, sanitizedEntity);
 
-        return yield client.query_(`SELECT ${returningFields.join(', ')} FROM ${table} WHERE ${whereQuery}`, entity);
+        return yield client.query_(`
+            SELECT ${returningFields.join(', ')}
+            FROM ${table}
+            WHERE ${whereQuery}`, sanitizedEntity);
     };
 };

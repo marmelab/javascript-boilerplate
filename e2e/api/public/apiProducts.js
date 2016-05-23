@@ -1,5 +1,3 @@
-/* eslint func-names:0 */
-
 describe('/api/products', () => {
     describe('GET', () => {
         before(function* addFixtures() {
@@ -19,9 +17,10 @@ describe('/api/products', () => {
             });
             assert.equal(body.length, 3);
             const requestedProducts = body.map(product => {
-                delete product.id;
-                delete product.totalcount;
-                return product;
+                const p = Object.assign({}, product);
+                delete p.id;
+                delete p.totalcount;
+                return p;
             });
             assert.deepEqual(requestedProducts, [
                 {

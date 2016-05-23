@@ -1,19 +1,17 @@
-/* eslint func-names:0 */
-
 describe('/api/products/{id}', () => {
     let product;
     before(function* addFixtures() {
         product = yield fixtureLoader.addProduct();
     });
     describe('GET', () => {
-        it('should not require authentification', function* shouldNotRequireAuthentification() {
+        it('should not require authentification', function* () {
             const { statusCode, body } = yield request({
                 method: 'GET',
                 url: `/api/products/${product.id}`,
             });
             assert.equal(statusCode, 200, JSON.stringify(body));
         });
-        it('should return information about a specific products', function* shouldReturnAllProductsList() {
+        it('should return information about a specific products', function* () {
             const { body } = yield request({
                 method: 'GET',
                 url: `/api/products/${product.id}`,

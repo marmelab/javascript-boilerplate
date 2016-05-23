@@ -11,7 +11,12 @@ export default (client, table, primaryFields, secondaryFields, autoIncrementFiel
 
         try {
             // copy the table structure without the constraint
-            yield client.query_(`CREATE TEMPORARY TABLE ${tempTable} AS SELECT * FROM ${table} WHERE true = false;`);
+            yield client.query_(`
+                CREATE TEMPORARY TABLE ${tempTable} AS
+                    SELECT *
+                    FROM ${table}
+                    WHERE true = false;`
+            );
             yield tempBatchInsert(entities);
 
             const setQuery = secondaryFields.map(f => `${f}=${tempTable}.${f}`);

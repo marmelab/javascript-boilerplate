@@ -1,21 +1,33 @@
-export default (client, table, fields, idFieldName) => {
-    return function* batchInsert(ids) {
+export default (client, table, fields, idFieldName) =>
+    function* batchInsert(ids) {
+        let idsToInsert = ids;
+
         if (!Array.isArray(ids)) {
-            ids = [ids];
+            idsToInsert = [ids];
         }
 
-        const idsQuery = ids.reduce((query, id, index) => {
+        const idsQuery = idsToInsert.reduce((query, id, index) => {
             const fieldName = idFieldName + index;
-            query.parameters[fieldName] = id;
-            query.sql.push(`$${fieldName}`);
+            const parameters = {};
+            parameters[fieldName] = id;
 
-            return query;
+            return ({
+                ...query,
+                parameters: {
+                    ...query.parameters,
+                    ...parameters,
+                },
+                sql: [...query.sql, `$${fieldName}`],
+            });
         }, {
             parameters: {},
             sql: [],
         });
-        const query = `DELETE FROM ${table} WHERE ${idFieldName} IN (${idsQuery.sql.join(', ')}) RETURNING ${fields.join(', ')}`;
+
+        const query = `
+            DELETE FROM ${table}
+            WHERE ${idFieldName} IN (${idsQuery.sql.join(', ')})
+            RETURNING ${fields.join(', ')}`;
 
         return (yield client.query_(query, idsQuery.parameters)).rows;
     };
-};

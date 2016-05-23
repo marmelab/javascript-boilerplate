@@ -1,5 +1,3 @@
-/* eslint func-names:0 */
-
 describe('/healthcare', () => {
     describe('GET', () => {
         it('should return an object describing the API health', function* () {
