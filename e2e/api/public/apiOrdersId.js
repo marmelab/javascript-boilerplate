@@ -1,5 +1,3 @@
-/* eslint func-names:0 */
-
 import userFactory from '../../../src/api/users/userModel';
 import orderFactory from '../../../src/api/orders/orderModel';
 
@@ -57,13 +55,13 @@ describe('/api/orders/{id}', () => {
             const { statusCode } = yield request({
                 method: 'GET',
                 url: `/api/orders/${orders.orderUser1.id}`,
-            }, null, { 'token': user1CookieToken });
+            }, null, { token: user1CookieToken });
             assert.equal(statusCode, 401);
         });
         it('should return data about a specific order', function* () {
             const { statusCode, body } = yield request({
                 url: `/api/orders/${orders.orderUser1.id}`,
-            }, user1Token, { 'token': user1CookieToken });
+            }, user1Token, { token: user1CookieToken });
 
             assert.equal(statusCode, 200, JSON.stringify(body));
             delete body.id;
@@ -98,7 +96,7 @@ describe('/api/orders/{id}', () => {
                 url: `/api/orders/${orders.orderUser1.id}`,
             });
             assert.equal(statusCode, 401);
-        }, null, { 'token': user1CookieToken });
+        }, null, { token: user1CookieToken });
         it('should delete a specific order', function* () {
             const newOrder = yield orderQueries.insertOne({
                 reference: 'ref1',
@@ -113,7 +111,7 @@ describe('/api/orders/{id}', () => {
             const { statusCode, body } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${newOrder.id}`,
-            }, user1Token, { 'token': user1CookieToken });
+            }, user1Token, { token: user1CookieToken });
 
             assert.equal(statusCode, 200, JSON.stringify(body));
             userOrders = yield orderQueries.selectByUserId(user1.id);

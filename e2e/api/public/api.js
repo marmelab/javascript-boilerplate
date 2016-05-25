@@ -1,5 +1,3 @@
-/* eslint func-names:0 */
-
 describe('/api', () => {
     describe('GET', () => {
         it('should not require authentification', function* () {

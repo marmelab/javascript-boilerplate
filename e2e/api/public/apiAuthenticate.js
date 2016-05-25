@@ -1,5 +1,3 @@
-/* eslint func-names:0 */
-
 describe('/api/sign-in', () => {
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();

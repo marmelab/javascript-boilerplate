@@ -4,10 +4,10 @@ export default (client, tableName, fields, idFieldName) => {
 
     const selectOneById = function* selectOneById(id) {
         if (!id) {
-            throw new Error('No id specified for selecting ' + tableName + ' entity.');
+            throw new Error(`No id specified for selecting ${tableName} entity.`);
         }
 
-        const result = yield client.query_(queryById, { id: id });
+        const result = yield client.query_(queryById, { id });
         const entity = result.rows[0];
 
         if (!entity) {

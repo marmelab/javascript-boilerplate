@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 
-export default (select, watchedFields) => {
-    return function* hasChange(entity) {
+export default (select, watchedFields) =>
+    function* hasChange(entity) {
         const old = yield select.selectOneById(entity.id);
         const copy = {};
         const original = {};
@@ -21,4 +21,3 @@ export default (select, watchedFields) => {
 
         return false;
     };
-};
