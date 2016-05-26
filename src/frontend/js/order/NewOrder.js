@@ -6,12 +6,22 @@ import numeral from 'numeral';
 import HelmetTitle from '../app/HelmetTitle';
 import orderActions from './orderActions';
 import NewOrderItem from './NewOrderItem';
-import { removeProductFromShoppingCart as removeProductFromShoppingCartAction, setShoppingCartItemQuantity as setShoppingCartItemQuantityAction } from '../shoppingcart/shoppingCartActions';
+import {
+    removeProductFromShoppingCart as removeProductFromShoppingCartAction,
+    setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
+} from '../shoppingcart/shoppingCartActions';
 import ProductPropType from '../product/productPropTypes';
 
 class NewOrder extends Component {
     render() {
-        const { loading, order, products, removeProductFromShoppingCart, setShoppingCartItemQuantity, total } = this.props;
+        const {
+            loading,
+            placeNewOrder,
+            products,
+            removeProductFromShoppingCart,
+            setShoppingCartItemQuantity,
+            total,
+        } = this.props;
 
         return (
             <div className="shopping-cart list-group">
@@ -35,7 +45,13 @@ class NewOrder extends Component {
                 }
                     <div className="list-group-item">
                         {products.length > 0 &&
-                            <button onClick={order} disabled={loading} className="btn btn-primary">Order</button>
+                            <button
+                                onClick={placeNewOrder}
+                                disabled={loading}
+                                className="btn btn-primary"
+                            >
+                                Order
+                            </button>
                         }
                         <Link to="/products" className="btn btn-link">Continue shopping</Link>
                     </div>
@@ -46,6 +62,7 @@ class NewOrder extends Component {
 
 NewOrder.propTypes = {
     loading: PropTypes.bool.isRequired,
+    placeNewOrder: PropTypes.func.isRequired,
     products: PropTypes.arrayOf(PropTypes.shape({
         ...ProductPropType,
         quantity: PropTypes.number.isRequired,
@@ -64,7 +81,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        order: orderActions.order.request,
+        placeNewOrder: orderActions.order.request,
         removeProductFromShoppingCart: removeProductFromShoppingCartAction,
         setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
     }, dispatch);

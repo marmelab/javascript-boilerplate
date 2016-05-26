@@ -26,7 +26,17 @@ const signUpSchema = buildSchema({
     },
 });
 
-const SignUp = ({ signUpError, signUp, previousRoute, fields: { email, password, confirmPassword }, handleSubmit, submitting, submitFailed }) => (
+const SignUp = ({
+    /* eslint-disable react/prop-types */
+    signUpError,
+    signUp,
+    previousRoute,
+    fields: { email, password, confirmPassword },
+    handleSubmit,
+    submitting,
+    submitFailed,
+    /* eslint-enable react/prop-types */
+}) => (
     <div className="container signUp">
         <HelmetTitle title="Sign up" />
         <div className="row">
@@ -41,45 +51,55 @@ const SignUp = ({ signUpError, signUp, previousRoute, fields: { email, password,
                     <form onSubmit={handleSubmit(signUp.bind(null, previousRoute))}>
                         <div className={classNames('form-group', {
                             'has-error': email.touched && email.error,
-                        })}>
+                        })}
+                        >
                             <input
                                 type="email"
                                 className="form-control input-lg"
                                 placeholder="Your email"
                                 {...email}
                             />
-                            {email.touched && email.error && <span className="help-block">{email.error}</span>}
+                            {email.touched && email.error &&
+                                <span className="help-block">{email.error}</span>
+                            }
                         </div>
                         <div className={classNames('form-group', {
                             'has-error': password.touched && password.error,
-                        })}>
+                        })}
+                        >
                             <input
                                 type="password"
                                 className="form-control input-lg"
                                 placeholder="Your password"
                                 {...password}
                             />
-                            {password.touched && password.error && <span className="help-block">{password.error}</span>}
+                            {password.touched && password.error &&
+                                <span className="help-block">{password.error}</span>
+                            }
                         </div>
                         <div className={classNames('form-group', {
                             'has-error': confirmPassword.touched && confirmPassword.error,
-                        })}>
+                        })}
+                        >
                             <input
                                 type="password"
                                 className="form-control input-lg"
                                 placeholder="Confirm your password"
                                 {...confirmPassword}
                             />
-                            {confirmPassword.touched && confirmPassword.error && <span className="help-block">{confirmPassword.error}</span>}
+                            {confirmPassword.touched && confirmPassword.error &&
+                                <span className="help-block">{confirmPassword.error}</span>
+                            }
                         </div>
                         <button type="submit" className={classNames('btn btn-lg btn-primary', {
                             'btn-danger': signUpError || submitFailed,
-                        })} disabled={submitting}>
+                        })} disabled={submitting}
+                        >
                             Sign up
                         </button>
                         <Link
                             className="btn btn-lg btn-link"
-                            to={{ pathname: '/sign-in', state: { nextPathname: previousRoute }}}
+                            to={{ pathname: '/sign-in', state: { nextPathname: previousRoute } }}
                         >
                             Already have an account ? Sign in !
                         </Link>
@@ -105,7 +125,7 @@ export default reduxForm({
     let previousRoute;
     try {
         previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
-    } catch(error) {
+    } catch (error) {
         previousRoute = '/';
     }
 
