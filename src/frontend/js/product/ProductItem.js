@@ -32,10 +32,10 @@ class ProductItem extends Component {
                 <div className="card-block">
                     <p className="card-text">{description}</p>
                     <Link to={`/products/${id}`} className="card-link">Details</Link>
-                    <a
-                        onClick={this.orderProduct}
-                        className="card-link btn btn-link"
-                    >
+                        <a
+                            onClick={this.orderProduct}
+                            className="card-link btn btn-link"
+                        >
                             Buy
                         </a>
                 </div>

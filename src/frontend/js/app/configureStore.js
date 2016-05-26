@@ -5,11 +5,13 @@ import createSagaMiddleware from 'redux-saga';
 import thunkMiddleware from 'redux-thunk';
 
 import sagas from './sagas';
+const sagaMiddleware = createSagaMiddleware();
 
 export default function configureStore(rootReducer, initialState) {
+
     let enhancers = [
         applyMiddleware(
-            createSagaMiddleware(sagas),
+            sagaMiddleware,
             routerMiddleware(hashHistory),
             thunkMiddleware
         ),
@@ -23,5 +25,7 @@ export default function configureStore(rootReducer, initialState) {
         ];
     }
 
-    return createStore(rootReducer, initialState, compose(...enhancers));
+    const store = createStore(rootReducer, initialState, compose(...enhancers));
+    sagaMiddleware.run(sagas);
+    return store;
 }

@@ -18,9 +18,9 @@ export default function(client) {
     }
 
     function* removeAllFixtures() {
-        yield client.query_('TRUNCATE product RESTART IDENTITY');
-        yield client.query_('TRUNCATE user_order RESTART IDENTITY');
-        yield client.query_('TRUNCATE user_account RESTART IDENTITY');
+        yield client.queryPromise('TRUNCATE product RESTART IDENTITY');
+        yield client.queryPromise('TRUNCATE user_order RESTART IDENTITY');
+        yield client.queryPromise('TRUNCATE user_account RESTART IDENTITY');
     }
 
     function* getTokenFor(email) {

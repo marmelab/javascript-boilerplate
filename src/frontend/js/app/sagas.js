@@ -3,8 +3,8 @@ import userSagas from '../user/userSagas';
 import productSagas from '../product/productSagas';
 import orderSagas from '../order/orderSagas';
 
-export default function* (getState) {
-    yield fork(userSagas, getState);
-    yield fork(productSagas, getState);
-    yield fork(orderSagas, getState);
+export default function* () {
+    yield fork(userSagas);
+    yield fork(productSagas);
+    yield fork(orderSagas);
 }

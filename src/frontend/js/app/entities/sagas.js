@@ -1,9 +1,9 @@
 import { takeEvery } from 'redux-saga';
-import { call, fork, put } from 'redux-saga/effects';
+import { call, fork, put, select } from 'redux-saga/effects';
 
-export const loadListFactory = (actions, fetchList, jwtAccessor) =>
+export const loadListFactory = (actions, fetchList, jwtSelector = () => null) =>
     function* loadList() {
-        const jwt = typeof jwtAccessor === 'function' ? jwtAccessor() : undefined;
+        const jwt = yield select(jwtSelector);
         const { error, list } = yield call(fetchList, jwt);
 
         if (error) {
@@ -14,9 +14,9 @@ export const loadListFactory = (actions, fetchList, jwtAccessor) =>
         }
     };
 
-export const loadItemFactory = (actions, fetchItem, jwtAccessor) =>
+export const loadItemFactory = (actions, fetchItem, jwtSelector = () => null) =>
     function* loadItem({ payload }) {
-        const jwt = typeof jwtAccessor === 'function' ? jwtAccessor() : undefined;
+        const jwt = yield select(jwtSelector);
         const { error, item } = yield call(fetchItem, payload, jwt);
 
         if (error) {
@@ -27,24 +27,24 @@ export const loadItemFactory = (actions, fetchItem, jwtAccessor) =>
         }
     };
 
-export const entityListFactory = (actionTypes, actions, fetchList, jwtAccessor) =>
+export const entityListFactory = (actionTypes, actions, fetchList, jwtSelector) =>
     function* sagas() {
         yield* takeEvery(
             actionTypes.REQUEST,
-            loadListFactory(actions, fetchList, jwtAccessor)
+            loadListFactory(actions, fetchList, jwtSelector)
         );
     };
 
-export const entityItemFactory = (actionTypes, actions, fetchItem, jwtAccessor) =>
+export const entityItemFactory = (actionTypes, actions, fetchItem, jwtSelector) =>
     function* sagas() {
         yield* takeEvery(
             actionTypes.REQUEST,
-            loadItemFactory(actions, fetchItem, jwtAccessor)
+            loadItemFactory(actions, fetchItem, jwtSelector)
         );
     };
 
-export const entityFactory = (actionTypes, actions, fetchList, fetchItem, jwtAccessor) =>
+export const entityFactory = (actionTypes, actions, fetchList, fetchItem, jwtSelector) =>
     function* sagas() {
-        yield fork(entityListFactory(actionTypes.list, actions.list, fetchList, jwtAccessor));
-        yield fork(entityItemFactory(actionTypes.item, actions.item, fetchItem, jwtAccessor));
+        yield fork(entityListFactory(actionTypes.list, actions.list, fetchList, jwtSelector));
+        yield fork(entityItemFactory(actionTypes.item, actions.item, fetchItem, jwtSelector));
     };

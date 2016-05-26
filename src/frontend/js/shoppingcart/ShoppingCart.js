@@ -16,7 +16,7 @@ class ShoppingCart extends Component {
         return (
             <div className="shopping-cart list-group">
                 {products.length === 0 &&
-                    <div className="list-group-item">Your shopping cart is empty</div>
+                    <div className="list-group-item">Your shopping cart is empty...</div>
                 }
                 {products.map(product => (
                     <ShoppingCartItem

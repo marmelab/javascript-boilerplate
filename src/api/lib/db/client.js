@@ -10,6 +10,7 @@ export default function* dbClient({ host, port, user, password, database }) {
     const done = connectionResponse[1];
 
     named.patch(client);
+
     const query = client.query;
 
     client.query_ = (queryString, values) =>
