@@ -1,5 +1,5 @@
-export default (store) => {
-    return (nextState, replace) => {
+export default (store) =>
+    (nextState, replace) => {
         const { user: { authenticated } } = store.getState();
 
         if (!authenticated) {
@@ -9,4 +9,3 @@ export default (store) => {
             });
         }
     };
-};

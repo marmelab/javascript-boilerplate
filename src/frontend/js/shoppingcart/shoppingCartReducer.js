@@ -10,7 +10,8 @@ const initialState = {
     total: 0,
 };
 
-export const computeShoppingCartTotal = products => products.reduce((total, p) => total + (p.price * p.quantity), 0);
+export const computeShoppingCartTotal = products =>
+    products.reduce((total, p) => total + (p.price * p.quantity), 0);
 
 export default (state = initialState, { type, payload }) => {
     const products = state.products;

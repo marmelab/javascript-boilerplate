@@ -17,6 +17,10 @@ export class App extends Component {
         }
     }
 
+    mapStylesForRouteTransition(s) {
+        return { transform: `translateX(${s.translateX}%)` };
+    }
+
     render() {
         const { children, location, user, signOut } = this.props;
 
@@ -65,7 +69,7 @@ export class App extends Component {
                             atEnter={{ translateX: 100 }}
                             atLeave={{ translateX: -100 }}
                             atActive={{ translateX: 0 }}
-                            mapStyles={s => ({ transform: `translateX(${s.translateX}%)` })}
+                            mapStyles={this.mapStylesForRouteTransition}
                             style={{ position: 'relative' }}
                         >
                             <div style={{ position: 'absolute', width: '100%' }}>
