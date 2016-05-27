@@ -6,9 +6,9 @@ export const fetchOrder = fetchEntityFactory('orders');
 
 export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/orders`, {
     headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': jwt,
+        Authorization: jwt,
     },
     // Allows API to set http-only cookies with AJAX calls
     // @see http://www.redotheweb.com/2015/11/09/api-security.html
@@ -25,8 +25,5 @@ export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/orders`, {
 
     return response.json();
 })
-.then(json => {
-    return { order: json };
-}, error => ({
-    error,
-}));
+.then(json => ({ order: json }))
+.catch(error => ({ error }));

@@ -117,10 +117,10 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" --recursive ./src/frontend/js/**/*.spec.js
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
 test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive ./src/isomorphic/{,**/}*.spec.js
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test
