@@ -5,7 +5,9 @@ import ProductPropType from '../product/productPropTypes';
 
 class OrderProductItem extends Component {
     render() {
-        const {id, reference, price, quantity } = this.props;
+        /* eslint-disable react/prop-types */
+        const { id, reference, price, quantity } = this.props;
+        /* eslint-enable react/prop-types */
 
         return (
             <div className="list-group-item">

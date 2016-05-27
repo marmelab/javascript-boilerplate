@@ -17,7 +17,17 @@ const signInSchema = buildSchema({
     },
 });
 
-const SignIn = ({ signInError, signIn, previousRoute, fields: { email, password }, handleSubmit, submitting, submitFailed }) => (
+const SignIn = ({
+    /* eslint-disable react/prop-types */
+    signInError,
+    signIn,
+    previousRoute,
+    fields: { email, password },
+    handleSubmit,
+    submitting,
+    submitFailed,
+    /* eslint-enable react/prop-types */
+}) => (
     <div className="container signIn">
         <HelmetTitle title="Sign in" />
         <div className="row">
@@ -32,34 +42,41 @@ const SignIn = ({ signInError, signIn, previousRoute, fields: { email, password 
                     <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
                         <div className={classNames('form-group', {
                             'has-error': email.touched && email.error,
-                        })}>
+                        })}
+                        >
                             <input
                                 type="email"
                                 className="form-control input-lg"
                                 placeholder="Your email"
                                 {...email}
                             />
-                            {email.touched && email.error && <span className="help-block">{email.error}</span>}
+                            {email.touched && email.error &&
+                                <span className="help-block">{email.error}</span>
+                            }
                         </div>
                         <div className={classNames('form-group', {
                             'has-error': password.touched && password.error,
-                        })}>
+                        })}
+                        >
                             <input
                                 type="password"
                                 className="form-control input-lg"
                                 placeholder="Your password"
                                 {...password}
                             />
-                            {password.touched && password.error && <span className="help-block">{password.error}</span>}
+                            {password.touched && password.error &&
+                                <span className="help-block">{password.error}</span>
+                            }
                         </div>
                         <button type="submit" className={classNames('btn btn-lg btn-primary', {
                             'btn-danger': signInError || submitFailed,
-                        })} disabled={submitting}>
+                        })} disabled={submitting}
+                        >
                             Sign in
                         </button>
                         <Link
                             className="btn btn-lg btn-link"
-                            to={{ pathname: '/sign-up', state: { nextPathname: previousRoute }}}
+                            to={{ pathname: '/sign-up', state: { nextPathname: previousRoute } }}
                         >
                             No account? Sign up!
                         </Link>
@@ -91,7 +108,7 @@ export default reduxForm({
     let previousRoute;
     try {
         previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
-    } catch(error) {
+    } catch (error) {
         previousRoute = '/';
     }
 

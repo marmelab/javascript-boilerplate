@@ -1,12 +1,15 @@
 import { userActionTypes } from './userActions';
 
-export default function(localStorage) {
+export default function (localStorage) {
+    const notExpired = localStorage.getItem('expires') > (new Date()).getTime();
+    const authenticated = !!localStorage.getItem('token') && notExpired;
+
     const initialState = {
         id: localStorage.getItem('id'),
         email: localStorage.getItem('email'),
         token: localStorage.getItem('token'),
         expires: localStorage.getItem('expires'),
-        authenticated: !!localStorage.getItem('token') && localStorage.getItem('expires') > (new Date()).getTime(),
+        authenticated,
         loading: false,
     };
 

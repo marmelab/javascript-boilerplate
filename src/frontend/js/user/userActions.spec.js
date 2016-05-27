@@ -3,7 +3,10 @@ import { signIn, signUp, signOut, userActionTypes } from './userActions';
 
 describe('userActions', () => {
     it('signIn.request should return the correct action', () => {
-        expect(signIn.request('/route', { email: 'test_email', password: 'test_password' })).to.deep.equal({
+        expect(signIn.request('/route', {
+            email: 'test_email',
+            password: 'test_password',
+        })).to.deep.equal({
             type: userActionTypes.signIn.REQUEST,
             payload: {
                 previousRoute: '/route',
@@ -14,7 +17,11 @@ describe('userActions', () => {
     });
 
     it('signIn.success should return the correct action', () => {
-        expect(signIn.success({ id: 'id_test', email: 'test_email', token: 'test_token' })).to.deep.equal({
+        expect(signIn.success({
+            id: 'id_test',
+            email: 'test_email',
+            token: 'test_token',
+        })).to.deep.equal({
             type: userActionTypes.signIn.SUCCESS,
             payload: { id: 'id_test', email: 'test_email', token: 'test_token' },
         });
@@ -31,7 +38,10 @@ describe('userActions', () => {
     });
 
     it('signUp.request should return the correct action', () => {
-        expect(signUp.request('/route', { email: 'test_email', password: 'test_password' })).to.deep.equal({
+        expect(signUp.request('/route', {
+            email: 'test_email',
+            password: 'test_password',
+        })).to.deep.equal({
             type: userActionTypes.signUp.REQUEST,
             payload: {
                 previousRoute: '/route',
@@ -42,7 +52,11 @@ describe('userActions', () => {
     });
 
     it('signUp.success should return the correct action', () => {
-        expect(signUp.success({ id: 'id_test', email: 'test_email', token: 'test_token' })).to.deep.equal({
+        expect(signUp.success({
+            id: 'id_test',
+            email: 'test_email',
+            token: 'test_token',
+        })).to.deep.equal({
             type: userActionTypes.signUp.SUCCESS,
             payload: { id: 'id_test', email: 'test_email', token: 'test_token' },
         });

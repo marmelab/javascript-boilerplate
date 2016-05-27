@@ -10,14 +10,24 @@ import ProductPropType from './productPropTypes';
 import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
 
 class ProductDetails extends Component {
+    constructor() {
+        super();
+        this.orderProduct = this.orderProduct.bind(this);
+    }
+
     componentDidMount() {
         if (!this.props.product) {
             this.props.loadProduct(this.props.productId);
         }
     }
 
+    orderProduct() {
+        const { orderProduct, product } = this.props;
+        orderProduct(product);
+    }
+
     render() {
-        const { loading, orderProduct, product } = this.props;
+        const { loading, product } = this.props;
 
         if (loading || !product) {
             return (
@@ -40,7 +50,12 @@ class ProductDetails extends Component {
                     <p className="description">{description}</p>
                     <p className="price">Price: {numeral(price).format('$0.00')}</p>
                     <p>
-                        <button onClick={orderProduct.bind(this, { ...product })} className="btn btn-primary">Buy</button>
+                        <button
+                            onClick={this.orderProduct}
+                            className="btn btn-primary"
+                        >
+                            Buy
+                        </button>
                         <Link to="/products" className="btn btn-link">Return to product list</Link>
                     </p>
                 </div>
@@ -60,7 +75,11 @@ ProductDetails.propTypes = {
 function mapStateToProps(state, ownProps) {
     const productId = parseInt(ownProps.params.id, 10);
     const productFromState = state.product.item;
-    const productFromList = state.product.list.length > 0 ? state.product.list.find(p => p.id === productId) : null;
+    let productFromList = null;
+
+    if (state.product.list.length > 0) {
+        productFromList = state.product.list.find(p => p.id === productId);
+    }
 
     return {
         loading: state.product.loading,

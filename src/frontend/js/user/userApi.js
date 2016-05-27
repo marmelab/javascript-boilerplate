@@ -3,7 +3,7 @@ export function fetchSignIn(email, password) {
     return fetch(`${API_URL}/sign-in`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json; charset=utf-8',
         },
         body: JSON.stringify({
@@ -21,18 +21,15 @@ export function fetchSignIn(email, password) {
 
         return response.json();
     })
-    .then(json => {
-        return { user: json };
-    }, error => ({
-        error,
-    }));
+    .then(json => ({ user: json }))
+    .catch(error => ({ error }));
 }
 
 export function fetchSignUp(email, password) {
     return fetch(`${API_URL}/sign-up`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json; charset=utf-8',
         },
         body: JSON.stringify({
@@ -50,11 +47,8 @@ export function fetchSignUp(email, password) {
 
         return response.json();
     })
-    .then(json => {
-        return { user: json };
-    }, error => ({
-        error,
-    }));
+    .then(json => ({ user: json }))
+    .catch(error => ({ error }));
 }
 
 export const storeLocalUser = ({ id, email, token, expires }) => {
