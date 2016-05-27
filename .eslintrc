@@ -6,7 +6,6 @@
         "node": true,
     },
     "extends": "airbnb",
-    "parser": "babel-eslint",
     "rules": {
         "indent": [2, 4],
         "react/jsx-indent-props": [2, 4],

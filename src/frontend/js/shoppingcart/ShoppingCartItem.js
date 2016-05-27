@@ -1,10 +1,10 @@
+/* eslint react/prop-types: 0 */
 import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import Icon from 'react-fa';
 import { Link } from 'react-router';
 import ProductPropType from '../product/productPropTypes';
 
-/* eslint-disable react/prop-types */
 class ShoppingCartItem extends Component {
     constructor() {
         super();
@@ -17,9 +17,7 @@ class ShoppingCartItem extends Component {
     }
 
     render() {
-        /* eslint-disable react/prop-types */
         const { id, reference, price, quantity } = this.props;
-        /* eslint-enable react/prop-types */
 
         return (
             <div className="list-group-item">

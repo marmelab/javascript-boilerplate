@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import Icon from 'react-fa';
@@ -12,30 +13,24 @@ class NewOrderItem extends Component {
     }
 
     setShoppingCartItemQuantity(event) {
-        /* eslint-disable react/prop-types */
         const { id, setShoppingCartItemQuantity } = this.props;
-        /* eslint-enable react/prop-types */
 
         setShoppingCartItemQuantity(id, parseInt(event.target.value, 10));
     }
 
     removeProductFromShoppingCart() {
-        /* eslint-disable react/prop-types */
         const { id, removeProductFromShoppingCart } = this.props;
-        /* eslint-enable react/prop-types */
 
         removeProductFromShoppingCart(id);
     }
 
     render() {
-        /* eslint-disable react/prop-types */
         const {
             id,
             reference,
             price,
             quantity,
         } = this.props;
-        /* eslint-enable react/prop-types */
 
         return (
             <div className="list-group-item">
