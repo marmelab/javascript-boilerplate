@@ -1,10 +1,11 @@
 import { takeEvery } from 'redux-saga';
 import { routerActions } from 'react-router-redux';
-import { call, fork, put } from 'redux-saga/effects';
+import { call, fork, put, select } from 'redux-saga/effects';
 
 import orderActions, { orderActionTypes } from './orderActions';
 import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
 import { entityFactory } from '../app/entities/sagas';
+import jwtSelector from '../app/jwtSelector';
 
 import {
     fetchOrder,
@@ -12,11 +13,12 @@ import {
     fetchNewOrder as fetchNewOrderApi,
 } from './orderApi';
 
-export const newOrder = (fetchNewOrder, jwtAccessor) => function* newOrderSaga({ payload }) {
+export const newOrder = (fetchNewOrder) => function* newOrderSaga({ payload }) {
+    const jwt = yield select(jwtSelector);
     const {
         error,
         order,
-    } = yield call(fetchNewOrder, payload, jwtAccessor());
+    } = yield call(fetchNewOrder, payload, jwt);
 
     if (error) {
         console.error({ error }); // eslint-disable-line no-console
@@ -28,10 +30,9 @@ export const newOrder = (fetchNewOrder, jwtAccessor) => function* newOrderSaga({
     }
 };
 
-const sagas = function* sagas(getState) {
-    const jwtAccessor = () => getState().user.token;
-    yield fork(entityFactory(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtAccessor));
-    yield* takeEvery(orderActionTypes.order.REQUEST, newOrder(fetchNewOrderApi, jwtAccessor));
+const sagas = function* sagas() {
+    yield fork(entityFactory(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtSelector));
+    yield* takeEvery(orderActionTypes.order.REQUEST, newOrder(fetchNewOrderApi));
 };
 
 export default sagas;

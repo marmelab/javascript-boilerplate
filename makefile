@@ -106,6 +106,11 @@ log-frontend-dev: ## Display the logs of the frontend applications with PM2
 log-api-dev: ## Display the logs of the API with PM2
 	@node_modules/.bin/pm2 logs bpm_api-dev
 
+log-frontend-test: ## Display the logs of the frontend applications with PM2
+	@node_modules/.bin/pm2 logs bpm_frontend-test
+log-api-test: ## Display the logs of the API with PM2
+	@node_modules/.bin/pm2 logs bpm_api-test
+
 # Tests ========================================================================
 build-test: ## Build all front applications defined with webpack for test environment
 	@NODE_ENV=test make build
@@ -125,6 +130,7 @@ test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+	sleep 5 # Strange behaviour: tests fail with ECONNREFUSED without this
 	@node_modules/.bin/nightwatch --config="./e2e/frontend/nightwatch.json"
 	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
