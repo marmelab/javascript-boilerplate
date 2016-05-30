@@ -2,6 +2,32 @@ import koa from 'koa';
 import coBody from 'co-body';
 import koaRoute from 'koa-route';
 
+function getListParametersFromQueryParameters(params) {
+    const parameters = {};
+
+    // NOTE: those parameters are sent by ng-admin
+    /* eslint-disable no-underscore-dangle */
+    if (params._page) {
+        parameters.limit = params._perPage;
+        parameters.offset = (params._page - 1) * params._perPage;
+    }
+
+    if (params._sortField) {
+        parameters.sort = params._sortField;
+        parameters.sortDir = params._sortDir;
+    }
+
+    if (params._filters) {
+        Object.keys(params._filters).forEach(filter => {
+            if (filter === 'q') parameters.filter = params._filters.q;
+            else parameters[filter] = params._filters[filter];
+        });
+    }
+    /* eslint-enable no-underscore-dangle */
+
+    return parameters;
+}
+
 export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELETE']) => {
     const app = koa();
     let queries;
@@ -34,8 +60,17 @@ export default (queriesFactory, availableMethods = ['GET', 'POST', 'PUT', 'DELET
             if (excludedQueryParams.indexOf(key) !== -1) return;
             other[key] = query[key];
         });
+        const params = getListParametersFromQueryParameters(query);
 
-        this.body = yield queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other);
+        this.body = yield queries.selectPage(
+            params.limit,
+            params.offset,
+            params.filter,
+            params.sort,
+            params.sortDir,
+            other
+        );
+
         const totalCount = (this.body[0]) ? this.body[0].totalcount : (yield queries.countAll());
         this.set('X-Total-Count', totalCount);
         this.set('Access-Control-Expose-Headers', 'X-Total-Count');
