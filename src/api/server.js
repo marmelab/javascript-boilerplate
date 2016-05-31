@@ -83,7 +83,7 @@ app.on('error', (err, ctx = {}) => {
         err,
     };
 
-    httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
+    httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails); // eslint-disable-line max-len
 });
 
 process.on('unhandledRejection', (error, promise) => {
@@ -119,7 +119,7 @@ app.use(koaMount('/', koaCors({
     origin: (request) => {
         const origin = request.get('origin');
 
-        if (!!origin.length && config.apps.api.allowOrigin.indexOf(origin) === -1) {
+        if (!origin.length || config.apps.api.allowOrigin.indexOf(origin) === -1) {
             return false;
         }
 
@@ -128,7 +128,7 @@ app.use(koaMount('/', koaCors({
 })));
 
 // DB connection
-app.use(function* (next) {
+app.use(function* (next) { // eslint-disable-line func-names
     let pgConnection;
     let error;
 
@@ -159,6 +159,7 @@ if (env !== 'development') {
     app.use(compress());
 }
 
+app.use(koaMount('/healthcare', require('./healthcare')));
 app.use(koaMount('/api', require('./api')));
 app.use(koaMount('/admin', require('./admin')));
 
