@@ -1,28 +1,36 @@
-module.exports = {
-    after: function (client) {
-        client.end();
-    },
+import { after, describe, it } from 'selenium-webdriver/testing';
+import driver from 'nodium/lib/driver';
+import chai, { expect } from 'chai';
+chai.use(require('chai-as-promised'));
+chai.use(require('chai-webdriver')(driver));
 
-    'Products - user should see the product list': function (client) {
-        client
-            .url('http://localhost:8081/#/products')
-            .waitForElementVisible('body', 1000)
-            .waitForElementVisible('.product-item', 1000, false, function () {
-                client.getLog('browser', function (result) {
-                    console.error(result);
-                });
+describe('Products', function () { // eslint-disable-line func-names
+    this.timeout(5000);
+
+    it('user should see the product list', done => {
+        driver
+            .get('http://localhost:8081/#/products')
+            .then(() => {
+                expect('.product-item').dom.to.have.count(3, done);
             });
-    },
+    });
 
-    'Products - user should see the product details': function (client) {
-        client
-            .url('http://localhost:8081/#/products/1')
-            .waitForElementVisible('.product-details', 5000);
+    it('user should see the product details', done => {
+        driver
+            .get('http://localhost:8081/#/products/1')
+            .then(() => {
+                expect('.product-details').dom.to.be.visible();
+                expect('.img-thumbnail').dom.to.be.visible();
+                expect('.img-thumbnail').dom.to.have.attribute('src', 'http://lorempixel.com/400/400/');
+                expect('h2').dom.to.have.text('abc');
+                expect('.description').dom.to.have.text('John the zoo');
+                expect('.price').dom.to.have.text('Price: $3.40');
+            })
+            .then(done)
+            .catch(done);
+    });
 
-        client.expect.element('.img-thumbnail').to.be.visible;
-        client.expect.element('.img-thumbnail').to.have.attribute('src', 'http://lorempixel.com/400/400/');
-        client.expect.element('h2').text.to.equal('abc');
-        client.expect.element('.description').text.to.equal('John the zoo');
-        client.expect.element('.price').text.to.equal('Price: $3.40');
-    },
-};
+    after(() => {
+        driver.quit();
+    });
+});
