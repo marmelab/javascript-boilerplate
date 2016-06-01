@@ -5,7 +5,7 @@ chai.use(require('chai-as-promised'));
 chai.use(require('chai-webdriver')(driver));
 
 describe('Products', function () { // eslint-disable-line func-names
-    this.timeout(5000);
+    this.timeout(10000);
 
     it('user should see the product list', done => {
         driver
