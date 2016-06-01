@@ -24,7 +24,6 @@
     "koa-route": "2.4.2",
     "lodash._baseflatten": "4.2.1",
     "lodash.pick": "4.2.1",
-    "nightwatch": "0.9.1",
     "node-postgres-named": "2.4.0",
     "nodemailer": "2.4.2",
     "nodemailer-html-to-text": "2.1.0",
