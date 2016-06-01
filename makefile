@@ -130,7 +130,11 @@ test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test
 	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" --recursive ./e2e/frontend
+	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver" \
+		./node_modules/.bin/mocha \
+		--compilers="js:babel-core/register" \
+		--recursive \
+		./e2e/frontend
 	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 load-test-fixtures: ## Initialize the test database with fixtures
