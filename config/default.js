@@ -1,15 +1,16 @@
-var apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
-var apiUrl = 'http://localhost:' + apiPort; // eslint-disable-line no-var
-var frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
+const apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
+const apiUrl = `http://localhost:${apiPort}`; // eslint-disable-line no-var
+const frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
+const allowOrigin = [frontendUrl, apiUrl];
 
 module.exports = {
     appName: 'New App',
     apps: {
         admin: {
-            api_url: apiUrl + '/admin/',
+            api_url: `${apiUrl}/admin/`,
         },
         api: {
-            allowOrigin: [frontendUrl],
+            allowOrigin,
             cookies: {
                 secure: false,
                 secureProxy: false,
@@ -27,7 +28,8 @@ module.exports = {
             },
             healthcare: {
                 internetUrl: 'http://google.com',
-                apiUrl: apiUrl + '/api/products',
+                apiUrl,
+                endPoint: '/api/products',
             },
             logs: {
                 app: { Console: { timestamp: true, colorize: true, level: 'error' } },
@@ -77,7 +79,7 @@ module.exports = {
             },
         },
         frontend: {
-            api_url: apiUrl + '/api',
+            api_url: `${apiUrl}/api`,
             enableDevTools: true,
         },
     },
