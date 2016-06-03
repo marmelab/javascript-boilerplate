@@ -1,7 +1,7 @@
 const apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
 const apiUrl = `http://localhost:${apiPort}`; // eslint-disable-line no-var
 const frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
-const allowOrigin = [frontendUrl, apiUrl];
+const allowedOrigins = [frontendUrl, apiUrl];
 
 module.exports = {
     appName: 'New App',
@@ -10,7 +10,7 @@ module.exports = {
             api_url: `${apiUrl}/admin/`,
         },
         api: {
-            allowOrigin,
+            allowedOrigins,
             cookies: {
                 secure: false,
                 secureProxy: false,
