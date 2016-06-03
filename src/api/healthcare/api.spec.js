@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 import sinon from 'sinon';
@@ -12,9 +13,12 @@ describe('Healthcare', () => {
 
             yield apiCheck({
                 apiUrl: 'foo',
+                endPoint: '/bar',
             }, fetch);
 
-            expect(fetch).to.have.been.calledWith('foo');
+            expect(fetch).to.have.been.calledWith('foo/bar', {
+                headers: { origin: 'foo' },
+            });
         });
 
         it('should return a valid result when api response is ok', function* () {
@@ -22,6 +26,7 @@ describe('Healthcare', () => {
 
             const result = yield apiCheck({
                 apiUrl: 'foo',
+                endPoint: '/bar',
             }, fetch);
 
             expect(result).to.equal(true);
@@ -32,6 +37,7 @@ describe('Healthcare', () => {
 
             const result = yield apiCheck({
                 apiUrl: 'foo',
+                endPoint: '/bar',
             }, fetch);
 
             expect(result).to.equal(false);

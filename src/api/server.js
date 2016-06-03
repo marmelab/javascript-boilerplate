@@ -82,8 +82,8 @@ app.on('error', (err, ctx = {}) => {
         stack: err.stack,
         err,
     };
-
-    httpLogger.log('error', typeof ctx.request !== 'undefined' ? ctx.request.url : '', errorDetails);
+    const url = typeof ctx.request !== 'undefined' ? ctx.request.url : '';
+    httpLogger.log('error', url, errorDetails);
 });
 
 process.on('unhandledRejection', (error, promise) => {
@@ -119,7 +119,7 @@ app.use(koaMount('/', koaCors({
     origin: (request) => {
         const origin = request.get('origin');
 
-        if (!!origin.length && config.apps.api.allowOrigin.indexOf(origin) === -1) {
+        if (!!origin.length && config.apps.api.allowedOrigins.indexOf(origin) === -1) {
             return false;
         }
 
@@ -128,7 +128,7 @@ app.use(koaMount('/', koaCors({
 })));
 
 // DB connection
-app.use(function* (next) {
+app.use(function* connectToDb(next) {
     let pgConnection;
     let error;
 
