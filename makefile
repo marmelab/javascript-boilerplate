@@ -9,6 +9,8 @@ CLIENT_NAME ?= leonard
 CLIENT_EMAIL ?= leonard@newapp.com
 CLIENT_PASSWORD ?= supadupa42!
 
+PM2_HOME ?= .pm2
+
 help:
 	@grep -P '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -69,19 +71,28 @@ deploy-prod: deploy-prod-api deploy-prod-frontend ## Deploy the production envir
 
 # Development ==================================================================
 run-dev: ## Run all applications in development environment (using webpack-dev-server)
-	@node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
+	@echo "All apps started and running"
+	@echo "  API:          http://localhost:3000"
+	@echo "  Frontend App: http://localhost:8080/frontend"
+	@echo "  Admin app:    http://localhost:8080/admin"
+	@echo "Type 'make stop-dev' to stop the apps"
+
 stop-dev: ## Stop all applications in development environment
-	@node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
+	@echo "All apps stopped"
 
 restart-frontend-dev: ## Restart all frontend applications in development environment
-	@node_modules/.bin/pm2 restart bpm_frontend-dev
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	@echo "Webpack dev restarted"
+
 restart-api-dev: ## Restart the API in development environment
-	@node_modules/.bin/pm2 restart bpm_api-dev
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
 	@echo "API dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
 	@node ./src/api/index.js
+
 run-frontend: ## Starts the frontend applications using webpack-dev-server (you may define the NODE_ENV)
 	@./node_modules/.bin/webpack-dev-server  \
 		--no-info \
@@ -91,25 +102,30 @@ run-frontend: ## Starts the frontend applications using webpack-dev-server (you 
 		--inline
 
 servers-monitoring: ## Get an overview of your processes with PM2
-	@node_modules/.bin/pm2 monit
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 monit
+
 servers-list: ## List the processes managed by PM2
-	@node_modules/.bin/pm2 list
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 list
+
 servers-stop-all: ## Stop all processes with PM2
-	@node_modules/.bin/pm2 stop all
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 stop all
+
 servers-clear-all: ## Delete all processes and flush the logs in PM2
-	@node_modules/.bin/pm2 stop all
-	@node_modules/.bin/pm2 delete all
-	@node_modules/.bin/pm2 flush
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 stop all
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete all
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 flush
 
 log-frontend-dev: ## Display the logs of the frontend applications with PM2
-	@node_modules/.bin/pm2 logs bpm_frontend-dev
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-dev
+
 log-api-dev: ## Display the logs of the API with PM2
-	@node_modules/.bin/pm2 logs bpm_api-dev
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_api-dev
 
 log-frontend-test: ## Display the logs of the frontend applications with PM2
-	@node_modules/.bin/pm2 logs bpm_frontend-test
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
+
 log-api-test: ## Display the logs of the API with PM2
-	@node_modules/.bin/pm2 logs bpm_api-test
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_api-test
 
 # Tests ========================================================================
 build-test: ## Build all front applications defined with webpack for test environment
@@ -129,13 +145,13 @@ test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test
-	@node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver" \
 		./node_modules/.bin/mocha \
 		--compilers="js:babel-core/register" \
 		--recursive \
 		./e2e/frontend
-	@node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 load-test-fixtures: ## Initialize the test database with fixtures
 	@NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js

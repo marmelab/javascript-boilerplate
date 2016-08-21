@@ -11,6 +11,7 @@ export default function (appName) {
         loader: 'babel-loader',
         // Options to configure babel with
         query: {
+            cacheDirectory: true,
             plugins: [
                 'transform-runtime',
                 'add-module-exports',

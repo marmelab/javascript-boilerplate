@@ -34,7 +34,6 @@ describe('orderActions', () => {
     it('clearShoppingCart should return the correct action', () => {
         expect(clearShoppingCart()).to.deep.equal({
             type: CLEAR_SHOPPING_CART,
-            payload: undefined,
         });
     });
 });

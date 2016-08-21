@@ -75,14 +75,12 @@ describe('userActions', () => {
     it('signOut.request should return the correct action', () => {
         expect(signOut.request()).to.deep.equal({
             type: userActionTypes.signOut.REQUEST,
-            payload: undefined,
         });
     });
 
     it('signOut.success should return the correct action', () => {
         expect(signOut.success()).to.deep.equal({
             type: userActionTypes.signOut.SUCCESS,
-            payload: undefined,
         });
     });
 });

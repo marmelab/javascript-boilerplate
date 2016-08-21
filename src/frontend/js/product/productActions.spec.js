@@ -5,7 +5,6 @@ describe('productActions', () => {
     it('productActions.list.request should return the correct action', () => {
         expect(productActions.list.request()).to.deep.equal({
             type: productActionTypes.list.REQUEST,
-            payload: undefined,
         });
     });
 
@@ -28,7 +27,6 @@ describe('productActions', () => {
     it('productActions.item.request should return the correct action', () => {
         expect(productActions.item.request()).to.deep.equal({
             type: productActionTypes.item.REQUEST,
-            payload: undefined,
         });
     });
 

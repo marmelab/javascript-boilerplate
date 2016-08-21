@@ -8,24 +8,20 @@ chai.use(sinonChai);
 
 describe('Healthcare', () => {
     describe('DB', () => {
-        it('should call dbClientFactory with correct config', function* (done) {
+        it('should call dbClientFactory with correct config', function* () {
             const dbClientFactory = sinon.stub().returns(Promise.resolve({
                 client: {
                     query_: sinon.stub().returns(Promise.resolve({ rows: [] })),
                 },
             }));
 
-            try {
-                yield dbCheck({
-                    foo: 'foo',
-                }, dbClientFactory);
-            } catch (err) {
-                done(err);
-            }
+            yield dbCheck({
+                foo: 'foo',
+            }, dbClientFactory);
+
             expect(dbClientFactory).to.have.been.calledWith({
                 foo: 'foo',
             });
-            done();
         });
 
         it('should return a valid result when db query response is ok', function* () {
