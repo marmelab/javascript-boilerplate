@@ -5,7 +5,7 @@ import { signIn, signOut, signUp } from './userActions';
 
 describe('user reducer', () => {
     const getItemWithUser = sinon.stub();
-    const expireTokenTime = (new Date()).getTime() + 30 * 1000;
+    const expireTokenTime = (new Date()).getTime() + (30 * 1000);
     getItemWithUser.withArgs('id').returns('foo');
     getItemWithUser.withArgs('email').returns('foo@bar.com');
     getItemWithUser.withArgs('token').returns('bar');

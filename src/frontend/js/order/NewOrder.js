@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -12,53 +12,47 @@ import {
 } from '../shoppingcart/shoppingCartActions';
 import ProductPropType from '../product/productPropTypes';
 
-class NewOrder extends Component {
-    render() {
-        const {
-            loading,
-            placeNewOrder,
-            products,
-            removeProductFromShoppingCart,
-            setShoppingCartItemQuantity,
-            total,
-        } = this.props;
-
-        return (
-            <div className="shopping-cart list-group">
-                <h2>New order</h2>
-                <HelmetTitle title="Shopping cart" />
-                {products.length === 0 &&
-                    <div className="list-group-item">Your shopping cart is empty</div>
-                }
-                {products.map(product => (
-                    <NewOrderItem
-                        key={product.id}
-                        {...product}
-                        removeProductFromShoppingCart={removeProductFromShoppingCart}
-                        setShoppingCartItemQuantity={setShoppingCartItemQuantity}
-                    />
-                ))}
-                {products.length > 0 &&
-                    <div className="list-group-item text-xs-right lead">
-                        TOTAL: {numeral(total).format('$0.00')}
-                    </div>
-                }
-                    <div className="list-group-item">
-                        {products.length > 0 &&
-                            <button
-                                onClick={placeNewOrder}
-                                disabled={loading}
-                                className="btn btn-primary"
-                            >
-                                Order
-                            </button>
-                        }
-                        <Link to="/products" className="btn btn-link">Continue shopping</Link>
-                    </div>
+const NewOrder = ({
+    loading,
+    placeNewOrder,
+    products,
+    removeProductFromShoppingCart,
+    setShoppingCartItemQuantity,
+    total,
+}) => (
+    <div className="shopping-cart list-group">
+        <h2>New order</h2>
+        <HelmetTitle title="Shopping cart" />
+        {products.length === 0 &&
+            <div className="list-group-item">Your shopping cart is empty</div>
+        }
+        {products.map(product => (
+            <NewOrderItem
+                key={product.id}
+                {...product}
+                removeProductFromShoppingCart={removeProductFromShoppingCart}
+                setShoppingCartItemQuantity={setShoppingCartItemQuantity}
+            />
+        ))}
+        {products.length > 0 &&
+            <div className="list-group-item text-xs-right lead">
+                TOTAL: {numeral(total).format('$0.00')}
             </div>
-        );
-    }
-}
+        }
+        <div className="list-group-item">
+            {products.length > 0 &&
+                <button
+                    onClick={placeNewOrder}
+                    disabled={loading}
+                    className="btn btn-primary"
+                >
+                    Order
+                </button>
+            }
+            <Link to="/products" className="btn btn-link">Continue shopping</Link>
+        </div>
+    </div>
+);
 
 NewOrder.propTypes = {
     loading: PropTypes.bool.isRequired,

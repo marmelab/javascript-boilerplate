@@ -43,7 +43,7 @@ class ProductDetails extends Component {
             <div className="row product-details">
                 <HelmetTitle title={name} />
                 <div className="col-xs-12 col-md-4 col-lg-3">
-                    <img src={image} className="img-thumbnail" />
+                    <img src={image} alt={name} className="img-thumbnail" />
                 </div>
                 <div className="col-xs-12 col-md-8 col-lg-9">
                     <h2>{reference}</h2>
