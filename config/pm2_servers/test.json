@@ -7,7 +7,7 @@
             },
             "exec_mode": "fork",
             "name": "bpm_api-test",
-            "script": "./src/api/index.js"
+            "script": "node --require reify ./src/api/index.js"
         },
         {
             "args": [
