@@ -4,16 +4,33 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import numeral from 'numeral';
 import ShoppingCartItem from './ShoppingCartItem';
-import {
-    removeProductFromShoppingCart as removeProductFromShoppingCartAction,
-} from './shoppingCartActions';
+import { removeProductFromShoppingCart as removeProductFromShoppingCartAction } from './actions';
 import ProductPropType from '../product/productPropTypes';
+
+export const EmptyShoppingCart = () => (
+    <div className="list-group-item">Your shopping cart is empty...</div>
+);
+
+export const ShoppingCartTotal = ({ total }) => (
+    <div className="list-group-item text-xs-right lead">
+        TOTAL: {numeral(total).format('$0.00')}
+    </div>
+);
+
+ShoppingCartTotal.propTypes = {
+    total: PropTypes.number.isRequired,
+};
+
+export const ShoppingCartOrderButton = () => (
+    <div className="list-group-item">
+        <Link to="/orders/new" className="btn btn-primary btn-block">Order</Link>
+    </div>
+);
 
 const ShoppingCart = ({ removeProductFromShoppingCart, products, total }) => (
     <div className="shopping-cart list-group">
-        {products.length === 0 &&
-            <div className="list-group-item">Your shopping cart is empty...</div>
-        }
+        {products.length === 0 && <EmptyShoppingCart />}
+
         {products.map(product => (
             <ShoppingCartItem
                 key={product.id}
@@ -21,16 +38,9 @@ const ShoppingCart = ({ removeProductFromShoppingCart, products, total }) => (
                 removeProductFromShoppingCart={removeProductFromShoppingCart}
             />
         ))}
-        {products.length > 0 &&
-            <div className="list-group-item text-xs-right lead">
-                TOTAL: {numeral(total).format('$0.00')}
-            </div>
-        }
-        {products.length > 0 &&
-            <div className="list-group-item">
-                <Link to="/orders/new" className="btn btn-primary btn-block">Order</Link>
-            </div>
-        }
+        {products.length > 0 && <ShoppingCartTotal {...{ total }} />}
+
+        {products.length > 0 && <ShoppingCartOrderButton />}
     </div>
 );
 
@@ -43,14 +53,10 @@ ShoppingCart.propTypes = {
     total: PropTypes.number.isRequired,
 };
 
-function mapStateToProps(state) {
-    return state.shoppingCart;
-}
+const mapStateToProps = state => state.shoppingCart;
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        removeProductFromShoppingCart: removeProductFromShoppingCartAction,
-    }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);

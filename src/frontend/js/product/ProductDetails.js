@@ -5,9 +5,9 @@ import numeral from 'numeral';
 import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
-import productActions from './productActions';
+import productActions from './actions';
 import ProductPropType from './productPropTypes';
-import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
+import { addProductToShoppingCart } from '../shoppingcart/actions';
 import { getProductById } from './selectors';
 
 const ProductDetails = ({ reference, description, price, image, orderProduct }) => (
@@ -70,23 +70,19 @@ ProductDetailsContainer.propTypes = {
     orderProduct: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
     const productId = parseInt(ownProps.params.id, 10);
-    const productFromState = state.product.item;
-    const productFromList = getProductById(state, productId);
 
     return {
         loading: state.product.loading,
         productId,
-        product: productFromState || productFromList,
+        product: state.product.item || getProductById(state, productId),
     };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        loadProduct: productActions.item.request,
-        orderProduct: addProductToShoppingCart,
-    }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadProduct: productActions.item.request,
+    orderProduct: addProductToShoppingCart,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailsContainer);

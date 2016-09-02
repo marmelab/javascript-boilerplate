@@ -6,21 +6,13 @@ import { Link } from 'react-router';
 import ProductPropType from '../product/productPropTypes';
 
 class NewOrderItem extends Component {
-    constructor() {
-        super();
-        this.setShoppingCartItemQuantity = this.setShoppingCartItemQuantity.bind(this);
-        this.removeProductFromShoppingCart = this.removeProductFromShoppingCart.bind(this);
-    }
-
-    setShoppingCartItemQuantity(event) {
+    setShoppingCartItemQuantity = event => {
         const { id, setShoppingCartItemQuantity } = this.props;
-
         setShoppingCartItemQuantity(id, parseInt(event.target.value, 10));
     }
 
-    removeProductFromShoppingCart() {
+    removeProductFromShoppingCart = () => {
         const { id, removeProductFromShoppingCart } = this.props;
-
         removeProductFromShoppingCart(id);
     }
 

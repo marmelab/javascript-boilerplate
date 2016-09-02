@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { signIn, signUp, signOut, userActionTypes } from './userActions';
+import { signIn, signUp, signOut, userActionTypes } from './actions';
 
 describe('userActions', () => {
     it('signIn.request should return the correct action', () => {

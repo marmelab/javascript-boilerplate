@@ -4,12 +4,7 @@ import { Link } from 'react-router';
 import ProductPropType from './productPropTypes';
 
 class ProductItem extends Component {
-    constructor() {
-        super();
-        this.orderProduct = this.orderProduct.bind(this);
-    }
-
-    orderProduct() {
+    orderProduct = () => {
         /* eslint-disable react/prop-types */
         const { id, reference, description, price, thumbnail, orderProduct } = this.props;
         /* eslint-enable react/prop-types */

@@ -1,14 +1,16 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 
+import Alert from '../ui/Alert';
+import { BigLinkButton } from '../ui/LinkButton';
 import HelmetTitle from '../app/HelmetTitle';
 import FormGroup from '../ui/FormGroup';
-import SubmitButton from '../ui/SubmitButton';
-import { signIn as signInActions } from './userActions';
+import { BigSubmitButton } from '../ui/SubmitButton';
+import { signIn as signInActions } from './actions';
+import { getPreviousRoute } from './selectors';
 
 const signInSchema = buildSchema({
     email: {
@@ -48,11 +50,8 @@ const SignIn = ({
             <div className="col-xs-12">
                 <div className="jumbotron">
                     <h2 className="display-4">Sign in</h2>
-                    {signInError &&
-                        <div className="alert alert-danger" role="alert">
-                            {signInError.message}
-                        </div>
-                    }
+                    {signInError && <Alert>{signInError.message}</Alert>}
+
                     <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
                         <Field
                             name="email"
@@ -64,21 +63,15 @@ const SignIn = ({
                             component={renderInput}
                             type="password"
                         />
-                        <SubmitButton error={signInError || submitFailed} submitting={submitting}>
+                        <BigSubmitButton error={signInError || submitFailed} submitting={submitting}>
                             Sign in
-                        </SubmitButton>
-                        <Link
-                            className="btn btn-lg btn-link"
-                            to={{ pathname: '/sign-up', state: { nextPathname: previousRoute } }}
-                        >
+                        </BigSubmitButton>
+                        <BigLinkButton to={{ pathname: '/sign-up', state: { nextPathname: previousRoute } }}>
                             No account? Sign up!
-                        </Link>
-                        <Link
-                            className="btn btn-lg btn-link"
-                            to="/forgot-password"
-                        >
+                        </BigLinkButton>
+                        <BigLinkButton to="/forgot-password">
                             Forgot your password?
-                        </Link>
+                        </BigLinkButton>
                     </form>
                 </div>
             </div>
@@ -92,19 +85,10 @@ SignIn.propTypes = {
     previousRoute: PropTypes.string,
 };
 
-const mapStateToProps = state => {
-    let previousRoute;
-    try {
-        previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
-    } catch (error) {
-        previousRoute = '/';
-    }
-
-    return {
-        previousRoute,
-        signInError: state.user.error,
-    };
-};
+const mapStateToProps = state => ({
+    previousRoute: getPreviousRoute(state),
+    signInError: state.user.error,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     signIn: signInActions.request,

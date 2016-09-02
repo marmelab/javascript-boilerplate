@@ -4,7 +4,7 @@ import {
     REMOVE_PRODUCT_FROM_SHOPPING_CART, removeProductFromShoppingCart,
     SET_SHOPPING_CART_ITEM_QUANTITY, setShoppingCartItemQuantity,
     CLEAR_SHOPPING_CART, clearShoppingCart,
-} from './shoppingCartActions';
+} from './actions';
 
 describe('orderActions', () => {
     it('addProductToShoppingCart should return the correct action', () => {

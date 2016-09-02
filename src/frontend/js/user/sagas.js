@@ -7,13 +7,13 @@ import {
     fetchSignUp as fetchSignUpApi,
     removeLocalUser as removeLocalUserApi,
     storeLocalUser as storeLocalUserApi,
-} from './userApi';
+} from './api';
 import {
     signIn as signInActions,
     signOut as signOutActions,
     signUp as signUpActions,
     userActionTypes,
-} from './userActions';
+} from './actions';
 
 export const signIn = (fetchSignIn, storeLocalUser) => function* signInSaga({
     payload: { email, password, previousRoute },

@@ -5,7 +5,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
-import orderActions from './orderActions';
+import orderActions from './actions';
 import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
@@ -60,21 +60,14 @@ OrderDetails.propTypes = {
     loadOrder: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
-    const orderId = parseInt(ownProps.params.id, 10);
-    const orderFromState = state.order.item;
+const mapStateToProps = (state, ownProps) => ({
+    loading: state.order.loading,
+    orderId: parseInt(ownProps.params.id, 10),
+    order: state.order.item,
+});
 
-    return {
-        loading: state.order.loading,
-        orderId,
-        order: orderFromState,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        loadOrder: orderActions.item.request,
-    }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadOrder: orderActions.item.request,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetails);

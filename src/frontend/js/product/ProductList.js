@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import ProductItem from './ProductItem';
-import productActions from './productActions';
-import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
+import productActions from './actions';
+import { addProductToShoppingCart } from '../shoppingcart/actions';
 import ProductPropType from './productPropTypes';
 
 const ProductList = ({ orderProduct, products }) => (
@@ -54,18 +54,14 @@ ProductListContainer.propTypes = {
     orderProduct: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-    return {
-        loading: state.product.loading,
-        products: state.product.list,
-    };
-}
+const mapStateToProps = state => ({
+    loading: state.product.loading,
+    products: state.product.list,
+});
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        loadProducts: productActions.list.request,
-        orderProduct: addProductToShoppingCart,
-    }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadProducts: productActions.list.request,
+    orderProduct: addProductToShoppingCart,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListContainer);

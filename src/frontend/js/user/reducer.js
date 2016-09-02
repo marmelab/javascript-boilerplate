@@ -1,4 +1,4 @@
-import { userActionTypes } from './userActions';
+import { userActionTypes } from './actions';
 
 export default function (localStorage) {
     const notExpired = localStorage.getItem('expires') > (new Date()).getTime();

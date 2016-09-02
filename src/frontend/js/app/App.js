@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RouteTransition } from 'react-router-transition';
 import HelmetTitle from './HelmetTitle';
-import { signOut as signOutActions } from '../user/userActions';
+import { signOut as signOutActions } from '../user/actions';
 import AppNavbar from './AppNavbar';
 import ShoppingCart from '../shoppingcart/ShoppingCart';
 

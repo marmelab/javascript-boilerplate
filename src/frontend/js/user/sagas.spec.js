@@ -7,12 +7,12 @@ import {
     signIn as signInSagaFactory,
     signOut as signOutSagaFactory,
     signUp as signUpSagaFactory,
-} from './userSagas';
+} from './sagas';
 import {
     signIn as signInActions,
     signOut as signOutActions,
     signUp as signUpActions,
-} from './userActions';
+} from './actions';
 
 describe('userSagas', () => {
     describe('signIn', () => {

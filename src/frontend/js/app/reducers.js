@@ -3,11 +3,11 @@ import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import { createEntityReducer } from './entities/reducers';
 
-import { orderActionTypes } from '../order/orderActions';
-import { productActionTypes } from '../product/productActions';
+import { orderActionTypes } from '../order/actions';
+import { productActionTypes } from '../product/actions';
 
-import shoppingCart from '../shoppingcart/shoppingCartReducer';
-import userReducerFactory from '../user/userReducer';
+import shoppingCart from '../shoppingcart/reducer';
+import userReducerFactory from '../user/reducer';
 
 const rootReducer = combineReducers({
     form,

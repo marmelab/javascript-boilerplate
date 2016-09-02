@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
 import OrderItem from './OrderItem';
-import orderActions from './orderActions';
+import orderActions from './actions';
 
 class OrderList extends Component {
     componentDidMount() {

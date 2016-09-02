@@ -2,8 +2,8 @@ import { takeEvery } from 'redux-saga';
 import { routerActions } from 'react-router-redux';
 import { call, fork, put, select } from 'redux-saga/effects';
 
-import orderActions, { orderActionTypes } from './orderActions';
-import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
+import orderActions, { orderActionTypes } from './actions';
+import { clearShoppingCart } from '../shoppingcart/actions';
 import { entityFactory } from '../app/entities/sagas';
 import jwtSelector from '../app/jwtSelector';
 
@@ -11,7 +11,7 @@ import {
     fetchOrder,
     fetchOrders,
     fetchNewOrder as fetchNewOrderApi,
-} from './orderApi';
+} from './api';
 
 export const newOrder = (fetchNewOrder) => function* newOrderSaga({ payload }) {
     const jwt = yield select(jwtSelector);

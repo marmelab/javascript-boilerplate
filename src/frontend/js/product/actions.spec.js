@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import productActions, { productActionTypes } from './productActions';
+import productActions, { productActionTypes } from './actions';
 
 describe('productActions', () => {
     it('productActions.list.request should return the correct action', () => {

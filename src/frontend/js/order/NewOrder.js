@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import numeral from 'numeral';
 import HelmetTitle from '../app/HelmetTitle';
-import orderActions from './orderActions';
+import orderActions from './actions';
 import NewOrderItem from './NewOrderItem';
 import {
     removeProductFromShoppingCart as removeProductFromShoppingCartAction,
     setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
-} from '../shoppingcart/shoppingCartActions';
+} from '../shoppingcart/actions';
 import ProductPropType from '../product/productPropTypes';
 
 const NewOrder = ({
@@ -66,19 +66,15 @@ NewOrder.propTypes = {
     total: PropTypes.number.isRequired,
 };
 
-function mapStateToProps(state) {
-    return {
-        ...state.shoppingCart,
-        loading: state.order.loading,
-    };
-}
+const mapStateToProps = state => ({
+    ...state.shoppingCart,
+    loading: state.order.loading,
+});
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        placeNewOrder: orderActions.order.request,
-        removeProductFromShoppingCart: removeProductFromShoppingCartAction,
-        setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
-    }, dispatch);
-}
+const mapDispatchToProps = dispatch => bindActionCreators({
+    placeNewOrder: orderActions.order.request,
+    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+    setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewOrder);
