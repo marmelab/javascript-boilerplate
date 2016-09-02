@@ -4,7 +4,6 @@ import orderRoutesFactory from '../order/orderRoutes';
 import userRoutes from '../user/userRoutes';
 
 export default store => ({
-    component: 'div',
     childRoutes: [{
         path: '/',
         component: App,
