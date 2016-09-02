@@ -18,11 +18,15 @@ help:
 copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
 	@cp -n ./config/development-dist.js ./config/development.js | true
 
-install: copy-conf ## Install npm dependencies for the api, admin, and frontend apps
+install-npm-dependencies:
 	@echo "Installing Node dependencies"
 	@npm install
+
+install-selenium:
 	@echo "Installing Selenium server"
 	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.21
+
+install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
 
 # Deployment ===================================================================
 clear-build:  ## Remove precedent build files
