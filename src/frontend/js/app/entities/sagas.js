@@ -14,7 +14,7 @@ export const fetchSagaFactory = (actions, fetch, jwtSelector = () => null) =>
         }
     };
 
-export const takeEveryRequestFactory = (actionTypes, actions, fetch, jwtSelector) =>
+export const takeEveryRequestSagaFactory = (actionTypes, actions, fetch, jwtSelector) =>
     function* sagas() {
         yield* takeEvery(
             actionTypes.REQUEST,
@@ -24,6 +24,6 @@ export const takeEveryRequestFactory = (actionTypes, actions, fetch, jwtSelector
 
 export const entityFactory = (actionTypes, actions, fetchList, fetchItem, jwtSelector) =>
     function* sagas() {
-        yield fork(takeEveryRequestFactory(actionTypes.list, actions.list, fetchList, jwtSelector));
-        yield fork(takeEveryRequestFactory(actionTypes.item, actions.item, fetchItem, jwtSelector));
+        yield fork(takeEveryRequestSagaFactory(actionTypes.list, actions.list, fetchList, jwtSelector));
+        yield fork(takeEveryRequestSagaFactory(actionTypes.item, actions.item, fetchItem, jwtSelector));
     };

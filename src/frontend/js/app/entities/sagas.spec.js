@@ -3,8 +3,8 @@ import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import sinon from 'sinon';
 import {
-    fetchFactory,
-    takeEveryFetchFactory,
+    fetchSagaFactory,
+    takeEveryRequestSagaFactory,
 } from './sagas';
 
 describe('entities sagas', () => {
@@ -15,33 +15,33 @@ describe('entities sagas', () => {
         success: sinon.stub().returnsArg(0),
     };
 
-    describe('fetchFactory', () => {
+    describe('fetchSagaFactory', () => {
         const actionWithoutPayload = {};
         const actionWithPayload = { payload: 'entityId' };
         const successfullFetch = sinon.stub().returns(Promise.resolve({ result: [{ id: 42 }] }));
 
         it('should get the jwt using select and the specified selector', () => {
-            const saga = fetchFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
+            const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
 
             expect(saga.next().value).to.deep.equal(select(jwtSelector));
         });
 
         it('should call the specified fetch function', () => {
-            const saga = fetchFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
+            const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
             saga.next();
 
             expect(saga.next('token').value).to.deep.equal(call(successfullFetch, 'token', undefined));
         });
 
         it('should call the specified fetch function with payload if any', () => {
-            const saga = fetchFactory(actions, successfullFetch, jwtSelector)(actionWithPayload);
+            const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithPayload);
             saga.next();
 
             expect(saga.next('token').value).to.deep.equal(call(successfullFetch, 'token', 'entityId'));
         });
 
         it('should put the actions.success action with response result on successfull fetch', () => { // eslint-disable-line max-len
-            const saga = fetchFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
+            const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
 
             saga.next({});
             saga.next();
@@ -54,7 +54,7 @@ describe('entities sagas', () => {
         it('should put the actions.failure action with error on failed fetch', () => {
             const error = new Error('Run you fools');
             const fetch = sinon.stub().returns(Promise.resolve({ error }));
-            const saga = fetchFactory(actions, fetch, jwtSelector)(actionWithoutPayload);
+            const saga = fetchSagaFactory(actions, fetch, jwtSelector)(actionWithoutPayload);
 
             saga.next();
             saga.next();
@@ -65,13 +65,13 @@ describe('entities sagas', () => {
         });
     });
 
-    describe('takeEveryFetchFactory', () => {
+    describe('takeEveryRequestSagaFactory', () => {
         it('should take every action of type REQUEST', () => {
-            const saga = takeEveryFetchFactory({
+            const saga = takeEveryRequestSagaFactory({
                 REQUEST: 'test/REQUEST',
             })();
             const fetch = sinon.stub().returns(Promise.resolve({ result: [{ id: 42 }] }));
-            const fetchSaga = fetchFactory(actions.list, fetch, jwtSelector);
+            const fetchSaga = fetchSagaFactory(actions.list, fetch, jwtSelector);
 
             expect(saga.next()).to.deep.equal(takeEvery('test/REQUEST', fetchSaga).next()); // eslint-disable-line max-len
         });
