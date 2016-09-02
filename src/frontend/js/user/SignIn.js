@@ -1,28 +1,42 @@
-import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { reduxForm, propTypes } from 'redux-form';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 
 import HelmetTitle from '../app/HelmetTitle';
+import FormGroup from '../ui/FormGroup';
+import SubmitButton from '../ui/SubmitButton';
 import { signIn as signInActions } from './userActions';
 
 const signInSchema = buildSchema({
     email: {
+        label: 'email',
         required: true,
         type: 'email',
     },
     password: {
+        label: 'password',
         required: true,
     },
 });
+
+const renderInput = field => (
+    <FormGroup field={field}>
+        <input
+            {...field.input}
+            className="form-control input-lg"
+            type={field.type}
+        />
+    </FormGroup>
+);
 
 const SignIn = ({
     /* eslint-disable react/prop-types */
     signInError,
     signIn,
     previousRoute,
-    fields: { email, password },
     handleSubmit,
     submitting,
     submitFailed,
@@ -40,40 +54,19 @@ const SignIn = ({
                         </div>
                     }
                     <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
-                        <div className={classNames('form-group', {
-                            'has-error': email.touched && email.error,
-                        })}
-                        >
-                            <input
-                                type="email"
-                                className="form-control input-lg"
-                                placeholder="Your email"
-                                {...email}
-                            />
-                            {email.touched && email.error &&
-                                <span className="help-block">{email.error}</span>
-                            }
-                        </div>
-                        <div className={classNames('form-group', {
-                            'has-error': password.touched && password.error,
-                        })}
-                        >
-                            <input
-                                type="password"
-                                className="form-control input-lg"
-                                placeholder="Your password"
-                                {...password}
-                            />
-                            {password.touched && password.error &&
-                                <span className="help-block">{password.error}</span>
-                            }
-                        </div>
-                        <button type="submit" className={classNames('btn btn-lg btn-primary', {
-                            'btn-danger': signInError || submitFailed,
-                        })} disabled={submitting}
-                        >
+                        <Field
+                            name="email"
+                            component={renderInput}
+                            type="email"
+                        />
+                        <Field
+                            name="password"
+                            component={renderInput}
+                            type="password"
+                        />
+                        <SubmitButton error={signInError || submitFailed} submitting={submitting}>
                             Sign in
-                        </button>
+                        </SubmitButton>
                         <Link
                             className="btn btn-lg btn-link"
                             to={{ pathname: '/sign-up', state: { nextPathname: previousRoute } }}
@@ -99,12 +92,7 @@ SignIn.propTypes = {
     previousRoute: PropTypes.string,
 };
 
-export default reduxForm({
-    form: 'signIn',
-    fields: signInSchema.fields,
-    validate: signInSchema.validate,
-    destroyOnUnmount: false,
-}, state => {
+const mapStateToProps = state => {
     let previousRoute;
     try {
         previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
@@ -116,6 +104,14 @@ export default reduxForm({
         previousRoute,
         signInError: state.user.error,
     };
-}, {
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
     signIn: signInActions.request,
-})(SignIn);
+}, dispatch);
+
+export default reduxForm({
+    form: 'signIn',
+    validate: signInSchema.validate,
+    destroyOnUnmount: false,
+})(connect(mapStateToProps, mapDispatchToProps)(SignIn));

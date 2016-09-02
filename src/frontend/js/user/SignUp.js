@@ -1,9 +1,13 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames';
-import { reduxForm, propTypes } from 'redux-form';
-import buildSchema from 'redux-form-schema';
-import HelmetTitle from '../app/HelmetTitle';
 import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { propTypes, reduxForm, Field } from 'redux-form';
+import buildSchema from 'redux-form-schema';
+
+import HelmetTitle from '../app/HelmetTitle';
+import FormGroup from '../ui/FormGroup';
+import SubmitButton from '../ui/SubmitButton';
 import { signUp as signUpActions } from './userActions';
 
 const signUpSchema = buildSchema({
@@ -26,12 +30,21 @@ const signUpSchema = buildSchema({
     },
 });
 
+const renderInput = field => (
+    <FormGroup field={field}>
+        <input
+            {...field.input}
+            className="form-control input-lg"
+            type={field.type}
+        />
+    </FormGroup>
+);
+
 const SignUp = ({
     /* eslint-disable react/prop-types */
     signUpError,
     signUp,
     previousRoute,
-    fields: { email, password, confirmPassword },
     handleSubmit,
     submitting,
     submitFailed,
@@ -49,54 +62,26 @@ const SignUp = ({
                         </div>
                     }
                     <form onSubmit={handleSubmit(signUp.bind(null, previousRoute))}>
-                        <div className={classNames('form-group', {
-                            'has-error': email.touched && email.error,
-                        })}
-                        >
-                            <input
-                                type="email"
-                                className="form-control input-lg"
-                                placeholder="Your email"
-                                {...email}
-                            />
-                            {email.touched && email.error &&
-                                <span className="help-block">{email.error}</span>
-                            }
-                        </div>
-                        <div className={classNames('form-group', {
-                            'has-error': password.touched && password.error,
-                        })}
-                        >
-                            <input
-                                type="password"
-                                className="form-control input-lg"
-                                placeholder="Your password"
-                                {...password}
-                            />
-                            {password.touched && password.error &&
-                                <span className="help-block">{password.error}</span>
-                            }
-                        </div>
-                        <div className={classNames('form-group', {
-                            'has-error': confirmPassword.touched && confirmPassword.error,
-                        })}
-                        >
-                            <input
-                                type="password"
-                                className="form-control input-lg"
-                                placeholder="Confirm your password"
-                                {...confirmPassword}
-                            />
-                            {confirmPassword.touched && confirmPassword.error &&
-                                <span className="help-block">{confirmPassword.error}</span>
-                            }
-                        </div>
-                        <button type="submit" className={classNames('btn btn-lg btn-primary', {
-                            'btn-danger': signUpError || submitFailed,
-                        })} disabled={submitting}
-                        >
+                        <Field
+                            name="email"
+                            component={renderInput}
+                            type="email"
+                        />
+                        <Field
+                            name="password"
+                            component={renderInput}
+                            type="password"
+                        />
+                        <Field
+                            name="confirmPassword"
+                            component={renderInput}
+                            type="password"
+                        />
+
+                        <SubmitButton error={signUpError || submitFailed} submitting={submitting}>
                             Sign up
-                        </button>
+                        </SubmitButton>
+
                         <Link
                             className="btn btn-lg btn-link"
                             to={{ pathname: '/sign-in', state: { nextPathname: previousRoute } }}
@@ -116,12 +101,7 @@ SignUp.propTypes = {
     previousRoute: PropTypes.string,
 };
 
-export default reduxForm({
-    form: 'signUp',
-    fields: signUpSchema.fields,
-    validate: signUpSchema.validate,
-    destroyOnUnmount: false,
-}, state => {
+const mapStateToProps = state => {
     let previousRoute;
     try {
         previousRoute = state.routing.locationBeforeTransitions.state.nextPathname;
@@ -133,6 +113,14 @@ export default reduxForm({
         previousRoute,
         signInError: state.user.error,
     };
-}, {
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
     signUp: signUpActions.request,
-})(SignUp);
+}, dispatch);
+
+export default reduxForm({
+    form: 'signUp',
+    validate: signUpSchema.validate,
+    destroyOnUnmount: false,
+})(connect(mapStateToProps, mapDispatchToProps)(SignUp));
