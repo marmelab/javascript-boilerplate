@@ -1,16 +1,16 @@
 export default (userOptions = {}) => {
-    let { adapter, ...options } = userOptions;
+    let { adapter } = userOptions;
     adapter = adapter || 'memory';
 
     // window, delay, and max apply per-ip unless global is set to true
-    options = Object.assign({
+    const options = Object.assign({
         // milliseconds - how long to keep records of requests in memory
         duration: 60 * 1000,
         // max number of recent connections during `window` miliseconds before
         // sending a 429 response
         max: 5,
-    }, options);
+    }, userOptions, { adapter: undefined });
 
-    const adapterImplementation = require(`./${adapter}`);
+    const adapterImplementation = require(`./${adapter}`).default; // eslint-disable-line global-require, max-len
     return adapterImplementation(options);
 };

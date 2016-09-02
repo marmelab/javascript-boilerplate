@@ -1,10 +1,12 @@
 import co from 'co';
 import coBody from 'co-body';
 import config from 'config';
-import crud from '../lib/middlewares/pgCrud';
 import koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
+import uuid from 'uuid';
+
+import crud from '../lib/middlewares/pgCrud';
 import methodFilter from '../lib/middlewares/methodFilter';
 import orderFactory, { OrderStatus } from './orderModel';
 import prepareNewOrderMail from './mails/newOrderMail';
@@ -13,7 +15,6 @@ import sendEmailsFactory from '../lib/mails/sendEmails';
 import tokenCheckerMiddleware from '../lib/middlewares/tokenChecker';
 import transporterFactory from '../lib/mails/transporter';
 import userFactory from '../users/userModel';
-import uuid from 'uuid';
 
 const mailConfig = config.apps.api.mails;
 const transporter = transporterFactory(mailConfig.transporter);
@@ -42,12 +43,9 @@ app.use(koaRoute.post('/', function* postUserOrder(next) {
     const orderData = yield coBody(this);
     const productQueries = this.productQueries;
     const products = yield orderData.products.map(co.wrap(function* getProduct(p) {
-    const product = yield productQueries.selectOneById(p.id);
+        const product = yield productQueries.selectOneById(p.id);
 
-        return {
-            ...p,
-            ...product,
-        };
+        return Object.assign({}, p, product);
     }));
 
     const total = products.reduce((t, p) => t + p.price * (p.quantity || 1), 0);

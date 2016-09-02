@@ -16,9 +16,8 @@ export default client => {
 
     const queries = queriesFactory(client, tableName, exposedFields);
 
-    return {
-        tableName,
+    return Object.assign({
         exposedFields,
-        ...queries,
-    };
+        tableName,
+    }, queries);
 };

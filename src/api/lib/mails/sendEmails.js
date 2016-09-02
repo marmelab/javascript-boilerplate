@@ -3,13 +3,10 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
         throw new Error('Invalid transporter');
     }
 
-    const defaultEmail = {attachments: [], ...defaultOptions};
+    const defaultEmail = Object.assign({ attachments: [] }, defaultOptions);
 
     const wrapMail = email => {
-        const cleanedEmail = {
-            ...defaultEmail,
-            ...email,
-        };
+        const cleanedEmail = Object.assign({}, defaultEmail, email);
 
         if (cleanedEmail.emitter) {
             if (!cleanedEmail.from) {

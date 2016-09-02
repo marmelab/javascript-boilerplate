@@ -11,12 +11,8 @@ export default (client, table, fields, idFieldName) =>
             const parameters = {};
             parameters[fieldName] = id;
 
-            return ({
-                ...query,
-                parameters: {
-                    ...query.parameters,
-                    ...parameters,
-                },
+            return Object.assign({}, query, {
+                parameters: Object.assign({}, query.parameters, parameters),
                 sql: [...query.sql, `$${fieldName}`],
             });
         }, {

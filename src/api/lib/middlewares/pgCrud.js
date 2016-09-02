@@ -16,7 +16,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     let queries;
 
     app.use(function* (next) {
-        this.availableMethods = { ...defaultMethods, ...configuredMethods };
+        this.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
 
         yield next;
     });

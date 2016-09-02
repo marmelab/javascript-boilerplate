@@ -4,6 +4,7 @@ import config from 'config';
 import jwt from 'jsonwebtoken';
 import koa from 'koa';
 import koaRoute from 'koa-route';
+
 import methodFilter from '../lib/middlewares/methodFilter';
 import rateLimiter from '../lib/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
@@ -28,11 +29,10 @@ app.use(koaRoute.post('/', function* login() {
     const delay = config.apps.api.security.expirationTokenDelay * 1000;
     const tokenExpires = (new Date((new Date()).getTime() + delay));
 
-    this.cookies.set('token', cookieToken, {
-        ...config.apps.api.cookies,
+    this.cookies.set('token', cookieToken, Object.assign({}, config.apps.api.cookies, {
         expires: tokenExpires,
         httpOnly: true,
-    });
+    }));
 
     this.body = {
         id: user.id,
