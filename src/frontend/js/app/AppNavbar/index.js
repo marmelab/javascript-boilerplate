@@ -15,9 +15,9 @@ NavbarItem.propTypes = {
 
 const AppNavbar = ({ user, signOut }) => (
     <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
-        <a className="navbar-brand" href="/home">New App</a>
+        <Link className="navbar-brand" to="/products">New App</Link>
         <ul className="nav navbar-nav">
-            <NavbarItem to="/home">Home</NavbarItem>
+            <NavbarItem to="/products">Home</NavbarItem>
             <NavbarItem to="/products">Products</NavbarItem>
             <NavbarItem to="/orders">Orders</NavbarItem>
         </ul>
