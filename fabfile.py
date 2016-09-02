@@ -63,4 +63,4 @@ def deploy_static(branch='master'):
     local('git pull')
     local('rm -rf build/*')
     local('NODE_ENV=%s make build' % env.environment)
-    local('aws --region=eu-west-1 s3 sync ./build/ s3://%s/' % env.s3_bucket)
+    local('aws --region=eu-west-1 s3 sync ./build/frontend s3://%s/' % env.s3_bucket)
