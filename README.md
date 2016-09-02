@@ -37,7 +37,7 @@ The boilerplate contains a sample app with three domains: users, products, and o
 
 Requirements:
 
-* Node.js V5
+* Node.js v6.5
 * PostgreSQL
 
 ```sh
