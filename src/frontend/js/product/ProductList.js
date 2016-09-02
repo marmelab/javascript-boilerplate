@@ -8,7 +8,24 @@ import productActions from './productActions';
 import { addProductToShoppingCart } from '../shoppingcart/shoppingCartActions';
 import ProductPropType from './productPropTypes';
 
-class ProductList extends Component {
+const ProductList = ({ orderProduct, products }) => (
+    <div className="col-xs-12">
+        <div className="row">
+            {products.map(product => (
+                <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
+                    <ProductItem {... { ...product, orderProduct }} />
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
+ProductList.propTypes = {
+    products: PropTypes.arrayOf(PropTypes.shape(ProductPropType)),
+    orderProduct: PropTypes.func.isRequired,
+};
+
+class ProductListContainer extends Component {
     componentDidMount() {
         this.props.loadProducts();
     }
@@ -24,19 +41,13 @@ class ProductList extends Component {
                         <Loading />
                     </div>
                 }
-                {!loading &&
-                    products.map(product => (
-                        <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
-                            <ProductItem {...product} orderProduct={orderProduct} />
-                        </div>
-                    ))
-                }
+                {!loading && <ProductList {... { orderProduct, products }} /> }
             </div>
         );
     }
 }
 
-ProductList.propTypes = {
+ProductListContainer.propTypes = {
     products: PropTypes.arrayOf(PropTypes.shape(ProductPropType)),
     loading: PropTypes.bool.isRequired,
     loadProducts: PropTypes.func.isRequired,
@@ -57,4 +68,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListContainer);
