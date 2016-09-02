@@ -7,7 +7,7 @@ ADMIN_PASSWORD ?= password
 
 CLIENT_NAME ?= leonard
 CLIENT_EMAIL ?= leonard@newapp.com
-CLIENT_PASSWORD ?= supadupa42!
+CLIENT_PASSWORD ?= password
 
 PM2_HOME ?= .pm2
 
