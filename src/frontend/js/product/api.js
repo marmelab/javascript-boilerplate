@@ -1,4 +1,4 @@
-import { fetchEntitiesFactory, fetchEntityFactory } from '../app/entities/fetchEntities';
+import fetchFactory from '../app/entities/fetchEntities';
 
-export const fetchProducts = fetchEntitiesFactory('products');
-export const fetchProduct = fetchEntityFactory('products');
+export const fetchProducts = fetchFactory('products');
+export const fetchProduct = fetchFactory('products');

@@ -1,8 +1,8 @@
 /* globals API_URL */
-import { fetchEntitiesFactory, fetchEntityFactory } from '../app/entities/fetchEntities';
+import fetchFactory from '../app/entities/fetchEntities';
 
-export const fetchOrders = fetchEntitiesFactory('orders');
-export const fetchOrder = fetchEntityFactory('orders');
+export const fetchOrders = fetchFactory('orders');
+export const fetchOrder = fetchFactory('orders');
 
 export const fetchNewOrder = (products, jwt) => fetch(`${API_URL}/orders`, {
     headers: {
