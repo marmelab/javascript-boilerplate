@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { expect } from 'chai';
 import { routerActions } from 'react-router-redux';
 import { call, put, select } from 'redux-saga/effects';

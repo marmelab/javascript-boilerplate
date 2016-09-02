@@ -5,6 +5,7 @@ import resolve from './resolve';
 import { definePlugin } from './plugins';
 
 export default {
+    cache: true,
     entry: {
         index: [
             `${__dirname}/../src/frontend/js/main.js`,

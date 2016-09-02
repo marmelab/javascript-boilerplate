@@ -5,7 +5,6 @@ describe('orderActions', () => {
     it('orderActions.list.request should return the correct action', () => {
         expect(orderActions.list.request()).to.deep.equal({
             type: orderActionTypes.list.REQUEST,
-            payload: undefined,
         });
     });
 
@@ -28,7 +27,6 @@ describe('orderActions', () => {
     it('orderActions.item.request should return the correct action', () => {
         expect(orderActions.item.request()).to.deep.equal({
             type: orderActionTypes.item.REQUEST,
-            payload: undefined,
         });
     });
 
@@ -51,7 +49,6 @@ describe('orderActions', () => {
     it('orderActions.order.request should return the correct action', () => {
         expect(orderActions.order.request()).to.deep.equal({
             type: orderActionTypes.order.REQUEST,
-            payload: undefined,
         });
     });
 

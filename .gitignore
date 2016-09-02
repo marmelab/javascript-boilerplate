@@ -8,3 +8,4 @@ fabfile.pyc
 selenium-debug.log
 e2e/**/reports
 .tern-project
+.pm2

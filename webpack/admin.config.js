@@ -3,6 +3,7 @@ import loaders from './loaders';
 import { definePlugin, extractTextPlugin } from './plugins';
 
 export default {
+    cache: true,
     entry: {
         index: [
             `${__dirname}/../src/admin/js/main.js`,
