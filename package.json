@@ -107,12 +107,12 @@
     "react-addons-test-utils": "15.3.1",
     "redux-mock-store": "1.1.4",
     "sass-loader": "4.0.0",
-    "selenium-standalone": "5.5.0",
+    "selenium-standalone": "5.6.0",
     "sinon": "1.17.5",
     "sinon-chai": "2.8.0",
     "url-loader": "0.5.7",
     "webpack": "1.13.2",
-    "webpack-dev-server": "1.14.1"
+    "webpack-dev-server": "1.15.0"
   },
   "scripts": {
     "test": "make test"
