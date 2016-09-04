@@ -7,7 +7,7 @@ module.exports = {
     appName: 'New App',
     apps: {
         admin: {
-            api_url: `${apiUrl}/admin/`,
+            api_url: `${apiUrl}/admin`,
         },
         api: {
             allowedOrigins,

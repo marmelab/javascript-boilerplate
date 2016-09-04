@@ -7,7 +7,6 @@ export default {
     entry: {
         index: [
             `${__dirname}/../src/admin/js/main.js`,
-            `${__dirname}/../src/admin/css/main.scss`,
         ],
         login: [
             `${__dirname}/../src/admin/js/login.js`,
