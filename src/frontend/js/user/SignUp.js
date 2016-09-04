@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 
 import Alert from '../ui/Alert';
 import { BigLinkButton } from '../ui/LinkButton';
-import HelmetTitle from '../app/HelmetTitle';
 import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signUp as signUpActions } from './actions';
 import { getPreviousRoute } from './reducer';
+import withWindowTitle from '../app/withWindowTitle';
 
 const signUpSchema = buildSchema({
     email: {
@@ -52,14 +54,13 @@ const SignUp = ({
     /* eslint-enable react/prop-types */
 }) => (
     <div className="container signUp">
-        <HelmetTitle title="Sign up" />
         <div className="row">
             <div className="col-xs-12">
                 <div className="jumbotron">
                     <h2 className="display-4">Sign up</h2>
                     {signUpError && <Alert>{signUpError.message}</Alert>}
 
-                    <form onSubmit={handleSubmit(signUp.bind(null, previousRoute))}>
+                    <form onSubmit={handleSubmit(signUp)}>
                         <Field
                             name="email"
                             component={renderInput}
@@ -103,8 +104,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = ({ signUp: signUpActions.request });
 
-export default reduxForm({
-    form: 'signUp',
-    validate: signUpSchema.validate,
-    destroyOnUnmount: false,
-})(connect(mapStateToProps, mapDispatchToProps)(SignUp));
+export default compose(
+    reduxForm({
+        form: 'signUp',
+        validate: signUpSchema.validate,
+        destroyOnUnmount: false,
+    }),
+    connect(mapStateToProps, mapDispatchToProps),
+    withHandlers({
+        signUp: props => values => props.signUp(props.previousRoute, values),
+    }),
+    withWindowTitle('Sign up'),
+)(SignUp);

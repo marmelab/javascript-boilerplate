@@ -4,7 +4,7 @@ import { call, fork, put, select } from 'redux-saga/effects';
 export const fetchSagaFactory = (actions, fetch, jwtSelector = () => null) =>
     function* fetchSaga({ payload }) {
         const jwt = yield select(jwtSelector);
-        const { error, result } = yield call(fetch, jwt, payload);
+        const { error, result } = yield call(fetch, { jwt, ...payload });
 
         if (error) {
             console.error({ error }); // eslint-disable-line no-console
@@ -12,6 +12,8 @@ export const fetchSagaFactory = (actions, fetch, jwtSelector = () => null) =>
         } else {
             yield put(actions.success(result));
         }
+
+        return { error, result };
     };
 
 export const takeEveryRequestSagaFactory = (actionTypes, actions, fetch, jwtSelector) =>

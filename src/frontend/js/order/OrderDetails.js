@@ -1,75 +1,60 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import numeral from 'numeral';
-import HelmetTitle from '../app/HelmetTitle';
-import Loading from '../app/Loading';
 import orderActions from './actions';
 import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
-import { getOrderById } from './reducer';
+import { getOrderById } from './selectors';
+import withFetchingOnMount from '../app/withFetchingOnMount';
+import withWindowTitle from '../app/withWindowTitle';
 
-class OrderDetails extends Component {
-    componentDidMount() {
-        this.props.loadOrder(this.props.orderId);
-    }
-
-    render() {
-        const { loading, order } = this.props;
-
-        if (loading || !order) {
-            return (
-                <div className="col-xs-12">
-                    <Loading />
-                </div>
-            );
-        }
-
-        const { reference, date, total, status, products } = order;
-        const formattedDate = moment(date).format('L');
-
-        return (
-            <div className="shopping-cart list-group">
-                <HelmetTitle title={`Order ${reference} - ${formattedDate}`} />
-                <h2>
-                    <OrderStatusBadge status={status} />
-                    #{reference} - {formattedDate}
-                </h2>
-                <div className="list-group">
-                    {products.map(product => (
-                        <OrderProductItem
-                            key={product.product_id}
-                            id={product.product_id}
-                            {...product}
-                        />
-                    ))}
-                    <div className="list-group-item text-xs-right lead">
-                        TOTAL: {numeral(total).format('$0.00')}
-                    </div>
-                </div>
+const OrderDetails = ({ order: { reference, date, total, status, products } }) => (
+    <div className="shopping-cart list-group">
+        <h2>
+            <OrderStatusBadge status={status} />
+            #{reference} - {moment(date).format('L')}
+        </h2>
+        <div className="list-group">
+            {products.map((product, index) => (
+                <OrderProductItem
+                    key={index}
+                    id={product.product_id}
+                    {...product}
+                />
+            ))}
+            <div className="list-group-item text-xs-right lead">
+                TOTAL: {numeral(total).format('$0.00')}
             </div>
-        );
-    }
-}
+        </div>
+    </div>
+);
 
 OrderDetails.propTypes = {
-    orderId: PropTypes.number.isRequired,
-    loading: PropTypes.bool.isRequired,
     order: PropTypes.shape(OrderItem.propTypes),
-    loadOrder: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => ({ order: state.order.item });
+
+const dataStateSelector = (state, ownProps) => {
     const orderId = parseInt(ownProps.params.id, 10);
+    return state.order.item || getOrderById(state, orderId);
+};
+const paramsStateSelector = (state, ownProps) => ownProps.routeParams.id;
+const loadingStateSelector = state => state.order.loading;
+const titleStateSelector = (state, ownProps) => {
+    const orderId = parseInt(ownProps.routeParams.id, 10);
+    const order = state.order.item || getOrderById(state, orderId);
 
-    return {
-        loading: state.order.loading,
-        orderId,
-        order: state.order.item || getOrderById(state, orderId),
-    };
+    if (order) return `Order ${order.reference} - ${moment(order.date).format('L')}`;
+
+    return null;
 };
 
-const mapDispatchToProps = ({ loadOrder: orderActions.item.request });
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderDetails);
+export default compose(
+    withFetchingOnMount(orderActions.item.request, dataStateSelector, paramsStateSelector, loadingStateSelector),
+    withWindowTitle(titleStateSelector),
+    connect(mapStateToProps),
+)(OrderDetails);

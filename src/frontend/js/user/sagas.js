@@ -1,6 +1,7 @@
 import { routerActions } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
+import { fetchSagaFactory } from '../app/entities/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,
@@ -15,28 +16,19 @@ import {
     userActionTypes,
 } from './actions';
 
-export const signIn = (fetchSignIn, storeLocalUser) => function* signInSaga({
-    payload: { email, password, previousRoute },
-}) {
-    const { error, user } = yield call(fetchSignIn, email, password);
-    if (error) {
-        yield put(signInActions.failure(error));
-    } else {
-        yield call(storeLocalUser, user);
-        yield put(signInActions.success(user));
+export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
+    const { error, result } = yield call(fetchSaga, { payload });
+    if (!error) {
+        yield call(storeLocalUser, result);
         yield put(routerActions.push(previousRoute));
     }
 };
 
-export const signUp = (fetchSignUp, storeLocalUser) => function* signUpSaga({
-    payload: { email, password, previousRoute },
-}) {
-    const { error, user } = yield call(fetchSignUp, email, password);
-    if (error) {
-        yield put(signUpActions.failure(error));
-    } else {
-        yield call(storeLocalUser, user);
-        yield put(signUpActions.success(user));
+export const signUp = (fetchSaga, storeLocalUser) => function* signUpSaga({ payload: { previousRoute, ...payload } }) {
+    const { error, result } = yield call(fetchSaga, { payload });
+
+    if (!error) {
+        yield call(storeLocalUser, result);
         yield put(routerActions.push(previousRoute));
     }
 };
@@ -49,8 +41,8 @@ export const signOut = removeLocalUser => function* signOutSaga() {
 
 const sagas = function* sagas() {
     yield [
-        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSignInApi, storeLocalUserApi)),
-        takeLatest(userActionTypes.signUp.REQUEST, signUp(fetchSignUpApi, storeLocalUserApi)),
+        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi)),
+        takeLatest(userActionTypes.signUp.REQUEST, signUp(fetchSagaFactory(signUpActions, fetchSignUpApi), storeLocalUserApi)),
         takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
     ];
 };

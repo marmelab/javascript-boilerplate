@@ -1,49 +1,41 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
+import withHandlers from 'recompose/withHandlers';
+
 import ProductPropType from './productPropTypes';
 
-class ProductItem extends Component {
-    orderProduct = () => {
-        /* eslint-disable react/prop-types */
-        const { id, reference, description, price, thumbnail, orderProduct } = this.props;
-        /* eslint-enable react/prop-types */
+export const ProductItem = ({ product, orderProduct }) => {
+    const { id, reference, description, price, thumbnail } = product;
 
-        orderProduct({ id, reference, description, price, thumbnail });
-    }
-
-    render() {
-        /* eslint-disable react/prop-types */
-        const { id, reference, description, price, thumbnail } = this.props;
-        /* eslint-enable react/prop-types */
-
-        return (
-            <div className="card product-item">
-                <Link to={`/products/${id}`} className="card-link">
-                    <img src={thumbnail} alt={reference} className="card-img-top img-fluid" />
-                </Link>
-                <div className="card-block">
-                    <h4 className="card-title">{reference}</h4>
-                    <h6 className="card-subtitle text-muted">{numeral(price).format('$0.00')}</h6>
-                </div>
-                <div className="card-block">
-                    <p className="card-text">{description}</p>
-                    <Link to={`/products/${id}`} className="card-link">Details</Link>
-                    <a
-                        onClick={this.orderProduct}
-                        className="card-link btn btn-primary"
-                    >
-                        Buy
-                    </a>
-                </div>
+    return (
+        <div className="card product-item">
+            <Link to={`/products/${id}`} className="card-link">
+                <img src={thumbnail} alt={reference} className="card-img-top img-fluid" />
+            </Link>
+            <div className="card-block">
+                <h4 className="card-title">{reference}</h4>
+                <h6 className="card-subtitle text-muted">{numeral(price).format('$0.00')}</h6>
             </div>
-        );
-    }
-}
+            <div className="card-block">
+                <p className="card-text">{description}</p>
+                <Link to={`/products/${id}`} className="card-link">Details</Link>
+                <a
+                    onClick={orderProduct}
+                    className="card-link btn btn-primary"
+                >
+                    Buy
+                </a>
+            </div>
+        </div>
+    );
+};
 
 ProductItem.propTypes = {
-    ...ProductPropType,
+    product: PropTypes.shape(ProductPropType),
     orderProduct: PropTypes.func.isRequired,
 };
 
-export default ProductItem;
+export default withHandlers({
+    orderProduct: props => () => { props.orderProduct(props.product); },
+})(ProductItem);

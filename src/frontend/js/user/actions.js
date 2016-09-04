@@ -10,7 +10,7 @@ export const userActionTypes = {
 export const signIn = {
     request: createAction(userActionTypes.signIn.REQUEST, (previousRoute, credentials) => ({
         previousRoute,
-        ...credentials,
+        body: credentials,
     })),
     success: createAction(userActionTypes.signIn.SUCCESS),
     failure: createAction(userActionTypes.signIn.FAILURE),
@@ -19,7 +19,7 @@ export const signIn = {
 export const signUp = {
     request: createAction(userActionTypes.signUp.REQUEST, (previousRoute, credentials) => ({
         previousRoute,
-        ...credentials,
+        body: credentials,
     })),
     success: createAction(userActionTypes.signUp.SUCCESS),
     failure: createAction(userActionTypes.signUp.FAILURE),

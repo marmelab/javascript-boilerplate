@@ -1,15 +1,18 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 import { Link } from 'react-router';
 import HelmetTitle from '../app/HelmetTitle';
-import Loading from '../app/Loading';
 import productActions from './actions';
 import ProductPropType from './productPropTypes';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
 import { getProductById } from './reducer';
+import withFetchingOnMount from '../app/withFetchingOnMount';
+import withWindowTitle from '../app/withWindowTitle';
 
-const ProductDetails = ({ reference, description, price, image, orderProduct }) => (
+const ProductDetails = ({ product: { reference, description, price, image }, orderProduct }) => (
     <div className="row product-details">
         <HelmetTitle title={name} />
         <div className="col-xs-12 col-md-4 col-lg-3">
@@ -22,59 +25,24 @@ const ProductDetails = ({ reference, description, price, image, orderProduct }) 
             <p>
                 <button
                     onClick={orderProduct}
-                    className="btn btn-primary"
+                    className="btn btn-lg btn-primary"
                 >
                     Buy
                 </button>
-                <Link to="/products" className="btn btn-link">Return to product list</Link>
+                <Link to="/products" className="btn btn-lg btn-link">Return to product list</Link>
             </p>
         </div>
     </div>
 );
 
-ProductDetails.propTypes = ProductPropType;
-
-class ProductDetailsContainer extends Component {
-    componentDidMount() {
-        if (!this.props.product) {
-            this.props.loadProduct(this.props.productId);
-        }
-    }
-
-    orderProduct = () => {
-        const { orderProduct, product } = this.props;
-        orderProduct(product);
-    }
-
-    render() {
-        const { loading, product } = this.props;
-
-        if (loading || !product) {
-            return (
-                <div className="col-xs-12">
-                    <Loading />
-                </div>
-            );
-        }
-
-        return <ProductDetails {... { ...product, orderProduct: this.orderProduct }} />;
-    }
-}
-
-ProductDetailsContainer.propTypes = {
-    productId: PropTypes.number.isRequired,
-    loading: PropTypes.bool.isRequired,
+ProductDetails.propTypes = {
     product: PropTypes.shape(ProductPropType),
-    loadProduct: PropTypes.func.isRequired,
     orderProduct: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
     const productId = parseInt(ownProps.params.id, 10);
-
     return {
-        loading: state.product.loading,
-        productId,
         product: state.product.item || getProductById(state, productId),
     };
 };
@@ -84,4 +52,26 @@ const mapDispatchToProps = ({
     orderProduct: addProductToShoppingCart,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailsContainer);
+const dataStateSelector = (state, ownProps) => {
+    const productId = parseInt(ownProps.params.id, 10);
+    return state.product.item || getProductById(state, productId);
+};
+const paramsStateSelector = (state, ownProps) => ownProps.routeParams.id;
+const loadingStateSelector = state => state.product.loading;
+const titleStateSelector = (state, ownProps) => {
+    const productId = parseInt(ownProps.routeParams.id, 10);
+    const product = state.product.item || getProductById(state, productId);
+
+    if (product) return product.name;
+
+    return null;
+};
+
+export default compose(
+    withFetchingOnMount(productActions.item.request, dataStateSelector, paramsStateSelector, loadingStateSelector),
+    withWindowTitle(titleStateSelector),
+    connect(mapStateToProps, mapDispatchToProps),
+    withHandlers({
+        orderProduct: props => () => { props.orderProduct(props.product); },
+    })
+)(ProductDetails);

@@ -7,7 +7,7 @@ import {
     takeEveryRequestSagaFactory,
 } from './sagas';
 
-describe('entities sagas', () => {
+describe('fetch sagas', () => {
     const jwtSelector = () => 'token';
 
     const actions = {
@@ -17,7 +17,7 @@ describe('entities sagas', () => {
 
     describe('fetchSagaFactory', () => {
         const actionWithoutPayload = {};
-        const actionWithPayload = { payload: 'entityId' };
+        const actionWithPayload = { payload: { id: 'entityId' } };
         const successfullFetch = sinon.stub().returns(Promise.resolve({ result: [{ id: 42 }] }));
 
         it('should get the jwt using select and the specified selector', () => {
@@ -30,14 +30,14 @@ describe('entities sagas', () => {
             const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithoutPayload);
             saga.next();
 
-            expect(saga.next('token').value).to.deep.equal(call(successfullFetch, 'token', undefined));
+            expect(saga.next('token').value).to.deep.equal(call(successfullFetch, { jwt: 'token' }));
         });
 
         it('should call the specified fetch function with payload if any', () => {
             const saga = fetchSagaFactory(actions, successfullFetch, jwtSelector)(actionWithPayload);
             saga.next();
 
-            expect(saga.next('token').value).to.deep.equal(call(successfullFetch, 'token', 'entityId'));
+            expect(saga.next('token').value).to.deep.equal(call(successfullFetch, { jwt: 'token', id: 'entityId' }));
         });
 
         it('should put the actions.success action with response result on successfull fetch', () => { // eslint-disable-line max-len

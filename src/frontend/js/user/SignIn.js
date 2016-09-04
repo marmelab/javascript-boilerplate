@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
 
 import Alert from '../ui/Alert';
 import { BigLinkButton } from '../ui/LinkButton';
-import HelmetTitle from '../app/HelmetTitle';
 import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signIn as signInActions } from './actions';
 import { getPreviousRoute } from './reducer';
+import withWindowTitle from '../app/withWindowTitle';
 
 const signInSchema = buildSchema({
     email: {
@@ -44,14 +46,13 @@ const SignIn = ({
     /* eslint-enable react/prop-types */
 }) => (
     <div className="container signIn">
-        <HelmetTitle title="Sign in" />
         <div className="row">
             <div className="col-xs-12">
                 <div className="jumbotron">
                     <h2 className="display-4">Sign in</h2>
                     {signInError && <Alert>{signInError.message}</Alert>}
 
-                    <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
+                    <form onSubmit={handleSubmit(signIn)}>
                         <Field
                             name="email"
                             component={renderInput}
@@ -91,8 +92,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = ({ signIn: signInActions.request });
 
-export default reduxForm({
-    form: 'signIn',
-    validate: signInSchema.validate,
-    destroyOnUnmount: false,
-})(connect(mapStateToProps, mapDispatchToProps)(SignIn));
+export default compose(
+    reduxForm({
+        form: 'signIn',
+        validate: signInSchema.validate,
+        destroyOnUnmount: false,
+    }),
+    connect(mapStateToProps, mapDispatchToProps),
+    withHandlers({
+        signIn: props => values => props.signIn(props.previousRoute, values),
+    }),
+    withWindowTitle('Sign in'),
+)(SignIn);
