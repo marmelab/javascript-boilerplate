@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import { Admin, Resource } from 'admin-on-rest';
 
 import restClient from './restClient';
+import Layout from './Layout';
 import { ProductList, ProductEdit, ProductCreate, ProductIcon } from './products';
 import { OrderList, OrderEdit, OrderCreate, OrderIcon } from './orders';
 
@@ -28,7 +29,7 @@ const tokenExpires = window.localStorage.getItem('expires');
 if (tokenExpires && tokenExpires < currentTime) logout();
 
 render(
-    <Admin restClient={restClient(ADMIN_API_URL, () => window.localStorage.getItem('token'), logout)}>
+    <Admin restClient={restClient(ADMIN_API_URL, () => window.localStorage.getItem('token'), logout)} appLayout={Layout}>
         <Resource name="products" list={ProductList} edit={ProductEdit} create={ProductCreate} icon={ProductIcon} />
         <Resource name="orders" list={OrderList} edit={OrderEdit} create={OrderCreate} icon={OrderIcon} />
     </Admin>,
