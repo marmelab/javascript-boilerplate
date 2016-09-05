@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RouteTransition } from 'react-router-transition';
 import HelmetTitle from './HelmetTitle';
@@ -60,12 +59,8 @@ App.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-    user: state.user,
-});
+const mapStateToProps = state => ({ user: state.user });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    signOut: signOutActions.request,
-}, dispatch);
+const mapDispatchToProps = ({ signOut: signOutActions.request });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

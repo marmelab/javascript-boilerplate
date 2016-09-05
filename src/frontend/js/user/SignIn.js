@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
@@ -10,7 +9,7 @@ import HelmetTitle from '../app/HelmetTitle';
 import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signIn as signInActions } from './actions';
-import { getPreviousRoute } from './selectors';
+import { getPreviousRoute } from './reducer';
 
 const signInSchema = buildSchema({
     email: {
@@ -90,9 +89,7 @@ const mapStateToProps = state => ({
     signInError: state.user.error,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    signIn: signInActions.request,
-}, dispatch);
+const mapDispatchToProps = ({ signIn: signInActions.request });
 
 export default reduxForm({
     form: 'signIn',

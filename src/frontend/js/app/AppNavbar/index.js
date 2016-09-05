@@ -17,7 +17,6 @@ const AppNavbar = ({ user, signOut }) => (
     <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
         <Link className="navbar-brand" to="/products">New App</Link>
         <ul className="nav navbar-nav">
-            <NavbarItem to="/products">Home</NavbarItem>
             <NavbarItem to="/products">Products</NavbarItem>
             <NavbarItem to="/orders">Orders</NavbarItem>
         </ul>

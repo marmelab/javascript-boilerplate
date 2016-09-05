@@ -7,6 +7,7 @@ export default store => ({
     childRoutes: [{
         path: '/',
         component: App,
+        indexRoute: { onEnter: (nextState, replace) => replace('/products') },
         childRoutes: [
             ...productRoutes,
             ...orderRoutesFactory(store),

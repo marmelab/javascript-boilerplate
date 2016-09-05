@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
@@ -59,9 +58,9 @@ const mapStateToProps = state => ({
     products: state.product.list,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = ({
     loadProducts: productActions.list.request,
     orderProduct: addProductToShoppingCart,
-}, dispatch);
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListContainer);

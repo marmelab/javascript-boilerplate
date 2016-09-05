@@ -13,13 +13,7 @@ const UserNavbarItem = ({ user, signOut }) => (
                 {user.email}
             </a>
             <div className="dropdown-menu">
-                <a
-                    className="dropdown-item"
-                    onClick={signOut}
-                    role="button"
-                >
-                    Sign out
-                </a>
+                <a className="dropdown-item" onClick={signOut} role="button">Sign out</a>
             </div>
         </li>
     </ul>

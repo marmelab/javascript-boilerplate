@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import numeral from 'numeral';
@@ -9,6 +8,7 @@ import orderActions from './actions';
 import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
+import { getOrderById } from './reducer';
 
 class OrderDetails extends Component {
     componentDidMount() {
@@ -60,14 +60,16 @@ OrderDetails.propTypes = {
     loadOrder: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-    loading: state.order.loading,
-    orderId: parseInt(ownProps.params.id, 10),
-    order: state.order.item,
-});
+const mapStateToProps = (state, ownProps) => {
+    const orderId = parseInt(ownProps.params.id, 10);
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    loadOrder: orderActions.item.request,
-}, dispatch);
+    return {
+        loading: state.order.loading,
+        orderId,
+        order: state.order.item || getOrderById(state, orderId),
+    };
+};
+
+const mapDispatchToProps = ({ loadOrder: orderActions.item.request });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetails);

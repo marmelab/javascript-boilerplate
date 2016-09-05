@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 import { Link } from 'react-router';
@@ -8,7 +7,7 @@ import Loading from '../app/Loading';
 import productActions from './actions';
 import ProductPropType from './productPropTypes';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
-import { getProductById } from './selectors';
+import { getProductById } from './reducer';
 
 const ProductDetails = ({ reference, description, price, image, orderProduct }) => (
     <div className="row product-details">
@@ -80,9 +79,9 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = ({
     loadProduct: productActions.item.request,
     orderProduct: addProductToShoppingCart,
-}, dispatch);
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailsContainer);

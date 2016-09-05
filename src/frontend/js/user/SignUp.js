@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
@@ -10,7 +9,7 @@ import HelmetTitle from '../app/HelmetTitle';
 import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signUp as signUpActions } from './actions';
-import { getPreviousRoute } from './selectors';
+import { getPreviousRoute } from './reducer';
 
 const signUpSchema = buildSchema({
     email: {
@@ -102,9 +101,7 @@ const mapStateToProps = state => ({
     signUpError: state.user.error,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    signUp: signUpActions.request,
-}, dispatch);
+const mapDispatchToProps = ({ signUp: signUpActions.request });
 
 export default reduxForm({
     form: 'signUp',

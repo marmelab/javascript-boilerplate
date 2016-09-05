@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import HelmetTitle from '../app/HelmetTitle';
 import Loading from '../app/Loading';
@@ -38,17 +37,11 @@ OrderList.propTypes = {
     loadOrders: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-    return {
-        loading: state.order.loading,
-        orders: state.order.list,
-    };
-}
+const mapStateToProps = state => ({
+    loading: state.order.loading,
+    orders: state.order.list,
+});
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        loadOrders: orderActions.list.request,
-    }, dispatch);
-}
+const mapDispatchToProps = ({ loadOrders: orderActions.list.request });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderList);
