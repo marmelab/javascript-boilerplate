@@ -1,4 +1,4 @@
-import { userActionTypes } from './userActions';
+import { userActionTypes } from './actions';
 
 export default function (localStorage) {
     const notExpired = localStorage.getItem('expires') > (new Date()).getTime();
@@ -61,3 +61,11 @@ export default function (localStorage) {
         }
     };
 }
+
+export const getPreviousRoute = state => {
+    if (state.routing && state.routing.locationBeforeTransitions && state.routing.locationBeforeTransitions.state) {
+        return state.routing.locationBeforeTransitions.state.nextPathname;
+    }
+
+    return '/';
+};

@@ -6,12 +6,7 @@ import { Link } from 'react-router';
 import ProductPropType from '../product/productPropTypes';
 
 class ShoppingCartItem extends Component {
-    constructor() {
-        super();
-        this.removeProductFromShoppingCart = this.removeProductFromShoppingCart.bind(this);
-    }
-
-    removeProductFromShoppingCart() {
+    removeProductFromShoppingCart = () => {
         const { id, removeProductFromShoppingCart } = this.props;
         removeProductFromShoppingCart(id);
     }

@@ -4,9 +4,9 @@ import { routerActions } from 'react-router-redux';
 import { call, put, select } from 'redux-saga/effects';
 import sinon from 'sinon';
 
-import orderActions from './orderActions';
-import { newOrder as newOrderSaga } from './orderSagas';
-import { clearShoppingCart } from '../shoppingcart/shoppingCartActions';
+import orderActions from './actions';
+import { newOrder as newOrderSaga } from './sagas';
+import { clearShoppingCart } from '../shoppingcart/actions';
 import jwtSelector from '../app/jwtSelector';
 
 describe('orderSagas', () => {

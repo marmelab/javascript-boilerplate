@@ -1,22 +1,22 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import numeral from 'numeral';
 import HelmetTitle from '../app/HelmetTitle';
-import orderActions from './orderActions';
+import orderActions from './actions';
 import NewOrderItem from './NewOrderItem';
 import {
     removeProductFromShoppingCart as removeProductFromShoppingCartAction,
     setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
-} from '../shoppingcart/shoppingCartActions';
+} from '../shoppingcart/actions';
 import ProductPropType from '../product/productPropTypes';
 
 class NewOrder extends Component {
+    placeNewOrder = () => this.props.placeNewOrder(this.props.products)
+
     render() {
         const {
             loading,
-            placeNewOrder,
             products,
             removeProductFromShoppingCart,
             setShoppingCartItemQuantity,
@@ -43,18 +43,18 @@ class NewOrder extends Component {
                         TOTAL: {numeral(total).format('$0.00')}
                     </div>
                 }
-                    <div className="list-group-item">
-                        {products.length > 0 &&
-                            <button
-                                onClick={placeNewOrder}
-                                disabled={loading}
-                                className="btn btn-primary"
-                            >
-                                Order
-                            </button>
-                        }
-                        <Link to="/products" className="btn btn-link">Continue shopping</Link>
-                    </div>
+                <div className="list-group-item">
+                    {products.length > 0 && // bind is not cool but this will be fixed using recompose
+                        <button
+                            onClick={this.placeNewOrder}
+                            disabled={loading}
+                            className="btn btn-primary"
+                        >
+                            Order
+                        </button>
+                    }
+                    <Link to="/products" className="btn btn-link">Continue shopping</Link>
+                </div>
             </div>
         );
     }
@@ -72,19 +72,15 @@ NewOrder.propTypes = {
     total: PropTypes.number.isRequired,
 };
 
-function mapStateToProps(state) {
-    return {
-        ...state.shoppingCart,
-        loading: state.order.loading,
-    };
-}
+const mapStateToProps = state => ({
+    ...state.shoppingCart,
+    loading: state.order.loading,
+});
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        placeNewOrder: orderActions.order.request,
-        removeProductFromShoppingCart: removeProductFromShoppingCartAction,
-        setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
-    }, dispatch);
-}
+const mapDispatchToProps = ({
+    placeNewOrder: orderActions.order.request,
+    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+    setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewOrder);

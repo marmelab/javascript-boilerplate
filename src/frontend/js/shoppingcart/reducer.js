@@ -3,7 +3,7 @@ import {
     CLEAR_SHOPPING_CART,
     REMOVE_PRODUCT_FROM_SHOPPING_CART,
     SET_SHOPPING_CART_ITEM_QUANTITY,
-} from './shoppingCartActions';
+} from './actions';
 
 const initialState = {
     products: [],

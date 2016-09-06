@@ -1,21 +1,21 @@
 import { expect } from 'chai';
-import shoppingCartReducer from './shoppingCartReducer';
+import reducer from './reducer';
 import {
     ADD_PRODUCT_TO_SHOPPING_CART,
     REMOVE_PRODUCT_FROM_SHOPPING_CART,
     SET_SHOPPING_CART_ITEM_QUANTITY,
-} from './shoppingCartActions';
+} from './actions';
 
 describe('order reducer', () => {
     it('should return its initial state', () => {
-        expect(shoppingCartReducer(undefined, { type: 'foo' })).to.deep.equal({
+        expect(reducer(undefined, { type: 'foo' })).to.deep.equal({
             products: [],
             total: 0,
         });
     });
 
     it('should handle the ADD_PRODUCT_TO_SHOPPING_CART action', () => {
-        expect(shoppingCartReducer(undefined, {
+        expect(reducer(undefined, {
             type: ADD_PRODUCT_TO_SHOPPING_CART,
             payload: { id: 42, quantity: 1, price: 84 },
         })).to.deep.equal({
@@ -27,7 +27,7 @@ describe('order reducer', () => {
     });
 
     it('should handle the ADD_PRODUCT_TO_SHOPPING_CART action with a new product', () => {
-        expect(shoppingCartReducer({
+        expect(reducer({
             products: [
                 { id: 43, quantity: 1, price: 20 },
             ],
@@ -44,7 +44,7 @@ describe('order reducer', () => {
     });
 
     it('should handle the ADD_PRODUCT_TO_SHOPPING_CART action with an existing product', () => {
-        expect(shoppingCartReducer({
+        expect(reducer({
             products: [
                 { id: 42, quantity: 1, price: 10 },
                 { id: 43, quantity: 1, price: 20 },
@@ -62,7 +62,7 @@ describe('order reducer', () => {
     });
 
     it('should handle the REMOVE_PRODUCT_FROM_SHOPPING_CART action', () => {
-        expect(shoppingCartReducer({
+        expect(reducer({
             products: [
                 { id: 42, quantity: 1, price: 10 },
                 { id: 43, quantity: 1, price: 20 },
@@ -76,7 +76,7 @@ describe('order reducer', () => {
     });
 
     it('should handle the SET_SHOPPING_CART_ITEM_QUANTITY action', () => {
-        expect(shoppingCartReducer({
+        expect(reducer({
             products: [
                 { id: 42, quantity: 1, price: 10 },
                 { id: 43, quantity: 1, price: 20 },

@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import reducerFactory from './userReducer';
-import { signIn, signOut, signUp } from './userActions';
+import reducerFactory from './reducer';
+import { signIn, signOut, signUp } from './actions';
 
 describe('user reducer', () => {
     const getItemWithUser = sinon.stub();
-    const expireTokenTime = (new Date()).getTime() + 30 * 1000;
+    const expireTokenTime = (new Date()).getTime() + (30 * 1000);
     getItemWithUser.withArgs('id').returns('foo');
     getItemWithUser.withArgs('email').returns('foo@bar.com');
     getItemWithUser.withArgs('token').returns('bar');
