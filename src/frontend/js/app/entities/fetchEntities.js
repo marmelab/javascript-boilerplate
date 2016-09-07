@@ -27,14 +27,8 @@ const handleResponse = response => {
 
 const handleError = error => ({ error });
 
-export const fetchEntitiesFactory = path => jwt =>
-    fetch(`${API_URL}/${path}`, getOptions(jwt))
+export default path => (jwt, id) =>
+    fetch(`${API_URL}/${path}${id ? `/${id}` : ''}`, getOptions(jwt))
     .then(handleResponse)
-    .then(json => ({ list: json }))
-    .catch(handleError);
-
-export const fetchEntityFactory = path => (id, jwt) =>
-    fetch(`${API_URL}/${path}/${id}`, getOptions(jwt))
-    .then(handleResponse)
-    .then(json => ({ item: json }))
+    .then(json => ({ result: json }))
     .catch(handleError);
