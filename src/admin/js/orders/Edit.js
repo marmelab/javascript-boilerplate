@@ -15,7 +15,7 @@ export default (props) => (
         <ReferenceManyField reference="order-products" target="order_id">
             <Datagrid>
                 <TextField source="reference" />
-                <TextInput source="quantity" />
+                <TextField source="quantity" />
                 <EditButton />
             </Datagrid>
         </ReferenceManyField>
