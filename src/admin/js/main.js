@@ -30,10 +30,10 @@ const tokenExpires = window.localStorage.getItem('expires');
 if (tokenExpires && tokenExpires < currentTime) logout();
 
 render(
-    <Admin restClient={restClient(ADMIN_API_URL, () => window.localStorage.getItem('token'), logout)} appLayout={Layout}>
+    <Admin restClient={restClient(ADMIN_API_URL, () => window.localStorage.getItem('token'), logout)} appLayout={Layout} title={`${APP_NAME} - Administration`}>
         <Resource name="products" list={ProductList} edit={ProductEdit} create={ProductCreate} icon={ProductIcon} />
         <Resource name="orders" list={OrderList} edit={OrderEdit} create={OrderCreate} icon={OrderIcon} />
-        <Resource name="order-products" list={OrderProductList} edit={OrderProductEdit} icon={OrderProductIcon} />
+        <Resource name="order-products" list={OrderProductList} edit={OrderProductEdit} icon={OrderProductIcon} options={{ hideInMenu: true }} />
     </Admin>,
     document.getElementById('root')
 );

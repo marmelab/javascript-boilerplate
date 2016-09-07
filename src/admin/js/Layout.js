@@ -1,4 +1,3 @@
-/* globals APP_NAME */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -7,25 +6,31 @@ import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Notification from 'admin-on-rest/src/mui/layout/Notification';
 import Menu from 'admin-on-rest/src/mui/layout/Menu';
-const Title = <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>{APP_NAME} - Administration</Link>;
 
-const Layout = ({ isLoading, children, route }) => (
-    <MuiThemeProvider>
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <AppBar title={Title} iconElementRight={isLoading ? <CircularProgress color="#fff" size={0.5} /> : <span/> } />
-            <div className="body" style={{ display: 'flex', flex: '1', backgroundColor: '#edecec' }}>
-                <div style={{ flex: 1 }}>{children}</div>
-                <Menu resources={route.resources} />
+const Layout = ({ isLoading, children, route, title }) => {
+    const Title = <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>{title}</Link>;
+    const RightElement = isLoading ? <CircularProgress color="#fff" size={0.5} /> : <span />;
+    const resources = route.resources.filter(props => !props.options.hideInMenu);
+
+    return (
+        <MuiThemeProvider>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                <AppBar title={Title} iconElementRight={RightElement} />
+                <div className="body" style={{ display: 'flex', flex: '1', backgroundColor: '#edecec' }}>
+                    <div style={{ flex: 1 }}>{children}</div>
+                    <Menu resources={resources} />
+                </div>
+                <Notification />
             </div>
-            <Notification />
-        </div>
-    </MuiThemeProvider>
-);
+        </MuiThemeProvider>
+    );
+};
 
 Layout.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     children: PropTypes.node,
     route: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
