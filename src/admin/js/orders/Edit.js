@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Edit, DateInput, TextInput } from 'admin-on-rest/lib/mui';
+import { Edit, EditButton, DateInput, TextInput, TextField, ReferenceManyField, Datagrid } from 'admin-on-rest/src/mui';
 
 const Title = ({ record }) => <span>Order {record ? `"${record.reference}"` : ''}</span>;
 
@@ -12,5 +12,12 @@ export default (props) => (
         <DateInput label="date" source="date" />
         <TextInput label="total" source="total" options={{ type: 'number' }} />
         <TextInput label="status" source="status" />
+        <ReferenceManyField reference="order-products" target="order_id">
+            <Datagrid>
+                <TextField source="reference" />
+                <TextInput source="quantity" />
+                <EditButton />
+            </Datagrid>
+        </ReferenceManyField>
     </Edit>
 );

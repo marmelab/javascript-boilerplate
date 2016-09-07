@@ -13,6 +13,6 @@ export default (props) => (
         <TextInput label="price" source="price" options={{ type: 'number' }} />
         <TextInput label="width" source="width" options={{ type: 'number' }} />
         <TextInput label="height" source="height" options={{ type: 'number' }} />
-        <TextInput label="stock" source="stock" options={{ type: 'number' }} />
+        <TextInput label="quantity" source="quantity" options={{ type: 'number' }} />
     </Edit>
 );

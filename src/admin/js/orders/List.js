@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, List, DateField, TextField, EditButton, TextInput } from 'admin-on-rest/lib/mui';
+import { Filter, List, DateField, TextField, EditButton, TextInput } from 'admin-on-rest/src/mui';
 
 export const OrderFilter = (props) => (
     <Filter {...props}>

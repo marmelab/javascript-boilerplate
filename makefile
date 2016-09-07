@@ -82,6 +82,11 @@ run-dev: ## Run all applications in development environment (using webpack-dev-s
 	@echo "  Admin app:    http://localhost:8080/admin"
 	@echo "Type 'make stop-dev' to stop the apps"
 
+restart-dev: ## Stop all applications in development environment
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
+	@echo "All apps restarted"
+
 stop-dev: ## Stop all applications in development environment
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
 	@echo "All apps stopped"

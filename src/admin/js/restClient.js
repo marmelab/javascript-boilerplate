@@ -1,13 +1,14 @@
-import { queryParameters, fetchJson } from 'admin-on-rest/lib/util/fetch';
+import { queryParameters, fetchJson } from 'admin-on-rest/src/util/fetch';
 import {
     GET_LIST,
     GET_MATCHING,
     GET_ONE,
     GET_MANY,
+    GET_MANY_REFERENCE,
     CREATE,
     UPDATE,
     DELETE,
-} from 'admin-on-rest/lib/rest/types';
+} from 'admin-on-rest/src/rest/types';
 
 /**
  * Maps admin-on-rest queries to a json-server powered REST API
@@ -57,6 +58,9 @@ export default (apiUrl, jwtSelector, logout) => {
         }
         case GET_ONE:
             url = `${apiUrl}/${resource}/${params.id}`;
+            break;
+        case GET_MANY_REFERENCE:
+            url = `${apiUrl}/${resource}?${queryParameters({ [params.target]: params.id })}`;
             break;
         case UPDATE:
             url = `${apiUrl}/${resource}/${params.id}`;

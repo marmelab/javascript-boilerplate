@@ -5,8 +5,8 @@ import { Link } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
-import Notification from 'admin-on-rest/lib/mui/layout/Notification';
-import Menu from 'admin-on-rest/lib/mui/layout/Menu';
+import Notification from 'admin-on-rest/src/mui/layout/Notification';
+import Menu from 'admin-on-rest/src/mui/layout/Menu';
 const Title = <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>{APP_NAME} - Administration</Link>;
 
 const Layout = ({ isLoading, children, route }) => (

@@ -13,7 +13,7 @@ export default (props) => (
         <TextField label="price" source="price" />
         <TextField label="width" source="width" />
         <TextField label="height" source="height" />
-        <TextField label="stock" source="stock" />
-        <EditButton basePath="/products" />
+        <TextField label="quantity" source="stock" />
+        <EditButton basePath="/order-products" />
     </List>
 );

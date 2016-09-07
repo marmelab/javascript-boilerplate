@@ -8,8 +8,12 @@
                 "stage-0"
             ],
             "plugins": [
-                "transform-runtime",
-                "add-module-exports"
+                "transform-react-jsx",
+                ["transform-runtime", {
+                    "polyfill": false,
+                    "regenerator": true,
+                }],
+                "add-module-exports",
             ],
         },
 
@@ -20,8 +24,12 @@
                 "stage-0"
             ],
             "plugins": [
-                "transform-runtime",
-                "add-module-exports"
+                "transform-react-jsx",
+                ["transform-runtime", {
+                    "polyfill": false,
+                    "regenerator": true,
+                }],
+                "add-module-exports",
             ],
         },
 
@@ -32,8 +40,12 @@
                 "stage-0"
             ],
             "plugins": [
-                "transform-runtime",
-                "add-module-exports"
+                "transform-react-jsx",
+                ["transform-runtime", {
+                    "polyfill": false,
+                    "regenerator": true,
+                }],
+                "add-module-exports",
             ],
         }
     }

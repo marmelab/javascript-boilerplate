@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, DateInput, TextInput } from 'admin-on-rest/lib/mui';
+import { Create, DateInput, TextInput } from 'admin-on-rest/src/mui';
 
 export default (props) => (
     <Create title="Create an Order" {...props}>

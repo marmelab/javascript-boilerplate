@@ -7,13 +7,17 @@ export default function (appName) {
 
     const loaders = [{
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!(admin-on-rest))/,
         loader: 'babel-loader',
         // Options to configure babel with
         query: {
             cacheDirectory: true,
             plugins: [
-                'transform-runtime',
+                'transform-react-jsx',
+                ['transform-runtime', {
+                    polyfill: false,
+                    regenerator: true,
+                }],
                 'add-module-exports',
             ],
             presets: [
