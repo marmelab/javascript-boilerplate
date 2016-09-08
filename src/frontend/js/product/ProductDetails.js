@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 import { Link } from 'react-router';
@@ -12,28 +11,37 @@ import { getProductById } from './reducer';
 import withFetchingOnMount from '../app/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
-const ProductDetails = ({ product: { reference, description, price, image }, orderProduct }) => (
-    <div className="row product-details">
-        <HelmetTitle title={name} />
-        <div className="col-xs-12 col-md-4 col-lg-3">
-            <img src={image} alt={name} className="img-thumbnail" />
-        </div>
-        <div className="col-xs-12 col-md-8 col-lg-9">
-            <h2>{reference}</h2>
-            <p className="description">{description}</p>
-            <p className="price">Price: {numeral(price).format('$0.00')}</p>
-            <p>
-                <button
-                    onClick={orderProduct}
-                    className="btn btn-lg btn-primary"
-                >
-                    Buy
-                </button>
-                <Link to="/products" className="btn btn-lg btn-link">Return to product list</Link>
-            </p>
-        </div>
-    </div>
-);
+class ProductDetails extends Component {
+    orderProduct = () => {
+        this.props.orderProduct(this.props.product);
+    }
+
+    render() {
+        const { product: { reference, description, price, image } } = this.props;
+        return (
+            <div className="row product-details">
+                <HelmetTitle title={name} />
+                <div className="col-xs-12 col-md-4 col-lg-3">
+                    <img src={image} alt={name} className="img-thumbnail" />
+                </div>
+                <div className="col-xs-12 col-md-8 col-lg-9">
+                    <h2>{reference}</h2>
+                    <p className="description">{description}</p>
+                    <p className="price">Price: {numeral(price).format('$0.00')}</p>
+                    <p>
+                        <button
+                            onClick={this.orderProduct}
+                            className="btn btn-lg btn-primary"
+                        >
+                            Buy
+                        </button>
+                        <Link to="/products" className="btn btn-lg btn-link">Return to product list</Link>
+                    </p>
+                </div>
+            </div>
+        );
+    }
+}
 
 ProductDetails.propTypes = {
     product: PropTypes.shape(ProductPropType),
@@ -71,7 +79,4 @@ export default compose(
     withFetchingOnMount(productActions.item.request, dataStateSelector, paramsStateSelector, loadingStateSelector),
     withWindowTitle(titleStateSelector),
     connect(mapStateToProps, mapDispatchToProps),
-    withHandlers({
-        orderProduct: props => () => { props.orderProduct(props.product); },
-    })
 )(ProductDetails);

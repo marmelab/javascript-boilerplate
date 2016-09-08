@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
@@ -43,53 +42,62 @@ const renderInput = field => (
     </FormGroup>
 );
 
-const SignUp = ({
-    /* eslint-disable react/prop-types */
-    signUpError,
-    signUp,
-    previousRoute,
-    handleSubmit,
-    submitting,
-    submitFailed,
-    /* eslint-enable react/prop-types */
-}) => (
-    <div className="container signUp">
-        <div className="row">
-            <div className="col-xs-12">
-                <div className="jumbotron">
-                    <h2 className="display-4">Sign up</h2>
-                    {signUpError && <Alert>{signUpError.message}</Alert>}
+class SignUp extends Component {
+    signUp = values => {
+        this.props.signUp(this.props.previousRoute, values);
+    }
 
-                    <form onSubmit={handleSubmit(signUp)}>
-                        <Field
-                            name="email"
-                            component={renderInput}
-                            type="email"
-                        />
-                        <Field
-                            name="password"
-                            component={renderInput}
-                            type="password"
-                        />
-                        <Field
-                            name="confirmPassword"
-                            component={renderInput}
-                            type="password"
-                        />
+    render() {
+        const {
+            /* eslint-disable react/prop-types */
+            signUpError,
+            previousRoute,
+            handleSubmit,
+            submitting,
+            submitFailed,
+            /* eslint-enable react/prop-types */
+        } = this.props;
 
-                        <BigSubmitButton error={signUpError || submitFailed} submitting={submitting}>
-                            Sign up
-                        </BigSubmitButton>
+        return (
+            <div className="container signUp">
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="jumbotron">
+                            <h2 className="display-4">Sign up</h2>
+                            {signUpError && <Alert>{signUpError.message}</Alert>}
 
-                        <BigLinkButton to={{ pathname: '/sign-in', state: { nextPathname: previousRoute } }}>
-                            Already have an account ? Sign in !
-                        </BigLinkButton>
-                    </form>
+                            <form onSubmit={handleSubmit(this.signUp)}>
+                                <Field
+                                    name="email"
+                                    component={renderInput}
+                                    type="email"
+                                />
+                                <Field
+                                    name="password"
+                                    component={renderInput}
+                                    type="password"
+                                />
+                                <Field
+                                    name="confirmPassword"
+                                    component={renderInput}
+                                    type="password"
+                                />
+
+                                <BigSubmitButton error={signUpError || submitFailed} submitting={submitting}>
+                                    Sign up
+                                </BigSubmitButton>
+
+                                <BigLinkButton to={{ pathname: '/sign-in', state: { nextPathname: previousRoute } }}>
+                                    Already have an account ? Sign in !
+                                </BigLinkButton>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-);
+        );
+    }
+}
 
 SignUp.propTypes = {
     ...propTypes,
@@ -111,8 +119,5 @@ export default compose(
         destroyOnUnmount: false,
     }),
     connect(mapStateToProps, mapDispatchToProps),
-    withHandlers({
-        signUp: props => values => props.signUp(props.previousRoute, values),
-    }),
     withWindowTitle('Sign up'),
 )(SignUp);
