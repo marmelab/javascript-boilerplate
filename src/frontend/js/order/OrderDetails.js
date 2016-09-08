@@ -7,7 +7,7 @@ import orderActions from './actions';
 import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
-import { getOrderById } from './selectors';
+import { getOrderById } from './reducer';
 import withFetchingOnMount from '../app/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
