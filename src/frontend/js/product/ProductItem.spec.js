@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { ProductItem } from './ProductItem';
+import ProductItem from './ProductItem';
 
 describe('Component ProductItem', () => {
     const props = {
