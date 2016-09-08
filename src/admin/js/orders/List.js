@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, List, DateField, TextField, EditButton, TextInput } from 'admin-on-rest/src/mui';
+import { Datagrid, Filter, List, DateField, TextField, EditButton, TextInput } from 'admin-on-rest/src/mui';
 
 export const OrderFilter = (props) => (
     <Filter {...props}>
@@ -9,10 +9,12 @@ export const OrderFilter = (props) => (
 
 export default (props) => (
     <List {...props} filter={OrderFilter}>
-        <DateField label="date" source="date" />
-        <TextField label="reference" source="reference" />
-        <TextField label="total" source="total" />
-        <TextField label="status" source="status" />
-        <EditButton basePath="/orders" />
+        <Datagrid>
+            <DateField label="date" source="date" />
+            <TextField label="reference" source="reference" />
+            <TextField label="total" source="total" />
+            <TextField label="status" source="status" />
+            <EditButton basePath="/orders" />
+        </Datagrid>
     </List>
 );

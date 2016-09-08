@@ -5,12 +5,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Notification from 'admin-on-rest/src/mui/layout/Notification';
-import Menu from 'admin-on-rest/src/mui/layout/Menu';
+import Menu from './Menu';
 
-const Layout = ({ isLoading, children, route, title }) => {
-    const Title = <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>{title}</Link>;
+const Layout = ({ isLoading, children, route }) => {
+    const Title = <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>{`${APP_NAME} - Administration`}</Link>;
     const RightElement = isLoading ? <CircularProgress color="#fff" size={0.5} /> : <span />;
-    const resources = route.resources.filter(props => !props.options.hideInMenu);
 
     return (
         <MuiThemeProvider>
@@ -18,7 +17,7 @@ const Layout = ({ isLoading, children, route, title }) => {
                 <AppBar title={Title} iconElementRight={RightElement} />
                 <div className="body" style={{ display: 'flex', flex: '1', backgroundColor: '#edecec' }}>
                     <div style={{ flex: 1 }}>{children}</div>
-                    <Menu resources={resources} />
+                    <Menu />
                 </div>
                 <Notification />
             </div>
@@ -30,7 +29,6 @@ Layout.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     children: PropTypes.node,
     route: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
