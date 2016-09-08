@@ -1,16 +1,18 @@
 import { assert } from 'chai';
 import config from 'config';
-import dbClient from '../../src/api/lib/db/client';
+import { PgPool } from 'co-postgres-queries';
 import fixturesFactory from '../lib/fixturesLoader';
 import request from '../lib/request';
 
 before(function* setGlobalForTest() {
-    global.db = yield dbClient(config.apps.api.db);
-    global.fixtureLoader = fixturesFactory(global.db.client);
+    global.pool = new PgPool(config.apps.api.db);
+    global.db = yield global.pool.connect();
+    global.fixtureLoader = fixturesFactory(global.db);
     global.assert = assert;
     global.request = request;
 });
 
-after(function* closeDb() {
-    global.db.done();
+after(() => {
+    global.db.release();
+    global.pool.end();
 });
