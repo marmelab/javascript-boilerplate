@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Edit, EditButton, DateInput, TextInput, TextField, ReferenceManyField, Datagrid } from 'admin-on-rest/src/mui';
+import { Edit, EditButton, DateInput, TextInput, TextField, ReferenceManyField, Datagrid } from 'admin-on-rest/lib/mui';
 
 const Title = ({ record }) => <span>Order {record ? `"${record.reference}"` : ''}</span>;
 

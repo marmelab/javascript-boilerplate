@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Edit, TextInput } from 'admin-on-rest/src/mui';
+import { Edit, TextInput } from 'admin-on-rest/lib/mui';
 
 const Title = ({ record }) => <span>{record ? record.reference : ''}</span>;
 

@@ -10,8 +10,8 @@ import { syncHistoryWithStore, routerMiddleware, routerReducer } from 'react-rou
 import createSagaMiddleware from 'redux-saga';
 
 // prebuilt admin-on-rest features
-import { adminReducer, crudSaga, CrudRoute } from 'admin-on-rest/src';
-import { Delete } from 'admin-on-rest/src/mui';
+import { adminReducer, crudSaga, CrudRoute } from 'admin-on-rest';
+import { Delete } from 'admin-on-rest/lib/mui';
 
 import restClientFactory from './restClient';
 import Layout from './Layout';

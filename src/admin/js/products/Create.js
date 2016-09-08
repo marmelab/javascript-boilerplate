@@ -1,5 +1,5 @@
 import React from 'react';
-import { Create, TextInput } from 'admin-on-rest/src/mui';
+import { Create, TextInput } from 'admin-on-rest/lib/mui';
 
 export default (props) => (
     <Create title="Create a Post" {...props}>

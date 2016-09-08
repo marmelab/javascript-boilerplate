@@ -1,4 +1,4 @@
-import { queryParameters, fetchJson } from 'admin-on-rest/src/util/fetch';
+import { queryParameters, fetchJson } from 'admin-on-rest/lib/util/fetch';
 import {
     GET_LIST,
     GET_MATCHING,
@@ -8,7 +8,7 @@ import {
     CREATE,
     UPDATE,
     DELETE,
-} from 'admin-on-rest/src/rest/types';
+} from 'admin-on-rest/lib/rest/types';
 
 function redirectToLogin() {
     window.location = '/admin/login.html';
