@@ -16,8 +16,8 @@ const Layout = ({ isLoading, children, route }) => {
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
                 <AppBar title={Title} iconElementRight={RightElement} />
                 <div className="body" style={{ display: 'flex', flex: '1', backgroundColor: '#edecec' }}>
-                    <Menu />
                     <div style={{ flex: 1 }}>{children}</div>
+                    <Menu />
                 </div>
                 <Notification />
             </div>

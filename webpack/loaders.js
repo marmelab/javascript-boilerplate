@@ -7,7 +7,7 @@ export default function (appName) {
 
     const loaders = [{
         test: /\.jsx?$/,
-        exclude: /node_modules\/(?!(admin-on-rest))/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         // Options to configure babel with
         query: {
