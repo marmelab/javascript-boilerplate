@@ -14,7 +14,7 @@ PM2_HOME ?= .pm2
 help:
 	@grep -P '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-# Initialization ===============================================================
+#B Initialization ===============================================================
 copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
 	@cp -n ./config/development-dist.js ./config/development.js | true
 
@@ -28,7 +28,7 @@ install-selenium:
 
 install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
 
-# Deployment ===================================================================
+#B Deployment ===================================================================
 clear-build:  ## Remove precedent build files
 	@rm -rf ./build/*
 
@@ -73,7 +73,7 @@ deploy-prod-frontend: ## Deploy the frontend in production environment
 
 deploy-prod: deploy-prod-api deploy-prod-frontend ## Deploy the production environment
 
-# Development ==================================================================
+#B Development ==================================================================
 run-dev: ## Run all applications in development environment (using webpack-dev-server)
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
 	@echo "All apps started and running"
@@ -82,7 +82,7 @@ run-dev: ## Run all applications in development environment (using webpack-dev-s
 	@echo "  Admin app:    http://localhost:8080/admin"
 	@echo "Type 'make stop-dev' to stop the apps"
 
-restart-dev: ## Stop all applications in development environment
+restart-dev: ## Restart all applications in development environment
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
 	@echo "All apps restarted"
@@ -136,23 +136,23 @@ log-frontend-test: ## Display the logs of the frontend applications with PM2
 log-api-test: ## Display the logs of the API with PM2
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_api-test
 
-# Tests ========================================================================
+#B Tests ========================================================================
 build-test: ## Build all front applications defined with webpack for test environment
 	@NODE_ENV=test make build
 
-test-api-unit: ## Run the API unit tests with mocha
+test-api-unit: ##B Run the API unit tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
 
-test-api-functional: reset-test-database ## Run the API functional tests with mocha
+test-api-functional: reset-test-database ##B Run the API functional tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
 
-test-frontend-unit: ## Run the frontend applications unit tests with mocha
+test-frontend-unit: ##B Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
-test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
+test-isomorphic-unit: ##B Run the isomorphic directory unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
 
-test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
+test-frontend-functional: reset-test-database load-test-fixtures ##B Run the frontend applications functional tests with nightwatch
 	@make build-test
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver" \
@@ -186,7 +186,7 @@ reset-test-database: ## Reset the test database and run all migrations
 		-e api \
 		up
 
-# Migrations ===================================================================
+#B Migrations ===================================================================
 migrate: ## Migrate the database defined in the configuration (you may define the NODE_ENV)
 	@./node_modules/.bin/db-migrate \
 		--migrations-dir=./src/api/lib/migrations \
@@ -204,7 +204,7 @@ create-migration: ## Create a new migration (you may define the NODE_ENV to sele
 load-fixtures: ## Load fixtures in the database (you may define the NODE_ENV to select a specific configuration)
 	./node_modules/.bin/babel-node ./bin/loadFixtures.js
 
-# Binaries =====================================================================
+#B Binaries =====================================================================
 create-admin: ## Create a new admin user in the database (you may define the NODE_ENV to select a specific configuration)
 	./node_modules/babel-cli/bin/babel-node.js ./bin/createAdmin.js ${ADMIN_NAME} ${ADMIN_EMAIL} ${ADMIN_PASSWORD}
 
