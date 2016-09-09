@@ -10,18 +10,6 @@ import {
     DELETE,
 } from 'admin-on-rest/lib/rest/types';
 
-function redirectToLogin() {
-    window.location = '/admin/login.html';
-}
-
-function logout() {
-    window.localStorage.removeItem('id');
-    window.localStorage.removeItem('email');
-    window.localStorage.removeItem('token');
-    window.localStorage.removeItem('expires');
-    redirectToLogin();
-}
-
 /**
  * Maps admin-on-rest queries to a json-server powered REST API
  *
@@ -35,7 +23,7 @@ function logout() {
  * CREATE       => POST http://my.api.url/posts/123
  * DELETE       => DELETE http://my.api.url/posts/123
  */
-export default (apiUrl, jwtSelector) => {
+export default (apiUrl, jwtSelector, logout) => {
     /**
      * @param {String} type One of the constants appearing at the top if this file, e.g. 'UPDATE'
      * @param {String} resource Name of the resource to fetch, e.g. 'posts'
@@ -135,6 +123,7 @@ export default (apiUrl, jwtSelector) => {
                 if (error.message === 'Unauthorized') {
                     logout();
                 }
+                return { data: [], total: 0 };
             });
     };
 };

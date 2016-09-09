@@ -183,7 +183,7 @@ describe('userSagas', () => {
             saga.next();
             saga.next();
 
-            expect(saga.next().value).to.deep.equal(put(routerActions.push('/')));
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/sign-in')));
         });
     });
 });

@@ -1,13 +1,16 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { propTypes, reduxForm, Field } from 'redux-form';
 import buildSchema from 'redux-form-schema';
+import { Link } from 'react-router';
 
-import Alert from '../ui/Alert';
-import { BigLinkButton } from '../ui/LinkButton';
-import HelmetTitle from '../app/HelmetTitle';
-import FormGroup from '../ui/FormGroup';
-import { BigSubmitButton } from '../ui/SubmitButton';
+import { Card, CardActions, CardTitle } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
+import TextField from 'redux-form-material-ui/lib/TextField';
+
 import { signIn as signInActions } from './actions';
 import { getPreviousRoute } from './reducer';
 
@@ -23,60 +26,59 @@ const signInSchema = buildSchema({
     },
 });
 
-const renderInput = field => (
-    <FormGroup field={field}>
-        <input
-            {...field.input}
-            className="form-control input-lg"
-            type={field.type}
-        />
-    </FormGroup>
-);
+const renderInput = (floatingLabelText, type, hintText) =>
+    ({ meta: { touched, error } = {}, input: { ...inputProps }, ...props }) => // eslint-disable-line react/prop-types
+        <TextField
+            errorText={touched && error}
+            {...{ floatingLabelText, type, hintText }}
+            {...inputProps}
+            {...props}
+            fullWidth
+        />;
 
-const SignIn = ({
-    /* eslint-disable react/prop-types */
-    signInError,
-    signIn,
-    previousRoute,
-    handleSubmit,
-    submitting,
-    submitFailed,
-    /* eslint-enable react/prop-types */
-}) => (
-    <div className="container signIn">
-        <HelmetTitle title="Sign in" />
-        <div className="row">
-            <div className="col-xs-12">
-                <div className="jumbotron">
-                    <h2 className="display-4">Sign in</h2>
-                    {signInError && <Alert>{signInError.message}</Alert>}
+class SignIn extends Component {
+    signIn = values => {
+        this.props.signIn(this.props.previousRoute, values);
+    }
 
-                    <form onSubmit={handleSubmit(signIn.bind(null, previousRoute))}>
-                        <Field
-                            name="email"
-                            component={renderInput}
-                            type="email"
+    render() {
+        const { signInError, handleSubmit, submitting } = this.props;
+
+        return (
+            <Card style={{ margin: '2em' }}>
+                <CardTitle title="Sign in" />
+                {signInError && <Snackbar open autoHideDuration={4000} message={signInError.message} />}
+
+                <form onSubmit={handleSubmit(this.signIn)}>
+                    <div style={{ padding: '0 1em 1em 1em' }}>
+                        <div>
+                            <Field
+                                name="email"
+                                component={renderInput('Email', 'email', 'john@doe.me')}
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                name="password"
+                                component={renderInput('Password', 'password', '5upa_dupa_pwd')}
+                            />
+                        </div>
+                    </div>
+                    <CardActions>
+                        <RaisedButton type="submit" primary disabled={submitting} label="Sign in" />
+
+                        <FlatButton
+                            containerElement={<Link to="/forgot-password" />}
+                            href="#"
+                            disabled={submitting}
+                            label="Forgot your password?"
                         />
-                        <Field
-                            name="password"
-                            component={renderInput}
-                            type="password"
-                        />
-                        <BigSubmitButton error={signInError || submitFailed} submitting={submitting}>
-                            Sign in
-                        </BigSubmitButton>
-                        <BigLinkButton to={{ pathname: '/sign-up', state: { nextPathname: previousRoute } }}>
-                            No account? Sign up!
-                        </BigLinkButton>
-                        <BigLinkButton to="/forgot-password">
-                            Forgot your password?
-                        </BigLinkButton>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-);
+                    </CardActions>
+                </form>
+            </Card>
+        );
+    }
+}
 
 SignIn.propTypes = {
     ...propTypes,
@@ -89,7 +91,7 @@ const mapStateToProps = state => ({
     signInError: state.user.error,
 });
 
-const mapDispatchToProps = ({ signIn: signInActions.request });
+const mapDispatchToProps = dispatch => bindActionCreators({ signIn: signInActions.request }, dispatch);
 
 export default reduxForm({
     form: 'signIn',
