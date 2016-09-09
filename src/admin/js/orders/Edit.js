@@ -4,7 +4,7 @@ import { Edit, EditButton, DateInput, TextInput, TextField, ReferenceManyField, 
 const Title = ({ record }) => <span>Order {record ? `"${record.reference}"` : ''}</span>;
 
 Title.propTypes = {
-    record: PropTypes.object.isRequired,
+    record: PropTypes.object,
 };
 
 export default (props) => (
@@ -12,10 +12,10 @@ export default (props) => (
         <DateInput label="date" source="date" />
         <TextInput label="total" source="total" options={{ type: 'number' }} />
         <TextInput label="status" source="status" />
-        <ReferenceManyField reference="order-products" target="order_id">
+        <ReferenceManyField label="products" reference="order-products" target="order_id">
             <Datagrid>
-                <TextField source="reference" />
-                <TextField source="quantity" />
+                <TextField label="reference" source="reference" />
+                <TextField label="quantity" source="quantity" />
                 <EditButton />
             </Datagrid>
         </ReferenceManyField>

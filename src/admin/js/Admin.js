@@ -40,7 +40,7 @@ const history = syncHistoryWithStore(hashHistory, store);
 const App = () => (
     <Provider store={store}>
         <Router history={history}>
-            <Redirect from="/" to="products" />
+            <Redirect from="/" to="orders" />
             <Route path="/" component={Layout}>
                 <CrudRoute path="products" list={ProductList} edit={ProductEdit} create={ProductCreate} remove={Delete} />
                 <CrudRoute path="orders" list={OrderList} edit={OrderEdit} create={OrderCreate} remove={Delete} />
