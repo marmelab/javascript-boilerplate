@@ -1,6 +1,5 @@
 import co from 'co';
-import queriesFactory from '../lib/db/queries/index';
-import insertOneQuery from '../lib/db/queries/insertOne';
+import { crud, insertOne } from 'co-postgres-queries';
 
 export const OrderStatus = {
     pending: 'pending',
@@ -10,16 +9,19 @@ export const OrderStatus = {
 
 export default client => {
     const tableName = 'user_order';
-    const exposedFields = [
-        'id',
+    const fields = [
         'reference',
         'date',
         'customer_id',
         'total',
         'status',
     ];
+    const exposedFields = [
+        'id',
+        ...fields,
+    ];
 
-    const queries = queriesFactory(client, tableName, exposedFields);
+    const queries = crud(tableName, fields, ['id'], exposedFields)(client);
 
     queries.selectByUserId = function* selectByUserId(userId) {
         const sql = `
@@ -27,15 +29,18 @@ export default client => {
             FROM ${tableName}
             WHERE customer_id = $userId`;
 
-        const orders = yield client.query_(sql, { userId });
+        const orders = yield client.query({
+            sql,
+            parameters: { userId },
+        });
 
-        return orders.rows;
+        return orders;
     };
 
-    const selectOneById = queries.selectOneById;
+    const selectOne = queries.selectOne;
 
-    queries.selectOneById = function* extendedSelectOneById(id) {
-        const order = yield selectOneById(id);
+    queries.selectOne = function* extendedSelectOne({ id }) {
+        const order = yield selectOne({ id });
 
         const sql = `
             SELECT
@@ -52,15 +57,17 @@ export default client => {
             FROM order_product
             WHERE order_id = $orderId`;
 
-        const orderProducts = yield client.query_(sql, { orderId: id });
+        const orderProducts = yield client.query({
+            sql,
+            parameters: { orderId: id },
+        });
 
-        order.products = orderProducts.rows;
+        order.products = orderProducts;
 
         return order;
     };
 
-    const insertOne = queries.insertOne;
-    const insertOneOrderProduct = insertOneQuery(client, 'order_product', [
+    const insertOneOrderProduct = insertOne('order_product', [
         'order_id',
         'product_id',
         'quantity',
@@ -71,46 +78,54 @@ export default client => {
         'thumbnail',
         'image',
         'description',
-    ]);
+    ])(client);
 
+
+    const insertOneOrder = queries.insertOne;
     queries.insertOne = function* insertOneWithProducts(data) {
-        const result = yield insertOne({
-            customer_id: data.customer_id,
-            date: data.date,
-            reference: data.reference,
-            status: data.status,
-            total: data.total,
-        });
-
-        const insertOrderProduct = co.wrap(function* insertOrderProduct(order, orderProduct) {
-            const {
-                quantity,
-                reference,
-                width,
-                height,
-                price,
-                thumbnail,
-                image,
-                description,
-            } = orderProduct;
-
-            return yield insertOneOrderProduct({
-                order_id: order.id,
-                product_id: orderProduct.id,
-                quantity,
-                reference,
-                width,
-                height,
-                price,
-                thumbnail,
-                image,
-                description,
+        yield client.begin();
+        try {
+            const result = yield insertOneOrder({
+                customer_id: data.customer_id,
+                date: data.date,
+                reference: data.reference,
+                status: data.status,
+                total: data.total,
             });
-        });
 
-        result.products = yield data.products.map(op => insertOrderProduct(result, op));
+            const insertOrderProduct = co.wrap(function* insertOrderProduct(order, orderProduct) {
+                const {
+                    quantity,
+                    reference,
+                    width,
+                    height,
+                    price,
+                    thumbnail,
+                    image,
+                    description,
+                } = orderProduct;
 
-        return result;
+                return yield insertOneOrderProduct({
+                    order_id: order.id,
+                    product_id: orderProduct.id,
+                    quantity,
+                    reference,
+                    width,
+                    height,
+                    price,
+                    thumbnail,
+                    image,
+                    description,
+                });
+            });
+
+            result.products = yield data.products.map(op => insertOrderProduct(result, op));
+            yield client.commit();
+            return result;
+        } catch (error) {
+            yield client.rollback();
+            throw error;
+        }
     };
 
     return {

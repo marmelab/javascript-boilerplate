@@ -1,4 +1,4 @@
-describe('/api/sign-in', () => {
+describe.skip('/api/sign-in', () => {
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();
     });

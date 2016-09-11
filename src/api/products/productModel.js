@@ -1,9 +1,8 @@
-import queriesFactory from '../lib/db/queries/index';
+import { crud } from 'co-postgres-queries';
 
 export default client => {
     const tableName = 'product';
-    const exposedFields = [
-        'id',
+    const fields = [
         'reference',
         'width',
         'height',
@@ -14,8 +13,12 @@ export default client => {
         'stock',
     ];
 
-    const queries = queriesFactory(client, tableName, exposedFields);
+    const exposedFields = [
+        'id',
+        ...fields,
+    ];
 
+    const queries = crud(tableName, fields, ['id'], exposedFields)(client);
     return {
         tableName,
         exposedFields,

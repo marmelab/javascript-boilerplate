@@ -1,29 +1,31 @@
 import bcrypt from 'bcrypt';
 import config from 'config';
 
-import insertOneQuery from '../lib/db/queries/insertOne';
-import batchInsertQuery from '../lib/db/queries/batchInsert';
-import queriesFactory from '../lib/db/queries/index';
+import { crud, batchInsert, insertOne } from 'co-postgres-queries';
 
 export default client => {
     const tableName = 'user_account';
-    const exposedFields = [
-        'id',
+
+    const fields = [
         'email',
         'password',
     ];
+    const exposedFields = [
+        'id',
+        ...fields
+    ];
 
-    const queries = queriesFactory(client, tableName, exposedFields);
-    const baseInsertOne = insertOneQuery(client, tableName, exposedFields);
-    const baseBatchInsert = batchInsertQuery(client, tableName, exposedFields);
+    const queries = crud(tableName, fields, ['id'], exposedFields)(client);
+    const baseInsertOne = queries.insertOne;
+    const baseBatchInsert = queries.batchInsert;
 
-    queries.insertOne = function* insertOne(user, isWhitelisted) {
+    queries.insertOne = function* insertOneQuery(user, isWhitelisted) {
         user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
 
         return yield baseInsertOne(user, isWhitelisted);
     };
 
-    queries.batchInsert = function* batchInsert(users) {
+    queries.batchInsert = function* batchInsertQuery(users) {
         const preparedUsers = users.map(user => {
             user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
 
@@ -40,8 +42,11 @@ export default client => {
             WHERE LOWER(email) = LOWER($email)
             LIMIT 1`;
 
-        const results = yield client.query_(sql, { email });
-        return results.rowCount ? results.rows[0] : null;
+        const results = yield client.query({
+            sql,
+            parameters: { email },
+        });
+        return results.length ? results[0] : null;
     };
 
     queries.authenticate = function* authenticate(email, password) {

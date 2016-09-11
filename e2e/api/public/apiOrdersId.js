@@ -11,8 +11,8 @@ describe('/api/orders/{id}', () => {
 
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();
-        const userRepository = userFactory(db.client);
-        orderQueries = orderFactory(db.client);
+        const userRepository = userFactory(db);
+        orderQueries = orderFactory(db);
         user1 = yield userRepository.findByEmail('user1@marmelab.io');
         user2 = yield userRepository.findByEmail('user2@marmelab.io');
         user1Token = yield fixtureLoader.getTokenFor('user1@marmelab.io');
