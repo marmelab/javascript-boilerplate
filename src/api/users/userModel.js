@@ -22,10 +22,9 @@ export default client => {
     const baseInsertOne = queries.insertOne;
     const baseBatchInsert = queries.batchInsert;
 
-    queries.insertOne = function* insertOneQuery(user, isWhitelisted) {
+    queries.insertOne = function* insertOneQuery(user) {
         user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
-
-        return yield baseInsertOne(user, isWhitelisted);
+        return yield baseInsertOne(user);
     };
 
     queries.batchInsert = function* batchInsertQuery(users) {
