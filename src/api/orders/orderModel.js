@@ -7,21 +7,24 @@ export const OrderStatus = {
     cancelled: 'cancelled',
 };
 
-export default client => {
-    const tableName = 'user_order';
-    const fields = [
-        'reference',
-        'date',
-        'customer_id',
-        'total',
-        'status',
-    ];
-    const exposedFields = [
-        'id',
-        ...fields,
-    ];
+const tableName = 'user_order';
+const fields = [
+    'reference',
+    'date',
+    'customer_id',
+    'total',
+    'status',
+];
+const exposedFields = [
+    'id',
+    ...fields,
+];
 
-    const queries = crud(tableName, fields, ['id'], exposedFields)(client);
+const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
+
+export default client => {
+    const queries = queriesFactory(client);
+
 
     queries.selectByUserId = function* selectByUserId(userId) {
         const sql = `
@@ -29,12 +32,10 @@ export default client => {
             FROM ${tableName}
             WHERE customer_id = $userId`;
 
-        const orders = yield client.query({
+        return yield client.query({
             sql,
             parameters: { userId },
         });
-
-        return orders;
     };
 
     const selectOne = queries.selectOne;

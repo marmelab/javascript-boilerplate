@@ -1,21 +1,24 @@
 import bcrypt from 'bcrypt';
 import config from 'config';
 
-import { crud, batchInsert, insertOne } from 'co-postgres-queries';
+import { crud } from 'co-postgres-queries';
+
+const tableName = 'user_account';
+
+const fields = [
+    'email',
+    'password',
+];
+const exposedFields = [
+    'id',
+    ...fields,
+];
+
+const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
 export default client => {
-    const tableName = 'user_account';
+    const queries = queriesFactory(client);
 
-    const fields = [
-        'email',
-        'password',
-    ];
-    const exposedFields = [
-        'id',
-        ...fields
-    ];
-
-    const queries = crud(tableName, fields, ['id'], exposedFields)(client);
     const baseInsertOne = queries.insertOne;
     const baseBatchInsert = queries.batchInsert;
 
