@@ -23,10 +23,10 @@ describe('User Model', () => {
 
     it('should correctly retrieve user by email', function* () {
         client = {
-            query: function* ({ sql, parameters }) {
+            query: ({ parameters }) => {
                 assert.deepEqual(parameters.email, 'email@example.org');
 
-                return [{ id: 42, email: 'email@example.org' }];
+                return Promise.resolve({ id: 42, email: 'email@example.org' });
             },
         };
 

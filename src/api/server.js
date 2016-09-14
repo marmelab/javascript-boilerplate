@@ -1,52 +1,31 @@
 import config from 'config';
-import path from 'path';
-import koa from 'koa';
-import koaCors from 'koa-cors';
+import Koa from 'koa';
+import koaCors from 'kcors';
 import koaMount from 'koa-mount';
 import koaHelmet from 'koa-helmet';
-import compress from 'koa-compressor';
 import { PgPool } from 'co-postgres-queries';
+import compress from 'koa-compress';
 
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
+import connectToDbMiddleware from './lib/middlewares/connectToDb';
+import httpLoggerMiddleware from './lib/middlewares/httpLogger';
+
+import healthcare from './healthcare';
+import api from './api';
+import admin from './admin';
 
 const pool = new PgPool(config.apps.api.db);
 
 const env = process.env.NODE_ENV || 'development';
 const port = config.apps.api.port;
 
-const app = koa();
+const app = new Koa();
 const appLogger = logger(config.apps.api.logs.app);
 const httpLogger = logger(config.apps.api.logs.http);
 
 // Server logs
-app.use(function* logHttp(next) {
-    this.httpLog = {
-        method: this.request.method,
-        remoteIP: this.request.ip,
-        userAgent: this.request.headers['user-agent'],
-        app: this.request.url.indexOf('/admin') === 0 ? 'admin' : 'api',
-    };
-
-    const sessionId = this.cookies.get('koa:sess');
-    if (sessionId) {
-        this.httpLog.sessionId = sessionId;
-    }
-
-    const authorization = this.get('authorization');
-    if (authorization) {
-        this.httpLog.authorization = authorization;
-    }
-
-    yield next;
-
-    // Static files
-    if (['.css', '.js', '.woff'].indexOf(path.extname(this.request.url)) !== -1) {
-        return;
-    }
-    this.httpLog.status = this.status;
-    httpLogger.log('info', this.request.url, this.httpLog);
-});
+app.use(httpLoggerMiddleware(httpLogger));
 
 // Error catching - override koa's undocumented error handler
 app.context.onerror = function onError(err) {
@@ -56,7 +35,7 @@ app.context.onerror = function onError(err) {
     this.app.emit('error', err, this);
 
     if (this.headerSent || !this.writable) {
-        err.headerSent = true;
+        err.headerSent = true; // eslint-disable-line no-param-reassign
         return;
     }
 
@@ -95,31 +74,37 @@ process.on('unhandledRejection', (error, promise) => {
     });
 });
 
-app.use(koaMount('/healthcare', require('./healthcare')));
+app.use(koaMount('/healthcare', healthcare));
 
 // XmlHttpRequest shim for IE
 app.use(xdomainRoute);
 
 // Security headers
 app.use(koaHelmet());
-app.use(koaHelmet.csp({ directives: { defaultSrc: ["'self'"] } }));
+app.use(koaHelmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"] } }));
 app.use(koaHelmet.frameguard('deny'));
-app.use(koaMount('/', koaCors({
+app.use(koaCors({
     credentials: true,
-    headers: [
+    exposeHeaders: [
         'Authorization',
         'Content-Disposition',
         'Content-Type',
         'X-Entities',
     ],
-    methods: [
+    allowHeaders: [
+        'Authorization',
+        'Content-Disposition',
+        'Content-Type',
+        'X-Entities',
+    ],
+    allowMethods: [
         'DELETE',
         'GET',
         'POST',
         'PUT',
     ],
-    origin: (request) => {
-        const origin = request.get('origin');
+    origin: ctx => {
+        const origin = ctx.get('origin');
 
         if (!!origin.length && config.apps.api.allowedOrigins.indexOf(origin) === -1) {
             return false;
@@ -127,38 +112,18 @@ app.use(koaMount('/', koaCors({
 
         return origin;
     },
-})));
+}));
 
 // DB connection
-app.use(function* connectToDb(next) {
-    try {
-        this.client = yield pool.connect();
-    } catch (err) {
-        appLogger.log('error', `Unable to connect to database: ${err.message}`, { err });
-        this.throw(503, 'Unable to connect to database');
-    }
-
-    try {
-        yield next;
-    } catch (err) {
-        // Since there was an error somewhere down the middleware,
-        // then we need to throw this client away.
-        this.client.end();
-
-        throw err;
-    } finally {
-        appLogger.log('debug', 'Closing DB connection');
-        this.client.release();
-    }
-});
+app.use(connectToDbMiddleware(null /* dbClient */, appLogger, config.apps.api.db));
 
 if (env !== 'development') {
     // gzip compression
     app.use(compress());
 }
 
-app.use(koaMount('/api', require('./api')));
-app.use(koaMount('/admin', require('./admin')));
+app.use(koaMount('/api', api));
+app.use(koaMount('/admin', admin));
 
 if (!module.parent || module.parent.filename.indexOf('api/index.js') !== -1) {
     app.listen(port);

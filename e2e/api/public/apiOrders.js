@@ -1,11 +1,24 @@
+/* eslint-disable func-names */
+import config from 'config';
+import { assert } from 'chai';
+import request from '../../lib/request';
+import fixturesFactory from '../../lib/fixturesLoader';
+import dbClient from '../../../src/api/lib/db/client';
+
 import userFactory from '../../../src/api/users/userModel';
 import orderFactory from '../../../src/api/orders/orderModel';
 
-describe('/api/orders', () => {
+describe.only('/api/orders', () => {
     let user;
     let userToken;
     let userCookieToken;
+    let fixtureLoader;
+    let db;
+
     before(function* addFixtures() {
+        db = yield dbClient(config.apps.api.db);
+        fixtureLoader = fixturesFactory(db.client);
+
         yield fixtureLoader.loadDefaultFixtures();
         const userRepository = userFactory(db);
         user = yield userRepository.findByEmail('user1@marmelab.io');
@@ -22,25 +35,25 @@ describe('/api/orders', () => {
     });
     describe('GET', () => {
         it('should require authentification', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'GET',
                 url: '/api/orders',
             });
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should require authentification without cookie token', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'GET',
                 url: '/api/orders',
             }, userToken);
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should require authentification with only cookie token', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'GET',
                 url: '/api/orders',
             }, null, { token: userCookieToken });
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should return all connected user\'s orders', function* () {
             const { statusCode, body } = yield request({
@@ -48,7 +61,7 @@ describe('/api/orders', () => {
             }, userToken, { token: userCookieToken });
 
             assert.equal(statusCode, 200, JSON.stringify(body));
-            assert.equal(body.length, 1);
+            assert.equal(body.length, 1, JSON.stringify(body));
             delete body[0].id;
             delete body[0].date;
             assert.deepEqual(body[0], {
@@ -61,7 +74,7 @@ describe('/api/orders', () => {
     });
     describe('POST', () => {
         it('should require authentification', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -70,10 +83,10 @@ describe('/api/orders', () => {
                     products: [],
                 },
             });
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should require authentification without cookie token', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -81,10 +94,10 @@ describe('/api/orders', () => {
                     status: 'valid',
                 },
             }, userToken);
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should require authentification with only cookie token', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -92,7 +105,7 @@ describe('/api/orders', () => {
                     status: 'valid',
                 },
             }, null, { token: userCookieToken });
-            assert.equal(statusCode, 401);
+            assert.equal(statusCode, 401, JSON.stringify(body));
         });
         it('should create a order', function* () {
             let userOrders = yield orderFactory(db).selectByUserId(user.id);
@@ -113,11 +126,11 @@ describe('/api/orders', () => {
     });
     describe('PUT', () => {
         it('should not allow PUT request', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'PUT',
                 url: '/api/orders',
             });
-            assert.equal(statusCode, 405);
+            assert.equal(statusCode, 405, JSON.stringify(body));
         });
     });
     after(function* removeFixtures() {

@@ -1,15 +1,12 @@
 export default function sendEmailsFactory(transporter, defaultOptions = {}) {
-    if (!transporter || typeof transporter.sendMail_ !== 'function') {
+    if (!transporter || typeof transporter.sendMailPromise !== 'function') {
         throw new Error('Invalid transporter');
     }
 
-    const defaultEmail = {attachments: [], ...defaultOptions};
+    const defaultEmail = Object.assign({ attachments: [] }, defaultOptions);
 
-    const wrapMail = email => {
-        const cleanedEmail = {
-            ...defaultEmail,
-            ...email,
-        };
+    const wrapMail = async email => {
+        const cleanedEmail = Object.assign({}, defaultEmail, email);
 
         if (cleanedEmail.emitter) {
             if (!cleanedEmail.from) {
@@ -21,16 +18,16 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
         cleanedEmail.html = cleanedEmail.body;
         delete cleanedEmail.body;
 
-        return transporter.sendMail_(cleanedEmail);
+        return await transporter.sendMailPromise(cleanedEmail);
     };
 
     /**
      * @param {array} emails - List a emails with attrs `from`, `to`, `subject`, `body`, `attachments`
      *                         Only `to`, `subject` and `body` are required if default options specify others
      */
-    return function* sendEmails(emails) {
+    return async emails => {
         const emailsToSend = (Array.isArray(emails)) ? emails : [emails];
 
-        return yield emailsToSend.map(wrapMail);
+        return await Promise.all(emailsToSend.map(wrapMail));
     };
 }

@@ -1,15 +1,15 @@
 import config from 'config';
-import koa from 'koa';
+import Koa from 'koa';
 import koaRoute from 'koa-route';
-import methodFilter from './lib/middlewares/methodFilter';
 import fetch from 'isomorphic-fetch';
 import { PgPool } from 'co-postgres-queries';
 
+import methodFilter from './lib/middlewares/methodFilter';
 import internetAccessCheck from './healthcare/internet';
 import dbCheck from './healthcare/db';
 import apiCheck from './healthcare/api';
 
-const app = koa();
+const app = new Koa();
 
 app.use(methodFilter(['GET']));
 app.use(koaRoute.get('/', function* primaryEntryPoint() {

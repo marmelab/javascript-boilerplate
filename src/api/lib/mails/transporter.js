@@ -1,24 +1,26 @@
 import { htmlToText } from 'nodemailer-html-to-text';
 import smtpTransport from 'nodemailer-smtp-transport';
 import nodemailer from 'nodemailer';
-import thunkify from 'thunkify';
 
 const transporterFactory = config => {
     let transporter;
 
     if (!config) throw Error('Configuration needed for transporter factory');
 
-    switch (config.service) {
-    case 'smtp':
+    if (config.service === 'smtp') {
         transporter = nodemailer.createTransport(smtpTransport(config.auth || {}));
-        break;
-    default: {
-        const transport = require(`./transporters/${config.transport}`);
+    } else {
+        const transport = require(`./transporters/${config.transport}`).default; // eslint-disable-line global-require
         transporter = nodemailer.createTransport(transport(config.transport_options));
-    }}
+    }
 
     transporter.use('compile', htmlToText());
-    transporter.sendMail_ = thunkify(transporter.sendMail);
+    transporter.sendMailPromise = mails => new Promise((resolve, reject) => {
+        transporter.sendMail(mails, (err, result) => {
+            if (err) return reject(err);
+            return resolve(result);
+        });
+    });
 
     return transporter;
 };

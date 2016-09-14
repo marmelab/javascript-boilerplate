@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* globals assert, db, fixtureLoader, request */
 describe('/api', () => {
     describe('GET', () => {
         it('should not require authentification', function* () {

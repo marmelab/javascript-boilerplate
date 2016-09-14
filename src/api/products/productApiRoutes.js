@@ -1,10 +1,10 @@
-import crud from '../lib/middlewares/pgCrud';
-import koa from 'koa';
+import Koa from 'koa';
 import koaMount from 'koa-mount';
+import crud from '../lib/middlewares/pgCrud';
 import methodFilter from '../lib/middlewares/methodFilter';
 import productFactory from './productModel';
 
-const app = koa();
+const app = new Koa();
 
 app.use(methodFilter(['GET']));
 

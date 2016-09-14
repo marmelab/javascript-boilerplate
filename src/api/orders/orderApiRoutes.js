@@ -1,7 +1,8 @@
+/* eslint no-param-reassign: off */
 import co from 'co';
 import coBody from 'co-body';
 import config from 'config';
-import koa from 'koa';
+import Koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
 import uuid from 'uuid';
@@ -20,41 +21,37 @@ const mailConfig = config.apps.api.mails;
 const transporter = transporterFactory(mailConfig.transporter);
 const sendEmails = sendEmailsFactory(transporter, mailConfig.defaultOptions);
 
-const app = koa();
+const app = new Koa();
 
 app.use(methodFilter(['GET', 'POST', 'DELETE']));
 
 app.use(tokenCheckerMiddleware);
 
-app.use(function* getUser(next) {
-    this.userData = yield userFactory(this.client).findByEmail(this.user.email);
+app.use(async (ctx, next) => {
+    ctx.userData = await userFactory(ctx.client).findByEmail(ctx.user.email);
 
-    yield next;
+    await next();
 });
 
-app.use(function* setQueries(next) {
-    this.orderQueries = orderFactory(this.client);
-    this.productQueries = productFactory(this.client);
+app.use(async (ctx, next) => {
+    ctx.orderQueries = orderFactory(ctx.client);
+    ctx.productQueries = productFactory(ctx.client);
 
-    yield next;
+    await next();
 });
 
-app.use(koaRoute.post('/', function* postUserOrder(next) {
-    const orderData = yield coBody(this);
-    const productQueries = this.productQueries;
-    const products = yield orderData.products.map(co.wrap(function* getProduct(p) {
-        const product = yield productQueries.selectOne({ id: p.id });
+app.use(koaRoute.post('/', async (ctx, next) => {
+    const orderData = await coBody(ctx);
+    const products = await orderData.products.map(co.wrap(function* getProduct(p) {
+        const product = yield ctx.productQueries.selectOne({ id: p.id });
 
-        return {
-            ...p,
-            ...product,
-        };
+        return Object.assign({}, p, product);
     }));
 
     const total = products.reduce((t, p) => t + (p.price * (p.quantity || 1)), 0);
 
-    this.data = {
-        customer_id: this.userData.id,
+    ctx.data = {
+        customer_id: ctx.userData.id,
         date: new Date(),
         products,
         reference: uuid.v1(),
@@ -62,11 +59,11 @@ app.use(koaRoute.post('/', function* postUserOrder(next) {
         total,
     };
 
-    yield next;
+    await next();
 
-    yield sendEmails(prepareNewOrderMail(
-        this.userData,
-        this.data
+    await sendEmails(prepareNewOrderMail(
+        ctx.userData,
+        ctx.data
     ));
 }));
 
@@ -77,12 +74,12 @@ app.use(koaMount('/', crud(orderFactory, {
     DELETE: 'managed',
 })));
 
-app.use(koaRoute.get('/', function* getUserOrders() {
-    this.body = yield this.orderQueries.selectByUserId(this.userData.id);
+app.use(koaRoute.get('/', async ctx => {
+    ctx.body = await ctx.orderQueries.selectByUserId(ctx.userData.id);
 }));
 
-app.use(koaRoute.get('/:id', function* getUserOrder(id) {
-    this.body = yield this.orderQueries.selectOne({ id });
+app.use(koaRoute.get('/:id', async (ctx, id) => {
+    ctx.body = await ctx.orderQueries.selectOne({ id });
 }));
 
 export default app;

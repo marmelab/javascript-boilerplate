@@ -1,6 +1,18 @@
+/* eslint-disable func-names */
+import config from 'config';
+import { assert } from 'chai';
+import request from '../../lib/request';
+import fixturesFactory from '../../lib/fixturesLoader';
+import dbClient from '../../../src/api/lib/db/client';
+
 describe('/api/products', () => {
     describe('GET', () => {
+        let fixtureLoader;
+
         before(function* addFixtures() {
+            const db = yield dbClient(config.apps.api.db);
+            fixtureLoader = fixturesFactory(db.client);
+
             yield fixtureLoader.loadDefaultFixtures();
         });
         it('should not require authentification', function* () {

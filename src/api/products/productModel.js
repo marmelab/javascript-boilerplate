@@ -22,9 +22,8 @@ const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 export default client => {
     const queries = queriesFactory(client);
 
-    return {
+    return Object.assign({
         tableName,
         exposedFields,
-        ...queries,
-    };
+    }, queries);
 };

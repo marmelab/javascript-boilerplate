@@ -1,3 +1,4 @@
+/* eslint func-names: off */
 import { assert } from 'chai';
 import sendEmailsFactory from './sendEmails';
 
@@ -7,7 +8,7 @@ describe('Mails sendEmails', () => {
 
     beforeEach(() => {
         transporter = {
-            *sendMail_(input) { return input; },
+            sendMailPromise(input) { return Promise.resolve(input); },
         };
         defaultOptions = {
             emitter: { name: 'marmelab', address: 'info@marmelab.com' },

@@ -140,11 +140,11 @@ log-api-test: ## Display the logs of the API with PM2
 build-test: ## Build all front applications defined with webpack for test environment
 	@NODE_ENV=test make build
 
-test-api-unit: ## Run the API unit tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
+test-api-unit: ## Run the API unit tests with mocha
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./reify-transformer" --require=co-mocha --recursive ./src/api/
 
-test-api-functional: reset-test-database ## Run the API functional tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
+test-api-functional: reset-test-database ## Run the API functional tests with mocha
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./reify-transformer" --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
