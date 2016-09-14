@@ -95,7 +95,7 @@ restart-api-dev: ## Restart the API in development environment
 	@echo "API dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
-	@node ./src/api/index.js
+	@node --require reify ./src/api/index.js
 
 run-frontend: ## Starts the frontend applications using webpack-dev-server (you may define the NODE_ENV)
 	@./node_modules/.bin/webpack-dev-server  \
@@ -136,10 +136,10 @@ build-test: ## Build all front applications defined with webpack for test enviro
 	@NODE_ENV=test make build
 
 test-api-unit: ## Run the API unit tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./src/api/
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require reify --require co-mocha --recursive ./src/api
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./babel-transformer" --require=co-mocha --recursive ./e2e/api
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require reify --require co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"

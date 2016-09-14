@@ -7,7 +7,7 @@
             },
             "instances": 1,
             "name": "bpm_api-dev",
-            "script": "./src/api/index.js",
+            "script": "node --require reify ./src/api/index.js",
             "watch": [
                 "./src/api",
                 "./src/isomorphic",

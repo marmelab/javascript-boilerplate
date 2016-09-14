@@ -113,9 +113,8 @@ export default client => {
         return result;
     };
 
-    return {
-        tableName,
+    return Object.assign({
         exposedFields,
-        ...queries,
-    };
+        tableName,
+    }, queries);
 };

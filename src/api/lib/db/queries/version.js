@@ -14,7 +14,7 @@ export default (client, table, historyTable, fields, idFieldName, idAutoGenerate
             const params = {};
             params[field] = value;
             return ({
-                parameters: { ...result.parameters, ...params },
+                parameters: Object.assign({}, result.parameters, params),
                 setQuery: [...result.setQuery, `${field}=$${field}`],
             });
         }, { parameters: {}, setQuery: [] });

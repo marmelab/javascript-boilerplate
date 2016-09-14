@@ -32,11 +32,10 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     const delay = config.apps.api.security.expirationTokenDelay * 1000;
     const tokenExpires = (new Date((new Date()).getTime() + delay));
 
-    this.cookies.set('token', cookieToken, {
-        ...config.apps.api.cookies,
+    this.cookies.set('token', cookieToken, Object.assign({}, config.apps.api.cookies, {
         expires: tokenExpires,
         httpOnly: true,
-    });
+    }));
 
     this.body = {
         id: user.id,

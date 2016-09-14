@@ -13,7 +13,7 @@ const transporterFactory = config => {
         transporter = nodemailer.createTransport(smtpTransport(config.auth || {}));
         break;
     default: {
-        const transport = require(`./transporters/${config.transport}`);
+        const transport = require(`./transporters/${config.transport}`).default;
         transporter = nodemailer.createTransport(transport(config.transport_options));
     }}
 
