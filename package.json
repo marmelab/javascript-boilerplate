@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": ">= 6.4.0"
+    "node": ">= 6.5.0"
   },
   "dependencies": {
     "admin-on-rest": "0.3.1",
