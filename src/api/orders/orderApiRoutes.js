@@ -1,6 +1,4 @@
 /* eslint no-param-reassign: off */
-import co from 'co';
-import coBody from 'co-body';
 import config from 'config';
 import Koa from 'koa';
 import koaMount from 'koa-mount';
@@ -40,14 +38,15 @@ app.use(async (ctx, next) => {
     await next();
 });
 
+const sanitizeProduct = async (p, productQueries) => {
+    const product = await productQueries.selectOneById({ id: p.id });
+    return Object.assign({}, p, product);
+};
+
 app.use(koaRoute.post('/', async (ctx, next) => {
-    const orderData = await coBody(ctx);
-    const products = await orderData.products.map(co.wrap(function* getProduct(p) {
-        const product = yield ctx.productQueries.selectOne({ id: p.id });
+    const orderData = ctx.request.body;
 
-        return Object.assign({}, p, product);
-    }));
-
+    const products = await Promise.all(orderData.products.map(p => sanitizeProduct(p, ctx.productQueries)));
     const total = products.reduce((t, p) => t + (p.price * (p.quantity || 1)), 0);
 
     ctx.data = {

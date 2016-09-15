@@ -1,5 +1,6 @@
 import config from 'config';
 import Koa from 'koa';
+import koaBodyParser from 'koa-bodyparser';
 import koaCors from 'kcors';
 import koaMount from 'koa-mount';
 import koaHelmet from 'koa-helmet';
@@ -121,6 +122,8 @@ if (env !== 'development') {
     // gzip compression
     app.use(compress());
 }
+
+app.use(koaBodyParser());
 
 app.use(koaMount('/api', api));
 app.use(koaMount('/admin', admin));

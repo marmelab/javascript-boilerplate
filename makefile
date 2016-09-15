@@ -141,16 +141,16 @@ build-test: ## Build all front applications defined with webpack for test enviro
 	@NODE_ENV=test make build
 
 test-api-unit: ## Run the API unit tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./reify-transformer" --require=co-mocha --recursive ./src/api/
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./src/api/
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require "./reify-transformer" --require=co-mocha --recursive ./e2e/api
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
-test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
+test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
+	@NODE_ENV=test ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register "./src/isomorphic/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test

@@ -1,3 +1,8 @@
+/* eslint-disable func-names */
+import { assert } from 'chai';
+
+import request from '../../lib/request';
+
 describe('/healthcare', () => {
     describe('GET', () => {
         it('should return an object describing the API health', function* () {

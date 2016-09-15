@@ -1,17 +1,21 @@
 /* eslint-disable func-names */
 import config from 'config';
 import { assert } from 'chai';
+import { PgPool } from 'co-postgres-queries';
+
 import request from '../../lib/request';
 import fixturesFactory from '../../lib/fixturesLoader';
-import dbClient from '../../../src/api/lib/db/client';
 
 describe('/api/products', () => {
     describe('GET', () => {
         let fixtureLoader;
+        let db;
+        let pool;
 
         before(function* addFixtures() {
-            const db = yield dbClient(config.apps.api.db);
-            fixtureLoader = fixturesFactory(db.client);
+            pool = new PgPool(config.apps.api.db);
+            db = yield global.pool.connect();
+            fixtureLoader = fixturesFactory(db);
 
             yield fixtureLoader.loadDefaultFixtures();
         });
@@ -69,6 +73,8 @@ describe('/api/products', () => {
         });
         after(function* removeFixtures() {
             yield fixtureLoader.removeAllFixtures();
+            yield db.release();
+            yield pool.end();
         });
     });
     describe('POST', () => {

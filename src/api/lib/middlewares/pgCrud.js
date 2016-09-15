@@ -1,6 +1,4 @@
 /* eslint no-param-reassign: off, max-len: off */
-
-import coBody from 'co-body';
 import Koa from 'koa';
 import koaRoute from 'koa-route';
 
@@ -69,7 +67,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     // POST /
     app.use(koaRoute.post('/', async (ctx, next) => {
         if (ctx.availableMethods.POST) {
-            const data = ctx.data || (await coBody(ctx));
+            const data = ctx.data || ctx.request.body;
             ctx.body = await queries.insertOne(data);
         }
 
@@ -81,7 +79,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     // POST /multi
     app.use(koaRoute.post('/multi', async (ctx, next) => {
         if (ctx.availableMethods.POST) {
-            const data = ctx.data || (await coBody(ctx));
+            const data = ctx.data || ctx.request.body;
             ctx.body = await queries.batchInsert(data);
         }
 
@@ -123,7 +121,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     // PUT /:id
     app.use(koaRoute.put('/:id', async (ctx, id, next) => {
         if (ctx.availableMethods.PUT) {
-            const data = ctx.data || (await coBody(ctx));
+            const data = ctx.data || ctx.request.body;
             let modifiedEntity;
             try {
                 modifiedEntity = await queries.updateOne(id, data);

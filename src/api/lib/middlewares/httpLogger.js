@@ -22,7 +22,7 @@ export default httpLogger => async (ctx, next) => {
     await next();
 
     // Static files
-    if (['.css', '.js', '.woff'].indexOf(path.extname(ctx.request.url)) !== -1) {
+    if (['.css', '.js', '.woff'].includes(path.extname(ctx.request.url))) {
         return;
     }
     ctx.httpLog.status = ctx.status;

@@ -1,23 +1,25 @@
 /* eslint-disable func-names */
 import config from 'config';
 import { assert } from 'chai';
+import { PgPool } from 'co-postgres-queries';
+
 import request from '../../lib/request';
 import fixturesFactory from '../../lib/fixturesLoader';
-import dbClient from '../../../src/api/lib/db/client';
-
 import userFactory from '../../../src/api/users/userModel';
 import orderFactory from '../../../src/api/orders/orderModel';
 
-describe.only('/api/orders', () => {
+describe('/api/orders', () => {
     let user;
     let userToken;
     let userCookieToken;
     let fixtureLoader;
     let db;
+    let pool;
 
     before(function* addFixtures() {
-        db = yield dbClient(config.apps.api.db);
-        fixtureLoader = fixturesFactory(db.client);
+        pool = new PgPool(config.apps.api.db);
+        db = yield global.pool.connect();
+        fixtureLoader = fixturesFactory(db);
 
         yield fixtureLoader.loadDefaultFixtures();
         const userRepository = userFactory(db);
@@ -135,5 +137,7 @@ describe.only('/api/orders', () => {
     });
     after(function* removeFixtures() {
         yield fixtureLoader.removeAllFixtures();
+        yield db.release();
+        yield pool.end();
     });
 });

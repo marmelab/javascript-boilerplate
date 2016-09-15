@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: off */
-import coBody from 'co-body';
 import config from 'config';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -20,7 +19,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(koaRoute.post('/sign-in', async ctx => {
-    const { email, password } = await coBody(ctx);
+    const { email, password } = ctx.request.body;
     const user = await userRepository.authenticate(email, password);
     if (!user) {
         this.status = 401;
@@ -49,7 +48,7 @@ app.use(koaRoute.post('/sign-in', async ctx => {
 }));
 
 app.use(koaRoute.post('/sign-up', async ctx => {
-    const { email, password } = await coBody(ctx);
+    const { email, password } = ctx.request.body;
     const user = await userRepository.insertOne({ email, password });
 
     if (!user) {

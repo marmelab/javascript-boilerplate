@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import coBody from 'co-body';
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import Koa from 'koa';
@@ -14,7 +13,7 @@ app.use(methodFilter(['POST']));
 app.use(koaRoute.post('/', rateLimiter(config.apps.api.security.rateLimitOptions.auth)));
 
 app.use(koaRoute.post('/', async ctx => {
-    const { email, password } = await coBody(ctx);
+    const { email, password } = ctx.request.body;
     const userRepository = userRepositoryFactory(ctx.client);
     const user = await userRepository.authenticate(email, password);
     if (!user) {
@@ -35,7 +34,7 @@ app.use(koaRoute.post('/', async ctx => {
         httpOnly: true,
     }));
 
-    ctx.body = {
+    ctx.body = { // eslint-disable-line no-param-reassign
         id: user.id,
         email: user.email,
         expires: tokenExpires.getTime(),
