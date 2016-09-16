@@ -9,7 +9,7 @@ import { Card, CardActions, CardTitle } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import TextField from 'redux-form-material-ui/lib/TextField';
+import TextField from 'material-ui/TextField';
 
 import { signIn as signInActions } from './actions';
 import { getPreviousRoute } from './reducer';
