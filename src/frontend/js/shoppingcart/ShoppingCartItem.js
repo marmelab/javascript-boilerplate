@@ -7,8 +7,7 @@ import ProductPropType from '../product/productPropTypes';
 
 class ShoppingCartItem extends Component {
     removeProductFromShoppingCart = () => {
-        const { id, removeProductFromShoppingCart } = this.props;
-        removeProductFromShoppingCart(id);
+        this.props.removeProductFromShoppingCart(this.props.id);
     }
 
     render() {

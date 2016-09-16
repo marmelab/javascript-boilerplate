@@ -8,11 +8,13 @@ import ProductItem from './ProductItem';
 
 describe('Component ProductItem', () => {
     const props = {
-        id: 42,
-        price: 28.53,
-        reference: 'REF-654564',
-        thumbnail: 'http://google.fr/image.jpg',
-        description: 'Best product ever',
+        product: {
+            id: 42,
+            price: 28.53,
+            reference: 'REF-654564',
+            thumbnail: 'http://google.fr/image.jpg',
+            description: 'Best product ever',
+        },
         orderProduct: sinon.spy(),
     };
 

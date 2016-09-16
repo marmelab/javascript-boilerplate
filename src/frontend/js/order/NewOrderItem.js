@@ -7,13 +7,11 @@ import ProductPropType from '../product/productPropTypes';
 
 class NewOrderItem extends Component {
     setShoppingCartItemQuantity = event => {
-        const { id, setShoppingCartItemQuantity } = this.props;
-        setShoppingCartItemQuantity(id, parseInt(event.target.value, 10));
+        this.props.setShoppingCartItemQuantity(this.props.id, parseInt(event.target.value, 10));
     }
 
     removeProductFromShoppingCart = () => {
-        const { id, removeProductFromShoppingCart } = this.props;
-        removeProductFromShoppingCart(id);
+        this.props.removeProductFromShoppingCart(this.props.id);
     }
 
     render() {

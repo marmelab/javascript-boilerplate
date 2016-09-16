@@ -1,5 +1,7 @@
 /* globals API_URL */
-const getOptions = jwt => {
+import fetch from 'isomorphic-fetch';
+
+const getOptions = (method, { jwt, id, body }) => {
     const headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
@@ -9,11 +11,23 @@ const getOptions = jwt => {
         headers.Authorization = jwt;
     }
 
+    let finalMethod = method;
+
+    if (id && body && method === 'GET') {
+        finalMethod = 'PUT';
+    }
+
+    if (!id && body && method === 'GET') {
+        finalMethod = 'POST';
+    }
+
     return {
-        headers,
         // Allows API to set http-only cookies with AJAX calls
         // @see http://www.redotheweb.com/2015/11/09/api-security.html
         credentials: 'include',
+        headers,
+        method: finalMethod,
+        body: body ? JSON.stringify(body) : undefined,
     };
 };
 
@@ -27,8 +41,14 @@ const handleResponse = response => {
 
 const handleError = error => ({ error });
 
-export default path => (jwt, id) =>
-    fetch(`${API_URL}/${path}${id ? `/${id}` : ''}`, getOptions(jwt))
-    .then(handleResponse)
-    .then(json => ({ result: json }))
-    .catch(handleError);
+export const customFetch = fetchImpl => (path, method = 'GET') => (options = {}) => {
+    const url = `${API_URL}/${path}${options.id ? `/${options.id}` : ''}`;
+    const finalOptions = getOptions(method, options);
+
+    return fetchImpl(url, finalOptions)
+        .then(handleResponse)
+        .then(json => ({ result: json }))
+        .catch(handleError);
+};
+
+export default customFetch(fetch);

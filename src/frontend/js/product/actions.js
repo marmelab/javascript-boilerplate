@@ -8,7 +8,7 @@ export const productActionTypes = {
 
 export default {
     item: {
-        request: createAction(productActionTypes.item.REQUEST),
+        request: createAction(productActionTypes.item.REQUEST, id => ({ id })),
         success: createAction(productActionTypes.item.SUCCESS),
         failure: createAction(productActionTypes.item.FAILURE),
     },

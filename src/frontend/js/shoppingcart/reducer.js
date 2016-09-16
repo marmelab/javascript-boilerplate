@@ -14,7 +14,7 @@ export const computeShoppingCartTotal = products =>
     products.reduce((total, p) => total + (p.price * p.quantity), 0);
 
 export default (state = initialState, { type, payload }) => {
-    const products = state.products;
+    const products = [...state.products];
 
     switch (type) {
     case ADD_PRODUCT_TO_SHOPPING_CART: {

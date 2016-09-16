@@ -1,17 +1,15 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint require-yield: off, func-names: off */
 import { expect } from 'chai';
 import { routerActions } from 'react-router-redux';
-import { call, put, select } from 'redux-saga/effects';
-import sinon from 'sinon';
+import { call, put } from 'redux-saga/effects';
 
-import orderActions from './actions';
-import { newOrder as newOrderSaga } from './sagas';
+import { newOrderSaga } from './sagas';
 import { clearShoppingCart } from '../shoppingcart/actions';
-import jwtSelector from '../app/jwtSelector';
 
 describe('orderSagas', () => {
-    describe('newOrder', () => {
-        const fetchNewOrder = sinon.spy();
+    describe('newOrderSaga', () => {
+        const fetchNewOrderSaga = function* () { return; };
+
         const action = {
             payload: [{
                 id: 42,
@@ -20,65 +18,34 @@ describe('orderSagas', () => {
             }],
         };
 
-        it('should select using the specified selector', () => {
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
+        it('should call the fetch saga', () => {
+            const saga = newOrderSaga(fetchNewOrderSaga)(action);
 
-            expect(saga.next().value).to.deep.equal(select(jwtSelector));
-        });
-
-        it('should call the fetchOrders function', () => {
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
-            saga.next();
-
-            expect(saga.next('blublu').value).to.deep.equal(call(fetchNewOrder, [{
-                id: 42,
-            }, {
-                id: 84,
-            }], 'blublu'));
-        });
-
-        it('should put the orderActions.order.success action with order on successfull fetch', () => { // eslint-disable-line max-len
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
-            saga.next();
-            saga.next();
-
-            expect(saga.next({
-                order: { id: 42 },
-            }).value).to.deep.equal(put(orderActions.order.success({ id: 42 })));
+            expect(saga.next('blublu').value).to.deep.equal(call(fetchNewOrderSaga, {
+                payload: [{
+                    id: 42,
+                }, {
+                    id: 84,
+                }] }));
         });
 
         it('should put the clearShoppingCart action with order on successfull fetch', () => {
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
-            saga.next();
-            saga.next();
-            saga.next({
-                order: { id: 42 },
-            });
-
-            expect(saga.next().value).to.deep.equal(put(clearShoppingCart()));
-        });
-
-        it('should put the routerActions.push action with orders on successfull fetch', () => {
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
-            saga.next();
-            saga.next();
-            saga.next({
-                order: { id: 42 },
-            });
-            saga.next();
-
-            expect(saga.next().value).to.deep.equal(put(routerActions.push('/orders/42')));
-        });
-
-        it('should put the orderActions.order.failure action with error on failed fetch', () => {
-            const error = new Error('Run you fools');
-            const saga = newOrderSaga(fetchNewOrder, jwtSelector)(action);
-            saga.next();
+            const saga = newOrderSaga(fetchNewOrderSaga)(action);
             saga.next();
 
             expect(saga.next({
-                error,
-            }).value).to.deep.equal(put(orderActions.order.failure(error)));
+                result: { id: 42 },
+            }).value).to.deep.equal(put(clearShoppingCart()));
+        });
+
+        it('should put the routerActions.push action with orders on successfull fetch', () => {
+            const saga = newOrderSaga(fetchNewOrderSaga)(action);
+            saga.next();
+            saga.next({
+                result: { id: 42 },
+            });
+
+            expect(saga.next().value).to.deep.equal(put(routerActions.push('/orders/42')));
         });
     });
 });

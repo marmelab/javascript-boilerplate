@@ -14,12 +14,12 @@ export default {
         failure: createAction(orderActionTypes.list.FAILURE),
     },
     item: {
-        request: createAction(orderActionTypes.item.REQUEST),
+        request: createAction(orderActionTypes.item.REQUEST, id => ({ id })),
         success: createAction(orderActionTypes.item.SUCCESS),
         failure: createAction(orderActionTypes.item.FAILURE),
     },
     order: {
-        request: createAction(orderActionTypes.order.REQUEST),
+        request: createAction(orderActionTypes.order.REQUEST, products => ({ body: { products } })),
         success: createAction(orderActionTypes.order.SUCCESS),
         failure: createAction(orderActionTypes.order.FAILURE),
     },

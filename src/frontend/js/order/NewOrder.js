@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import numeral from 'numeral';
-import HelmetTitle from '../app/HelmetTitle';
 import orderActions from './actions';
 import NewOrderItem from './NewOrderItem';
 import {
@@ -10,9 +10,23 @@ import {
     setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
 } from '../shoppingcart/actions';
 import ProductPropType from '../product/productPropTypes';
+import withWindowTitle from '../app/withWindowTitle';
+
+const mapStateToProps = state => ({
+    ...state.shoppingCart,
+    loading: state.order.loading,
+});
+
+const mapDispatchToProps = ({
+    placeNewOrder: orderActions.order.request,
+    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+    setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
+});
 
 class NewOrder extends Component {
-    placeNewOrder = () => this.props.placeNewOrder(this.props.products)
+    placeNewOrder = () => {
+        this.props.placeNewOrder(this.props.products);
+    }
 
     render() {
         const {
@@ -26,7 +40,6 @@ class NewOrder extends Component {
         return (
             <div className="shopping-cart list-group">
                 <h2>New order</h2>
-                <HelmetTitle title="Shopping cart" />
                 {products.length === 0 &&
                     <div className="list-group-item">Your shopping cart is empty</div>
                 }
@@ -72,15 +85,7 @@ NewOrder.propTypes = {
     total: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = state => ({
-    ...state.shoppingCart,
-    loading: state.order.loading,
-});
-
-const mapDispatchToProps = ({
-    placeNewOrder: orderActions.order.request,
-    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
-    setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewOrder);
+export default compose(
+    withWindowTitle('New order'),
+    connect(mapStateToProps, mapDispatchToProps),
+)(NewOrder);

@@ -1,10 +1,11 @@
+/* eslint func-names: off */
 import { takeEvery } from 'redux-saga';
 import { routerActions } from 'react-router-redux';
-import { call, fork, put, select } from 'redux-saga/effects';
+import { call, fork, put } from 'redux-saga/effects';
 
 import orderActions, { orderActionTypes } from './actions';
 import { clearShoppingCart } from '../shoppingcart/actions';
-import { entityFactory } from '../../../common-client/fetch/sagas';
+import { entityFactory, fetchSagaFactory } from '../../../common-client/fetch/sagas';
 import jwtSelector from '../app/jwtSelector';
 
 import {
@@ -13,26 +14,23 @@ import {
     fetchNewOrder as fetchNewOrderApi,
 } from './api';
 
-export const newOrder = (fetchNewOrder) => function* newOrderSaga({ payload }) {
-    const jwt = yield select(jwtSelector);
-    const {
-        error,
-        order,
-    } = yield call(fetchNewOrder, payload, jwt);
+export const newOrderSaga = fetchNewOrderSaga => function* ({ payload }) {
+    const { error, result } = yield call(fetchNewOrderSaga, { payload });
 
-    if (error) {
-        console.error({ error }); // eslint-disable-line no-console
-        yield put(orderActions.order.failure(error));
-    } else {
-        yield put(orderActions.order.success(order));
+    if (!error) {
         yield put(clearShoppingCart());
-        yield put(routerActions.push(`/orders/${order.id}`));
+        yield put(routerActions.push(`/orders/${result.id}`));
     }
+};
+
+export const watchNewOrderSaga = fetchNewOrderSaga => function* () {
+    yield* takeEvery(orderActionTypes.order.REQUEST, newOrderSaga(fetchNewOrderSaga));
 };
 
 const sagas = function* sagas() {
     yield fork(entityFactory(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtSelector));
-    yield* takeEvery(orderActionTypes.order.REQUEST, newOrder(fetchNewOrderApi));
+    const fetchNewOrderSaga = fetchSagaFactory(orderActions.order, fetchNewOrderApi, jwtSelector);
+    yield fork(watchNewOrderSaga(fetchNewOrderSaga));
 };
 
 export default sagas;
