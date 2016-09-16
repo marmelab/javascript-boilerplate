@@ -1,29 +1,30 @@
 /* eslint func-names: off */
-import queriesFactory from '../lib/db/queries/index';
+import { crud } from 'co-postgres-queries';
 
 export const OrderStatus = {
     pending: 'pending',
     sent: 'sent',
     cancelled: 'cancelled',
 };
+const tableName = 'order_product';
+const exposedFields = [
+    'id',
+    'order_id',
+    'product_id',
+    'quantity',
+    'reference',
+    'width',
+    'height',
+    'price',
+    'thumbnail',
+    'image',
+    'description',
+];
+
+const crudQueries = crud(tableName, exposedFields, exposedFields);
 
 export default client => {
-    const tableName = 'order_product';
-    const exposedFields = [
-        'id',
-        'order_id',
-        'product_id',
-        'quantity',
-        'reference',
-        'width',
-        'height',
-        'price',
-        'thumbnail',
-        'image',
-        'description',
-    ];
-
-    const queries = queriesFactory(client, tableName, exposedFields);
+    const queries = crudQueries(client);
 
     queries.selectByOrderId = function* (orderId) {
         const sql = `
@@ -31,7 +32,7 @@ export default client => {
             FROM ${tableName}
             WHERE order_id = $orderId`;
 
-        return yield client.query_(sql, { orderId });
+        return yield client.query(sql, { orderId });
     };
 
     return {
