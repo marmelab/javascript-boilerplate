@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import createRequestActionTypes from '../app/entities/createRequestActionTypes';
+import createRequestActionTypes from '../../../common-client/fetch/createRequestActionTypes';
 
 export const productActionTypes = {
     item: createRequestActionTypes('PRODUCT'),

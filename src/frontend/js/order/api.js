@@ -1,5 +1,5 @@
 /* globals API_URL */
-import fetchFactory from '../app/entities/fetchEntities';
+import fetchFactory from '../../../common-client/fetch/fetch';
 
 export const fetchOrders = fetchFactory('orders');
 export const fetchOrder = fetchFactory('orders');

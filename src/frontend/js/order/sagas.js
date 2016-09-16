@@ -4,7 +4,7 @@ import { call, fork, put, select } from 'redux-saga/effects';
 
 import orderActions, { orderActionTypes } from './actions';
 import { clearShoppingCart } from '../shoppingcart/actions';
-import { entityFactory } from '../app/entities/sagas';
+import { entityFactory } from '../../../common-client/fetch/sagas';
 import jwtSelector from '../app/jwtSelector';
 
 import {

@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import fetchFactory from './fetchEntities';
+import fetchFactory from './fetch';
 
 chai.use(sinonChai);
 

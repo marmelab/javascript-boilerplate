@@ -18,7 +18,7 @@ document.getElementById('loginForm').addEventListener('submit', (event) => {
 
     const req = new XMLHttpRequest();
     req.withCredentials = true;
-    req.open('POST', `${ADMIN_API_URL}authenticate`, true);
+    req.open('POST', `${ADMIN_API_URL}/authenticate`, true);
     req.setRequestHeader('Content-Type', 'application/json');
 
     req.onload = () => {
