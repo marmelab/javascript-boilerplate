@@ -1,7 +1,7 @@
 import { routerActions } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
-import { fetchSagaFactory } from '../app/entities/sagas';
+import { fetchSagaFactory } from '../../../common-client/fetch/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,
