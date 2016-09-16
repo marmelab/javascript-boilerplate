@@ -26,18 +26,17 @@ const crudQueries = crud(tableName, exposedFields, exposedFields);
 export default client => {
     const queries = crudQueries(client);
 
-    queries.selectByOrderId = function* (orderId) {
+    queries.selectByOrderId = async orderId => {
         const sql = `
             SELECT ${exposedFields.join(', ')}
             FROM ${tableName}
             WHERE order_id = $orderId`;
 
-        return yield client.query(sql, { orderId });
+        return await client.query({ sql, parameters: { orderId } });
     };
 
-    return {
+    return Object.assign({
         tableName,
         exposedFields,
-        ...queries,
-    };
+    }, queries);
 };
