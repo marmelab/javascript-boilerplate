@@ -2,12 +2,12 @@
 
 import co from 'co';
 import config from 'config';
-import dbClient from '../src/api/lib/db/client';
+import { PgPool } from 'co-postgres-queries';
 import fixturesFactory from '../e2e/lib/fixturesLoader';
 
 co(function* () {
-    const db = yield dbClient(config.apps.api.db);
-    const fixtureLoader = fixturesFactory(db.client);
+    const db = new PgPool(config.apps.api.db);
+    const fixtureLoader = fixturesFactory(db);
     yield fixtureLoader.removeAllFixtures();
     yield fixtureLoader.loadDefaultFixtures();
 }).then(() => {

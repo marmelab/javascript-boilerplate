@@ -8,7 +8,7 @@ import data from '../fixtures/demo_fixtures.json';
 import productFactory from '../../src/api/products/productModel';
 import userFactory from '../../src/api/users/userModel';
 
-export default function(client) {
+export default function (client) {
     const productQueries = productFactory(client);
     const userQueries = userFactory(client);
 
@@ -18,21 +18,21 @@ export default function(client) {
     }
 
     function* removeAllFixtures() {
-        yield client.queryPromise('TRUNCATE product RESTART IDENTITY');
-        yield client.queryPromise('TRUNCATE user_order RESTART IDENTITY');
-        yield client.queryPromise('TRUNCATE user_account RESTART IDENTITY');
+        yield client.query({ sql: 'TRUNCATE product RESTART IDENTITY' });
+        yield client.query({ sql: 'TRUNCATE user_order RESTART IDENTITY' });
+        yield client.query({ sql: 'TRUNCATE user_account RESTART IDENTITY' });
     }
 
     function* getTokenFor(email) {
         // const causes an error! don't know why
-        let user = yield userQueries.findByEmail(email);
+        const user = yield userQueries.findByEmail(email);
         delete user.id;
 
         return jwt.sign(user, config.apps.api.security.jwt.privateKey);
     }
 
     function* getCookieTokenFor(email) {
-        let token = yield getTokenFor(email);
+        const token = yield getTokenFor(email);
 
         return crypto.createHmac('sha256', config.apps.api.security.secret)
             .update(token)
@@ -41,7 +41,7 @@ export default function(client) {
 
     function* addProduct(productData) {
         // const causes an error! don't know why
-        let defaultProductData = {
+        const defaultProductData = {
             reference: uuid.v1(),
             width: 60,
             height: 40,

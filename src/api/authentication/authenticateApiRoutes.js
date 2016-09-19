@@ -22,7 +22,9 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     const { email, password } = yield coBody(this);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
-        this.throw('Invalid credentials.', 401);
+        this.status = 401;
+        this.body = 'Invalid credentials.';
+        return;
     }
 
     const token = jwt.sign(user, config.apps.api.security.jwt.privateKey);
@@ -48,7 +50,7 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
 
 app.use(koaRoute.post('/sign-up', function* signUp() {
     const { email, password } = yield coBody(this);
-    const user = yield userRepository.insertOne({email, password});
+    const user = yield userRepository.insertOne({ email, password });
 
     if (!user) {
         this.status = 401;

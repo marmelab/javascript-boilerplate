@@ -52,7 +52,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     app.use(koaRoute.get('/:id', function* (id, next) {
         if (this.availableMethods.GET) {
             try {
-                this.body = yield queries.selectOneById(id);
+                this.body = yield queries.selectOne({ id });
             } catch (e) {
                 if (e.message === 'not found') {
                     this.status = 404;
@@ -94,7 +94,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     app.use(koaRoute.delete('/:id', function* (id, next) {
         if (this.availableMethods.DELETE) {
             try {
-                this.body = yield queries.removeOne(id);
+                this.body = yield queries.deleteOne(id);
             } catch (e) {
                 if (e.message === 'not found') {
                     this.status = 404;

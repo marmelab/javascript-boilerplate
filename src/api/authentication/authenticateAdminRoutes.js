@@ -18,7 +18,9 @@ app.use(koaRoute.post('/', function* login() {
     const userRepository = userRepositoryFactory(this.client);
     const user = yield userRepository.authenticate(email, password);
     if (!user) {
-        this.throw('Invalid credentials.', 401);
+        this.body = 'Invalid credentials.';
+        this.status = 401;
+        return;
     }
 
     const token = jwt.sign(user, config.apps.api.security.jwt.privateKey);

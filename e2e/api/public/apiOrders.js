@@ -7,11 +7,11 @@ describe('/api/orders', () => {
     let userCookieToken;
     before(function* addFixtures() {
         yield fixtureLoader.loadDefaultFixtures();
-        const userRepository = userFactory(db.client);
+        const userRepository = userFactory(db);
         user = yield userRepository.findByEmail('user1@marmelab.io');
         userToken = yield fixtureLoader.getTokenFor('user1@marmelab.io');
         userCookieToken = yield fixtureLoader.getCookieTokenFor('user1@marmelab.io');
-        yield orderFactory(db.client).insertOne({
+        yield orderFactory(db).insertOne({
             reference: 'ref1',
             date: new Date(),
             customer_id: user.id,
@@ -95,7 +95,7 @@ describe('/api/orders', () => {
             assert.equal(statusCode, 401);
         });
         it('should create a order', function* () {
-            let userOrders = yield orderFactory(db.client).selectByUserId(user.id);
+            let userOrders = yield orderFactory(db).selectByUserId(user.id);
             assert.equal(userOrders.length, 1);
             const { statusCode, body } = yield request({
                 method: 'POST',
@@ -107,7 +107,7 @@ describe('/api/orders', () => {
                 },
             }, userToken, { token: userCookieToken });
             assert.equal(statusCode, 200, JSON.stringify(body));
-            userOrders = yield orderFactory(db.client).selectByUserId(user.id);
+            userOrders = yield orderFactory(db).selectByUserId(user.id);
             assert.equal(userOrders.length, 2);
         });
     });

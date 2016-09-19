@@ -5,6 +5,7 @@ import koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
 import uuid from 'uuid';
+
 import crud from '../lib/middlewares/pgCrud';
 import methodFilter from '../lib/middlewares/methodFilter';
 import orderFactory, { OrderStatus } from './orderModel';
@@ -42,7 +43,7 @@ app.use(koaRoute.post('/', function* postUserOrder(next) {
     const orderData = yield coBody(this);
     const productQueries = this.productQueries;
     const products = yield orderData.products.map(co.wrap(function* getProduct(p) {
-        const product = yield productQueries.selectOneById(p.id);
+        const product = yield productQueries.selectOne({ id: p.id });
 
         return {
             ...p,
@@ -81,7 +82,7 @@ app.use(koaRoute.get('/', function* getUserOrders() {
 }));
 
 app.use(koaRoute.get('/:id', function* getUserOrder(id) {
-    this.body = yield this.orderQueries.selectOneById(id);
+    this.body = yield this.orderQueries.selectOne({ id });
 }));
 
 export default app;

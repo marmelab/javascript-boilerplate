@@ -3,7 +3,7 @@ import koa from 'koa';
 import koaRoute from 'koa-route';
 import methodFilter from './lib/middlewares/methodFilter';
 import fetch from 'isomorphic-fetch';
-import dbClient from './lib/db/client';
+import { PgPool } from 'co-postgres-queries';
 
 import internetAccessCheck from './healthcare/internet';
 import dbCheck from './healthcare/db';
@@ -24,7 +24,7 @@ app.use(koaRoute.get('/', function* primaryEntryPoint() {
     }
 
     try {
-        db = yield dbCheck(config.apps.api.db, dbClient);
+        db = yield dbCheck(config.apps.api.db, PgPool);
     } catch (err) {
         db = false;
     }

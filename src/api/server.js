@@ -5,10 +5,12 @@ import koaCors from 'koa-cors';
 import koaMount from 'koa-mount';
 import koaHelmet from 'koa-helmet';
 import compress from 'koa-compressor';
+import { PgPool } from 'co-postgres-queries';
 
-import dbClient from './lib/db/client';
 import logger from './lib/logger';
 import xdomainRoute from './lib/xdomainRoute';
+
+const pool = new PgPool(config.apps.api.db);
 
 const env = process.env.NODE_ENV || 'development';
 const port = config.apps.api.port;
@@ -129,12 +131,8 @@ app.use(koaMount('/', koaCors({
 
 // DB connection
 app.use(function* connectToDb(next) {
-    let pgConnection;
-    let error;
-
     try {
-        pgConnection = yield dbClient(config.apps.api.db);
-        this.client = pgConnection.client;
+        this.client = yield pool.connect();
     } catch (err) {
         appLogger.log('error', `Unable to connect to database: ${err.message}`, { err });
         this.throw(503, 'Unable to connect to database');
@@ -145,12 +143,12 @@ app.use(function* connectToDb(next) {
     } catch (err) {
         // Since there was an error somewhere down the middleware,
         // then we need to throw this client away.
-        error = err;
+        this.client.end();
 
         throw err;
     } finally {
         appLogger.log('debug', 'Closing DB connection');
-        pgConnection.done(error);
+        this.client.release();
     }
 });
 
