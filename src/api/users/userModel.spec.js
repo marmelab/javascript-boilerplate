@@ -26,7 +26,7 @@ describe('User Model', () => {
             query: ({ parameters }) => {
                 assert.deepEqual(parameters.email, 'email@example.org');
 
-                return Promise.resolve({ id: 42, email: 'email@example.org' });
+                return Promise.resolve([{ id: 42, email: 'email@example.org' }]);
             },
         };
 

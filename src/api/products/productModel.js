@@ -12,10 +12,7 @@ const fields = [
     'stock',
 ];
 
-const exposedFields = [
-    'id',
-    ...fields,
-];
+const exposedFields = ['id'].concat(fields);
 
 const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 

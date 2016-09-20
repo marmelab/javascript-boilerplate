@@ -22,8 +22,8 @@ app.use(koaRoute.post('/sign-in', async ctx => {
     const { email, password } = ctx.request.body;
     const user = await userRepository.authenticate(email, password);
     if (!user) {
-        this.status = 401;
-        this.body = 'Invalid credentials.';
+        ctx.status = 401;
+        ctx.body = 'Invalid credentials.';
         return;
     }
 

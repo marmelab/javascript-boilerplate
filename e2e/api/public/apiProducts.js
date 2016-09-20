@@ -14,7 +14,7 @@ describe('/api/products', () => {
 
         before(function* addFixtures() {
             pool = new PgPool(config.apps.api.db);
-            db = yield global.pool.connect();
+            db = yield pool.connect();
             fixtureLoader = fixturesFactory(db);
 
             yield fixtureLoader.loadDefaultFixtures();
@@ -73,8 +73,8 @@ describe('/api/products', () => {
         });
         after(function* removeFixtures() {
             yield fixtureLoader.removeAllFixtures();
-            yield db.release();
-            yield pool.end();
+            db.release();
+            pool.end();
         });
     });
     describe('POST', () => {

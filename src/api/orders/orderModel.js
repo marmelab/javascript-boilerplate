@@ -18,10 +18,7 @@ const fields = [
     'status',
 ];
 
-const exposedFields = [
-    'id',
-    ...fields,
-];
+const exposedFields = ['id'].concat(fields);
 
 const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
@@ -39,7 +36,7 @@ export default client => {
     };
 
     const selectOne = queries.selectOne;
-    queries.selectOne = async id => {
+    queries.selectOne = async ({ id }) => {
         const order = await selectOne({ id });
         order.products = await orderProductsQueries.selectByOrderId(id);
 

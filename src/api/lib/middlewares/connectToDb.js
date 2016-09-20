@@ -1,11 +1,7 @@
 /* eslint no-param-reassign: off */
-export default (dbClient, appLogger, config) => async (ctx, next) => {
-    let pgConnection;
-    let error;
-
+export default (connect, appLogger) => async (ctx, next) => {
     try {
-        pgConnection = await dbClient(config);
-        ctx.client = pgConnection.client;
+        ctx.client = await connect();
     } catch (err) {
         appLogger.log('error', `Unable to connect to database: ${err.message}`, { err });
         ctx.throw(503, 'Unable to connect to database');
@@ -13,14 +9,14 @@ export default (dbClient, appLogger, config) => async (ctx, next) => {
 
     try {
         await next();
-    } catch (err) {
+    } catch (error) {
         // Since there was an error somewhere down the middleware,
         // then we need to throw this client away.
-        error = err;
+        ctx.client.end();
 
-        throw err;
+        throw error;
     } finally {
         appLogger.log('debug', 'Closing DB connection');
-        pgConnection.done(error);
+        ctx.client.release();
     }
 };

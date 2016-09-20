@@ -14,7 +14,7 @@ export default (queriesFactory, configuredMethods = {}) => {
     let queries;
 
     app.use(async (ctx, next) => {
-        ctx.availableMethods = { ...defaultMethods, ...configuredMethods };
+        ctx.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
 
         await next();
     });

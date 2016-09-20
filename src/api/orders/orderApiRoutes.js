@@ -67,7 +67,7 @@ app.use(koaRoute.post('/', async (ctx, next) => {
 }));
 
 app.use(koaMount('/', crud(orderFactory, {
-    GET: false,
+    GET: 'managed',
     PUT: false,
     POST: 'managed',
     DELETE: 'managed',
@@ -75,10 +75,6 @@ app.use(koaMount('/', crud(orderFactory, {
 
 app.use(koaRoute.get('/', async ctx => {
     ctx.body = await ctx.orderQueries.selectByUserId(ctx.userData.id);
-}));
-
-app.use(koaRoute.get('/:id', async (ctx, id) => {
-    ctx.body = await ctx.orderQueries.selectOne({ id });
 }));
 
 export default app;

@@ -116,7 +116,7 @@ app.use(koaCors({
 }));
 
 // DB connection
-app.use(connectToDbMiddleware(null /* dbClient */, appLogger, config.apps.api.db));
+app.use(connectToDbMiddleware(pool.connect, appLogger, config.apps.api.db));
 
 if (env !== 'development') {
     // gzip compression

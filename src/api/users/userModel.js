@@ -9,10 +9,8 @@ const fields = [
     'email',
     'password',
 ];
-const exposedFields = [
-    'id',
-    ...fields,
-];
+
+const exposedFields = ['id'].concat(fields);
 
 const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
@@ -47,6 +45,7 @@ export default client => {
 
     queries.authenticate = async (email, password) => {
         const foundUser = await queries.findByEmail(email);
+
         if (!foundUser || !bcrypt.compareSync(password, foundUser.password)) {
             return false;
         }
