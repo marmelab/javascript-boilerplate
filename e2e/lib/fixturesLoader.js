@@ -53,7 +53,7 @@ export default function (client) {
         };
 
         // ES7, in Babel it is experimental stage 2 and enabled by default
-        return yield productQueries.insertOne({ ...defaultProductData, ...productData });
+        return yield productQueries.insertOne(Object.assign({}, defaultProductData, productData));
     }
 
     return {

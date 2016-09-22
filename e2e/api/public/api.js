@@ -1,3 +1,8 @@
+/* eslint-disable func-names */
+import { assert } from 'chai';
+
+import request from '../../lib/request';
+
 describe('/api', () => {
     describe('GET', () => {
         it('should not require authentification', function* () {

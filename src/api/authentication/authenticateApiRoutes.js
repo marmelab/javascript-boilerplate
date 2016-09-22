@@ -1,29 +1,29 @@
-import coBody from 'co-body';
+/* eslint no-param-reassign: off */
 import config from 'config';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import koa from 'koa';
+import Koa from 'koa';
 import koaRoute from 'koa-route';
-import rateLimiterMiddleware from '../lib/rateLimiter';
+import rateLimiterMiddleware from '../lib/middlewares/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
 
-const app = koa();
+const app = new Koa();
 let userRepository;
 
 app.use(koaRoute.post('/', rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.auth)));
 
-app.use(function* init(next) {
-    userRepository = userRepositoryFactory(this.client);
+app.use(async (ctx, next) => {
+    userRepository = userRepositoryFactory(ctx.client);
 
-    yield next;
+    await next();
 });
 
-app.use(koaRoute.post('/sign-in', function* signIn() {
-    const { email, password } = yield coBody(this);
-    const user = yield userRepository.authenticate(email, password);
+app.use(koaRoute.post('/sign-in', async ctx => {
+    const { email, password } = ctx.request.body;
+    const user = await userRepository.authenticate(email, password);
     if (!user) {
-        this.status = 401;
-        this.body = 'Invalid credentials.';
+        ctx.status = 401;
+        ctx.body = 'Invalid credentials.';
         return;
     }
 
@@ -34,13 +34,12 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     const delay = config.apps.api.security.expirationTokenDelay * 1000;
     const tokenExpires = (new Date((new Date()).getTime() + delay));
 
-    this.cookies.set('token', cookieToken, {
-        ...config.apps.api.cookies,
+    ctx.cookies.set('token', cookieToken, Object.assign(config.apps.api.cookies, {
         expires: tokenExpires,
         httpOnly: true,
-    });
+    }));
 
-    this.body = {
+    ctx.body = {
         id: user.id,
         email: user.email,
         expires: tokenExpires.getTime(),
@@ -48,16 +47,16 @@ app.use(koaRoute.post('/sign-in', function* signIn() {
     };
 }));
 
-app.use(koaRoute.post('/sign-up', function* signUp() {
-    const { email, password } = yield coBody(this);
-    const user = yield userRepository.insertOne({ email, password });
+app.use(koaRoute.post('/sign-up', async ctx => {
+    const { email, password } = ctx.request.body;
+    const user = await userRepository.insertOne({ email, password });
 
     if (!user) {
-        this.status = 401;
+        ctx.status = 401;
         return;
     }
 
-    this.body = {
+    ctx.body = {
         id: user.id,
         email: user.email,
         token: jwt.sign(user, config.apps.api.security.jwt.privateKey),

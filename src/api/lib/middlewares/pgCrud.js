@@ -1,11 +1,9 @@
-/* eslint func-names:0*/
-
-import koa from 'koa';
-import coBody from 'co-body';
+/* eslint no-param-reassign: off, max-len: off */
+import Koa from 'koa';
 import koaRoute from 'koa-route';
 
 export default (queriesFactory, configuredMethods = {}) => {
-    const app = koa();
+    const app = new Koa();
     const defaultMethods = {
         GET: 'managed',
         POST: 'managed',
@@ -15,21 +13,21 @@ export default (queriesFactory, configuredMethods = {}) => {
 
     let queries;
 
-    app.use(function* (next) {
-        this.availableMethods = { ...defaultMethods, ...configuredMethods };
+    app.use(async (ctx, next) => {
+        ctx.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
 
-        yield next;
+        await next();
     });
 
-    app.use(function* (next) {
-        queries = queriesFactory(this.client);
-        yield next;
+    app.use(async (ctx, next) => {
+        queries = queriesFactory(ctx.client);
+        await next();
     });
 
     // GET /
-    app.use(koaRoute.get('/', function* (next) {
-        if (this.availableMethods.GET) {
-            const query = this.request.query;
+    app.use(koaRoute.get('/', async (ctx, next) => {
+        if (ctx.availableMethods.GET) {
+            const query = ctx.request.query;
             const excludedQueryParams = ['limit', 'offset', 'filter', '_sort', '_sortDir'];
             const other = {};
             Object.keys(query).forEach(key => {
@@ -37,109 +35,109 @@ export default (queriesFactory, configuredMethods = {}) => {
                 other[key] = query[key];
             });
 
-            this.body = yield queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other);
-            const totalCount = (this.body[0]) ? this.body[0].totalcount : (yield queries.countAll());
-            this.set('X-Total-Count', totalCount);
-            this.set('Access-Control-Expose-Headers', 'X-Total-Count');
+            ctx.body = await queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
+            const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await queries.countAll());
+            ctx.set('X-Total-Count', totalCount);
+            ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }
 
-        if (this.availableMethods.GET !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.GET !== 'managed') {
+            await next();
         }
     }));
 
     // GET /:id
-    app.use(koaRoute.get('/:id', function* (id, next) {
-        if (this.availableMethods.GET) {
+    app.use(koaRoute.get('/:id', async (ctx, id, next) => {
+        if (ctx.availableMethods.GET) {
             try {
-                this.body = yield queries.selectOne({ id });
+                ctx.body = await queries.selectOne({ id });
             } catch (e) {
                 if (e.message === 'not found') {
-                    this.status = 404;
+                    ctx.status = 404;
                 } else {
                     throw e;
                 }
             }
         }
-        if (this.availableMethods.GET !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.GET !== 'managed') {
+            await next();
         }
     }));
 
     // POST /
-    app.use(koaRoute.post('/', function* (next) {
-        if (this.availableMethods.POST) {
-            const data = this.data || (yield coBody(this));
-            this.body = yield queries.insertOne(data);
+    app.use(koaRoute.post('/', async (ctx, next) => {
+        if (ctx.availableMethods.POST) {
+            const data = ctx.data || ctx.request.body;
+            ctx.body = await queries.insertOne(data);
         }
 
-        if (this.availableMethods.POST !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.POST !== 'managed') {
+            await next();
         }
     }));
 
     // POST /multi
-    app.use(koaRoute.post('/multi', function* (next) {
-        if (this.availableMethods.POST) {
-            const data = this.data || (yield coBody(this));
-            this.body = yield queries.batchInsert(data);
+    app.use(koaRoute.post('/multi', async (ctx, next) => {
+        if (ctx.availableMethods.POST) {
+            const data = ctx.data || ctx.request.body;
+            ctx.body = await queries.batchInsert(data);
         }
 
-        if (this.availableMethods.POST !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.POST !== 'managed') {
+            await next();
         }
     }));
 
     // DELETE /
-    app.use(koaRoute.delete('/:id', function* (id, next) {
-        if (this.availableMethods.DELETE) {
+    app.use(koaRoute.delete('/:id', async (ctx, id, next) => {
+        if (ctx.availableMethods.DELETE) {
             try {
-                this.body = yield queries.deleteOne(id);
+                ctx.body = await queries.deleteOne(id);
             } catch (e) {
                 if (e.message === 'not found') {
-                    this.status = 404;
+                    ctx.status = 404;
                 } else {
                     throw e;
                 }
             }
         }
 
-        if (this.availableMethods.DELETE !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.DELETE !== 'managed') {
+            await next();
         }
     }));
 
     // DELETE /multi
-    app.use(koaRoute.delete('/multi', function* (next) {
-        if (this.availableMethods.DELETE) {
-            const ids = this.query.id;
-            this.body = yield queries.batchDelete(ids);
+    app.use(koaRoute.delete('/multi', async (ctx, next) => {
+        if (ctx.availableMethods.DELETE) {
+            const ids = ctx.query.id;
+            ctx.body = await queries.batchDelete(ids);
         }
-        if (this.availableMethods.DELETE !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.DELETE !== 'managed') {
+            await next();
         }
     }));
 
     // PUT /:id
-    app.use(koaRoute.put('/:id', function* (id, next) {
-        if (this.availableMethods.PUT) {
-            const data = this.data || (yield coBody(this));
+    app.use(koaRoute.put('/:id', async (ctx, id, next) => {
+        if (ctx.availableMethods.PUT) {
+            const data = ctx.data || ctx.request.body;
             let modifiedEntity;
             try {
-                modifiedEntity = yield queries.updateOne(id, data);
+                modifiedEntity = await queries.updateOne(id, data);
             } catch (e) {
                 if (e.message === 'not found') {
-                    this.status = 404;
+                    ctx.status = 404;
                     return;
                 }
 
                 throw e;
             }
-            this.body = modifiedEntity;
+            ctx.body = modifiedEntity;
         }
 
-        if (this.availableMethods.PUT !== 'managed') {
-            yield next;
+        if (ctx.availableMethods.PUT !== 'managed') {
+            await next();
         }
     }));
 

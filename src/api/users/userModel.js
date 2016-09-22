@@ -9,12 +9,14 @@ const fields = [
     'email',
     'password',
 ];
-const exposedFields = [
-    'id',
-    ...fields,
-];
+
+const exposedFields = ['id'].concat(fields);
 
 const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
+
+const hashUserPassword = user => Object.assign({}, user, {
+    password: bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor),
+});
 
 export default client => {
     const queries = queriesFactory(client);
@@ -22,37 +24,28 @@ export default client => {
     const baseInsertOne = queries.insertOne;
     const baseBatchInsert = queries.batchInsert;
 
-    queries.insertOne = function* insertOneQuery(user) {
-        user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
-        return yield baseInsertOne(user);
+    queries.insertOne = async (user, isWhitelisted) => await baseInsertOne(hashUserPassword(user), isWhitelisted);
+
+    queries.batchInsert = async users => {
+        const preparedUsers = users.map(hashUserPassword);
+
+        return await baseBatchInsert(preparedUsers);
     };
 
-    queries.batchInsert = function* batchInsertQuery(users) {
-        const preparedUsers = users.map(user => {
-            user.password = bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor);
-
-            return user;
-        });
-
-        return yield baseBatchInsert(preparedUsers);
-    };
-
-    queries.findByEmail = function* findByEmail(email) {
+    queries.findByEmail = async email => {
         const sql = `
             SELECT ${exposedFields}
             FROM ${tableName}
             WHERE LOWER(email) = LOWER($email)
             LIMIT 1`;
 
-        const results = yield client.query({
-            sql,
-            parameters: { email },
-        });
+        const results = await client.query({ sql, parameters: { email } });
         return results.length ? results[0] : null;
     };
 
-    queries.authenticate = function* authenticate(email, password) {
-        const foundUser = yield this.findByEmail(email);
+    queries.authenticate = async (email, password) => {
+        const foundUser = await queries.findByEmail(email);
+
         if (!foundUser || !bcrypt.compareSync(password, foundUser.password)) {
             return false;
         }
@@ -62,9 +55,8 @@ export default client => {
         };
     };
 
-    return {
+    return Object.assign({
         tableName,
         exposedFields,
-        ...queries,
-    };
+    }, queries);
 };

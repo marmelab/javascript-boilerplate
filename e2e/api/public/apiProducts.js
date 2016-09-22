@@ -1,6 +1,22 @@
+/* eslint-disable func-names */
+import config from 'config';
+import { assert } from 'chai';
+import { PgPool } from 'co-postgres-queries';
+
+import request from '../../lib/request';
+import fixturesFactory from '../../lib/fixturesLoader';
+
 describe('/api/products', () => {
     describe('GET', () => {
+        let fixtureLoader;
+        let db;
+        let pool;
+
         before(function* addFixtures() {
+            pool = new PgPool(config.apps.api.db);
+            db = yield pool.connect();
+            fixtureLoader = fixturesFactory(db);
+
             yield fixtureLoader.loadDefaultFixtures();
         });
         it('should not require authentification', function* () {
@@ -57,6 +73,8 @@ describe('/api/products', () => {
         });
         after(function* removeFixtures() {
             yield fixtureLoader.removeAllFixtures();
+            db.release();
+            pool.end();
         });
     });
     describe('POST', () => {

@@ -1,6 +1,9 @@
+import convert from 'koa-convert';
+import omit from 'lodash.omit';
+
 export default (userOptions = {}) => {
-    let { adapter, ...options } = userOptions;
-    adapter = adapter || 'memory';
+    const adapter = userOptions.adapter || 'memory';
+    let options = omit(userOptions, 'adapter');
 
     // window, delay, and max apply per-ip unless global is set to true
     options = Object.assign({
@@ -11,6 +14,6 @@ export default (userOptions = {}) => {
         max: 5,
     }, options);
 
-    const adapterImplementation = require(`./${adapter}`);
-    return adapterImplementation(options);
+    const adapterImplementation = require(`./${adapter}`).default; // eslint-disable-line global-require
+    return convert(adapterImplementation(options));
 };

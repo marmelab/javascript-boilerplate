@@ -1,12 +1,10 @@
 import winston from 'winston';
 
 export default function logger(loggersConfig) {
-    const transports = [];
-
-    for (const key in loggersConfig) {
-        if (!loggersConfig[key]) continue;
-        transports.push(new (winston.transports[key])(loggersConfig[key]));
-    }
+    const transports = Object
+        .keys(loggersConfig)
+        .filter(key => loggersConfig[key])
+        .map(key => new (winston.transports[key])(loggersConfig[key]));
 
     return new (winston.Logger)({
         transports,

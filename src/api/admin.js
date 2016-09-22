@@ -1,8 +1,8 @@
 import config from 'config';
-import koa from 'koa';
+import Koa from 'koa';
 import koaMount from 'koa-mount';
 
-import rateLimiterMiddleware from './lib/rateLimiter';
+import rateLimiterMiddleware from './lib/middlewares/rateLimiter';
 import tokenCheckerMiddleware from './lib/middlewares/tokenChecker';
 
 import authenticateAdminRoutes from './authentication/authenticateAdminRoutes';
@@ -10,7 +10,7 @@ import productAdminApiRoutes from './products/productAdminApiRoutes';
 import orderAdminApiRoutes from './orders/orderAdminApiRoutes';
 import orderProductAdminApiRoutes from './order-products/orderAdminApiRoutes';
 
-const app = koa();
+const app = new Koa();
 
 app.use(koaMount('/authenticate', authenticateAdminRoutes));
 app.use(rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.api));

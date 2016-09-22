@@ -12,19 +12,15 @@ const fields = [
     'stock',
 ];
 
-const exposedFields = [
-    'id',
-    ...fields,
-];
+const exposedFields = ['id'].concat(fields);
 
 const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
 export default client => {
     const queries = queriesFactory(client);
 
-    return {
+    return Object.assign({
         tableName,
         exposedFields,
-        ...queries,
-    };
+    }, queries);
 };
