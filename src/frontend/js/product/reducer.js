@@ -1,5 +1,5 @@
 import { createEntityReducer } from '../../../common-client/fetch/reducers';
-import { productActionTypes } from '../product/actions';
+import { productActionTypes } from './actions';
 
 export default createEntityReducer(productActionTypes);
 
