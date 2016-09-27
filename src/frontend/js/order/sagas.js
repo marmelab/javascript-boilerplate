@@ -6,7 +6,7 @@ import { call, fork, put } from 'redux-saga/effects';
 import orderActions, { orderActionTypes } from './actions';
 import { clearShoppingCart } from '../shoppingcart/actions';
 import { createEntitySagas, fetchSagaFactory } from '../../../common-client/fetch/sagas';
-import jwtSelector from '../app/jwtSelector';
+import jwtSelector from '../jwtSelector';
 
 import {
     fetchOrder,

@@ -2,12 +2,12 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteTransition } from 'react-router-transition';
-import HelmetTitle from './HelmetTitle';
-import { signOut as signOutActions } from '../user/actions';
-import AppNavbar from './AppNavbar';
-import ShoppingCart from '../shoppingcart/ShoppingCart';
+import HelmetTitle from './app/HelmetTitle';
+import { signOut as signOutActions } from './user/actions';
+import AppNavbar from './app/AppNavbar';
+import ShoppingCart from './shoppingcart/ShoppingCart';
 
-export class App extends Component {
+export class AppComponent extends Component {
     componentWillReceiveProps(nextProps) {
         const { user, signOut } = nextProps;
         const currentTime = (new Date()).getTime();
@@ -52,7 +52,7 @@ export class App extends Component {
     }
 }
 
-App.propTypes = {
+AppComponent.propTypes = {
     children: PropTypes.node,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -64,4 +64,4 @@ const mapStateToProps = state => ({ user: state.user });
 
 const mapDispatchToProps = ({ signOut: signOutActions.request });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
