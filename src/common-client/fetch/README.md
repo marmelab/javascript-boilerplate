@@ -4,7 +4,7 @@
 
 We want to set up some actions, reducers and sagas for a product entity. We need to be able to:
 - list all products with pagination
-- get a single products
+- get a single product
 - display a loading component when fetching data
 
 Let's start by defining our actions:
