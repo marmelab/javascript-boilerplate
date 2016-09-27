@@ -39,6 +39,27 @@ export const DefaultLoading = () => (
  * @param {Object} LoadingComponent The component to display when loading.
  */
 export default (actionCreator, selectors: {}, LoadingComponent = DefaultLoading) => BaseComponent => {
+    if (!selectors) {
+        console.error(`withFetchingOnMount(${BaseComponent.displayName}) requires at least two selectors, one to retrieve the fetched data and the other to retrieve the loading state.`); // eslint-disable-line max-len, no-console
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Pass them withing an object as the second parameter of the withFetchingOnMount call like: `withFetchingOnMount(actionCreator, { data: dataSelector, loading: loadingSelector })`'); // eslint-disable-line max-len, no-console
+        }
+    }
+
+    if (!selectors.data) {
+        console.error(`withFetchingOnMount(${BaseComponent.displayName}) requires the data selector, which retrieve the fetched data from state.`); // eslint-disable-line max-len, no-console
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Pass it withing an object as the second parameter of the withFetchingOnMount call like: `withFetchingOnMount(actionCreator, { data: dataSelector, loading: loadingSelector })`'); // eslint-disable-line max-len, no-console
+        }
+    }
+
+    if (!selectors.loading) {
+        console.error(`withFetchingOnMount(${BaseComponent.displayName}) requires the loading selector, which retrieve the loading status from state.`); // eslint-disable-line max-len, no-console
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Pass it withing an object as the second parameter of the withFetchingOnMount call like: `withFetchingOnMount(actionCreator, { data: dataSelector, loading: loadingSelector })`'); // eslint-disable-line max-len, no-console
+        }
+    }
+
     // This will return the component correctly initialized
     const factory = createEagerFactory(BaseComponent);
 
