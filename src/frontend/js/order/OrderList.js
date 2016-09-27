@@ -28,6 +28,9 @@ const mapStateToProps = state => ({ orders: state.order.list });
 
 export default compose(
     withWindowTitle('Orders'),
-    withFetchingOnMount(orderActions.list.request, dataSelector, null, loadingSelector),
+    withFetchingOnMount(orderActions.list.request, {
+        data: dataSelector,
+        loading: loadingSelector,
+    }),
     connect(mapStateToProps)
 )(OrderList);

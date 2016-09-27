@@ -151,7 +151,7 @@ const mapStateToProps = state => ({ products: state.product.list });
 const mapDispatchToProps = ({ orderProduct: addProductToShoppingCart });
 
 export default compose(
-    withFetchingOnMount(productActions.list.request, dataSelector, null, loadingSelector),
+    withFetchingOnMount(productActions.list.request, { data: dataSelector, loading: loadingSelector }),
     connect(mapStateToProps, mapDispatchToProps)
 )(ProductList);
 ```

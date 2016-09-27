@@ -32,48 +32,48 @@ export const DefaultLoading = () => (
  * This HOC can be used when a component needs to fetch data on mount.
  *
  * @param actionCreator An action creator
- * @param {dataSelector} dataSelector A selector to retrieve the fetched data from state.
- * @param {paramsSelector} paramsSelector A selector to retrieve the parameters to use for fetch, from state.
- * @param {loadingSelector} loadingSelector A selector to retrieve the loading status from state.
+ * @param {Object} selectors The selectors used for data, loading and fetch parameters retrieval from state.
+ * @param {dataSelector} selectors.data Mandatory selector to retrieve the fetched data from state.
+ * @param {loadingSelector} selectors.loading Mandatory selector to retrieve the loading status from state.
+ * @param {paramsSelector} selectors.params Optional selector to retrieve the parameters to use for fetch, from state.
  * @param {Object} LoadingComponent The component to display when loading.
  */
-export default (actionCreator, dataSelector, paramsSelector, loadingSelector, LoadingComponent = DefaultLoading) => // eslint-disable-line max-len
-    BaseComponent => {
-        // This will return the component correctly initialized
-        const factory = createEagerFactory(BaseComponent);
+export default (actionCreator, selectors: {}, LoadingComponent = DefaultLoading) => BaseComponent => {
+    // This will return the component correctly initialized
+    const factory = createEagerFactory(BaseComponent);
 
-        const mapStateToProps = (state, ownProps) => ({
-            data: dataSelector(state, ownProps),
-            loading: loadingSelector(state, ownProps),
-            params: paramsSelector && paramsSelector(state, ownProps),
-        });
+    const mapStateToProps = (state, ownProps) => ({
+        data: selectors.data(state, ownProps),
+        loading: selectors.loading(state, ownProps),
+        params: selectors.params && selectors.params(state, ownProps),
+    });
 
-        const mapDispatchToProps = dispatch => bindActionCreators({
-            action: actionCreator,
-        }, dispatch);
+    const mapDispatchToProps = dispatch => bindActionCreators({
+        action: actionCreator,
+    }, dispatch);
 
-        class WithActionOnMount extends Component {
-            componentDidMount() {
-                this.props.action(this.props.params);
-            }
-
-            render() {
-                const { loading, data, ...props } = this.props;
-
-                if (loading || !data) {
-                    return <LoadingComponent />;
-                }
-
-                return factory(props);
-            }
+    class WithActionOnMount extends Component {
+        componentDidMount() {
+            this.props.action(this.props.params);
         }
 
-        WithActionOnMount.propTypes = {
-            action: PropTypes.func.isRequired,
-            data: PropTypes.any,
-            params: PropTypes.any,
-            loading: PropTypes.bool.isRequired,
-        };
+        render() {
+            const { loading, data, ...props } = this.props;
 
-        return connect(mapStateToProps, mapDispatchToProps)(WithActionOnMount);
+            if (loading || !data) {
+                return <LoadingComponent />;
+            }
+
+            return factory(props);
+        }
+    }
+
+    WithActionOnMount.propTypes = {
+        action: PropTypes.func.isRequired,
+        data: PropTypes.any,
+        params: PropTypes.any,
+        loading: PropTypes.bool.isRequired,
     };
+
+    return connect(mapStateToProps, mapDispatchToProps)(WithActionOnMount);
+};

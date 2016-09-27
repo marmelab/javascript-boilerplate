@@ -36,6 +36,9 @@ const mapDispatchToProps = ({
 
 export default compose(
     withWindowTitle('Products'),
-    withFetchingOnMount(productActions.list.request, dataSelector, null, loadingSelector),
+    withFetchingOnMount(productActions.list.request, {
+        data: dataSelector,
+        loading: loadingSelector,
+    }),
     connect(mapStateToProps, mapDispatchToProps)
 )(ProductList);
