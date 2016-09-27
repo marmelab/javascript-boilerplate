@@ -10,7 +10,34 @@ export const DefaultLoading = () => (
     </div>
 );
 
-export default (action, dataStateSelector, paramsStateSelector, loadingStateSelector, LoadingComponent = DefaultLoading) => // eslint-disable-line max-len
+/**
+ * @callback dataStateSelector
+ * @param {Object} state The current state
+ * @param {Object} ownProps The props from the BaseComponent allowing use of things like route parameters
+ */
+
+/**
+ * @callback paramsStateSelector
+ * @param {Object} state The current state
+ * @param {Object} ownProps The props from the BaseComponent allowing use of things like route parameters
+ */
+
+/**
+ * @callback loadingStateSelector
+ * @param {Object} state The current state
+ * @param {Object} ownProps The props from the BaseComponent allowing use of things like route parameters
+ */
+
+/**
+ * This HOC can be used when a component needs to fetch data on mount.
+ *
+ * @param actionCreator An action creator
+ * @param {dataStateSelector} dataStateSelector A selector to retrieve the fetched data from state.
+ * @param {paramsStateSelector} paramsStateSelector A selector to retrieve the parameters to use for fetch, from state.
+ * @param {loadingStateSelector} loadingStateSelector A selector to retrieve the loading status from state.
+ * @param {Object} LoadingComponent The component to display when loading.
+ */
+export default (actionCreator, dataStateSelector, paramsStateSelector, loadingStateSelector, LoadingComponent = DefaultLoading) => // eslint-disable-line max-len
     BaseComponent => {
         // This will return the component correctly initialized
         const factory = createEagerFactory(BaseComponent);
@@ -22,7 +49,7 @@ export default (action, dataStateSelector, paramsStateSelector, loadingStateSele
         });
 
         const mapDispatchToProps = dispatch => bindActionCreators({
-            action,
+            actionCreator,
         }, dispatch);
 
         class WithActionOnMount extends Component {
