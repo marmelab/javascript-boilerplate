@@ -60,13 +60,13 @@ const mapDispatchToProps = ({
     orderProduct: addProductToShoppingCart,
 });
 
-const dataStateSelector = (state, ownProps) => {
+const dataSelector = (state, ownProps) => {
     const productId = parseInt(ownProps.params.id, 10);
     return state.product.item || getProductById(state, productId);
 };
-const paramsStateSelector = (state, ownProps) => ownProps.routeParams.id;
-const loadingStateSelector = state => state.product.loading;
-const titleStateSelector = (state, ownProps) => {
+const paramsSelector = (state, ownProps) => ownProps.routeParams.id;
+const loadingSelector = state => state.product.loading;
+const titleSelector = (state, ownProps) => {
     const productId = parseInt(ownProps.routeParams.id, 10);
     const product = state.product.item || getProductById(state, productId);
 
@@ -76,7 +76,7 @@ const titleStateSelector = (state, ownProps) => {
 };
 
 export default compose(
-    withFetchingOnMount(productActions.item.request, dataStateSelector, paramsStateSelector, loadingStateSelector),
-    withWindowTitle(titleStateSelector),
+    withFetchingOnMount(productActions.item.request, dataSelector, paramsSelector, loadingSelector),
+    withWindowTitle(titleSelector),
     connect(mapStateToProps, mapDispatchToProps),
 )(ProductDetails);

@@ -22,12 +22,12 @@ OrderList.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape(OrderItem.propTypes)),
 };
 
-const dataStateSelector = state => state.order.list;
-const loadingStateSelector = state => state.order.loading;
+const dataSelector = state => state.order.list;
+const loadingSelector = state => state.order.loading;
 const mapStateToProps = state => ({ orders: state.order.list });
 
 export default compose(
     withWindowTitle('Orders'),
-    withFetchingOnMount(orderActions.list.request, dataStateSelector, null, loadingStateSelector),
+    withFetchingOnMount(orderActions.list.request, dataSelector, null, loadingSelector),
     connect(mapStateToProps)
 )(OrderList);

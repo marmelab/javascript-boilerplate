@@ -62,7 +62,7 @@ Whenever the `productActions.list.request` is dispatched, a saga will run and wi
 - the `productActions.list.success` action with the fetched products if successull
 - the `productActions.list.failure` action with the error if failed.
 
-Now, we need a reducer for our store:
+Then, we need a reducer for our store:
 ```js
 // products/reducer.js
 import { createEntityReducer } from 'common-client/fetch/reducers';
@@ -90,4 +90,68 @@ export const getProductById = (state, productId) =>
     // and back to false when the success or failure actions are dispatched
     loading: false,
 }
+```
+
+Then, we must register our sagas and reducers as usual:
+```js
+// reducers.js
+import { routerReducer } from 'react-router-redux';
+import { combineReducers } from 'redux';
+
+import product from './product/reducer';
+// ...more reducers here
+
+const rootReducer = combineReducers({
+    routing: routerReducer,
+    product,
+    // ...more reducers here
+});
+
+export default rootReducer;
+```
+
+```js
+// sagas.js
+import { fork } from 'redux-saga/effects';
+import productSagas from './product/sagas';
+// ...more sagas here
+
+export default function* () {
+    yield fork(productSagas);
+    // ...more sagas here
+}
+```
+
+Finally, we need a component for displaying the products:
+```js
+import React, { PropTypes } from 'react';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
+import ProductItem from './ProductItem';
+import productActions from './actions';
+import withFetchingOnMount from '../../../common-client/fetch/withFetchingOnMount';
+
+const ProductList = ({ products }) => (
+    <div className="row product-list">
+        {products.map(product => (
+            <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
+                <ProductItem {... { product }} />
+            </div>
+        ))}
+    </div>
+);
+
+ProductList.propTypes = {
+    products: PropTypes.arrayOf(PropTypes.shape(ProductPropType)),
+};
+
+const dataSelector = state => state.product.list;
+const loadingSelector = state => state.product.loading;
+const mapStateToProps = state => ({ products: state.product.list });
+const mapDispatchToProps = ({ orderProduct: addProductToShoppingCart });
+
+export default compose(
+    withFetchingOnMount(productActions.list.request, dataSelector, null, loadingSelector),
+    connect(mapStateToProps, mapDispatchToProps)
+)(ProductList);
 ```
