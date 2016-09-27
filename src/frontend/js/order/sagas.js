@@ -5,7 +5,7 @@ import { call, fork, put } from 'redux-saga/effects';
 
 import orderActions, { orderActionTypes } from './actions';
 import { clearShoppingCart } from '../shoppingcart/actions';
-import { entityFactory, fetchSagaFactory } from '../../../common-client/fetch/sagas';
+import { createEntitySagas, fetchSagaFactory } from '../../../common-client/fetch/sagas';
 import jwtSelector from '../app/jwtSelector';
 
 import {
@@ -28,7 +28,7 @@ export const watchNewOrderSaga = fetchNewOrderSaga => function* () {
 };
 
 const sagas = function* sagas() {
-    yield fork(entityFactory(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtSelector));
+    yield fork(createEntitySagas(orderActionTypes, orderActions, fetchOrders, fetchOrder, jwtSelector));
     const fetchNewOrderSaga = fetchSagaFactory(orderActions.order, fetchNewOrderApi, jwtSelector);
     yield fork(watchNewOrderSaga(fetchNewOrderSaga));
 };
