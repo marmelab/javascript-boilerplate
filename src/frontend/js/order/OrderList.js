@@ -3,7 +3,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import OrderItem from './OrderItem';
 import orderActions from './actions';
-import withFetchingOnMount from '../app/withFetchingOnMount';
+import withFetchingOnMount from '../../../common-client/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const OrderList = ({ orders }) => (
@@ -22,12 +22,12 @@ OrderList.propTypes = {
     orders: PropTypes.arrayOf(PropTypes.shape(OrderItem.propTypes)),
 };
 
-const dataStateSelector = state => state.order.list;
-const loadingStateSelector = state => state.order.loading;
+const dataSelector = state => state.order.list;
+const loadingSelector = state => state.order.loading;
 const mapStateToProps = state => ({ orders: state.order.list });
 
 export default compose(
     withWindowTitle('Orders'),
-    withFetchingOnMount(orderActions.list.request, dataStateSelector, null, loadingStateSelector),
+    withFetchingOnMount(orderActions.list.request, dataSelector, null, loadingSelector),
     connect(mapStateToProps)
 )(OrderList);

@@ -1,10 +1,10 @@
 import { createAction } from 'redux-actions';
-import createRequestActionTypes from '../../../common-client/fetch/createRequestActionTypes';
+import createFetchActionTypes from '../../../common-client/fetch/createFetchActionTypes';
 
 export const orderActionTypes = {
-    list: createRequestActionTypes('ORDERS'),
-    item: createRequestActionTypes('ORDER'),
-    order: createRequestActionTypes('NEW_ORDER'),
+    list: createFetchActionTypes('ORDERS'),
+    item: createFetchActionTypes('ORDER'),
+    order: createFetchActionTypes('NEW_ORDER'),
 };
 
 export default {

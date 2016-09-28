@@ -149,6 +149,9 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
+test-common-client-unit: ## Run the common-client directory unit tests with mocha
+	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/common-client/**/*.spec.js"
+
 test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register "./src/isomorphic/{,**/}*.spec.js"
 
@@ -167,6 +170,7 @@ load-test-fixtures: ## Initialize the test database with fixtures
 
 test: ## Run all tests
 	@cp -n ./config/test-dist.js ./config/test.js | true
+	make test-common-client-unit
 	make test-frontend-unit
 	make test-api-unit
 	# TODO: restore when implemented

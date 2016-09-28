@@ -41,6 +41,11 @@ const handleResponse = response => {
 
 const handleError = error => ({ error });
 
+/**
+ * Factory for fetch requests. Must be supplied the fetch implementation.
+ * This method is meant for tests but can be used instead of the default export
+ * if a custom fetch implementation is needed.
+ */
 export const customFetch = fetchImpl => (path, method = 'GET') => (options = {}) => {
     const url = `${API_URL}/${path}${options.id ? `/${options.id}` : ''}`;
     const finalOptions = getOptions(method, options);
@@ -51,4 +56,25 @@ export const customFetch = fetchImpl => (path, method = 'GET') => (options = {})
         .catch(handleError);
 };
 
+/**
+ * Simple wrapper around fetch for common uses.
+ *
+ * @example <caption>fetch for an unauthenticated GET request</caption>
+ * import fetch from 'common-client/fetch';
+ *
+ * // Will request 'API_URL/products'
+ * fetch('products')();
+ *
+ * @example <caption>fetch for an authenticated GET request</caption>
+ * import fetch from 'common-client/fetch';
+ *
+ * // Will request 'API_URL/orders/foo' with the correct jwt headers
+ * fetch('orders')({ jwt: localstore.get('jwt'), id: 'foo' });
+ *
+ * @example <caption>fetch for an authenticated PATCH request</caption>
+ * import fetch from 'common-client/fetch';
+ *
+ * // Will request 'API_URL/orders/foo' with the correct jwt headers
+ * fetch('orders', 'PATCH')({ jwt: localstore.get('jwt'), id: 'foo', body: { status: 'pending' } });
+ */
 export default customFetch(fetch);

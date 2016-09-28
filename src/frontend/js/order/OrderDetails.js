@@ -8,7 +8,7 @@ import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
 import { getOrderById } from './reducer';
-import withFetchingOnMount from '../app/withFetchingOnMount';
+import withFetchingOnMount from '../../../common-client/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const OrderDetails = ({ order: { reference, date, total, status, products } }) => (
@@ -38,13 +38,13 @@ OrderDetails.propTypes = {
 
 const mapStateToProps = state => ({ order: state.order.item });
 
-const dataStateSelector = (state, ownProps) => {
+const dataSelector = (state, ownProps) => {
     const orderId = parseInt(ownProps.params.id, 10);
     return state.order.item || getOrderById(state, orderId);
 };
-const paramsStateSelector = (state, ownProps) => ownProps.routeParams.id;
-const loadingStateSelector = state => state.order.loading;
-const titleStateSelector = (state, ownProps) => {
+const paramsSelector = (state, ownProps) => ownProps.routeParams.id;
+const loadingSelector = state => state.order.loading;
+const titleSelector = (state, ownProps) => {
     const orderId = parseInt(ownProps.routeParams.id, 10);
     const order = state.order.item || getOrderById(state, orderId);
 
@@ -54,7 +54,7 @@ const titleStateSelector = (state, ownProps) => {
 };
 
 export default compose(
-    withFetchingOnMount(orderActions.item.request, dataStateSelector, paramsStateSelector, loadingStateSelector),
-    withWindowTitle(titleStateSelector),
+    withFetchingOnMount(orderActions.item.request, dataSelector, paramsSelector, loadingSelector),
+    withWindowTitle(titleSelector),
     connect(mapStateToProps),
 )(OrderDetails);

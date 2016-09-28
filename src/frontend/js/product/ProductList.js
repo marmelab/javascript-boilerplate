@@ -5,7 +5,7 @@ import ProductItem from './ProductItem';
 import productActions from './actions';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
 import ProductPropType from './productPropTypes';
-import withFetchingOnMount from '../app/withFetchingOnMount';
+import withFetchingOnMount from '../../../common-client/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const ProductList = ({ orderProduct, products }) => (
@@ -23,20 +23,19 @@ ProductList.propTypes = {
     orderProduct: PropTypes.func.isRequired,
 };
 
-const dataStateSelector = state => state.product.list;
-const loadingStateSelector = state => state.product.loading;
+const dataSelector = state => state.product.list;
+const loadingSelector = state => state.product.loading;
 
 const mapStateToProps = state => ({
     products: state.product.list,
 });
 
 const mapDispatchToProps = ({
-    loadProducts: productActions.list.request,
     orderProduct: addProductToShoppingCart,
 });
 
 export default compose(
     withWindowTitle('Products'),
-    withFetchingOnMount(productActions.list.request, dataStateSelector, null, loadingStateSelector),
+    withFetchingOnMount(productActions.list.request, dataSelector, null, loadingSelector),
     connect(mapStateToProps, mapDispatchToProps)
 )(ProductList);

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import createRequestActionTypes from './createRequestActionTypes';
+import createFetchActionTypes from './createFetchActionTypes';
 
-describe('createRequestActionTypes', () => {
+describe('createFetchActionTypes', () => {
     it('should return an object with REQUEST, SUCCESS and FAILURE properties', () => {
-        const actionTypes = createRequestActionTypes('foo');
+        const actionTypes = createFetchActionTypes('foo');
 
         expect(actionTypes).to.deep.equal({
             REQUEST: 'foo_REQUEST',

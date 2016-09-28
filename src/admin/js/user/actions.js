@@ -1,9 +1,9 @@
 import { createAction } from 'redux-actions';
-import createRequestActionTypes from '../../../common-client/fetch/createRequestActionTypes';
+import createFetchActionTypes from '../../../common-client/fetch/createFetchActionTypes';
 
 export const userActionTypes = {
-    signIn: createRequestActionTypes('SIGN_IN'),
-    signOut: createRequestActionTypes('SIGN_OUT'),
+    signIn: createFetchActionTypes('SIGN_IN'),
+    signOut: createFetchActionTypes('SIGN_OUT'),
 };
 
 export const signIn = {
