@@ -55,11 +55,11 @@ export default entityFactory(productActionTypes, productActions, fetchFactory('p
 We defined two sagas here: one will handle the `item` actions, the other the `list` actions.
 
 Whenever the `productActions.item.request` is dispatched, a saga will run and will dispatch:
-- the `productActions.item.success` action with the fetched product if successull
+- the `productActions.item.success` action with the fetched product if successfull
 - the `productActions.item.failure` action with the error if failed.
 
 Whenever the `productActions.list.request` is dispatched, a saga will run and will dispatch:
-- the `productActions.list.success` action with the fetched products if successull
+- the `productActions.list.success` action with the fetched products if successfull
 - the `productActions.list.failure` action with the error if failed.
 
 Then, we need a reducer for our store:
@@ -151,7 +151,7 @@ const mapStateToProps = state => ({ products: state.product.list });
 const mapDispatchToProps = ({ orderProduct: addProductToShoppingCart });
 
 export default compose(
-    withFetchingOnMount(productActions.list.request, { data: dataSelector, loading: loadingSelector }),
+    withFetchingOnMount(productActions.list.request, { dataSelector, loadingSelector }),
     connect(mapStateToProps, mapDispatchToProps)
 )(ProductList);
 ```
