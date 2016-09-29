@@ -1,0 +1,17 @@
+{
+    "apps": [{
+        "autorestart": true,
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "instances": 1,
+        "name": "bpm_api-dev",
+        "script": "./src/index.js",
+        "node_args": "--harmony --require reify --require async-to-gen/register",
+        "watch": [
+            "./src",
+            "../isomorphic",
+            "config"
+        ]
+    }]
+}

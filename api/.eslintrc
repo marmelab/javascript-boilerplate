@@ -1,0 +1,14 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "mocha": true,
+        "node": true,
+    },
+    "extends": "airbnb-base",
+    "rules": {
+        "indent": ["error", 4],
+        "max-len": ["error", {"code": 120, "tabWidth": 4, "ignoreUrls": true}],
+        "import/no-extraneous-dependencies": "off"
+    },
+}
