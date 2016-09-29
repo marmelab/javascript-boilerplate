@@ -1,0 +1,23 @@
+{
+    "apps": [{
+        "args": [
+            "../build/frontend",
+            "-p 8082",
+            "--silent"
+        ],
+        "env": {
+            "NODE_ENV": "test",
+        },
+        "exec_mode": "fork",
+        "name": "bpm_frontend-test",
+        "script": "./node_modules/.bin/http-server"
+    }, {
+        "args": [
+            "../e2e/fixtures/demo_fixtures.json",
+            "--port=3010",
+        ],
+        "exec_mode": "fork",
+        "name": "bpm_api-test",
+        "script": "./node_modules/.bin/json-server"
+    }]
+}

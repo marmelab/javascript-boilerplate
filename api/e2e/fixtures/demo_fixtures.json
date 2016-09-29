@@ -1,7 +1,6 @@
 {
     "products" : [
         {
-            "id": 1,
             "reference": "abc",
             "width": 30,
             "height": 40,
@@ -12,7 +11,6 @@
             "stock": 10
         },
         {
-            "id": 2,
             "reference": "efg",
             "width": 30,
             "height": 40,
@@ -23,7 +21,6 @@
             "stock": 10
         },
         {
-            "id": 3,
             "reference": "hij",
             "width": 30,
             "height": 40,
