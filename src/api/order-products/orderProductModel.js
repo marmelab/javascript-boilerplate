@@ -1,5 +1,5 @@
 /* eslint func-names: off */
-import { crud } from 'co-postgres-queries';
+import { crudQueries } from 'co-postgres-queries';
 
 export const OrderStatus = {
     pending: 'pending',
@@ -21,22 +21,16 @@ const exposedFields = [
     'description',
 ];
 
-const crudQueries = crud(tableName, exposedFields, exposedFields);
+const orderProductsQueries = crudQueries(tableName, exposedFields, exposedFields);
 
 export default client => {
-    const queries = crudQueries(client);
+    const orderProductModelClient = client.link(orderProductsQueries);
 
-    queries.selectByOrderId = async orderId => {
-        const sql = `
-            SELECT ${exposedFields.join(', ')}
-            FROM ${tableName}
-            WHERE order_id = $orderId`;
-
-        return await client.query({ sql, parameters: { orderId } });
-    };
+    orderProductModelClient.selectByOrderId = async orderId
+        => await orderProductModelClient.selectPage(1, 0, { orderId });
 
     return Object.assign({
         tableName,
         exposedFields,
-    }, queries);
+    }, orderProductModelClient);
 };

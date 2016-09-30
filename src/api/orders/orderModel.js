@@ -1,5 +1,4 @@
-import co from 'co';
-import { crud } from 'co-postgres-queries';
+import { crudQueries } from 'co-postgres-queries';
 import orderProductsModel from '../order-products/orderProductModel';
 
 export const OrderStatus = {
@@ -20,13 +19,13 @@ const fields = [
 
 const exposedFields = ['id'].concat(fields);
 
-const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
+const queriesFactory = crudQueries(tableName, fields, ['id'], exposedFields);
 
 export default client => {
-    const queries = queriesFactory(client);
-    const orderProductsQueries = orderProductsModel(client);
+    const orderClient = client.link(queriesFactory);
+    const orderProductsClient = orderProductsModel(client);
 
-    queries.selectByUserId = async userId => {
+    orderClient.selectByUserId = async userId => {
         const sql = `
             SELECT ${exposedFields}
             FROM ${tableName}
@@ -35,16 +34,16 @@ export default client => {
         return await client.query({ sql, parameters: { userId } });
     };
 
-    const selectOne = queries.selectOne;
-    queries.selectOne = async ({ id }) => {
+    const selectOne = orderClient.selectOne;
+    orderClient.selectOne = async ({ id }) => {
         const order = await selectOne({ id });
-        order.products = await orderProductsQueries.selectByOrderId(id);
+        order.products = await orderProductsClient.selectByOrderId(id);
 
         return order;
     };
 
-    const baseInsertOne = queries.insertOne;
-    queries.insertOne = async data => {
+    const baseInsertOne = orderClient.insertOne;
+    orderClient.insertOne = async data => {
         await client.begin();
 
         try {
@@ -56,38 +55,10 @@ export default client => {
                 total: data.total,
             });
 
-            const insertOrderProduct = async (order, orderProduct) => {
-                const {
-                    quantity,
-                    reference,
-                    width,
-                    height,
-                    price,
-                    thumbnail,
-                    image,
-                    description,
-                } = orderProduct;
+            const orderProducts = data.products
+            .map(product => Object.assign({}, product, { order_id: data.id, product_id: product.id }));
 
-                return await orderProductsQueries.insertOne({
-                    order_id: order.id,
-                    product_id: orderProduct.id,
-                    quantity,
-                    reference,
-                    width,
-                    height,
-                    price,
-                    thumbnail,
-                    image,
-                    description,
-                });
-            };
-
-            result.products = [];
-            for (let i = 0; i < data.products.length; i++) {
-                const product = data.products[i];
-                const insertedProduct = await insertOrderProduct(result, product);
-                result.products.push(insertedProduct);
-            }
+            await orderProductsClient.batchInsert(orderProducts);
 
             await client.commit();
             return result;
@@ -100,5 +71,5 @@ export default client => {
     return Object.assign({
         tableName,
         exposedFields,
-    }, queries);
+    }, orderClient);
 };

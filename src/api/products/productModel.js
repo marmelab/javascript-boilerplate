@@ -1,4 +1,4 @@
-import { crud } from 'co-postgres-queries';
+import { crudQueries } from 'co-postgres-queries';
 
 const tableName = 'product';
 const fields = [
@@ -14,10 +14,10 @@ const fields = [
 
 const exposedFields = ['id'].concat(fields);
 
-const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
+const queriesFactory = crudQueries(tableName, fields, ['id'], exposedFields);
 
 export default client => {
-    const queries = queriesFactory(client);
+    const queries = client.link(queriesFactory);
 
     return Object.assign({
         tableName,
