@@ -6,11 +6,11 @@ import buildSchema from 'redux-form-schema';
 
 import Alert from '../ui/Alert';
 import { BigLinkButton } from '../ui/LinkButton';
-import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signUp as signUpActions } from './actions';
 import { getPreviousRoute } from './reducer';
 import withWindowTitle from '../app/withWindowTitle';
+import renderInput from '../ui/renderInput';
 
 const signUpSchema = buildSchema({
     email: {
@@ -32,18 +32,8 @@ const signUpSchema = buildSchema({
     },
 });
 
-const renderInput = field => (
-    <FormGroup field={field}>
-        <input
-            {...field.input}
-            className="form-control input-lg"
-            type={field.type}
-        />
-    </FormGroup>
-);
-
 class SignUp extends Component {
-    signUp = values => {
+    signUp = (values) => {
         this.props.signUp(this.props.previousRoute, values);
     }
 

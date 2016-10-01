@@ -1,8 +1,5 @@
 import 'babel-core/register';
 import 'babel-polyfill';
-import 'expose?$!expose?jQuery!jquery'; // eslint-disable-line import/no-unresolved
-import 'expose?$!expose?Tether!tether'; // eslint-disable-line import/no-unresolved
-
 import 'bootstrap';
 
 import FastClick from 'fastclick';

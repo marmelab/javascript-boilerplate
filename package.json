@@ -102,7 +102,7 @@
     "expect": "1.20.2",
     "expose-loader": "0.7.1",
     "extract-text-webpack-plugin": "1.0.1",
-    "faker": "3.1.0",
+    "faker": "~3.1.0",
     "fakerest": "1.2.0",
     "file-loader": "0.9.0",
     "html-loader": "0.4.3",
@@ -124,7 +124,8 @@
     "webpack-dev-server": "1.15.1"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "postinstall": "make build-vendors"
   },
   "author": "marmelab <info@marmelab.com>",
   "license": "MIT"
