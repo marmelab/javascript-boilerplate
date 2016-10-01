@@ -1,4 +1,4 @@
-import fetchFactory from '../../../common-client/fetch/fetch';
+import fetchFactory from '../../../isomorphic/fetch/fetch';
 
 export const fetchProducts = fetchFactory('products');
 export const fetchProduct = fetchFactory('products');

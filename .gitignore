@@ -2,6 +2,7 @@ node_modules/*
 *.PID
 config/development.js
 config/production.js
+config/staging.js
 config/test.js
 build
 fabfile.pyc
