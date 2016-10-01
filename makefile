@@ -26,7 +26,7 @@ install-selenium:
 	@echo "Installing Selenium server"
 	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.21
 
-install: copy-conf install-npm-dependencies install-selenium build-vendors ## Install npm dependencies for the api, admin, and frontend apps
+install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
 
 # Deployment ===================================================================
 clear-build-admin:  ## Remove precedent build files for admin
@@ -35,31 +35,21 @@ clear-build-admin:  ## Remove precedent build files for admin
 clear-build-frontend:  ## Remove precedent build files for frontend
 	@rm -rf ./build/frontend/*
 
-build-admin: clear-build-frontend build-admin-vendors ## Build admin application
+build-admin: clear-build-frontend ## Build admin application
 	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
 		--config ./src/admin/webpack.config.babel.js \
 		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
-build-admin-vendors: # Build the vendors file for the admin (webpack optimization)
-	@echo "Building admin vendors dll"
-	@./node_modules/.bin/webpack --progress --config ./src/admin/webpack-vendors.config.babel.js
-
-build-frontend: clear-build-frontend build-frontend-vendors ## Build frontend application
+build-frontend: clear-build-frontend ## Build frontend application
 	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
 		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
-build-frontend-vendors: # Build the vendors file for the frontend (webpack optimization)
-	@echo "Building frontend vendors dll"
-	@./node_modules/.bin/webpack --progress --config ./src/frontend/webpack-vendors.config.babel.js
-
 build: build-frontend build-admin ## Build all front applications defined with webpack
-
-build-vendors: build-admin-vendors build-frontend-vendors # Build the vendors file for admin and frontend
 
 clean: ## Remove only files ignored by Git
 	git clean --force -d -X
@@ -170,7 +160,7 @@ build-test: ## Build all front applications defined with webpack for test enviro
 	@NODE_ENV=test make build
 
 test-admin-unit: ## Run the admin application unit tests with mocha
-    @NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/admin/js/test.spec.js' --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/admin/js/**/*.spec.js"
+    @NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/admin/js/test.spec.js' --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/admin/js/**/*.spec.js"
 
 test-api-unit: ## Run the API unit tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./src/api/
@@ -179,10 +169,10 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/frontend/js/test.spec.js' --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/frontend/js/test.spec.js' --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
 test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@NODE_ENV=test make build-frontend

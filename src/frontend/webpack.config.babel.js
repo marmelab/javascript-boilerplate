@@ -1,5 +1,5 @@
 import config from 'config';
-import { DefinePlugin, DllReferencePlugin } from 'webpack';
+import { DefinePlugin, ProvidePlugin } from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
@@ -80,10 +80,6 @@ export default {
                 NODE_ENV: process.env.NODE_ENV === 'development' ? JSON.stringify(process.env.NODE_ENV) : JSON.stringify('production'), // eslint-disable-line max-len
             },
         }),
-        new DllReferencePlugin({
-            context: resolve(__dirname, '../../build/frontend/js'),
-            manifest: require(resolve(__dirname, './js', './vendor-manifest.json')), // eslint-disable-line global-require, max-len, import/no-dynamic-require
-        }),
         new ExtractTextPlugin('[name].css', {
             allChunks: false,
         }),
@@ -91,6 +87,13 @@ export default {
             filename: 'index.html',
             template: resolve(__dirname, './index.html'),
             hash: true,
+        }),
+        new ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Tether: 'tether',
+            'window.Tether': 'tether',
         }),
     ],
     resolve: {

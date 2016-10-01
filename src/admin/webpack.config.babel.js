@@ -1,5 +1,5 @@
 import config from 'config';
-import { DefinePlugin, DllReferencePlugin } from 'webpack';
+import { DefinePlugin } from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
@@ -73,10 +73,6 @@ export default {
             'process.env': {
                 NODE_ENV: process.env.NODE_ENV === 'development' ? JSON.stringify(process.env.NODE_ENV) : JSON.stringify('production'), // eslint-disable-line max-len
             },
-        }),
-        new DllReferencePlugin({
-            context: resolve(__dirname, '../../build/admin/js'),
-            manifest: require(resolve(__dirname, './js', './vendor-manifest.json')), // eslint-disable-line global-require, max-len, import/no-dynamic-require
         }),
         new ExtractTextPlugin('[name].css', {
             allChunks: false,

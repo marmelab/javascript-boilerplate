@@ -17,7 +17,7 @@
             "args": [
                 "--config=./src/frontend/webpack.config.babel.js",
                 "--content-base=build/frontend",
-                "--devtool=eval",
+                "--devtool=cheap-module-inline-source-map",
                 "--hot",
                 "--inline",
                 "--quiet",
@@ -35,7 +35,7 @@
             "args": [
                 "--config=./src/admin/webpack.config.babel.js",
                 "--content-base=build/admin",
-                "--devtool=eval",
+                "--devtool=cheap-module-inline-source-map",
                 "--hot",
                 "--inline",
                 "--quiet",

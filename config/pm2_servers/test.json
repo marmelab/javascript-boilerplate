@@ -11,7 +11,7 @@
         }, {
             "args": [
                 "./build/frontend",
-                "-p 8081",
+                "-p 9080",
                 "--silent"
             ],
             "env": {
@@ -23,7 +23,7 @@
         }, {
             "args": [
                 "./build/admin",
-                "-p 8082",
+                "-p 9081",
                 "--silent"
             ],
             "env": {
