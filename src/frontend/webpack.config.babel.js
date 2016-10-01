@@ -2,15 +2,15 @@ import config from 'config';
 import { DefinePlugin, DllReferencePlugin } from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import path from 'path';
+import { resolve } from 'path';
 
 const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 
 export default {
     entry: {
         index: [
-            path.resolve(__dirname, './js/main.js'),
-            path.resolve(__dirname, './css/main.scss'),
+            resolve(__dirname, './js/main.js'),
+            resolve(__dirname, './css/main.scss'),
         ],
     },
     module: {
@@ -66,7 +66,7 @@ export default {
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, '../../build/frontend'),
+        path: resolve(__dirname, '../../build/frontend'),
         publicPath: '/',
     },
     plugins: [
@@ -81,20 +81,20 @@ export default {
             },
         }),
         new DllReferencePlugin({
-            context: path.resolve(__dirname, '../../build/frontend/js'),
-            manifest: require(path.resolve(__dirname, './js', './vendor-manifest.json')), // eslint-disable-line global-require, max-len, import/no-dynamic-require
+            context: resolve(__dirname, '../../build/frontend/js'),
+            manifest: require(resolve(__dirname, './js', './vendor-manifest.json')), // eslint-disable-line global-require, max-len, import/no-dynamic-require
         }),
         new ExtractTextPlugin('[name].css', {
             allChunks: false,
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: path.resolve(__dirname, './index.html'),
+            template: resolve(__dirname, './index.html'),
             hash: true,
         }),
     ],
     resolve: {
-        root: path.resolve(`${__dirname}/..`),
+        root: resolve(`${__dirname}/..`),
         alias: {
             isomorphic: 'src/isomorphic',
         },

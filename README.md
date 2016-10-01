@@ -130,6 +130,26 @@ make stop-dev
 
 **Tip:** because versions are *exact* you can run your `npm install` faster by running `npm set cache-min Infinity` (even without internet connection if packages are already cached).
 
+### About dependencies and webpack
+
+Webpack builds have been optimized for development mode following this [article](http://engineering.invisionapp.com/post/optimizing-webpack/).
+
+This results in faster build for the admin and frontend applications.
+
+The downside is that each time you add a new dependency to any frontend related project, you must:
+- update the vendor file
+- run the `make build-vendors` command
+
+If you know your dependency only impact one of the admin or frontend projects, you might only run:
+ - `make build-admin-vendors` for the admin
+ - `make build-frontend-vendors` for the frontend
+
+The vendors file will be updated whenever you run any of those commands:
+- `make install`
+- `make build`
+- `make build-admin` (only the admin vendors file)
+- `make build-frontend` (only the frontend vendors file)
+
 ## Test
 
 ```sh
