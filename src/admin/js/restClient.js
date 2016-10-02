@@ -45,9 +45,9 @@ export default (apiUrl, jwtSelector, logout) => {
             const query = {
                 ...params.filter,
                 _sort: field,
-                _order: order,
-                _start: (page - 1) * perPage,
-                _end: (page * perPage) - 1,
+                _sortDir: order,
+                _offset: (page - 1) * perPage,
+                _limit: perPage,
             };
             url = `${apiUrl}/${resource}?${queryParameters(query)}`;
             break;
