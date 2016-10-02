@@ -18,7 +18,7 @@
         {
             "args": [
                 "--content-base=build",
-                "--devtool=eval",
+                "--devtool=cheap-module-inline-source-map",
                 "--hot",
                 "--inline",
                 "--quiet",

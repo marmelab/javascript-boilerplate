@@ -34,7 +34,7 @@ clear-build:  ## Remove precedent build files
 
 build: clear-build ## Build all front applications defined with webpack
 	@./node_modules/.bin/webpack \
-		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+		$(if $(filter-out development,$(NODE_ENV)),-p,-d) \
 		--progress
 
 clean: ## Remove only files ignored by Git
