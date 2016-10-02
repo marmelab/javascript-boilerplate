@@ -33,7 +33,9 @@ clear-build:  ## Remove precedent build files
 	@rm -rf ./build/*
 
 build: clear-build ## Build all front applications defined with webpack
-	@./node_modules/.bin/webpack --progress
+	@./node_modules/.bin/webpack \
+		$(if $(filter-out development,$(NODE_ENV)),-p,-d) \
+		--progress
 
 clean: ## Remove only files ignored by Git
 	git clean --force -d -X
@@ -149,11 +151,8 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 test-frontend-unit: ## Run the frontend applications unit tests with mocha
 	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
-test-common-client-unit: ## Run the common-client directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/common-client/**/*.spec.js"
-
 test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register "./src/isomorphic/{,**/}*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@make build-test
@@ -170,11 +169,9 @@ load-test-fixtures: ## Initialize the test database with fixtures
 
 test: ## Run all tests
 	@cp -n ./config/test-dist.js ./config/test.js | true
-	make test-common-client-unit
+	make test-isomorphic-unit
 	make test-frontend-unit
 	make test-api-unit
-	# TODO: restore when implemented
-	# make test-isomorphic-unit
 	make test-api-functional
 	make test-frontend-functional
 

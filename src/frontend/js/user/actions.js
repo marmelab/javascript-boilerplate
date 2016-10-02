@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import createFetchActionTypes from '../../../common-client/fetch/createFetchActionTypes';
+import createFetchActionTypes from '../../../isomorphic/fetch/createFetchActionTypes';
 
 export const userActionTypes = {
     signIn: createFetchActionTypes('SIGN_IN'),

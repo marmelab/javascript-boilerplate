@@ -9,6 +9,9 @@ export function definePlugin() {
         API_URL: JSON.stringify(config.apps.frontend.api_url),
         FRONTEND_HISTORY: JSON.stringify(config.apps.frontend.history),
         FRONTEND__APP__ENABLE_DEV_TOOLS: JSON.stringify(config.apps.frontend.enableDevTools),
+        'process.env': {
+            NODE_ENV: process.env.NODE_ENV === 'development' ? JSON.stringify(process.env.NODE_ENV) : JSON.stringify('production'),
+        },
     });
 }
 

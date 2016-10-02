@@ -8,7 +8,7 @@ import productActions from './actions';
 import ProductPropType from './productPropTypes';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
 import { getProductById } from './reducer';
-import withFetchingOnMount from '../../../common-client/fetch/withFetchingOnMount';
+import withFetchingOnMount from '../../../isomorphic/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 class ProductDetails extends Component {

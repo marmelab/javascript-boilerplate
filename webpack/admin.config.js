@@ -8,10 +8,6 @@ export default {
         index: [
             `${__dirname}/../src/admin/js/main.js`,
         ],
-        login: [
-            `${__dirname}/../src/admin/js/login.js`,
-            `${__dirname}/../src/admin/css/login.scss`,
-        ],
     },
     module: {
         loaders: loaders('admin'),
@@ -28,12 +24,6 @@ export default {
             filename: 'admin/index.html',
             template: `${__dirname}/../src/admin/index.html`,
             chunks: ['index'],
-            hash: true,
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'admin/login.html',
-            template: `${__dirname}/../src/admin/login.html`,
-            chunks: ['login'],
             hash: true,
         }),
     ],
