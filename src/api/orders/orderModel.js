@@ -58,7 +58,9 @@ export default client => {
             const orderProducts = data.products
             .map(product => Object.assign({}, product, { order_id: data.id, product_id: product.id }));
 
-            await orderProductsClient.batchInsert(orderProducts);
+            if (orderProducts.length > 0) {
+                await orderProductsClient.batchInsert(orderProducts);
+            }
 
             await client.commit();
             return result;

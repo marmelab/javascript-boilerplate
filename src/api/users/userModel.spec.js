@@ -9,6 +9,7 @@ describe('User Model', () => {
 
     beforeEach(() => {
         client = sinon.spy();
+        client.link = () => ({});
     });
 
     it('should show basic infos', () => {
@@ -28,6 +29,7 @@ describe('User Model', () => {
 
                 return Promise.resolve([{ id: 42, email: 'email@example.org' }]);
             },
+            link: () => ({}),
         };
 
         const res = yield userRepository(client).findByEmail('email@example.org');

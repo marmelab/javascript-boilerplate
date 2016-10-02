@@ -26,8 +26,7 @@ const orderProductsQueries = crudQueries(tableName, exposedFields, exposedFields
 export default client => {
     const orderProductModelClient = client.link(orderProductsQueries);
 
-    orderProductModelClient.selectByOrderId = async orderId
-        => await orderProductModelClient.selectPage(1, 0, { orderId });
+    orderProductModelClient.selectByOrderId = (orderId) => orderProductModelClient.selectPage(1, 0, { orderId });
 
     return Object.assign({
         tableName,
