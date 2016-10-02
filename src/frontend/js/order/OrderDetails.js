@@ -54,7 +54,7 @@ const titleSelector = (state, ownProps) => {
 };
 
 export default compose(
-    withFetchingOnMount(orderActions.item.request, dataSelector, paramsSelector, loadingSelector),
+    withFetchingOnMount(orderActions.item.request, { dataSelector, paramsSelector, loadingSelector }),
     withWindowTitle(titleSelector),
     connect(mapStateToProps),
 )(OrderDetails);
