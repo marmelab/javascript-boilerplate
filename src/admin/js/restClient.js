@@ -45,9 +45,9 @@ export default (apiUrl, jwtSelector, logout) => {
             const query = {
                 ...params.filter,
                 _sort: field,
-                _order: order,
-                _start: (page - 1) * perPage,
-                _end: (page * perPage) - 1,
+                _sortDir: order,
+                _offset: (page - 1) * perPage,
+                _limit: perPage,
             };
             url = `${apiUrl}/${resource}?${queryParameters(query)}`;
             break;
@@ -59,6 +59,13 @@ export default (apiUrl, jwtSelector, logout) => {
         case GET_ONE:
             url = `${apiUrl}/${resource}/${params.id}`;
             break;
+        case GET_MANY: {
+            const query = {
+                filter: JSON.stringify({ id: params.ids }),
+            };
+            url = `${apiUrl}/${resource}?${queryParameters(query)}`;
+            break;
+        }
         case GET_MANY_REFERENCE:
             url = `${apiUrl}/${resource}?${queryParameters({ [params.target]: params.id })}`;
             break;
@@ -111,11 +118,6 @@ export default (apiUrl, jwtSelector, logout) => {
      * @returns {Promise} the Promise for a REST response
      */
     return (type, resource, params) => {
-        // json-server doesn't handle WHERE IN requests, so we fallback to calling GET_ONE n times instead
-        if (type === GET_MANY) {
-            return Promise.all(params.ids.map(id => fetchJson(`${apiUrl}/${resource}/${id}`)))
-                .then(responses => responses.map(response => response.json));
-        }
         const { url, options } = convertRESTRequestToHTTP(type, resource, params);
         return fetchJson(url, options)
             .then(response => convertHTTPResponseToREST(response, type, resource, params))
