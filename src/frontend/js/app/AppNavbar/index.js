@@ -13,18 +13,19 @@ NavbarItem.propTypes = {
     to: PropTypes.string.isRequired,
 };
 
-const AppNavbar = ({ user, signOut }) => (
+const AppNavbar = ({ authenticated, signOut, user }) => (
     <nav className="navbar navbar-fixed-top navbar-dark bg-primary">
         <Link className="navbar-brand" to="/products">New App</Link>
         <ul className="nav navbar-nav">
             <NavbarItem to="/products">Products</NavbarItem>
             <NavbarItem to="/orders">Orders</NavbarItem>
         </ul>
-        {user && user.authenticated && <UserNavbarItem {...{ user, signOut }} />}
+        {user && authenticated && <UserNavbarItem {...{ user, signOut }} />}
     </nav>
 );
 
 AppNavbar.propTypes = {
+    authenticated: PropTypes.bool.isRequired,
     signOut: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
 };

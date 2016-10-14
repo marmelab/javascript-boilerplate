@@ -1,8 +1,8 @@
-export default (store) =>
-    (nextState, replace) => {
-        const { user: { authenticated } } = store.getState();
+import { isAuthenticated } from './reducer';
 
-        if (!authenticated) {
+export default store =>
+    (nextState, replace) => {
+        if (!isAuthenticated(store.getState())) {
             replace({
                 pathname: '/sign-in',
                 state: { nextPathname: nextState.location.pathname },

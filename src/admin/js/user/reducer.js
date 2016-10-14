@@ -1,14 +1,35 @@
 import { userActionTypes } from './actions';
 
+export const isAuthenticated = ({ user: { authenticated, expires } }) => {
+    if (!authenticated) return false;
+
+    if (expires < new Date()) return false;
+
+    return true;
+};
+
 export default function (localStorage) {
-    const notExpired = new Date(localStorage.getItem('expires')) > (new Date()).getTime();
-    const authenticated = !!localStorage.getItem('token') && notExpired;
+    let authenticated = false;
+    let expires;
+    const expiresFromStorage = localStorage.getItem('expires');
+
+    if (expiresFromStorage) {
+        try {
+            expires = new Date(parseFloat(expiresFromStorage) * 1000);
+            const expired = expires < new Date();
+            authenticated = !!localStorage.getItem('token') && !expired;
+        } catch (error) {
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Error while parsing JWT token', error); // eslint-disable-line no-console
+            }
+        }
+    }
 
     const initialState = {
         id: localStorage.getItem('id'),
         email: localStorage.getItem('email'),
         token: localStorage.getItem('token'),
-        expires: localStorage.getItem('expires'),
+        expires,
         authenticated,
         loading: false,
     };
@@ -59,7 +80,7 @@ export default function (localStorage) {
     };
 }
 
-export const getPreviousRoute = state => {
+export const getPreviousRoute = (state) => {
     if (state.routing && state.routing.locationBeforeTransitions && state.routing.locationBeforeTransitions.state) {
         return state.routing.locationBeforeTransitions.state.nextPathname;
     }

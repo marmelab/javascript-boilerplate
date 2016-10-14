@@ -2,6 +2,7 @@
 import crypto from 'crypto';
 import config from 'config';
 import jwt from 'jsonwebtoken';
+import omit from 'lodash.omit';
 
 export default async (ctx, next) => {
     const token = ctx.get('Authorization');
@@ -16,12 +17,9 @@ export default async (ctx, next) => {
     }
 
     try {
-        ctx.user = await jwt.verify(token, config.apps.api.security.jwt.privateKey);
+        const tokenData = await jwt.verify(token, config.apps.api.security.jwt.privateKey);
 
-        if (!ctx.user.expires || new Date(ctx.user.expires) < new Date()) {
-            ctx.status = 401;
-            return;
-        }
+        ctx.user = omit(tokenData, 'expires');
     } catch (e) {
         ctx.status = 401;
         return;

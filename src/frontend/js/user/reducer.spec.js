@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import reducerFactory from './reducer';
+import reducerFactory, { isAuthenticated } from './reducer';
 import { signIn, signOut, signUp } from './actions';
 
 describe('user reducer', () => {
     const getItemWithUser = sinon.stub();
-    const expireTokenTime = (new Date()).getTime() + (30 * 1000);
+    const expireTokenTime = new Date(Date.now() + (30 * 1000));
     getItemWithUser.withArgs('id').returns('foo');
     getItemWithUser.withArgs('email').returns('foo@bar.com');
     getItemWithUser.withArgs('token').returns('bar');
-    getItemWithUser.withArgs('expires').returns(expireTokenTime);
+    getItemWithUser.withArgs('expires').returns(expireTokenTime.getTime() / 1000);
 
     const localStorageWithUser = {
         getItem: getItemWithUser,
@@ -120,6 +120,22 @@ describe('user reducer', () => {
             loading: false,
             token: null,
             expires: null,
+        });
+    });
+
+    describe('isAuthenticated', () => {
+        it('should return false if state.user.authenticated is false', () => {
+            expect(isAuthenticated({ user: { authenticated: false } })).to.be.false;
+        });
+
+        it('should return false if state.user.expires is anterior to now', () => {
+            const expires = new Date(Date.now() - 1000);
+            expect(isAuthenticated({ user: { authenticated: true, expires } })).to.be.false;
+        });
+
+        it('should return true if state.user.expires is posterior to now', () => {
+            const expires = new Date(Date.now() + 1000);
+            expect(isAuthenticated({ user: { authenticated: true, expires } })).to.be.true;
         });
     });
 });

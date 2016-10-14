@@ -6,6 +6,7 @@ import HelmetTitle from './app/HelmetTitle';
 import { signOut as signOutActions } from './user/actions';
 import AppNavbar from './app/AppNavbar';
 import ShoppingCart from './shoppingcart/ShoppingCart';
+import { isAuthenticated } from './user/reducer';
 
 export class AppComponent extends Component {
     static mapStylesForRouteTransition(s) {
@@ -26,12 +27,12 @@ export class AppComponent extends Component {
     }
 
     render() {
-        const { children, location, user } = this.props;
+        const { authenticated, children, location, user } = this.props;
 
         return (
             <div className="app container-fluid">
                 <HelmetTitle />
-                <AppNavbar {...{ user, signOut: this.handleSignOut }} />
+                <AppNavbar {...{ authenticated, user, signOut: this.handleSignOut }} />
                 <div className="row">
                     <div className="col-xs-12 col-md-10 col-lg-9">
                         <RouteTransition
@@ -57,6 +58,7 @@ export class AppComponent extends Component {
 }
 
 AppComponent.propTypes = {
+    authenticated: PropTypes.bool.isRequired,
     children: PropTypes.node,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
@@ -64,7 +66,7 @@ AppComponent.propTypes = {
     user: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({ user: state.user });
+const mapStateToProps = state => ({ user: state.user, authenticated: isAuthenticated(state) });
 
 const mapDispatchToProps = ({ signOut: signOutActions.request });
 

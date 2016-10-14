@@ -18,7 +18,11 @@ import {
     userActionTypes,
 } from './actions';
 
-export const getUserFromToken = token => ({ ...decodeJwt(token), token });
+export const getUserFromToken = (token) => {
+    const tokenData = decodeJwt(token);
+
+    return { ...tokenData, token, expires: new Date(tokenData.exp * 1000) };
+};
 
 export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
     const { error, result } = yield call(fetchSaga, { payload });

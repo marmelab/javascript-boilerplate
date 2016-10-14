@@ -4,11 +4,11 @@ import fetchFactory from '../../../isomorphic/fetch/fetch';
 export const fetchSignIn = fetchFactory(`${API_URL}/sign-in`, 'POST');
 export const fetchSignUp = fetchFactory(`${API_URL}/sign-up`, 'POST');
 
-export const storeLocalUser = ({ id, email, token, expires }) => {
+export const storeLocalUser = ({ id, email, exp, token }) => {
     localStorage.setItem('id', id);
     localStorage.setItem('email', email);
     localStorage.setItem('token', token);
-    localStorage.setItem('expires', expires);
+    localStorage.setItem('expires', exp);
 };
 
 export const removeLocalUser = () => {
