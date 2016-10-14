@@ -23,7 +23,9 @@ export const fetchSagaFactory = (actions, fetch, jwtSelector = () => null) =>
         const { error, result } = yield call(fetch, { jwt, ...payload });
 
         if (error) {
-            console.error({ error }); // eslint-disable-line no-console
+            if (process.env.NODE_ENV !== 'production') {
+                console.error({ error }); // eslint-disable-line no-console
+            }
             yield put(actions.failure(error));
         } else {
             yield put(actions.success(result));

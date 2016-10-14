@@ -17,6 +17,11 @@ export default async (ctx, next) => {
 
     try {
         ctx.user = await jwt.verify(token, config.apps.api.security.jwt.privateKey);
+
+        if (!ctx.user.expires || new Date(ctx.user.expires) < new Date()) {
+            ctx.status = 401;
+            return;
+        }
     } catch (e) {
         ctx.status = 401;
         return;

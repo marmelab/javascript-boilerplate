@@ -1,9 +1,9 @@
 /* eslint no-param-reassign: off */
 import config from 'config';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
 import Koa from 'koa';
 import koaRoute from 'koa-route';
+
+import authenticate from './authenticate';
 import rateLimiterMiddleware from '../lib/middlewares/rateLimiter';
 import userRepositoryFactory from '../users/userModel';
 
@@ -18,7 +18,7 @@ app.use(async (ctx, next) => {
     await next();
 });
 
-app.use(koaRoute.post('/sign-in', async ctx => {
+app.use(koaRoute.post('/sign-in', async (ctx) => {
     const { email, password } = ctx.request.body;
     const user = await userRepository.authenticate(email, password);
     if (!user) {
@@ -27,27 +27,10 @@ app.use(koaRoute.post('/sign-in', async ctx => {
         return;
     }
 
-    const token = jwt.sign(user, config.apps.api.security.jwt.privateKey);
-    const cookieToken = crypto.createHmac('sha256', config.apps.api.security.secret)
-        .update(token)
-        .digest('hex');
-    const delay = config.apps.api.security.expirationTokenDelay * 1000;
-    const tokenExpires = (new Date((new Date()).getTime() + delay));
-
-    ctx.cookies.set('token', cookieToken, Object.assign(config.apps.api.cookies, {
-        expires: tokenExpires,
-        httpOnly: true,
-    }));
-
-    ctx.body = {
-        id: user.id,
-        email: user.email,
-        expires: tokenExpires.getTime(),
-        token,
-    };
+    authenticate(ctx, user, config.apps.api.security);
 }));
 
-app.use(koaRoute.post('/sign-up', async ctx => {
+app.use(koaRoute.post('/sign-up', async (ctx) => {
     const { email, password } = ctx.request.body;
     const user = await userRepository.insertOne({ email, password });
 
@@ -56,11 +39,7 @@ app.use(koaRoute.post('/sign-up', async ctx => {
         return;
     }
 
-    ctx.body = {
-        id: user.id,
-        email: user.email,
-        token: jwt.sign(user, config.apps.api.security.jwt.privateKey),
-    };
+    authenticate(ctx, user, config.apps.api.security);
 }));
 
 export default app;

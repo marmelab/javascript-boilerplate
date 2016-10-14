@@ -12,7 +12,7 @@ import orderProductAdminApiRoutes from './order-products/orderAdminApiRoutes';
 
 const app = new Koa();
 
-app.use(koaMount('/authenticate', authenticateAdminRoutes));
+app.use(koaMount('/sign-in', authenticateAdminRoutes));
 app.use(rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.api));
 app.use(tokenCheckerMiddleware);
 

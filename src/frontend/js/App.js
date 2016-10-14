@@ -8,6 +8,10 @@ import AppNavbar from './app/AppNavbar';
 import ShoppingCart from './shoppingcart/ShoppingCart';
 
 export class AppComponent extends Component {
+    static mapStylesForRouteTransition(s) {
+        return { transform: `translateX(${s.translateX}%)` };
+    }
+
     componentWillReceiveProps(nextProps) {
         const { user, signOut } = nextProps;
         const currentTime = (new Date()).getTime();
@@ -17,17 +21,17 @@ export class AppComponent extends Component {
         }
     }
 
-    mapStylesForRouteTransition(s) {
-        return { transform: `translateX(${s.translateX}%)` };
+    handleSignOut = () => {
+        this.props.signOut();
     }
 
     render() {
-        const { children, location, user, signOut } = this.props;
+        const { children, location, user } = this.props;
 
         return (
             <div className="app container-fluid">
                 <HelmetTitle />
-                <AppNavbar {...{ user, signOut }} />
+                <AppNavbar {...{ user, signOut: this.handleSignOut }} />
                 <div className="row">
                     <div className="col-xs-12 col-md-10 col-lg-9">
                         <RouteTransition
@@ -35,7 +39,7 @@ export class AppComponent extends Component {
                             atEnter={{ translateX: 100 }}
                             atLeave={{ translateX: -100 }}
                             atActive={{ translateX: 0 }}
-                            mapStyles={this.mapStylesForRouteTransition}
+                            mapStyles={AppComponent.mapStylesForRouteTransition}
                             style={{ position: 'relative' }}
                         >
                             <div style={{ position: 'absolute', width: '100%' }}>

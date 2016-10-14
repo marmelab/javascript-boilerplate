@@ -1,8 +1,8 @@
 /* globals API_URL */
 import fetchFactory from '../../../isomorphic/fetch/fetch';
 
-export const fetchSignIn = fetchFactory('sign-in', 'POST');
-export const fetchSignUp = fetchFactory('sign-up', 'POST');
+export const fetchSignIn = fetchFactory(`${API_URL}/sign-in`, 'POST');
+export const fetchSignUp = fetchFactory(`${API_URL}/sign-up`, 'POST');
 
 export const storeLocalUser = ({ id, email, token, expires }) => {
     localStorage.setItem('id', id);

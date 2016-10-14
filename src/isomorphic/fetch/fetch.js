@@ -31,7 +31,7 @@ const getOptions = (method, { jwt, id, body }) => {
     };
 };
 
-const handleResponse = response => {
+const handleResponse = (response) => {
     if (!response.ok) {
         return response.text().then(result => Promise.reject(new Error(result)));
     }
@@ -46,11 +46,11 @@ const handleError = error => ({ error });
  * This method is meant for tests but can be used instead of the default export
  * if a custom fetch implementation is needed.
  */
-export const customFetch = fetchImpl => (path, method = 'GET') => (options = {}) => {
-    const url = `${API_URL}/${path}${options.id ? `/${options.id}` : ''}`;
+export const customFetch = fetchImpl => (url, method = 'GET') => (options = {}) => {
+    const finalUrl = `${url}${options.id ? `/${options.id}` : ''}`;
     const finalOptions = getOptions(method, options);
 
-    return fetchImpl(url, finalOptions)
+    return fetchImpl(finalUrl, finalOptions)
         .then(handleResponse)
         .then(json => ({ result: json }))
         .catch(handleError);

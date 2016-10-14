@@ -1,6 +1,9 @@
 import { routerActions } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
+import decodeJwt from 'jwt-decode';
+
+import { fetchSagaFactory } from '../../../isomorphic/fetch/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,
@@ -13,15 +16,14 @@ import {
     userActionTypes,
 } from './actions';
 
-export const signIn = (fetchSignIn, storeLocalUser) => function* signInSaga({
-    payload: { email, password, previousRoute },
-}) {
-    const { error, user } = yield call(fetchSignIn, email, password);
-    if (error) {
-        yield put(signInActions.failure(error));
-    } else {
+export const getUserFromToken = token => ({ ...decodeJwt(token), token });
+
+export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
+    const { error, result } = yield call(fetchSaga, { payload });
+    const user = yield call(getUserFromToken, result.token);
+
+    if (!error) {
         yield call(storeLocalUser, user);
-        yield put(signInActions.success(user));
         yield put(routerActions.push(previousRoute));
     }
 };
@@ -34,7 +36,7 @@ export const signOut = removeLocalUser => function* signOutSaga() {
 
 const sagas = function* sagas() {
     yield [
-        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSignInApi, storeLocalUserApi)),
+        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi)),
         takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
     ];
 };

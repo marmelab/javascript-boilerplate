@@ -121,7 +121,7 @@ export default (apiUrl, jwtSelector, logout) => {
         const { url, options } = convertRESTRequestToHTTP(type, resource, params);
         return fetchJson(url, options)
             .then(response => convertHTTPResponseToREST(response, type, resource, params))
-            .catch(error => {
+            .catch((error) => {
                 if (error.message === 'Unauthorized') {
                     logout();
                 }
