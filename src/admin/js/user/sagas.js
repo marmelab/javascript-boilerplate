@@ -1,8 +1,7 @@
 import { routerActions } from 'react-router-redux';
-import { takeEvery, takeLatest } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
+import { call, fork, put } from 'redux-saga/effects';
 import decodeJwt from 'jwt-decode';
-import { FAILURE } from '../../../isomorphic/fetch/createFetchActionTypes';
 import { fetchSagaFactory } from '../../../isomorphic/fetch/sagas';
 
 import {
@@ -41,11 +40,16 @@ export const signOut = removeLocalUser => function* signOutSaga() {
 
 export const getCurrentRoute = ({ routing: { locationBeforeTransitions: { pathname } } }) => pathname;
 
-const sagas = function* sagas() {
-    yield [
-        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi)),
-        takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
-    ];
-};
+function* watchSignInRequest() {
+    const saga = signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi);
+    yield takeLatest(userActionTypes.signIn.REQUEST, saga);
+}
 
-export default sagas;
+function* watchSignOutRequest() {
+    yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi));
+}
+
+export default function* sagas() {
+    yield fork(watchSignInRequest);
+    yield fork(watchSignOutRequest);
+}

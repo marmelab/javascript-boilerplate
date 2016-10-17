@@ -1,6 +1,6 @@
 import { routerActions } from 'react-router-redux';
 import { takeEvery, takeLatest } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, fork, put, select } from 'redux-saga/effects';
 import decodeJwt from 'jwt-decode';
 import { FAILURE } from '../../../isomorphic/fetch/createFetchActionTypes';
 import { fetchSagaFactory } from '../../../isomorphic/fetch/sagas';
@@ -67,13 +67,27 @@ export const handleUnauthorizedErrors = function* handleUnauthorizedErrorsSaga({
     }
 };
 
-const sagas = function* sagas() {
-    yield [
-        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi)),
-        takeLatest(userActionTypes.signUp.REQUEST, signUp(fetchSagaFactory(signUpActions, fetchSignUpApi), storeLocalUserApi)),
-        takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
-        takeEvery('*', handleUnauthorizedErrors),
-    ];
-};
+function* watchSignInRequest() {
+    const saga = signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi);
+    yield takeLatest(userActionTypes.signIn.REQUEST, saga);
+}
 
-export default sagas;
+function* watchSignUpRequest() {
+    const saga = signUp(fetchSagaFactory(signUpActions, fetchSignUpApi), storeLocalUserApi);
+    yield takeLatest(userActionTypes.signUp.REQUEST, saga);
+}
+
+function* watchSignOutRequest() {
+    yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi));
+}
+
+function* watchUnauthorizedErrors() {
+    yield takeEvery('*', handleUnauthorizedErrors);
+}
+
+export default function* sagas() {
+    yield fork(watchSignInRequest);
+    yield fork(watchSignUpRequest);
+    yield fork(watchSignOutRequest);
+    yield fork(watchUnauthorizedErrors);
+}
