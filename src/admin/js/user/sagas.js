@@ -1,6 +1,8 @@
 import { routerActions } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, fork, put } from 'redux-saga/effects';
+import decodeJwt from 'jwt-decode';
+import { fetchSagaFactory } from '../../../isomorphic/fetch/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,
@@ -13,15 +15,19 @@ import {
     userActionTypes,
 } from './actions';
 
-export const signIn = (fetchSignIn, storeLocalUser) => function* signInSaga({
-    payload: { email, password, previousRoute },
-}) {
-    const { error, user } = yield call(fetchSignIn, email, password);
-    if (error) {
-        yield put(signInActions.failure(error));
-    } else {
-        yield call(storeLocalUser, user);
+export const getUserFromToken = (token) => {
+    const tokenData = decodeJwt(token);
+
+    return { ...tokenData, token, expires: new Date(tokenData.exp * 1000) };
+};
+
+export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
+    const { error, result } = yield call(fetchSaga, { payload });
+    const user = yield call(getUserFromToken, result.token);
+
+    if (!error) {
         yield put(signInActions.success(user));
+        yield call(storeLocalUser, user);
         yield put(routerActions.push(previousRoute));
     }
 };
@@ -32,11 +38,18 @@ export const signOut = removeLocalUser => function* signOutSaga() {
     yield put(routerActions.push('/sign-in'));
 };
 
-const sagas = function* sagas() {
-    yield [
-        takeLatest(userActionTypes.signIn.REQUEST, signIn(fetchSignInApi, storeLocalUserApi)),
-        takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi)),
-    ];
-};
+export const getCurrentRoute = ({ routing: { locationBeforeTransitions: { pathname } } }) => pathname;
 
-export default sagas;
+function* watchSignInRequest() {
+    const saga = signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi);
+    yield takeLatest(userActionTypes.signIn.REQUEST, saga);
+}
+
+function* watchSignOutRequest() {
+    yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi));
+}
+
+export default function* sagas() {
+    yield fork(watchSignInRequest);
+    yield fork(watchSignOutRequest);
+}

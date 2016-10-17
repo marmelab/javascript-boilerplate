@@ -5,6 +5,7 @@ import { call, put } from 'redux-saga/effects';
 import sinon from 'sinon';
 
 import {
+    getUserFromToken,
     signIn as signInSagaFactory,
     signOut as signOutSagaFactory,
     signUp as signUpSagaFactory,
@@ -38,7 +39,7 @@ describe('userSagas', () => {
             }));
         });
 
-        it('should call the storeLocalUser function after a succesfull signIn', () => {
+        it('should call the getUserFromToken function after a succesfull signIn', () => {
             const saga = signInSaga(signInActions.request('/next-route', {
                 email: 'test_email',
                 password: 'test_password',
@@ -46,7 +47,32 @@ describe('userSagas', () => {
 
             saga.next();
 
-            expect(saga.next({ result: { id: 'foo' } }).value).toEqual(call(storeLocalUser, { id: 'foo' }));
+            expect(saga.next({ result: { token: 'foo' } }).value).toEqual(call(getUserFromToken, 'foo'));
+        });
+
+        it('should call the signInActions.success function after a succesfull signIn', () => {
+            const saga = signInSaga(signInActions.request('/next-route', {
+                email: 'test_email',
+                password: 'test_password',
+            }));
+
+            saga.next();
+            saga.next({ result: { token: 'foo' } });
+
+            expect(saga.next({ id: 'foo' }).value).toEqual(put(signInActions.success({ id: 'foo' })));
+        });
+
+        it('should call the storeLocalUser function after a succesfull signIn', () => {
+            const saga = signInSaga(signInActions.request('/next-route', {
+                email: 'test_email',
+                password: 'test_password',
+            }));
+
+            saga.next();
+            saga.next({ result: { token: 'foo' } });
+            saga.next({ id: 'foo' });
+
+            expect(saga.next().value).toEqual(call(storeLocalUser, { id: 'foo' }));
         });
 
         it('should put the routerActions.push action after a succesfull signIn', () => {
@@ -56,10 +82,9 @@ describe('userSagas', () => {
             }));
 
             saga.next();
-
-            saga.next({
-                result: { id: 'foo' },
-            });
+            saga.next({ result: { id: 'foo' } });
+            saga.next({ id: 'foo' });
+            saga.next();
 
             expect(saga.next().value).toEqual(put(routerActions.push('/next-route')));
         });
@@ -85,6 +110,29 @@ describe('userSagas', () => {
             }));
         });
 
+        it('should call the getUserFromToken function after a succesfull signIn', () => {
+            const saga = signUpSaga(signInActions.request('/next-route', {
+                email: 'test_email',
+                password: 'test_password',
+            }));
+
+            saga.next();
+
+            expect(saga.next({ result: { token: 'foo' } }).value).toEqual(call(getUserFromToken, 'foo'));
+        });
+
+        it('should call the signUpActions.success function after a succesfull signIn', () => {
+            const saga = signUpSaga(signUpActions.request('/next-route', {
+                email: 'test_email',
+                password: 'test_password',
+            }));
+
+            saga.next();
+            saga.next({ result: { token: 'foo' } });
+
+            expect(saga.next({ id: 'foo' }).value).toEqual(put(signUpActions.success({ id: 'foo' })));
+        });
+
         it('should call the storeLocalUser function after a succesfull signUp', () => {
             const saga = signUpSaga(signUpActions.request('/next-route', {
                 email: 'test_email',
@@ -92,6 +140,8 @@ describe('userSagas', () => {
             }));
 
             saga.next();
+            saga.next({ result: { token: 'foo' } });
+            saga.next({ id: 'foo' });
 
             expect(saga.next({ result: { id: 'foo' } }).value).toEqual(call(storeLocalUser, { id: 'foo' }));
         });
@@ -103,9 +153,9 @@ describe('userSagas', () => {
             }));
 
             saga.next();
-            saga.next({
-                result: { id: 'foo' },
-            });
+            saga.next({ result: { id: 'foo' } });
+            saga.next({ id: 'foo' });
+            saga.next();
 
             expect(saga.next().value).toEqual(put(routerActions.push('/next-route')));
         });

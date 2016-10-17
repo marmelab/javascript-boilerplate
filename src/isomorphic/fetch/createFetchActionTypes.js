@@ -1,6 +1,6 @@
-const REQUEST = 'REQUEST';
-const SUCCESS = 'SUCCESS';
-const FAILURE = 'FAILURE';
+export const REQUEST = 'REQUEST';
+export const SUCCESS = 'SUCCESS';
+export const FAILURE = 'FAILURE';
 
 /**
  * Creates action types constants for fetch actions, prefixed with the specified base:
@@ -16,7 +16,7 @@ const FAILURE = 'FAILURE';
  * console.log(productsActionTypes.SUCCESS); // output `PRODUCT_SUCCESS`
  * console.log(productsActionTypes.FAILURE); // output `PRODUCT_FAILURE`
  */
-export default (base) =>
+export default base =>
     [REQUEST, SUCCESS, FAILURE].reduce((requestTypes, type) => ({
         ...requestTypes,
         [type]: `${base}_${type}`,

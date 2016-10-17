@@ -5,6 +5,7 @@ export const userActionTypes = {
     signIn: createFetchActionTypes('SIGN_IN'),
     signUp: createFetchActionTypes('SIGN_UP'),
     signOut: createFetchActionTypes('SIGN_OUT'),
+    storeUser: 'STORE_USER',
 };
 
 export const signIn = {

@@ -11,13 +11,6 @@ module.exports = {
         },
         api: {
             allowedOrigins,
-            cookies: {
-                secure: false,
-                secureProxy: false,
-                httpOnly: false,
-                signed: false,
-                overwrite: true,
-            },
             db: {
                 driver: 'pg',
                 host: 'DB_HOST',
@@ -48,6 +41,13 @@ module.exports = {
             security: {
                 bcrypt: {
                     salt_work_factor: 10, // higher is safer, but slower
+                },
+                cookies: {
+                    secure: false,
+                    secureProxy: false,
+                    httpOnly: false,
+                    signed: false,
+                    overwrite: true,
                 },
                 expirationTokenDelay: 1800, // in seconds
                 jwt: {

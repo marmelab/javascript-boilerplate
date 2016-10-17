@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { signIn, signOut, userActionTypes } from './actions';
 
 describe('userActions', () => {
-    describe('signIn', () => {
+    describe('.signIn', () => {
         it('.request should return the correct action', () => {
             expect(signIn.request('/route', {
                 email: 'test_email',
@@ -11,8 +11,10 @@ describe('userActions', () => {
                 type: userActionTypes.signIn.REQUEST,
                 payload: {
                     previousRoute: '/route',
-                    email: 'test_email',
-                    password: 'test_password',
+                    body: {
+                        email: 'test_email',
+                        password: 'test_password',
+                    },
                 },
             });
         });
@@ -39,7 +41,7 @@ describe('userActions', () => {
         });
     });
 
-    describe('signIn', () => {
+    describe('.signOut', () => {
         it('.request should return the correct action', () => {
             expect(signOut.request()).to.deep.equal({
                 type: userActionTypes.signOut.REQUEST,

@@ -34,13 +34,6 @@ const renderInput = field => (
     </FormGroup>
 );
 
-const mapStateToProps = state => ({
-    previousRoute: getPreviousRoute(state),
-    signInError: state.user.error,
-});
-
-const mapDispatchToProps = ({ signIn: signInActions.request });
-
 class SignIn extends Component {
     signIn = values => {
         this.props.signIn(this.props.previousRoute, values);
@@ -99,6 +92,13 @@ SignIn.propTypes = {
     signIn: PropTypes.func.isRequired,
     previousRoute: PropTypes.string,
 };
+
+const mapStateToProps = state => ({
+    previousRoute: getPreviousRoute(state),
+    signInError: state.user.error,
+});
+
+const mapDispatchToProps = ({ signIn: signInActions.request });
 
 export default compose(
     reduxForm({
