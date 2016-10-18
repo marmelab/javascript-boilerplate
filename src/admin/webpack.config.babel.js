@@ -21,7 +21,10 @@ export default {
     module: {
         loaders: [{
             test: /\.jsx?$/,
-            exclude: /node_modules/,
+            include: [
+                resolve(__dirname, './js'),
+                resolve(__dirname, '../isomorphic'),
+            ],
             loader: 'babel-loader',
             // Options to configure babel with
             query: {
