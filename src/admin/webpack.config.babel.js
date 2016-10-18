@@ -26,7 +26,7 @@ export default {
                 resolve(__dirname, './js'),
                 resolve(__dirname, '../isomorphic'),
             ],
-            loader: 'babel-loader',
+            loader: 'babel',
             // Options to configure babel with
             query: {
                 cacheDirectory: true,
@@ -45,25 +45,25 @@ export default {
             },
         }, {
             test: /\.json$/,
-            loader: 'json-loader',
+            loader: 'json',
         }, {
             test: /\.jpe?g$|\.gif$|\.png$/,
-            loader: 'url-loader?limit=10000&name=/frontend/[hash].[ext]',
+            loader: 'url?limit=10000&name=/frontend/[hash].[ext]',
         }, {
             test: /\.(otf|svg)(\?.+)?$/,
-            loader: 'url-loader?limit=8192',
+            loader: 'url?limit=8192',
         }, {
             test: /\.eot(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&mimetype=application/vnd.ms-fontobject',
+            loader: 'url?limit=100000&mimetype=application/vnd.ms-fontobject',
         }, {
             test: /\.woff2(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&mimetype=application/font-woff2',
+            loader: 'url?limit=100000&mimetype=application/font-woff2',
         }, {
             test: /\.woff(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&mimetype=application/font-woff',
+            loader: 'url?limit=100000&mimetype=application/font-woff',
         }, {
             test: /\.ttf(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&mimetype=application/font-ttf',
+            loader: 'url?limit=100000&mimetype=application/font-ttf',
         }, {
             test: /\.html$/,
             loader: 'html',
