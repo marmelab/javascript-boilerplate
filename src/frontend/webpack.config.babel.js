@@ -9,6 +9,7 @@ const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 export default {
     devServer: {
         contentBase: 'build/frontend',
+        historyApiFallback: true,
         inline: true,
         noInfo: true,
         quiet: true,
@@ -33,7 +34,6 @@ export default {
             query: {
                 cacheDirectory: true,
                 plugins: [
-                    'transform-react-jsx',
                     ['transform-runtime', {
                         polyfill: false,
                         regenerator: true,
@@ -43,7 +43,7 @@ export default {
                 presets: [
                     'es2015',
                     'react',
-                    'stage-0',
+                    'stage-1',
                 ],
             },
         }, {
@@ -112,8 +112,5 @@ export default {
         alias: {
             isomorphic: 'src/isomorphic',
         },
-    },
-    devServer: {
-        historyApiFallback: true,
     },
 };

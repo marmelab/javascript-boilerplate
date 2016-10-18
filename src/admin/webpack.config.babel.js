@@ -7,6 +7,7 @@ import { resolve } from 'path';
 export default {
     devServer: {
         contentBase: 'build/admin',
+        historyApiFallback: true,
         inline: true,
         noInfo: true,
         quiet: true,
@@ -30,7 +31,6 @@ export default {
             query: {
                 cacheDirectory: true,
                 plugins: [
-                    'transform-react-jsx',
                     ['transform-runtime', {
                         polyfill: false,
                         regenerator: true,
@@ -40,7 +40,7 @@ export default {
                 presets: [
                     'es2015',
                     'react',
-                    'stage-0',
+                    'stage-1',
                 ],
             },
         }, {
@@ -95,7 +95,4 @@ export default {
             hash: true,
         }),
     ],
-    devServer: {
-        historyApiFallback: true,
-    },
 };
