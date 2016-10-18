@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import request from '../../lib/request';
 
-describe('/healthcare', () => {
+describe.skip('/healthcare', () => {
     describe('GET', () => {
         it('should return an object describing the API health', function* () {
             const { statusCode, body } = yield request({

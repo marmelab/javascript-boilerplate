@@ -1,35 +1,21 @@
-/* eslint func-names: off */
-import { crudQueries } from 'co-postgres-queries';
+import orderProductQueries from './orderProductQueries';
 
 export const OrderStatus = {
     pending: 'pending',
     sent: 'sent',
     cancelled: 'cancelled',
 };
-const tableName = 'order_product';
-const exposedFields = [
-    'id',
-    'order_id',
-    'product_id',
-    'quantity',
-    'reference',
-    'width',
-    'height',
-    'price',
-    'thumbnail',
-    'image',
-    'description',
-];
 
-const orderProductsQueries = crudQueries(tableName, exposedFields, exposedFields);
+function orderProductModel(client) {
+    const orderProductModelClient = client.link(orderProductModel.queries);
 
-export default client => {
-    const orderProductModelClient = client.link(orderProductsQueries);
+    const selectByOrderId = (orderId) => orderProductModelClient.selectPage(1, 0, { orderId });
 
-    orderProductModelClient.selectByOrderId = (orderId) => orderProductModelClient.selectPage(1, 0, { orderId });
+    return Object.assign({}, orderProductModelClient, {
+        selectByOrderId,
+    });
+}
 
-    return Object.assign({
-        tableName,
-        exposedFields,
-    }, orderProductModelClient);
-};
+orderProductModel.queries = orderProductQueries;
+
+export default orderProductModel;

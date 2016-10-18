@@ -21,18 +21,15 @@ const hashUserPassword = user => Object.assign({}, user, {
 export default client => {
     const userClient = client.link(queriesFactory);
 
-    const baseInsertOne = userClient.insertOne;
-    const baseBatchInsert = userClient.batchInsert;
+    const insertOne = async (user, isWhitelisted) => await userClient.insertOne(hashUserPassword(user), isWhitelisted);
 
-    userClient.insertOne = async (user, isWhitelisted) => await baseInsertOne(hashUserPassword(user), isWhitelisted);
-
-    userClient.batchInsert = async users => {
+    const batchInsert = async users => {
         const preparedUsers = users.map(hashUserPassword);
 
-        return await baseBatchInsert(preparedUsers);
+        return await userClient.batchInsert(preparedUsers);
     };
 
-    userClient.findByEmail = async email => {
+    const findByEmail = async email => {
         const sql = `
             SELECT ${exposedFields}
             FROM ${tableName}
@@ -43,8 +40,8 @@ export default client => {
         return results.length ? results[0] : null;
     };
 
-    userClient.authenticate = async (email, password) => {
-        const foundUser = await userClient.findByEmail(email);
+    const authenticate = async (email, password) => {
+        const foundUser = await findByEmail(email);
 
         if (!foundUser || !bcrypt.compareSync(password, foundUser.password)) {
             return false;
@@ -55,8 +52,12 @@ export default client => {
         };
     };
 
-    return Object.assign({
+    return Object.assign({}, userClient, {
         tableName,
         exposedFields,
-    }, userClient);
+        insertOne,
+        batchInsert,
+        findByEmail,
+        authenticate,
+    });
 };
