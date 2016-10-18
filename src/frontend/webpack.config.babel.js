@@ -7,6 +7,14 @@ import { resolve } from 'path';
 const sassOptions = 'includePaths[]=./node_modules/compass-mixins/lib/';
 
 export default {
+    devServer: {
+        contentBase: 'build/frontend',
+        inline: true,
+        noInfo: true,
+        quiet: true,
+        progress: false,
+    },
+    devtool: 'cheap-module-inline-source-map',
     entry: {
         index: [
             resolve(__dirname, './js/main.js'),

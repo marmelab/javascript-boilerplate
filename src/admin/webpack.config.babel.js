@@ -5,6 +5,14 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
 
 export default {
+    devServer: {
+        contentBase: 'build/admin',
+        inline: true,
+        noInfo: true,
+        quiet: true,
+        progress: false,
+    },
+    devtool: 'cheap-module-inline-source-map',
     entry: {
         index: [
             resolve(__dirname, './js/main.js'),

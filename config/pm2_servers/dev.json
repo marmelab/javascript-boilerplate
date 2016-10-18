@@ -16,13 +16,8 @@
         }, {
             "args": [
                 "--config=./src/frontend/webpack.config.babel.js",
-                "--content-base=build/frontend",
-                "--devtool=cheap-module-inline-source-map",
+                "--port=8080",
                 "--hot",
-                "--inline",
-                "--quiet",
-                "--progress",
-                "--port=8080"
             ],
             "autorestart": true,
             "env": {
@@ -34,13 +29,8 @@
         }, {
             "args": [
                 "--config=./src/admin/webpack.config.babel.js",
-                "--content-base=build/admin",
-                "--devtool=cheap-module-inline-source-map",
+                "--port=8081",
                 "--hot",
-                "--inline",
-                "--quiet",
-                "--progress",
-                "--port=8081"
             ],
             "autorestart": true,
             "env": {
