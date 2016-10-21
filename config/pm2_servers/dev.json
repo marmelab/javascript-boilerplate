@@ -6,11 +6,11 @@
             },
             "instances": 1,
             "name": "bpm_api-dev",
-            "script": "./src/api/index.js",
+            "script": "./src/api/src/index.js",
             "node_args": "--harmony --require reify --require async-to-gen/register",
             "watch": [
-                "./src/api",
-                "./src/isomorphic",
+                "./src/api/src",
+                "./src/common",
                 "config"
             ]
         }, {
