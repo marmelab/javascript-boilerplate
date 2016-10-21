@@ -1,10 +1,26 @@
-import productQueries from './productQueries';
+import { crud } from 'co-postgres-queries';
 
+const tableName = 'product';
+const fields = [
+    'reference',
+    'width',
+    'height',
+    'price',
+    'thumbnail',
+    'image',
+    'description',
+    'stock',
+];
 
-function productModel(client) {
-    return client.link(productModel.queries);
-}
+const exposedFields = ['id'].concat(fields);
 
-productModel.queries = productQueries;
+const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
-export default productModel;
+export default client => {
+    const queries = queriesFactory(client);
+
+    return Object.assign({
+        tableName,
+        exposedFields,
+    }, queries);
+};

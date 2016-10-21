@@ -1,31 +1,50 @@
 import bcrypt from 'bcrypt';
 import config from 'config';
 
-import userQueries from './userQueries';
+import { crud } from 'co-postgres-queries';
+
+const tableName = 'user_account';
+
+const fields = [
+    'email',
+    'password',
+];
+
+const exposedFields = ['id'].concat(fields);
+
+const queriesFactory = crud(tableName, fields, ['id'], exposedFields);
 
 const hashUserPassword = user => Object.assign({}, user, {
     password: bcrypt.hashSync(user.password, config.apps.api.security.bcrypt.salt_work_factor),
 });
 
-function userModel(client) {
-    const userClient = client.link(userModel.queries);
+export default client => {
+    const queries = queriesFactory(client);
 
-    const insertOne = async (user, isWhitelisted) => await userClient.insertOne(hashUserPassword(user), isWhitelisted);
+    const baseInsertOne = queries.insertOne;
+    const baseBatchInsert = queries.batchInsert;
 
-    const batchInsert = async users => {
+    queries.insertOne = async (user, isWhitelisted) => await baseInsertOne(hashUserPassword(user), isWhitelisted);
+
+    queries.batchInsert = async users => {
         const preparedUsers = users.map(hashUserPassword);
 
-        return await userClient.batchInsert(preparedUsers);
+        return await baseBatchInsert(preparedUsers);
     };
 
-    const findByEmail = async email => {
-        const results = await userClient.findByEmail(email);
+    queries.findByEmail = async email => {
+        const sql = `
+            SELECT ${exposedFields}
+            FROM ${tableName}
+            WHERE LOWER(email) = LOWER($email)
+            LIMIT 1`;
 
+        const results = await client.query({ sql, parameters: { email } });
         return results.length ? results[0] : null;
     };
 
-    const authenticate = async (email, password) => {
-        const foundUser = await findByEmail(email);
+    queries.authenticate = async (email, password) => {
+        const foundUser = await queries.findByEmail(email);
 
         if (!foundUser || !bcrypt.compareSync(password, foundUser.password)) {
             return false;
@@ -36,14 +55,8 @@ function userModel(client) {
         };
     };
 
-    return Object.assign({}, userClient, {
-        insertOne,
-        batchInsert,
-        findByEmail,
-        authenticate,
-    });
-}
-
-userModel.queries = userQueries;
-
-export default userModel;
+    return Object.assign({
+        tableName,
+        exposedFields,
+    }, queries);
+};

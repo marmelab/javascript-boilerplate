@@ -1,21 +1,42 @@
-import orderProductQueries from './orderProductQueries';
+/* eslint func-names: off */
+import { crud } from 'co-postgres-queries';
 
 export const OrderStatus = {
     pending: 'pending',
     sent: 'sent',
     cancelled: 'cancelled',
 };
+const tableName = 'order_product';
+const exposedFields = [
+    'id',
+    'order_id',
+    'product_id',
+    'quantity',
+    'reference',
+    'width',
+    'height',
+    'price',
+    'thumbnail',
+    'image',
+    'description',
+];
 
-function orderProductModel(client) {
-    const orderProductModelClient = client.link(orderProductModel.queries);
+const crudQueries = crud(tableName, exposedFields, exposedFields);
 
-    const selectByOrderId = (orderId) => orderProductModelClient.selectPage(1, 0, { orderId });
+export default (client) => {
+    const queries = crudQueries(client);
 
-    return Object.assign({}, orderProductModelClient, {
-        selectByOrderId,
-    });
-}
+    queries.selectByOrderId = async (orderId) => {
+        const sql = `
+            SELECT ${exposedFields.join(', ')}
+            FROM ${tableName}
+            WHERE order_id = $orderId`;
 
-orderProductModel.queries = orderProductQueries;
+        return await client.query({ sql, parameters: { orderId } });
+    };
 
-export default orderProductModel;
+    return Object.assign({
+        tableName,
+        exposedFields,
+    }, queries);
+};
