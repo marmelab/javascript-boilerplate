@@ -72,7 +72,6 @@ export default {
     output: {
         filename: '[name].js',
         path: resolve(__dirname, '../../build/admin'),
-        publicPath: '/',
     },
     plugins: [
         new DefinePlugin({

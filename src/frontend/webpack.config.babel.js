@@ -78,7 +78,6 @@ export default {
     output: {
         filename: '[name].js',
         path: resolve(__dirname, '../../build/frontend'),
-        publicPath: '/',
     },
     plugins: [
         new DefinePlugin({

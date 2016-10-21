@@ -35,7 +35,7 @@ clear-build-admin:  ## Remove precedent build files for admin
 clear-build-frontend:  ## Remove precedent build files for frontend
 	@rm -rf ./build/frontend/*
 
-build-admin: clear-build-frontend ## Build admin application
+build-admin: clear-build-admin ## Build admin application
 	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
 		--config ./src/admin/webpack.config.babel.js \
