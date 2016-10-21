@@ -1,6 +1,5 @@
 {
-    "apps": [
-        {
+    "apps": [{
             "env": {
                 "NODE_ENV": "test",
                 "NODE_PORT": 3010
@@ -9,20 +8,29 @@
             "name": "bpm_api-test",
             "node_args": "--harmony --require reify --require async-to-gen/register",
             "script": "./src/api/index.js"
-        },
-        {
+        }, {
             "args": [
                 "./build/frontend",
-                "-p 8081",
+                "-p 9080",
                 "--silent"
             ],
             "env": {
                 "NODE_ENV": "test",
-                "NODE_PORT": 3020
             },
             "exec_mode": "fork",
             "name": "bpm_frontend-test",
             "script": "./node_modules/.bin/http-server"
-        }
-    ]
+        }, {
+            "args": [
+                "./build/admin",
+                "-p 9081",
+                "--silent"
+            ],
+            "env": {
+                "NODE_ENV": "test",
+            },
+            "exec_mode": "fork",
+            "name": "bpm_admin-test",
+            "script": "./node_modules/.bin/http-server"
+        }]
 }

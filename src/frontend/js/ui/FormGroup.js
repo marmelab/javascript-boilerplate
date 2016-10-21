@@ -1,17 +1,16 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-const FormGroup = ({ children, field }) => (
+const FormGroup = ({ children, field: { meta: { touched, error } } }) => (
     <div
         className={classNames('form-group', {
-            'has-error': field.meta.touched && field.meta.error && field.meta.error.length > 0,
+            'has-danger': touched && error && error.length > 0,
+            'has-success': touched && (!error || error.length === 0),
         })}
     >
         {children}
 
-        {field.meta.touched && field.meta.error && field.meta.error.map(error => (
-            <span className="help-block">{error}</span>
-        ))}
+        {touched && error && error.map((e, i) => <span key={i} className="form-control-feedback">{e}</span>)}
     </div>
 );
 

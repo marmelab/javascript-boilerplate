@@ -1,6 +1,5 @@
 {
-    "apps": [
-        {
+    "apps": [{
             "autorestart": true,
             "env": {
                 "NODE_ENV": "development"
@@ -14,15 +13,11 @@
                 "./src/isomorphic",
                 "config"
             ]
-        },
-        {
+        }, {
             "args": [
-                "--content-base=build",
-                "--devtool=cheap-module-inline-source-map",
+                "--config=./src/frontend/webpack.config.babel.js",
+                "--port=8080",
                 "--hot",
-                "--inline",
-                "--quiet",
-                "--progress"
             ],
             "autorestart": true,
             "env": {
@@ -31,6 +26,18 @@
             "instances": 1,
             "name": "bpm_frontend-dev",
             "script": "./node_modules/.bin/webpack-dev-server"
-        }
-    ]
+        }, {
+            "args": [
+                "--config=./src/admin/webpack.config.babel.js",
+                "--port=8081",
+                "--hot",
+            ],
+            "autorestart": true,
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "instances": 1,
+            "name": "bpm_admin-dev",
+            "script": "./node_modules/.bin/webpack-dev-server"
+        }]
 }

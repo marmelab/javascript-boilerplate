@@ -29,13 +29,27 @@ install-selenium:
 install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
 
 # Deployment ===================================================================
-clear-build:  ## Remove precedent build files
-	@rm -rf ./build/*
+clear-build-admin:  ## Remove precedent build files for admin
+	@rm -rf ./build/admin/*
 
-build: clear-build ## Build all front applications defined with webpack
+clear-build-frontend:  ## Remove precedent build files for frontend
+	@rm -rf ./build/frontend/*
+
+build-admin: clear-build-admin ## Build admin application
+	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
-		$(if $(filter-out development,$(NODE_ENV)),-p,-d) \
+		--config ./src/admin/webpack.config.babel.js \
+		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
+
+build-frontend: clear-build-frontend ## Build frontend application
+	@echo "Building frontend application"
+	@./node_modules/.bin/webpack \
+		--config ./src/frontend/webpack.config.babel.js \
+		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+		--progress
+
+build: build-frontend build-admin ## Build all front applications defined with webpack
 
 clean: ## Remove only files ignored by Git
 	git clean --force -d -X
@@ -80,8 +94,8 @@ run-dev: ## Run all applications in development environment (using webpack-dev-s
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
 	@echo "All apps started and running"
 	@echo "  API:          http://localhost:3000"
-	@echo "  Frontend App: http://localhost:8080/frontend"
-	@echo "  Admin app:    http://localhost:8080/admin"
+	@echo "  Frontend App: http://localhost:8080"
+	@echo "  Admin app:    http://localhost:8081"
 	@echo "Type 'make stop-dev' to stop the apps"
 
 restart-dev: ## Restart all applications in development environment
@@ -126,6 +140,9 @@ servers-clear-all: ## Delete all processes and flush the logs in PM2
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete all
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 flush
 
+log-admin-dev: ## Display the logs of the frontend applications with PM2
+	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_admin-dev
+
 log-frontend-dev: ## Display the logs of the frontend applications with PM2
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-dev
 
@@ -143,7 +160,7 @@ build-test: ## Build all front applications defined with webpack for test enviro
 	@NODE_ENV=test make build
 
 test-admin-unit: ## Run the admin application unit tests with mocha
-    @NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/admin/js/test.spec.js' --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/admin/js/**/*.spec.js"
+    @NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/admin/js/test.spec.js' --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/admin/js/**/*.spec.js"
 
 test-api-unit: ## Run the API unit tests with mocha
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./src/api/
@@ -152,13 +169,13 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./e2e/api
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/frontend/js/test.spec.js' --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/frontend/js/test.spec.js' --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/frontend/js/**/*.spec.js"
 
 test-isomorphic-unit: ## Run the isomorphic directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./webpack/null-compiler,js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/isomorphic/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
-	@make build-test
+	@NODE_ENV=test make build-frontend
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver" \
 		./node_modules/.bin/mocha \

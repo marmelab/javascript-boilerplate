@@ -6,36 +6,24 @@ import buildSchema from 'redux-form-schema';
 
 import Alert from '../ui/Alert';
 import { BigLinkButton } from '../ui/LinkButton';
-import FormGroup from '../ui/FormGroup';
 import { BigSubmitButton } from '../ui/SubmitButton';
 import { signIn as signInActions } from './actions';
 import { getPreviousRoute } from './reducer';
+import renderInput from '../ui/renderInput';
 import withWindowTitle from '../app/withWindowTitle';
 
 const signInSchema = buildSchema({
     email: {
-        label: 'email',
         required: true,
         type: 'email',
     },
     password: {
-        label: 'password',
         required: true,
     },
 });
 
-const renderInput = field => (
-    <FormGroup field={field}>
-        <input
-            {...field.input}
-            className="form-control input-lg"
-            type={field.type}
-        />
-    </FormGroup>
-);
-
 class SignIn extends Component {
-    signIn = values => {
+    signIn = (values) => {
         this.props.signIn(this.props.previousRoute, values);
     }
 
@@ -61,12 +49,12 @@ class SignIn extends Component {
                             <form onSubmit={handleSubmit(this.signIn)}>
                                 <Field
                                     name="email"
-                                    component={renderInput}
+                                    component={renderInput('signin_email', 'Email')}
                                     type="email"
                                 />
                                 <Field
                                     name="password"
-                                    component={renderInput}
+                                    component={renderInput('signin_password', 'Password')}
                                     type="password"
                                 />
                                 <BigSubmitButton error={signInError || submitFailed} submitting={submitting}>

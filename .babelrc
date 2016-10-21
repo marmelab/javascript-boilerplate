@@ -5,10 +5,9 @@
                 "es2015",
                 "react",
                 "react-hmre",
-                "stage-0"
+                "stage-1"
             ],
             "plugins": [
-                "transform-react-jsx",
                 ["transform-runtime", {
                     "polyfill": false,
                     "regenerator": true,
@@ -21,10 +20,9 @@
             "presets": [
                 "es2015",
                 "react",
-                "stage-0"
+                "stage-1"
             ],
             "plugins": [
-                "transform-react-jsx",
                 ["transform-runtime", {
                     "polyfill": false,
                     "regenerator": true,
@@ -37,10 +35,9 @@
             "presets": [
                 "es2015",
                 "react",
-                "stage-0"
+                "stage-1"
             ],
             "plugins": [
-                "transform-react-jsx",
                 ["transform-runtime", {
                     "polyfill": false,
                     "regenerator": true,

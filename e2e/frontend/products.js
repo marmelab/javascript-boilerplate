@@ -11,13 +11,13 @@ describe('Products', function () { // eslint-disable-line func-names
     this.timeout(15000);
 
     it('user should see the product list', () => {
-        driver.get('http://localhost:8081/#/products');
+        driver.get('http://localhost:9080/#/products');
         utils(driver).waitForElementVisible(By.css('.product-item'));
         expect('.product-item').dom.to.have.count(3);
     });
 
     it('user should see the product details', () => {
-        driver.get('http://localhost:8081/#/products/1');
+        driver.get('http://localhost:9080/#/products/1');
         utils(driver).waitForElementVisible(By.css('.product-details'));
         expect('.product-details').dom.to.be.visible();
         expect('.img-thumbnail').dom.to.be.visible();

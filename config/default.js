@@ -1,13 +1,16 @@
 const apiPort = process.env.NODE_PORT || 3000; // eslint-disable-line no-var
 const apiUrl = `http://localhost:${apiPort}`; // eslint-disable-line no-var
+const adminUrl = 'http://localhost:8081'; // eslint-disable-line no-var
 const frontendUrl = 'http://localhost:8080'; // eslint-disable-line no-var
-const allowedOrigins = [frontendUrl, apiUrl];
+
+const allowedOrigins = [adminUrl, apiUrl, frontendUrl];
 
 module.exports = {
     appName: 'New App',
     apps: {
         admin: {
             api_url: `${apiUrl}/admin`,
+            webpack_public_path: ''
         },
         api: {
             allowedOrigins,
@@ -80,6 +83,7 @@ module.exports = {
         },
         frontend: {
             api_url: `${apiUrl}/api`,
+            webpack_public_path: ''
         },
     },
     babel_ignore: /node_modules\/(?!admin-config|fakerest)/,

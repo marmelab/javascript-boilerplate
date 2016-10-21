@@ -1,6 +1,11 @@
+const adminUrl = 'http://localhost:9081';
 const apiUrl = 'http://localhost:3010';
-const frontendUrl = 'http://localhost:8081';
-const allowedOrigins = [frontendUrl, apiUrl];
+const frontendUrl = 'http://localhost:9080';
+const allowedOrigins = [
+    adminUrl,
+    apiUrl,
+    frontendUrl,
+];
 
 module.exports = {
     apps: {
