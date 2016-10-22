@@ -30,6 +30,7 @@ export default {
             loader: 'babel',
             // Options to configure babel with
             query: {
+                babelrc: false,
                 cacheDirectory: true,
                 presets: [
                     ['es2015', { modules: false }],
@@ -110,10 +111,11 @@ export default {
         }),
         new LoaderOptionsPlugin({
             options: {
+                context: __dirname,
+                minimize: process.env.NODE_ENV !== 'development',
                 sassLoader: {
                     includePaths: ['./node_modules/compass-mixins/lib/'],
                 },
-                context: __dirname,
             },
         }),
         new ProvidePlugin({

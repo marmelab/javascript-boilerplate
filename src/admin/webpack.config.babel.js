@@ -1,6 +1,5 @@
 import config from 'config';
-import { DefinePlugin } from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import { DefinePlugin, LoaderOptionsPlugin } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
 
@@ -29,6 +28,7 @@ export default {
             loader: 'babel',
             // Options to configure babel with
             query: {
+                babelrc: false,
                 cacheDirectory: true,
                 presets: [
                     ['es2015', { modules: false }],
@@ -96,12 +96,11 @@ export default {
             chunks: ['index'],
             hash: true,
         }),
+        new LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                minimize: process.env.NODE_ENV !== 'development',
+            },
+        }),
     ],
-    resolve: {
-        modules: [
-            resolve(__dirname, './js'),
-            resolve(__dirname, '..'),
-            'node_modules',
-        ],
-    },
 };
