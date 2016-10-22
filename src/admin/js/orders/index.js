@@ -1,11 +1,4 @@
-import OrderIcon from 'material-ui/svg-icons/action/description';
-import OrderList from './List';
-import OrderEdit from './Edit';
-import OrderCreate from './Create';
-
-export default {
-    OrderList,
-    OrderEdit,
-    OrderCreate,
-    OrderIcon,
-};
+export { default as OrderIcon } from 'material-ui/svg-icons/action/description';
+export { default as OrderList } from './List';
+export { default as OrderEdit } from './Edit';
+export { default as OrderCreate } from './Create';

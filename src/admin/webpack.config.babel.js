@@ -30,17 +30,17 @@ export default {
             // Options to configure babel with
             query: {
                 cacheDirectory: true,
+                presets: [
+                    ['es2015', { modules: false }],
+                    'react',
+                    'react-hmre',
+                    'stage-1',
+                ],
                 plugins: [
                     ['transform-runtime', {
                         polyfill: false,
                         regenerator: true,
                     }],
-                    'add-module-exports',
-                ],
-                presets: [
-                    'es2015',
-                    'react',
-                    'stage-1',
                 ],
             },
         }, {
@@ -48,22 +48,28 @@ export default {
             loader: 'json',
         }, {
             test: /\.jpe?g$|\.gif$|\.png$/,
-            loader: 'url?limit=10000&name=/frontend/[hash].[ext]',
+            loader: 'url',
+            query: { limit: 10000, name: '/frontend/[hash].[ext]' },
         }, {
             test: /\.(otf|svg)(\?.+)?$/,
-            loader: 'url?limit=8192',
+            loader: 'url',
+            query: { limit: 8192 },
         }, {
             test: /\.eot(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/vnd.ms-fontobject',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/vnd.ms-fontobject' },
         }, {
             test: /\.woff2(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-woff2',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-woff2' },
         }, {
             test: /\.woff(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-woff',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-woff' },
         }, {
             test: /\.ttf(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-ttf',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-ttf' },
         }, {
             test: /\.html$/,
             loader: 'html',
@@ -84,9 +90,6 @@ export default {
                 NODE_ENV: process.env.NODE_ENV === 'development' ? JSON.stringify(process.env.NODE_ENV) : JSON.stringify('production'), // eslint-disable-line max-len
             },
         }),
-        new ExtractTextPlugin('[name].css', {
-            allChunks: false,
-        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: resolve(__dirname, './index.html'),
@@ -94,4 +97,11 @@ export default {
             hash: true,
         }),
     ],
+    resolve: {
+        modules: [
+            resolve(__dirname, './js'),
+            resolve(__dirname, '..'),
+            'node_modules',
+        ],
+    },
 };

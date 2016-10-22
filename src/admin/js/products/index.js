@@ -1,11 +1,4 @@
-import ProductIcon from 'material-ui/svg-icons/action/redeem';
-import ProductList from './List';
-import ProductEdit from './Edit';
-import ProductCreate from './Create';
-
-export default {
-    ProductList,
-    ProductEdit,
-    ProductCreate,
-    ProductIcon,
-};
+export { default as ProductIcon } from 'material-ui/svg-icons/action/redeem';
+export { default as ProductList } from './List';
+export { default as ProductEdit } from './Edit';
+export { default as ProductCreate } from './Create';
