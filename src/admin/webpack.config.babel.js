@@ -31,11 +31,10 @@ export default {
                 babelrc: false,
                 cacheDirectory: true,
                 presets: [
-                    ['es2015', { modules: false }],
+                    ['es2015', { loose: true, modules: false }],
                     'react',
-                    'react-hmre',
                     'stage-1',
-                ],
+                ].concat(process.env.NODE_ENV === 'development' ? ['react-hmre'] : []),
                 plugins: [
                     ['transform-runtime', {
                         polyfill: false,

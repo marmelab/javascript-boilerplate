@@ -46,7 +46,7 @@ build-frontend: clear-build-frontend ## Build frontend application
 	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
-		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+        $(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
 build: build-frontend build-admin ## Build all front applications defined with webpack
