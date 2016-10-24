@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import createFetchActionTypes from '../../../../common/fetch/createFetchActionTypes';
+import createFetchActionTypes from '../../../common/fetch/createFetchActionTypes';
 
 export const orderActionTypes = {
     list: createFetchActionTypes('ORDERS'),

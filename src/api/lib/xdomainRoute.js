@@ -3,7 +3,7 @@ import config from 'config';
 import { readFileSync } from 'fs';
 import koaRoute from 'koa-route';
 
-const xdomainScript = readFileSync(`${__dirname}/../../../../node_modules/xdomain/dist/xdomain.min.js`);
+const xdomainScript = readFileSync(`${__dirname}/../../../node_modules/xdomain/dist/xdomain.min.js`);
 const xdomainConfig = config.apps.api.security.xdomain;
 
 export default koaRoute.get(xdomainConfig.slave.path, async (ctx) => {

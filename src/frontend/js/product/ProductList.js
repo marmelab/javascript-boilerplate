@@ -5,7 +5,7 @@ import ProductItem from './ProductItem';
 import productActions from './actions';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
 import ProductPropType from './productPropTypes';
-import withFetchingOnMount from '../../../../common/fetch/withFetchingOnMount';
+import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const ProductList = ({ orderProduct, products }) => (

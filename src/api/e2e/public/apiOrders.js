@@ -5,8 +5,8 @@ import { PgPool } from 'co-postgres-queries';
 
 import request from '../../../common/e2e/lib/request';
 import fixturesFactory from '../../../common/e2e/lib/fixturesLoader';
-import userFactory from '../../src/users/userModel';
-import orderFactory from '../../src/orders/orderModel';
+import userFactory from '../../users/userModel';
+import orderFactory from '../../orders/orderModel';
 
 describe('/api/orders', () => {
     let user;

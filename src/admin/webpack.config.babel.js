@@ -16,14 +16,14 @@ export default {
     devtool: 'cheap-module-inline-source-map',
     entry: {
         index: [
-            resolve(__dirname, './src/js/main.js'),
+            resolve(__dirname, './js/main.js'),
         ],
     },
     module: {
         loaders: [{
             test: /\.jsx?$/,
             include: [
-                resolve(__dirname, './src/js'),
+                resolve(__dirname, './js'),
                 resolve(__dirname, '../common'),
             ],
             loader: 'babel',
@@ -89,7 +89,7 @@ export default {
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: resolve(__dirname, './src/index.html'),
+            template: resolve(__dirname, './index.html'),
             chunks: ['index'],
             hash: true,
         }),

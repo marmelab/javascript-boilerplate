@@ -1,6 +1,6 @@
 import http from 'http';
 import request from 'request';
-import app from '../../../api/src';
+import app from '../../../api';
 
 export default function myRequest(params, authToken = null, cookies = {}) {
     return (callback) => {

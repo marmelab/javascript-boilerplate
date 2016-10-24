@@ -160,19 +160,38 @@ build-test: ## Build all front applications defined with webpack for test enviro
 	@NODE_ENV=test make build
 
 test-admin-unit: ## Run the admin application unit tests with mocha
-    @NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/admin/src/js/test.spec.js' --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/admin/js/src/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha \
+		--require=co-mocha \
+		--require='./src/admin/js/test.spec.js' \
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/admin/js/**/*.spec.js"
 
 test-api-unit: ## Run the API unit tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./src/api/src
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
+        --require=reify \
+        --require=async-to-gen/register \
+        --require=co-mocha \
+        "./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
-	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha --require=reify --require=async-to-gen/register --require=co-mocha --recursive ./src/api/e2e
+	@NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
+        --require=reify \
+        --require=async-to-gen/register \
+        --require=co-mocha \
+        --recursive \
+        ./src/api/e2e
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --require=co-mocha --require='./src/frontend/src/js/test.spec.js' --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/frontend/src/js/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha \
+		--require=co-mocha \
+		--require='./src/frontend/js/test.spec.js' \
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/frontend/js/**/*.spec.js"
 
 test-common-unit: ## Run the common directory unit tests with mocha
-	@NODE_ENV=test ./node_modules/.bin/mocha --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" "./src/common/{,**/}*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/mocha \
+        --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+        "./src/common/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@NODE_ENV=test make build-frontend
@@ -198,12 +217,12 @@ test: ## Run all tests
 
 reset-test-database: ## Reset the test database and run all migrations
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/api/src/lib/migrations \
+        --migrations-dir=./src/api/lib/migrations \
 		--config=config/database.js \
 		-e api \
 		reset
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/api/src/lib/migrations \
+        --migrations-dir=./src/api/lib/migrations \
 		--config=config/database.js \
 		-e api \
 		up
@@ -211,14 +230,14 @@ reset-test-database: ## Reset the test database and run all migrations
 # Migrations ===================================================================
 migrate: ## Migrate the database defined in the configuration (you may define the NODE_ENV)
 	@./node_modules/.bin/db-migrate \
-		--migrations-dir=./src/api/src/lib/migrations \
+		--migrations-dir=./src/api/lib/migrations \
 		--config=config/database.js \
 		-e api \
 		up
 
 create-migration: ## Create a new migration (you may define the NODE_ENV to select a specific configuration)
 	@./node_modules/.bin/db-migrate \
-		--migrations-dir=./src/api/src/lib/migrations \
+		--migrations-dir=./src/api/lib/migrations \
 		--config=config/database.js \
 		-e api \
 		create migration

@@ -3,7 +3,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import OrderItem from './OrderItem';
 import orderActions from './actions';
-import withFetchingOnMount from '../../../../common/fetch/withFetchingOnMount';
+import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const OrderList = ({ orders }) => (

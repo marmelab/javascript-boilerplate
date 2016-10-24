@@ -1,5 +1,5 @@
 /* globals API_URL */
-import fetchFactory from '../../../../common/fetch/fetch';
+import fetchFactory from '../../../common/fetch/fetch';
 
 export const fetchSignIn = fetchFactory(`${API_URL}/sign-in`, 'POST');
 export const fetchSignUp = fetchFactory(`${API_URL}/sign-up`, 'POST');

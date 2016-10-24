@@ -2,8 +2,8 @@ import { routerActions } from 'react-router-redux';
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, fork, put, select } from 'redux-saga/effects';
 import decodeJwt from 'jwt-decode';
-import { FAILURE } from '../../../../common/fetch/createFetchActionTypes';
-import { fetchSagaFactory } from '../../../../common/fetch/sagas';
+import { FAILURE } from '../../../common/fetch/createFetchActionTypes';
+import { fetchSagaFactory } from '../../../common/fetch/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,
