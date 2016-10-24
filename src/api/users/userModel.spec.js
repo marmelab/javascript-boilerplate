@@ -2,19 +2,19 @@
 
 import { assert } from 'chai';
 import sinon from 'sinon';
-import userRepository from './userModel';
+import userModel from './userModel';
 
 describe('User Model', () => {
     let client;
 
     beforeEach(() => {
         client = sinon.spy();
+        client.link = () => ({});
     });
 
     it('should show basic infos', () => {
-        const model = userRepository(client);
-        assert.deepEqual(model.tableName, 'user_account');
-        assert.deepEqual(model.exposedFields, [
+        assert.deepEqual(userModel.queries.selectOne.table(), 'user_account');
+        assert.deepEqual(userModel.queries.selectOne.returnFields(), [
             'id',
             'email',
             'password',
@@ -23,14 +23,16 @@ describe('User Model', () => {
 
     it('should correctly retrieve user by email', function* () {
         client = {
-            query: ({ parameters }) => {
-                assert.deepEqual(parameters.email, 'email@example.org');
+            link: () => ({
+                findByEmail: (email) => {
+                    assert.deepEqual(email, 'email@example.org');
 
-                return Promise.resolve([{ id: 42, email: 'email@example.org' }]);
-            },
+                    return Promise.resolve([{ id: 42, email: 'email@example.org' }]);
+                },
+            }),
         };
 
-        const res = yield userRepository(client).findByEmail('email@example.org');
+        const res = yield userModel(client).findByEmail('email@example.org');
         assert.deepEqual(res, { id: 42, email: 'email@example.org' });
     });
 });

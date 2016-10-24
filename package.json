@@ -13,7 +13,7 @@
     "bootstrap": "4.0.0-alpha.2",
     "classnames": "2.2.5",
     "co": "4.6.0",
-    "co-postgres-queries": "0.0.10",
+    "co-postgres-queries": "0.1.0",
     "compass-mixins": "0.12.10",
     "config": "1.21.0",
     "fastclick": "1.0.6",
