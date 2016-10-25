@@ -1,6 +1,5 @@
 import config from 'config';
-import { DefinePlugin } from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import { DefinePlugin, LoaderOptionsPlugin } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
 
@@ -29,18 +28,18 @@ export default {
             loader: 'babel',
             // Options to configure babel with
             query: {
+                babelrc: false,
                 cacheDirectory: true,
+                presets: [
+                    ['es2015', { loose: true, modules: false }],
+                    'react',
+                    'stage-1',
+                ].concat(process.env.NODE_ENV === 'development' ? ['react-hmre'] : []),
                 plugins: [
                     ['transform-runtime', {
                         polyfill: false,
                         regenerator: true,
                     }],
-                    'add-module-exports',
-                ],
-                presets: [
-                    'es2015',
-                    'react',
-                    'stage-1',
                 ],
             },
         }, {
@@ -48,22 +47,28 @@ export default {
             loader: 'json',
         }, {
             test: /\.jpe?g$|\.gif$|\.png$/,
-            loader: 'url?limit=10000&name=/frontend/[hash].[ext]',
+            loader: 'url',
+            query: { limit: 10000, name: '/frontend/[hash].[ext]' },
         }, {
             test: /\.(otf|svg)(\?.+)?$/,
-            loader: 'url?limit=8192',
+            loader: 'url',
+            query: { limit: 8192 },
         }, {
             test: /\.eot(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/vnd.ms-fontobject',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/vnd.ms-fontobject' },
         }, {
             test: /\.woff2(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-woff2',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-woff2' },
         }, {
             test: /\.woff(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-woff',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-woff' },
         }, {
             test: /\.ttf(\?\S*)?$/,
-            loader: 'url?limit=100000&mimetype=application/font-ttf',
+            loader: 'url',
+            query: { limit: 10000, mimetype: 'application/font-ttf' },
         }, {
             test: /\.html$/,
             loader: 'html',
@@ -84,14 +89,17 @@ export default {
                 NODE_ENV: process.env.NODE_ENV === 'development' ? JSON.stringify(process.env.NODE_ENV) : JSON.stringify('production'), // eslint-disable-line max-len
             },
         }),
-        new ExtractTextPlugin('[name].css', {
-            allChunks: false,
-        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: resolve(__dirname, './index.html'),
             chunks: ['index'],
             hash: true,
+        }),
+        new LoaderOptionsPlugin({
+            options: {
+                context: __dirname,
+                minimize: process.env.NODE_ENV !== 'development',
+            },
         }),
     ],
 };

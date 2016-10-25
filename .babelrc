@@ -1,49 +1,13 @@
 {
-    "env": {
-        "development": {
-            "presets": [
-                "es2015",
-                "react",
-                "react-hmre",
-                "stage-1"
-            ],
-            "plugins": [
-                ["transform-runtime", {
-                    "polyfill": false,
-                    "regenerator": true,
-                }],
-                "add-module-exports",
-            ],
-        },
-
-        "production": {
-            "presets": [
-                "es2015",
-                "react",
-                "stage-1"
-            ],
-            "plugins": [
-                ["transform-runtime", {
-                    "polyfill": false,
-                    "regenerator": true,
-                }],
-                "add-module-exports",
-            ],
-        },
-
-        "test": {
-            "presets": [
-                "es2015",
-                "react",
-                "stage-1"
-            ],
-            "plugins": [
-                ["transform-runtime", {
-                    "polyfill": false,
-                    "regenerator": true,
-                }],
-                "add-module-exports",
-            ],
-        }
-    }
+    "presets": [
+        "es2015",
+        "react",
+        "stage-1",
+    ],
+    "plugins": [
+        ["transform-runtime", {
+            "polyfill": false,
+            "regenerator": true,
+        }],
+    ],
 }

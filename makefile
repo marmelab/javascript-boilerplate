@@ -24,7 +24,7 @@ install-npm-dependencies:
 
 install-selenium:
 	@echo "Installing Selenium server"
-	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.21
+	@./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.24
 
 install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
 
@@ -46,7 +46,7 @@ build-frontend: clear-build-frontend ## Build frontend application
 	@echo "Building frontend application"
 	@./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
-		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+        $(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
 build: build-frontend build-admin ## Build all front applications defined with webpack
@@ -196,7 +196,7 @@ test-common-unit: ## Run the common directory unit tests with mocha
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	@NODE_ENV=test make build-frontend
 	@PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
-	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.21-x64-chromedriver" \
+	@NODE_ENV=test SELENIUM_BROWSER=chrome SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
 		--compilers="js:babel-core/register" \
 		--recursive \
