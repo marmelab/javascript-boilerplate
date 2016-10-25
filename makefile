@@ -218,12 +218,12 @@ test: ## Run all tests
 
 reset-test-database: ## Reset the test database and run all migrations
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/api/lib/migrations \
+        --migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		reset
 	@NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/api/lib/migrations \
+        --migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
@@ -231,14 +231,14 @@ reset-test-database: ## Reset the test database and run all migrations
 # Migrations ===================================================================
 migrate: ## Migrate the database defined in the configuration (you may define the NODE_ENV)
 	@./node_modules/.bin/db-migrate \
-		--migrations-dir=./src/api/lib/migrations \
+        --migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
 
 create-migration: ## Create a new migration (you may define the NODE_ENV to select a specific configuration)
 	@./node_modules/.bin/db-migrate \
-		--migrations-dir=./src/api/lib/migrations \
+        --migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		create migration
