@@ -1,14 +1,13 @@
 /* eslint func-names:0 */
 
 import expect from 'expect';
-import sinon from 'sinon';
 import userModel from './userModel';
 
 describe('User Model', () => {
     let client;
 
     beforeEach(() => {
-        client = sinon.spy();
+        client = () => { };
         client.link = () => ({});
     });
 
