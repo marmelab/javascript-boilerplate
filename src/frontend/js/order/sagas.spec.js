@@ -1,5 +1,5 @@
 /* eslint require-yield: off, func-names: off */
-import { expect } from 'chai';
+import expect from 'expect';
 import { routerActions } from 'react-router-redux';
 import { call, put } from 'redux-saga/effects';
 
@@ -21,7 +21,7 @@ describe('orderSagas', () => {
         it('should call the fetch saga', () => {
             const saga = newOrderSaga(fetchNewOrderSaga)(action);
 
-            expect(saga.next('blublu').value).to.deep.equal(call(fetchNewOrderSaga, {
+            expect(saga.next('blublu').value).toEqual(call(fetchNewOrderSaga, {
                 payload: [{
                     id: 42,
                 }, {
@@ -35,7 +35,7 @@ describe('orderSagas', () => {
 
             expect(saga.next({
                 result: { id: 42 },
-            }).value).to.deep.equal(put(clearShoppingCart()));
+            }).value).toEqual(put(clearShoppingCart()));
         });
 
         it('should put the routerActions.push action with orders on successfull fetch', () => {
@@ -45,7 +45,7 @@ describe('orderSagas', () => {
                 result: { id: 42 },
             });
 
-            expect(saga.next().value).to.deep.equal(put(routerActions.push('/orders/42')));
+            expect(saga.next().value).toEqual(put(routerActions.push('/orders/42')));
         });
     });
 });

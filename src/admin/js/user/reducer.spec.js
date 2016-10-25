@@ -1,15 +1,23 @@
-import { expect } from 'chai';
-import sinon from 'sinon';
+import expect, { createSpy } from 'expect';
 import reducerFactory, { isAuthenticated } from './reducer';
-import { signIn, signOut, signUp } from './actions';
+import { signIn, signOut } from './actions';
 
 describe('user reducer', () => {
-    const getItemWithUser = sinon.stub();
     const expireTokenTime = new Date(Date.now() + (30 * 1000));
-    getItemWithUser.withArgs('id').returns('foo');
-    getItemWithUser.withArgs('email').returns('foo@bar.com');
-    getItemWithUser.withArgs('token').returns('bar');
-    getItemWithUser.withArgs('expires').returns(expireTokenTime.getTime() / 1000);
+    const getItemWithUser = createSpy().andCall((key) => {
+        switch (key) {
+        case 'id':
+            return 'foo';
+        case 'email':
+            return 'foo@bar.com';
+        case 'token':
+            return 'bar';
+        case 'expires':
+            return expireTokenTime.getTime() / 1000;
+        default:
+            return null;
+        }
+    });
 
     const localStorageWithUser = {
         getItem: getItemWithUser,
@@ -18,7 +26,7 @@ describe('user reducer', () => {
     it('should return the user saved in localStorage as its initial state', () => {
         const reducer = reducerFactory(localStorageWithUser);
 
-        expect(reducer(undefined, { type: 'foo' })).to.deep.equal({
+        expect(reducer(undefined, { type: 'foo' })).toEqual({
             authenticated: true,
             email: 'foo@bar.com',
             id: 'foo',
@@ -29,7 +37,7 @@ describe('user reducer', () => {
     });
 
     it('should handle the signIn.success action', () => {
-        const getItem = sinon.stub().returns(undefined);
+        const getItem = createSpy().andReturn(undefined);
         const localStorage = {
             getItem,
         };
@@ -40,7 +48,7 @@ describe('user reducer', () => {
             id: 'foo',
             token: 'bar',
             expires: expireTokenTime,
-        }))).to.deep.equal({
+        }))).toEqual({
             authenticated: true,
             error: false,
             id: 'foo',
@@ -54,7 +62,7 @@ describe('user reducer', () => {
     it('should handle the signOut.success action', () => {
         const reducer = reducerFactory(localStorageWithUser);
 
-        expect(reducer(undefined, signOut.success())).to.deep.equal({
+        expect(reducer(undefined, signOut.success())).toEqual({
             authenticated: false,
             id: null,
             email: null,
@@ -66,17 +74,17 @@ describe('user reducer', () => {
 
     describe('isAuthenticated', () => {
         it('should return false if state.user.authenticated is false', () => {
-            expect(isAuthenticated({ user: { authenticated: false } })).to.be.false;
+            expect(isAuthenticated({ user: { authenticated: false } })).toEqual(false);
         });
 
         it('should return false if state.user.expires is anterior to now', () => {
             const expires = new Date(Date.now() - 1000);
-            expect(isAuthenticated({ user: { authenticated: true, expires } })).to.be.false;
+            expect(isAuthenticated({ user: { authenticated: true, expires } })).toEqual(false);
         });
 
         it('should return true if state.user.expires is posterior to now', () => {
             const expires = new Date(Date.now() + 1000);
-            expect(isAuthenticated({ user: { authenticated: true, expires } })).to.be.true;
+            expect(isAuthenticated({ user: { authenticated: true, expires } })).toEqual(true);
         });
     });
 });

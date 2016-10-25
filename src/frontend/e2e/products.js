@@ -1,30 +1,26 @@
-import { By } from 'selenium-webdriver';
-import { after, describe, it } from 'selenium-webdriver/testing';
-import driver from 'nodium/lib/driver';
-import utils from 'nodium/lib/driver/utils';
-import chai, { expect } from 'chai';
+/* eslint func-names: off */
+import { until, By } from 'selenium-webdriver';
+import expect from 'expect';
+import driver from '../../common/e2e/lib/chromeDriver';
 
-chai.use(require('chai-as-promised'));
-chai.use(require('chai-webdriver')(driver));
-
-describe('Products', function () { // eslint-disable-line func-names
+describe('Products', function () {
     this.timeout(15000);
 
-    it('user should see the product list', () => {
+    it('user should see the product list', function* () {
         driver.get('http://localhost:9080/#/products');
-        utils(driver).waitForElementVisible(By.css('.product-item'));
-        expect('.product-item').dom.to.have.count(3);
+        yield driver.wait(until.elementLocated(By.css('.product-item')));
+        const productItems = yield driver.findElements(By.css('.product-item'));
+        expect(productItems.length).toEqual(3);
     });
 
-    it('user should see the product details', () => {
+    it('user should see the product details', function* () {
         driver.get('http://localhost:9080/#/products/1');
-        utils(driver).waitForElementVisible(By.css('.product-details'));
-        expect('.product-details').dom.to.be.visible();
-        expect('.img-thumbnail').dom.to.be.visible();
-        expect('.img-thumbnail').dom.to.have.attribute('src', 'http://lorempixel.com/400/400/');
-        expect('h2').dom.to.have.text('abc');
-        expect('.description').dom.to.have.text('John the zoo');
-        expect('.price').dom.to.have.text('Price: $3.40');
+        yield driver.wait(until.elementLocated(By.css('.product-details')));
+
+        expect(yield driver.findElement(By.css('.img-thumbnail')).getAttribute('src')).toEqual('http://lorempixel.com/400/400/');
+        expect(yield driver.findElement(By.css('h2')).getText()).toEqual('abc');
+        expect(yield driver.findElement(By.css('.description')).getText()).toEqual('John the zoo');
+        expect(yield driver.findElement(By.css('.price')).getText()).toEqual('Price: $3.40');
     });
 
     after(() => {

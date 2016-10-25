@@ -12,7 +12,7 @@ Features:
 
 * Babel transpilation (es2015, react, stage-0) for both client and server code
 * Node.js API built on top of Koa.js (successor of Express) for cleaner async code
-* Automated CRUD resources based on a PostgreSQL database (using `pg` and `co-pg`)
+* Automated CRUD resources based on a PostgreSQL database (using `pg` and `co-postgres-queries`)
 * State-of the art robustness and security for the API (JWT, rate limiting, secure headers, based on `helmet`)
 * Separated API for the admin, with different security settings (and login form)
 * Built-in database migration handling (using `db-migrate`)
@@ -27,7 +27,7 @@ Features:
 * Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target (minified)
 * Admin app built with Angular and `ng-admin`
 * Including a full-featured admin panel with references
-* Unified test build, running unit and functional tests on all apps, powered by `mocha`, `selenium`, and `nightwatch`
+* Unified test build, running unit and functional tests on all apps, powered by `mocha` and `selenium`
 * AWS deployment automated by Fabric
 * Sensible `eslint` defaults, based on Airbnb's rules
 
@@ -147,25 +147,25 @@ make test-isomorphic-unit
 API (and common lib) unit tests using:
 
 * [Mocha](http://mochajs.org/)
-* expect from [Chai](http://chaijs.com/guide/styles/)
+* expect from [expect](https://github.com/mjackson/expect)
 
 API functional tests using:
 
 * [Mocha](http://mochajs.org/)
-* expect from [Chai](http://chaijs.com/guide/styles/)
+* expect from [expect](https://github.com/mjackson/expect)
 * [request](https://github.com/request/request)
 
 Frontend unit tests using:
 
 * [Mocha](http://mochajs.org/)
-* [expect](https://github.com/mjackson/expect)
+* expect from [expect](https://github.com/mjackson/expect)
 * [Redux Thunk](https://github.com/gaearon/redux-thunk), [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) and [nock](https://github.com/pgte/nock)
 to test redux action creators (as explain in [redux documentation](http://rackt.org/redux/docs/recipes/WritingTests.html))
 * [enzyme](https://github.com/airbnb/enzyme) to test react components
 
 Frontend fonctional tests using:
 
-* [Nightwatch.js](http://nightwatchjs.org/)
+* [selenium-webdriver](https://github.com/SeleniumHQ/selenium)
 
 
 ## Deployment

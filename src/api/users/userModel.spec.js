@@ -1,6 +1,6 @@
 /* eslint func-names:0 */
 
-import { assert } from 'chai';
+import expect from 'expect';
 import sinon from 'sinon';
 import userModel from './userModel';
 
@@ -13,8 +13,8 @@ describe('User Model', () => {
     });
 
     it('should show basic infos', () => {
-        assert.deepEqual(userModel.queries.selectOne.table(), 'user_account');
-        assert.deepEqual(userModel.queries.selectOne.returnFields(), [
+        expect(userModel.queries.selectOne.table()).toEqual('user_account');
+        expect(userModel.queries.selectOne.returnFields()).toEqual([
             'id',
             'email',
             'password',
@@ -25,7 +25,7 @@ describe('User Model', () => {
         client = {
             link: () => ({
                 findByEmail: (email) => {
-                    assert.deepEqual(email, 'email@example.org');
+                    expect(email).toEqual('email@example.org');
 
                     return Promise.resolve([{ id: 42, email: 'email@example.org' }]);
                 },
@@ -33,6 +33,6 @@ describe('User Model', () => {
         };
 
         const res = yield userModel(client).findByEmail('email@example.org');
-        assert.deepEqual(res, { id: 42, email: 'email@example.org' });
+        expect(res).toEqual({ id: 42, email: 'email@example.org' });
     });
 });

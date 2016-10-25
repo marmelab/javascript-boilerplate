@@ -1,5 +1,5 @@
 /* eslint func-names: off */
-import { assert } from 'chai';
+import expect from 'expect';
 import sendEmailsFactory from './sendEmails';
 
 describe('Mails sendEmails', () => {
@@ -16,7 +16,7 @@ describe('Mails sendEmails', () => {
     });
 
     it('should throw an error if no transporter', () => {
-        assert.throws(sendEmailsFactory, 'Invalid transporter');
+        expect(sendEmailsFactory).toThrow('Invalid transporter');
     });
 
     it('should send correct emails', function* () {
@@ -33,7 +33,7 @@ describe('Mails sendEmails', () => {
             attachments: ['attachment'],
         }]);
 
-        assert.deepEqual(emails, [{
+        expect(emails).toEqual([{
             from: 'marmelab <info@marmelab.com>',
             to: 'user@marmelab.com',
             subject: 'Mail 1',

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import expect from 'expect';
 import reducer from './reducer';
 import {
     ADD_PRODUCT_TO_SHOPPING_CART,
@@ -8,7 +8,7 @@ import {
 
 describe('order reducer', () => {
     it('should return its initial state', () => {
-        expect(reducer(undefined, { type: 'foo' })).to.deep.equal({
+        expect(reducer(undefined, { type: 'foo' })).toEqual({
             products: [],
             total: 0,
         });
@@ -18,7 +18,7 @@ describe('order reducer', () => {
         expect(reducer(undefined, {
             type: ADD_PRODUCT_TO_SHOPPING_CART,
             payload: { id: 42, quantity: 1, price: 84 },
-        })).to.deep.equal({
+        })).toEqual({
             products: [
                 { id: 42, quantity: 1, price: 84 },
             ],
@@ -34,7 +34,7 @@ describe('order reducer', () => {
         }, {
             type: ADD_PRODUCT_TO_SHOPPING_CART,
             payload: { id: 42, quantity: 1, price: 10 },
-        })).to.deep.equal({
+        })).toEqual({
             products: [
                 { id: 43, quantity: 1, price: 20 },
                 { id: 42, quantity: 1, price: 10 },
@@ -52,7 +52,7 @@ describe('order reducer', () => {
         }, {
             type: ADD_PRODUCT_TO_SHOPPING_CART,
             payload: { id: 42, quantity: 1, price: 10 },
-        })).to.deep.equal({
+        })).toEqual({
             products: [
                 { id: 42, quantity: 2, price: 10 },
                 { id: 43, quantity: 1, price: 20 },
@@ -67,7 +67,7 @@ describe('order reducer', () => {
                 { id: 42, quantity: 1, price: 10 },
                 { id: 43, quantity: 1, price: 20 },
             ],
-        }, { type: REMOVE_PRODUCT_FROM_SHOPPING_CART, payload: 42 })).to.deep.equal({
+        }, { type: REMOVE_PRODUCT_FROM_SHOPPING_CART, payload: 42 })).toEqual({
             products: [
                 { id: 43, quantity: 1, price: 20 },
             ],
@@ -84,7 +84,7 @@ describe('order reducer', () => {
         }, {
             type: SET_SHOPPING_CART_ITEM_QUANTITY,
             payload: { id: 42, quantity: 100 },
-        })).to.deep.equal({
+        })).toEqual({
             products: [
                 { id: 42, quantity: 100, price: 10 },
                 { id: 43, quantity: 1, price: 20 },

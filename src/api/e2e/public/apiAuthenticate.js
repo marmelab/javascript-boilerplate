@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 import config from 'config';
-import { assert } from 'chai';
+import expect from 'expect';
 import { PgPool } from 'co-postgres-queries';
 
 import request from '../../../common/e2e/lib/request';
@@ -25,7 +25,7 @@ describe('/api/sign-in', () => {
                 method: 'PUT',
                 url: '/api/sign-in',
             });
-            assert.equal(statusCode, 405, JSON.stringify(body));
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
 
@@ -39,7 +39,7 @@ describe('/api/sign-in', () => {
                     password: '',
                 },
             });
-            assert.equal(statusCode, 401, JSON.stringify(body));
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
         it('should return 401 with an empty email', function* () {
             const { statusCode, body } = yield request({
@@ -50,7 +50,7 @@ describe('/api/sign-in', () => {
                     password: 'password',
                 },
             });
-            assert.equal(statusCode, 401, JSON.stringify(body));
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
         it('should return 401 with an empty password', function* () {
             const { statusCode, body } = yield request({
@@ -61,7 +61,7 @@ describe('/api/sign-in', () => {
                     password: '',
                 },
             });
-            assert.equal(statusCode, 401, JSON.stringify(body));
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
         it('should return 401 with a wrong email', function* () {
             const { statusCode, body } = yield request({
@@ -72,7 +72,7 @@ describe('/api/sign-in', () => {
                     password: 'password',
                 },
             });
-            assert.equal(statusCode, 401, JSON.stringify(body));
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
         it('should return 401 with a wrong password', function* () {
             const { statusCode, body } = yield request({
@@ -83,7 +83,7 @@ describe('/api/sign-in', () => {
                     password: 'wrongpassword',
                 },
             });
-            assert.equal(statusCode, 401, JSON.stringify(body));
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
         it('should return 200 with a valid email and password', function* () {
             const { statusCode, body } = yield request({
@@ -94,7 +94,7 @@ describe('/api/sign-in', () => {
                     password: 'password',
                 },
             });
-            assert.equal(statusCode, 200, JSON.stringify(body));
+            expect(statusCode).toEqual(200, JSON.stringify(body));
         });
     });
     describe('PUT', () => {
@@ -103,7 +103,7 @@ describe('/api/sign-in', () => {
                 method: 'PUT',
                 url: '/api/sign-in',
             });
-            assert.equal(statusCode, 405, JSON.stringify(body));
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
     describe('DELETE', () => {
@@ -112,7 +112,7 @@ describe('/api/sign-in', () => {
                 method: 'DELETE',
                 url: '/api/sign-in',
             });
-            assert.equal(statusCode, 405, JSON.stringify(body));
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
 

@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 import config from 'config';
-import { assert } from 'chai';
+import expect from 'expect';
 import { PgPool } from 'co-postgres-queries';
 
 import request from '../../../common/e2e/lib/request';
@@ -19,26 +19,30 @@ describe('/api/products', () => {
 
             yield fixtureLoader.loadDefaultFixtures();
         });
+
         it('should not require authentification', function* () {
             const { statusCode, body } = yield request({
                 method: 'GET',
                 url: '/api/products',
             });
-            assert.equal(statusCode, 200, JSON.stringify(body));
+            expect(statusCode).toEqual(200, JSON.stringify(body));
         });
+
         it('should return a list of all products', function* () {
             const { body } = yield request({
                 method: 'GET',
                 url: '/api/products',
             });
-            assert.equal(body.length, 3);
-            const requestedProducts = body.map(product => {
+            expect(body.length).toEqual(3);
+
+            const requestedProducts = body.map((product) => {
                 const p = Object.assign({}, product);
                 delete p.id;
                 delete p.totalcount;
                 return p;
             });
-            assert.deepEqual(requestedProducts, [
+
+            expect(requestedProducts).toEqual([
                 {
                     reference: 'abc',
                     width: 30,
@@ -71,37 +75,41 @@ describe('/api/products', () => {
                 },
             ]);
         });
+
         after(function* removeFixtures() {
             yield fixtureLoader.removeAllFixtures();
             db.release();
             pool.end();
         });
     });
+
     describe('POST', () => {
         it('should not allow POST request', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'POST',
                 url: '/api/products',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
+
     describe('PUT', () => {
         it('should not allow PUT request', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'PUT',
                 url: '/api/products',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
+
     describe('DELETE', () => {
         it('should not allow DELETE request', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'DELETE',
                 url: '/api/products',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
 });

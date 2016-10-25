@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import expect from 'expect';
 import {
     createListReducer,
     initialStateForList,
@@ -25,13 +25,13 @@ function testListReducer(reducer, initialState) {
     it('should return a list initial state', () => {
         const state = reducer(undefined, { type: 'foo' });
 
-        expect(state).to.deep.equal(initialState);
+        expect(state).toEqual(initialState);
     });
 
     it('should handle REQUEST actions', () => {
         const state = reducer(undefined, { type: actionTypes.list.REQUEST });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             loading: true,
         }));
     });
@@ -42,7 +42,7 @@ function testListReducer(reducer, initialState) {
             payload: [{ foo: 'bar' }],
         });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             list: [{ foo: 'bar' }],
         }));
     });
@@ -53,7 +53,7 @@ function testListReducer(reducer, initialState) {
             payload: 'foo',
         });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             error: 'foo',
         }));
     });
@@ -63,13 +63,13 @@ function testItemReducer(reducer, initialState) {
     it('should return an item initial state', () => {
         const state = reducer(undefined, { type: 'foo' });
 
-        expect(state).to.deep.equal(initialState);
+        expect(state).toEqual(initialState);
     });
 
     it('should handle REQUEST actions', () => {
         const state = reducer(undefined, { type: actionTypes.item.REQUEST });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             loading: true,
         }));
     });
@@ -80,7 +80,7 @@ function testItemReducer(reducer, initialState) {
             payload: { foo: 'bar' },
         });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             item: { foo: 'bar' },
         }));
     });
@@ -91,7 +91,7 @@ function testItemReducer(reducer, initialState) {
             payload: 'foo',
         });
 
-        expect(state).to.deep.equal(Object.assign({}, initialState, {
+        expect(state).toEqual(Object.assign({}, initialState, {
             error: 'foo',
         }));
     });
@@ -101,7 +101,7 @@ describe('createListReducer', () => {
     const reducer = createListReducer(actionTypes.list);
 
     it('should return a reducer', () => {
-        expect(reducer).to.be.a('function');
+        expect(reducer).toBeA('function');
     });
 
     testListReducer(reducer, initialStateForList);
@@ -111,7 +111,7 @@ describe('createItemReducer', () => {
     const reducer = createItemReducer(actionTypes.item);
 
     it('should return a reducer', () => {
-        expect(reducer).to.be.a('function');
+        expect(reducer).toBeA('function');
     });
 
     testItemReducer(reducer, initialStateForItem);
@@ -121,7 +121,7 @@ describe('createEntityReducer', () => {
     const reducer = createEntityReducer(actionTypes);
 
     it('should return a reducer', () => {
-        expect(reducer).to.be.a('function');
+        expect(reducer).toBeA('function');
     });
 
     testListReducer(reducer, initialStateForEntity);

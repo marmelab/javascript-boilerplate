@@ -20,7 +20,7 @@ function orderModel(client) {
         return order;
     };
 
-    const insertOne = async data => {
+    const insertOne = async (data) => {
         await client.begin();
 
         try {
@@ -41,7 +41,7 @@ function orderModel(client) {
 
             await client.commit();
 
-            return result;
+            return await selectOne({ id: result.id });
         } catch (error) {
             await client.rollback();
             throw error;

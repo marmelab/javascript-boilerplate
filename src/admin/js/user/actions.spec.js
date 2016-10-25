@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import expect from 'expect';
 import { signIn, signOut, userActionTypes } from './actions';
 
 describe('userActions', () => {
@@ -7,7 +7,7 @@ describe('userActions', () => {
             expect(signIn.request('/route', {
                 email: 'test_email',
                 password: 'test_password',
-            })).to.deep.equal({
+            })).toEqual({
                 type: userActionTypes.signIn.REQUEST,
                 payload: {
                     previousRoute: '/route',
@@ -24,7 +24,7 @@ describe('userActions', () => {
                 id: 'id_test',
                 email: 'test_email',
                 token: 'test_token',
-            })).to.deep.equal({
+            })).toEqual({
                 type: userActionTypes.signIn.SUCCESS,
                 payload: { id: 'id_test', email: 'test_email', token: 'test_token' },
             });
@@ -33,7 +33,7 @@ describe('userActions', () => {
         it('.failure should return the correct action', () => {
             const error = new Error('Run you fools !');
 
-            expect(signIn.failure(error)).to.deep.equal({
+            expect(signIn.failure(error)).toEqual({
                 type: userActionTypes.signIn.FAILURE,
                 payload: error,
                 error: true,
@@ -43,13 +43,13 @@ describe('userActions', () => {
 
     describe('.signOut', () => {
         it('.request should return the correct action', () => {
-            expect(signOut.request()).to.deep.equal({
+            expect(signOut.request()).toEqual({
                 type: userActionTypes.signOut.REQUEST,
             });
         });
 
         it('.success should return the correct action', () => {
-            expect(signOut.success()).to.deep.equal({
+            expect(signOut.success()).toEqual({
                 type: userActionTypes.signOut.SUCCESS,
             });
         });
