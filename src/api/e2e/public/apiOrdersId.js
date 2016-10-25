@@ -1,6 +1,7 @@
 /* eslint-disable func-names */
 import config from 'config';
-import { assert } from 'chai';
+import expect from 'expect';
+import omit from 'lodash.omit';
 import { PgPool } from 'co-postgres-queries';
 
 import request from '../../../common/e2e/lib/request';
@@ -51,67 +52,68 @@ describe('/api/orders/{id}', () => {
             }),
         };
     });
+
     describe('GET', () => {
         it('should require authentification', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'GET',
                 url: `/api/orders/${orders.orderUser1.id}`,
             });
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
+
         it('should require authentification without cookie token', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'GET',
                 url: `/api/orders/${orders.orderUser1.id}`,
             }, user1Token);
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
+
         it('should require authentification with only cookie token', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'GET',
                 url: `/api/orders/${orders.orderUser1.id}`,
             }, null, { token: user1CookieToken });
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
+
         it('should return data about a specific order', function* () {
-            const { statusCode, body } = yield request({
+            const { body, statusCode } = yield request({
                 url: `/api/orders/${orders.orderUser1.id}`,
             }, user1Token, { token: user1CookieToken });
 
-            assert.equal(statusCode, 200, JSON.stringify(body));
-            delete body.id;
-            delete body.date;
-            assert.deepEqual(body, {
-                reference: 'ref1',
-                customer_id: user1.id,
-                total: 6.80,
-                status: 'valid',
-                products: [],
-            });
+            expect(statusCode).toEqual(200, JSON.stringify(body));
+            expect(Object.assign({}, omit(body, 'date'))).toEqual(Object.assign({}, omit(orders.orderUser1, 'date')));
+            expect(new Date(body.date)).toEqual(new Date(orders.orderUser1.date));
         });
     });
+
     describe('DELETE', () => {
         it('should require authentification', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${orders.orderUser1.id}`,
             });
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         });
+
         it('should require authentification without cookie token', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${orders.orderUser1.id}`,
             });
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         }, user1Token);
+
         it('should require authentification with onlycookie token', function* () {
-            const { statusCode } = yield request({
+            const { body, statusCode } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${orders.orderUser1.id}`,
             });
-            assert.equal(statusCode, 401);
+            expect(statusCode).toEqual(401, JSON.stringify(body));
         }, null, { token: user1CookieToken });
+
         it('should delete a specific order', function* () {
             const newOrder = yield orderQueries.insertOne({
                 reference: 'ref1',
@@ -122,17 +124,18 @@ describe('/api/orders/{id}', () => {
                 products: [],
             });
             let userOrders = yield orderQueries.selectByUserId(user1.id);
-            assert.equal(userOrders.length, 2);
-            const { statusCode, body } = yield request({
+            expect(userOrders.length).toEqual(2);
+            const { body, statusCode } = yield request({
                 method: 'DELETE',
                 url: `/api/orders/${newOrder.id}`,
             }, user1Token, { token: user1CookieToken });
 
-            assert.equal(statusCode, 200, JSON.stringify(body));
+            expect(statusCode).toEqual(200, JSON.stringify(body));
             userOrders = yield orderQueries.selectByUserId(user1.id);
-            assert.equal(userOrders.length, 1);
+            expect(userOrders.length).toEqual(1);
         });
     });
+
     after(function* removeFixtures() {
         yield fixtureLoader.removeAllFixtures();
         db.release();

@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { assert } from 'chai';
+import expect from 'expect';
 
 import request from '../../../common/e2e/lib/request';
 
@@ -10,8 +10,8 @@ describe('/healthcare', () => {
                 method: 'GET',
                 url: '/healthcare',
             });
-            assert.equal(statusCode, 200, JSON.stringify(body));
-            assert.deepEqual(body, {
+            expect(statusCode).toEqual(200, JSON.stringify(body));
+            expect(body).toEqual({
                 api: 'OK',
                 db: 'OK',
                 internetAccess: 'OK',

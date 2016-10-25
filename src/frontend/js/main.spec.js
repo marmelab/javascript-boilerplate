@@ -1,7 +1,7 @@
-import { assert } from 'chai';
+import expect from 'expect';
 
 describe('main application', () => {
     it('should be always true', () => {
-        assert.equal(1, 1);
+        expect(1).toEqual(1);
     });
 });

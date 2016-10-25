@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { assert } from 'chai';
+import expect from 'expect';
 
 import request from '../../../common/e2e/lib/request';
 
@@ -10,34 +10,37 @@ describe('/api', () => {
                 method: 'GET',
                 url: '/api',
             });
-            assert.equal(statusCode, 200, JSON.stringify(body));
+            expect(statusCode).toEqual(200, JSON.stringify(body));
         });
     });
+
     describe('POST', () => {
         it('should not allow POST request', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'POST',
                 url: '/api',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
+
     describe('PUT', () => {
         it('should not allow PUT request', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'PUT',
                 url: '/api',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
+
     describe('DELETE', () => {
         it('should not allow DELETE request', function* () {
-            const { statusCode } = yield request({
+            const { statusCode, body } = yield request({
                 method: 'DELETE',
                 url: '/api',
             });
-            assert.equal(statusCode, 405);
+            expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
 });

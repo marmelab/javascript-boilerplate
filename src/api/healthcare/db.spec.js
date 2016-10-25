@@ -1,67 +1,63 @@
 /* eslint-disable func-names */
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import sinon from 'sinon';
+import expect, { createSpy } from 'expect';
 import dbCheck from './db';
-
-chai.use(sinonChai);
 
 describe('Healthcare', () => {
     describe('DB', () => {
         it('should call dbClientFactory with correct config', function* () {
-            const dbClientFactory = sinon.stub().returns({
-                query: sinon.stub().returns(Promise.resolve({ rows: [] })),
+            const dbClientFactory = createSpy().andReturn({
+                query: createSpy().andReturn(Promise.resolve({ rows: [] })),
             });
 
             yield dbCheck({
                 foo: 'foo',
             }, dbClientFactory);
 
-            expect(dbClientFactory).to.have.been.calledWith({
+            expect(dbClientFactory).toHaveBeenCalledWith({
                 foo: 'foo',
             });
         });
 
         it('should return a valid result when db query response is ok', function* () {
-            const dbClientFactory = sinon.stub().returns({
-                query: sinon.stub().returns(Promise.resolve(['valid response'])),
+            const dbClientFactory = createSpy().andReturn({
+                query: createSpy().andReturn(Promise.resolve(['valid response'])),
             });
 
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result).to.equal(true);
+            expect(result).toEqual(true);
         });
 
         it('should return an invalid result when db client factory fail', function* () {
-            const dbClientFactory = sinon.stub().throws();
+            const dbClientFactory = createSpy().andThrow();
 
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result).to.equal(false);
+            expect(result).toEqual(false);
         });
 
         it('should return an invalid result when db client query fail', function* () {
-            const dbClientFactory = sinon.stub().returns({
-                query: sinon.stub().returns(Promise.reject()),
+            const dbClientFactory = createSpy().andReturn({
+                query: createSpy().andReturn(Promise.reject()),
             });
 
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result).to.equal(false);
+            expect(result).toEqual(false);
         });
 
         it('should return an invalid result when db query does not return rows', function* () {
-            const dbClientFactory = sinon.stub().returns({
-                query: sinon.stub().returns(Promise.resolve([])),
+            const dbClientFactory = createSpy().andReturn({
+                query: createSpy().andReturn(Promise.resolve([])),
             });
 
             const result = yield dbCheck({
             }, dbClientFactory);
 
-            expect(result).to.equal(false);
+            expect(result).toEqual(false);
         });
     });
 });

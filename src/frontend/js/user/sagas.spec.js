@@ -1,8 +1,7 @@
 /* eslint require-yield: off, func-names: off */
-import expect from 'expect';
+import expect, { createSpy } from 'expect';
 import { routerActions } from 'react-router-redux';
 import { call, put } from 'redux-saga/effects';
-import sinon from 'sinon';
 
 import {
     getUserFromToken,
@@ -20,7 +19,7 @@ describe('userSagas', () => {
     const fetchSaga = function* () { return; };
 
     describe('signIn', () => {
-        const storeLocalUser = sinon.spy();
+        const storeLocalUser = createSpy();
         const signInSaga = signInSagaFactory(fetchSaga, storeLocalUser);
 
         it('should call the fetchSaga function after a SIGN_IN action', () => {
@@ -91,7 +90,7 @@ describe('userSagas', () => {
     });
 
     describe('signUp', () => {
-        const storeLocalUser = sinon.spy();
+        const storeLocalUser = createSpy();
         const signUpSaga = signUpSagaFactory(fetchSaga, storeLocalUser);
 
         it('should call the fetchSaga function after a SIGN_UP action', () => {
@@ -162,7 +161,7 @@ describe('userSagas', () => {
     });
 
     describe('signOut', () => {
-        const removeLocalUser = sinon.spy();
+        const removeLocalUser = createSpy();
         const signOutSaga = signOutSagaFactory(removeLocalUser);
 
         it('should call the removeLocalUser function', () => {

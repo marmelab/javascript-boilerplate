@@ -1,41 +1,37 @@
 /* eslint-disable func-names */
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import sinon from 'sinon';
+import expect, { createSpy } from 'expect';
 import internetCheck from './internet';
-
-chai.use(sinonChai);
 
 describe('Healthcare', () => {
     describe('Internet access', () => {
         it('should call fetch with url from config', function* () {
-            const fetch = sinon.stub().returns(Promise.resolve({ status: 200 }));
+            const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
             yield internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 
-            expect(fetch).to.have.been.calledWith('foo');
+            expect(fetch).toHaveBeenCalledWith('foo');
         });
 
         it('should return a valid result when fetch response is ok', function* () {
-            const fetch = sinon.stub().returns(Promise.resolve({ status: 200 }));
+            const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
             const result = yield internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 
-            expect(result).to.equal(true);
+            expect(result).toEqual(true);
         });
 
         it('should return an invalid result when fetch response is not ok', function* () {
-            const fetch = sinon.stub().returns(Promise.resolve({ status: 500, statusText: 'foo' }));
+            const fetch = createSpy().andReturn(Promise.resolve({ status: 500, statusText: 'foo' }));
 
             const result = yield internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 
-            expect(result).to.equal(false);
+            expect(result).toEqual(false);
         });
     });
 });

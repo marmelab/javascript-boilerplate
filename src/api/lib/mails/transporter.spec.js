@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import expect from 'expect';
 import transporterFactory from './transporter';
 
 describe('Mails Transporter', () => {
@@ -12,15 +12,15 @@ describe('Mails Transporter', () => {
     });
 
     it('should throws error with bad arguments', () => {
-        assert.throws(transporterFactory, 'Configuration needed for transporter factory');
+        expect(transporterFactory).toThrow('Configuration needed for transporter factory');
     });
 
     it('should return a console transporter by default', () => {
-        assert.deepEqual(transporterFactory(config).transporter.name, 'console');
+        expect(transporterFactory(config).transporter.name).toEqual('console');
     });
 
     it('should return a smtp transporter if needed', () => {
         config.service = 'smtp';
-        assert.deepEqual(transporterFactory(config).transporter.name, 'SMTP');
+        expect(transporterFactory(config).transporter.name).toEqual('SMTP');
     });
 });
