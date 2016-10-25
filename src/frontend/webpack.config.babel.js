@@ -27,7 +27,7 @@ export default {
             test: /\.jsx?$/,
             include: [
                 resolve(__dirname, './js'),
-                resolve(__dirname, '../isomorphic'),
+                resolve(__dirname, '../common'),
             ],
             loader: 'babel',
             // Options to configure babel with
@@ -106,10 +106,4 @@ export default {
             'window.Tether': 'tether',
         }),
     ],
-    resolve: {
-        root: resolve(`${__dirname}/..`),
-        alias: {
-            isomorphic: 'src/isomorphic',
-        },
-    },
 };

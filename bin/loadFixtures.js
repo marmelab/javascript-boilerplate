@@ -3,7 +3,7 @@
 import co from 'co';
 import config from 'config';
 import { PgPool } from 'co-postgres-queries';
-import fixturesFactory from '../e2e/lib/fixturesLoader';
+import fixturesFactory from '../src/common/e2e/lib/fixturesLoader';
 
 co(function* () {
     const db = new PgPool(config.apps.api.db);

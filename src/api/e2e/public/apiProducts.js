@@ -3,8 +3,8 @@ import config from 'config';
 import { assert } from 'chai';
 import { PgPool } from 'co-postgres-queries';
 
-import request from '../../lib/request';
-import fixturesFactory from '../../lib/fixturesLoader';
+import request from '../../../common/e2e/lib/request';
+import fixturesFactory from '../../../common/e2e/lib/fixturesLoader';
 
 describe('/api/products', () => {
     describe('GET', () => {

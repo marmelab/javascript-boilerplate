@@ -1,5 +1,5 @@
 /* globals API_URL */
-import fetchFactory from '../../../isomorphic/fetch/fetch';
+import fetchFactory from '../../../common/fetch/fetch';
 
 export const fetchOrders = fetchFactory(`${API_URL}/orders`);
 export const fetchOrder = fetchFactory(`${API_URL}/orders`);

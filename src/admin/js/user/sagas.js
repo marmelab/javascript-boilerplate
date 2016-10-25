@@ -2,7 +2,7 @@ import { routerActions } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
 import { call, fork, put } from 'redux-saga/effects';
 import decodeJwt from 'jwt-decode';
-import { fetchSagaFactory } from '../../../isomorphic/fetch/sagas';
+import { fetchSagaFactory } from '../../../common/fetch/sagas';
 
 import {
     fetchSignIn as fetchSignInApi,

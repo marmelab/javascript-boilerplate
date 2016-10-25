@@ -10,7 +10,7 @@
             "node_args": "--harmony --require reify --require async-to-gen/register",
             "watch": [
                 "./src/api",
-                "./src/isomorphic",
+                "./src/common",
                 "config"
             ]
         }, {

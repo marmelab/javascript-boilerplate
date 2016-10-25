@@ -8,7 +8,7 @@ import OrderItem from './OrderItem';
 import OrderProductItem from './OrderProductItem';
 import OrderStatusBadge from './OrderStatusBadge';
 import { getOrderById } from './reducer';
-import withFetchingOnMount from '../../../isomorphic/fetch/withFetchingOnMount';
+import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 const OrderDetails = ({ order: { reference, date, total, status, products } }) => (

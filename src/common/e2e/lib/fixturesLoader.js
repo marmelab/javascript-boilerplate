@@ -5,8 +5,8 @@ import uuid from 'uuid';
 import crypto from 'crypto';
 
 import data from '../fixtures/demo_fixtures.json';
-import productFactory from '../../src/api/products/productModel';
-import userFactory from '../../src/api/users/userModel';
+import productFactory from '../../../api/products/productModel';
+import userFactory from '../../../api/users/userModel';
 
 export default function (client) {
     const productQueries = productFactory(client);

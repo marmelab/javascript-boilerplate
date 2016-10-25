@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { assert } from 'chai';
 
-import request from '../../lib/request';
+import request from '../../../common/e2e/lib/request';
 
 describe('/api', () => {
     describe('GET', () => {

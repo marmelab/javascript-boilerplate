@@ -3,11 +3,11 @@ import config from 'config';
 import { assert } from 'chai';
 import { PgPool } from 'co-postgres-queries';
 
-import request from '../../lib/request';
-import fixturesFactory from '../../lib/fixturesLoader';
+import request from '../../../common/e2e/lib/request';
+import fixturesFactory from '../../../common/e2e/lib/fixturesLoader';
 
-import userFactory from '../../../src/api/users/userModel';
-import orderFactory from '../../../src/api/orders/orderModel';
+import userFactory from '../../users/userModel';
+import orderFactory from '../../orders/orderModel';
 
 describe('/api/orders/{id}', () => {
     let fixtureLoader;

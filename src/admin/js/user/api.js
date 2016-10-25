@@ -1,5 +1,5 @@
 /* globals ADMIN_API_URL */
-import fetchFactory from '../../../isomorphic/fetch/fetch';
+import fetchFactory from '../../../common/fetch/fetch';
 
 export const fetchSignIn = fetchFactory(`${ADMIN_API_URL}/sign-in`, 'POST');
 export const fetchSignUp = fetchFactory(`${ADMIN_API_URL}/sign-up`, 'POST');
