@@ -7,7 +7,7 @@
             "instances": 1,
             "name": "bpm_api-dev",
             "script": "./src/api/index.js",
-            "node_args": "--harmony --require reify --require async-to-gen/register",
+            "node_args": "--harmony-async-await --require reify",
             "watch": [
                 "./src/api",
                 "./src/common",
