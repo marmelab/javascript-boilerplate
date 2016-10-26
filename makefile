@@ -45,14 +45,14 @@ clear-build-frontend:  ## Remove precedent build files for frontend
 
 build-admin: clear-build-admin ## Build admin application
 	echo "Building frontend application"
-	./node_modules/.bin/webpack \
+	BABEL_ENV=browser-$(NODE_ENV) ./node_modules/.bin/webpack \
 		--config ./src/admin/webpack.config.babel.js \
 		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
 build-frontend: clear-build-frontend ## Build frontend application
 	echo "Building frontend application"
-	./node_modules/.bin/webpack \
+	BABEL_ENV=browser-$(NODE_ENV) ./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
 		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
@@ -90,8 +90,9 @@ run-dev: ## Run all applications in development environment (using webpack-dev-s
 	echo "Type 'make stop-dev' to stop the apps"
 
 restart-dev: ## Restart all applications in development environment
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_admin-dev
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	echo "All apps restarted"
 
 stop-dev: ## Stop all applications in development environment
@@ -111,7 +112,10 @@ restart-frontend-dev: ## Restart the frontend in development environment
 	echo "Webpack dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
-	node ./src/api/index.js
+	node \
+		--harmony-async-await \
+		--require reify \
+		./src/api/index.js
 
 servers-monitoring: ## Get an overview of your processes with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 monit
@@ -163,10 +167,10 @@ stop-debug-functionnal: ## Stop all applications in development environment
 	echo "All apps stopped"
 
 test-admin-unit: ## Run the admin application unit tests with mocha
-	NODE_ENV=test ./node_modules/.bin/mocha \
-		--require=async-to-gen/register \
-		--require='./src/admin/js/test.spec.js' \
+	NODE_ENV=test BABEL_ENV=browser-test ./node_modules/.bin/mocha \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+        --require=babel-polyfill \
+        --require='./src/admin/js/test.spec.js' \
 		"./src/admin/js/**/*.spec.js"
 
 test-admin-functional: ## Run the frontend applications functional tests
@@ -175,34 +179,36 @@ test-admin-functional: ## Run the frontend applications functional tests
 	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-		--require=reify \
-		--require=async-to-gen/register \
+		--harmony-async-await \
+		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/admin/e2e
 
 test-api-unit: ## Run the API unit tests with mocha
-	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-		--require=reify \
-		--require=async-to-gen/register \
+	NODE_ENV=test BABEL_ENV=node NODE_PORT=3010 ./node_modules/.bin/mocha \
+        --harmony-async-await \
+		--require=babel-register \
+        --require=babel-polyfill \
 		"./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
-	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-		--require=reify \
-		--require=async-to-gen/register \
+	NODE_ENV=test BABEL_ENV=node NODE_PORT=3010 ./node_modules/.bin/mocha \
+		--require=babel-register \
+		--harmony-async-await \
 		--recursive \
 		./src/api/e2e
 
 test-common-unit: ## Run the common directory unit tests with mocha
-	NODE_ENV=test ./node_modules/.bin/mocha \
+	NODE_ENV=test BABEL_ENV=browser-test ./node_modules/.bin/mocha \
+        --require=babel-polyfill \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/common/{,**/}*.spec.js"
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
-	NODE_ENV=test ./node_modules/.bin/mocha \
-		--require=async-to-gen/register \
-		--require='./src/frontend/js/test.spec.js' \
+	NODE_ENV=test BABEL_ENV=browser-test ./node_modules/.bin/mocha \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		--require=babel-polyfill \
+        --require='./src/frontend/js/test.spec.js' \
 		"./src/frontend/js/**/*.spec.js"
 
 test-frontend-functional: ## Run the frontend applications functional tests
@@ -211,10 +217,13 @@ test-frontend-functional: ## Run the frontend applications functional tests
 	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-		--require=reify \
-		--require=async-to-gen/register \
+        --harmony-async-await \
+		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/frontend/e2e
+
+load-test-fixtures: ## Initialize the test database with fixtures
+	NODE_ENV=test node --require babel-register --harmony-async-await ./bin/loadFixtures.js
 
 test: ## Run all tests
 	-cp -n ./config/test-dist.js ./config/test.js

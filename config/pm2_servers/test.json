@@ -6,7 +6,7 @@
             },
             "exec_mode": "fork",
             "name": "bpm_api-test",
-            "node_args": "--harmony --require reify --require async-to-gen/register",
+            "node_args": "--harmony-async-await --require babel-register",
             "script": "./src/api/index.js"
         }, {
             "args": [
