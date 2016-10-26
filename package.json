@@ -1,10 +1,9 @@
 {
   "engines": {
-    "node": ">= 6.9.1"
+    "node": ">= 7.0.0"
   },
   "dependencies": {
     "admin-on-rest": "0.4.0",
-    "async-to-gen": "1.1.4",
     "bcrypt": "0.8.7",
     "bootstrap": "4.0.0-alpha.5",
     "classnames": "2.2.5",

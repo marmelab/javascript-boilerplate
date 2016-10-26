@@ -111,7 +111,10 @@ restart-frontend-dev: ## Restart the frontend in development environment
 	echo "Webpack dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
-	node ./src/api/index.js
+	node \
+		--harmony-async-await \
+		--require reify \
+		./src/api/index.js
 
 servers-monitoring: ## Get an overview of your processes with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 monit
@@ -148,27 +151,25 @@ log-frontend-test: ## Display the logs of the frontend with PM2 in test environm
 # Tests ========================================================================
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-		--require=async-to-gen/register \
 		--require='./src/admin/js/test.spec.js' \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/admin/js/**/*.spec.js"
 
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
+        --harmony-async-await \
 		--require=reify \
-		--require=async-to-gen/register \
 		"./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
+        --harmony-async-await \
 		--require=reify \
-		--require=async-to-gen/register \
 		--recursive \
 		./src/api/e2e
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-		--require=async-to-gen/register \
 		--require='./src/frontend/js/test.spec.js' \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/frontend/js/**/*.spec.js"
@@ -183,7 +184,6 @@ test-frontend-functional: reset-test-database load-test-fixtures ## Run the fron
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-		--require=async-to-gen/register \
 		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/frontend/e2e
