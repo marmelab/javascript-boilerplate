@@ -28,6 +28,7 @@ def setup_api():
     sudo('apt --yes install nodejs')
     sudo('apt --yes install supervisor')
     sudo('apt --yes install git htop vim')
+    run('npm install -g npm@3.10.9')
     run('npm set progress=false')
 
     run('git clone %s %s/%s' % (gitUrl, env.home, env.api_pwd))
