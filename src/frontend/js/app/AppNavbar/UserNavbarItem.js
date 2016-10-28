@@ -13,7 +13,7 @@ const UserNavbarItem = ({ user, signOut }) => (
                 {user.email}
             </a>
             <div className="dropdown-menu">
-                <a className="dropdown-item" onClick={signOut} role="button">Sign out</a>
+                <a className="dropdown-item" href="/sign-out" onClick={signOut} role="button">Sign out</a>
             </div>
         </li>
     </ul>
@@ -21,7 +21,7 @@ const UserNavbarItem = ({ user, signOut }) => (
 
 UserNavbarItem.propTypes = {
     signOut: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired, // eslint-disable-line
 };
 
 export default UserNavbarItem;

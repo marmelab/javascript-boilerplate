@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import createEagerFactory from 'recompose/createEagerFactory';
 import Helmet from 'react-helmet';
 
-export default (titleSelector) => BaseComponent => {
+export default titleSelector => (BaseComponent) => {
     // This will return the component correctly initialized
     const factory = createEagerFactory(BaseComponent);
 

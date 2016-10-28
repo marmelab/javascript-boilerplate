@@ -1,5 +1,5 @@
-/* eslint-disable vars-on-top */
-/* eslint-disable no-var */
+#!./node_modules/babel/bin/babel-node.js
+
 import co from 'co';
 import config from 'config';
 import { PgPool } from 'co-postgres-queries';

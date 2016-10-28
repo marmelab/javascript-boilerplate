@@ -24,12 +24,13 @@ class ProductItem extends Component {
                 <div className="card-block">
                     <p className="card-text">{description}</p>
                     <Link to={`/products/${id}`} className="card-link">Details</Link>
-                    <a
+                    <button
                         onClick={orderProduct}
                         className="card-link btn btn-primary"
+                        type="button"
                     >
                         Buy
-                    </a>
+                    </button>
                 </div>
             </div>
         );

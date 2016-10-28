@@ -123,7 +123,7 @@ export const initialStateForEntity = { ...initialStateForList, ...initialStateFo
  * // Will output:
  * { error: null, list: [], item: null, loading: false }
  */
-export const createEntityReducer = actionTypes => {
+export const createEntityReducer = (actionTypes) => {
     const listReducer = createListReducer(actionTypes.list);
     const itemReducer = createItemReducer(actionTypes.item);
 

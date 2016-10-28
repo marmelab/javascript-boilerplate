@@ -12,13 +12,13 @@ function userModel(client) {
 
     const insertOne = async (user, isWhitelisted) => await userClient.insertOne(hashUserPassword(user), isWhitelisted);
 
-    const batchInsert = async users => {
+    const batchInsert = async (users) => {
         const preparedUsers = users.map(hashUserPassword);
 
         return await userClient.batchInsert(preparedUsers);
     };
 
-    const findByEmail = async email => {
+    const findByEmail = async (email) => {
         const results = await userClient.findByEmail(email);
 
         return results.length ? results[0] : null;

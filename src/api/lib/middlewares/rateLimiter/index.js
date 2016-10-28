@@ -1,3 +1,4 @@
+/* eslint global-require: off, import/no-dynamic-require: off */
 import convert from 'koa-convert';
 import omit from 'lodash.omit';
 
@@ -14,6 +15,6 @@ export default (userOptions = {}) => {
         max: 5,
     }, options);
 
-    const adapterImplementation = require(`./${adapter}`).default; // eslint-disable-line global-require
+    const adapterImplementation = require(`./${adapter}`).default;
     return convert(adapterImplementation(options));
 };

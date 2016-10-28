@@ -30,7 +30,7 @@ export default (queriesFactory, configuredMethods = {}) => {
             const query = ctx.request.query;
             const excludedQueryParams = ['limit', 'offset', 'filter', '_sort', '_sortDir'];
             const other = {};
-            Object.keys(query).forEach(key => {
+            Object.keys(query).forEach((key) => {
                 if (excludedQueryParams.indexOf(key) !== -1) return;
                 other[key] = query[key];
             });

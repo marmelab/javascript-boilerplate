@@ -10,7 +10,7 @@ module.exports = {
     apps: {
         admin: {
             api_url: `${apiUrl}/admin`,
-            webpack_public_path: ''
+            webpack_public_path: '',
         },
         api: {
             allowedOrigins,
@@ -83,7 +83,7 @@ module.exports = {
         },
         frontend: {
             api_url: `${apiUrl}/api`,
-            webpack_public_path: ''
+            webpack_public_path: '',
         },
     },
     babel_ignore: /node_modules\/(?!admin-config|fakerest)/,

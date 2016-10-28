@@ -104,7 +104,7 @@ app.use(koaCors({
         'POST',
         'PUT',
     ],
-    origin: ctx => {
+    origin: (ctx) => {
         const origin = ctx.get('origin');
 
         if (!!origin.length && config.apps.api.allowedOrigins.indexOf(origin) === -1) {

@@ -73,7 +73,7 @@ app.use(koaMount('/', crud(orderFactory, {
     DELETE: 'managed',
 })));
 
-app.use(koaRoute.get('/', async ctx => {
+app.use(koaRoute.get('/', async (ctx) => {
     ctx.body = await ctx.orderQueries.selectByUserId(ctx.userData.id);
 }));
 

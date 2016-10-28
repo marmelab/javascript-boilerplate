@@ -78,7 +78,7 @@ NewOrder.propTypes = {
     placeNewOrder: PropTypes.func.isRequired,
     products: PropTypes.arrayOf(PropTypes.shape({
         ...ProductPropType,
-        quantity: PropTypes.number.isRequired,
+        quantity: PropTypes.number.isRequired, // eslint-disable-line
     })),
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     setShoppingCartItemQuantity: PropTypes.func.isRequired,

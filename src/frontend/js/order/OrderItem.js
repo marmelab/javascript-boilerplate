@@ -17,7 +17,6 @@ const OrderItem = ({ id, reference, date, total, status }) => (
 );
 
 OrderItem.propTypes = {
-    customer_id: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     reference: PropTypes.string.isRequired,

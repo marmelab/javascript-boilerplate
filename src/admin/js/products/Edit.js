@@ -4,10 +4,10 @@ import { Edit, TextInput } from 'admin-on-rest/lib/mui';
 const Title = ({ record }) => <span>{record ? record.reference : ''}</span>;
 
 Title.propTypes = {
-    record: PropTypes.object.isRequired,
+    record: PropTypes.object.isRequired, // eslint-disable-line
 };
 
-export default (props) => (
+export default props => (
     <Edit title={Title} {...props}>
         <TextInput label="Reference" source="reference" />
         <TextInput label="price" source="price" options={{ type: 'number' }} />

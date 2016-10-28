@@ -33,12 +33,12 @@ export const DefaultLoading = () => (
  *
  * @param actionCreator An action creator
  * @param {Object} selectors The selectors used for data, loading and fetch parameters retrieval from state.
- * @param {dataSelector} selectors.dataSelector Mandatory selector to retrieve the fetched data from state.
- * @param {loadingSelector} selectors.loadingSelector Mandatory selector to retrieve the loading status from state.
- * @param {paramsSelector} selectors.paramsSelector Optional selector to retrieve the parameters to use for fetch, from state.
+ * @param {dataSelector} selectors.dataSelector Mandatory selector to get the fetched data from state.
+ * @param {loadingSelector} selectors.loadingSelector Mandatory selector to get the loading status from state.
+ * @param {paramsSelector} selectors.paramsSelector Optional selector to get the fetch parameters, from state.
  * @param {Object} LoadingComponent The component to display when loading.
  */
-export default (actionCreator, selectors: {}, LoadingComponent = DefaultLoading) => BaseComponent => {
+export default (actionCreator, selectors: {}, LoadingComponent = DefaultLoading) => (BaseComponent) => {
     if (!selectors) {
         console.error(`withFetchingOnMount(${BaseComponent.displayName}) requires at least two selectors, one to retrieve the fetched data and the other to retrieve the loading state.`); // eslint-disable-line max-len, no-console
         if (process.env.NODE_ENV !== 'production') {
@@ -93,8 +93,8 @@ export default (actionCreator, selectors: {}, LoadingComponent = DefaultLoading)
 
     WithActionOnMount.propTypes = {
         action: PropTypes.func.isRequired,
-        data: PropTypes.any,
-        params: PropTypes.any,
+        data: PropTypes.any, // eslint-disable-line
+        params: PropTypes.any, // eslint-disable-line
         loading: PropTypes.bool.isRequired,
     };
 
