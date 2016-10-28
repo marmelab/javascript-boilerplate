@@ -91,7 +91,11 @@ run-dev: ## Run all applications in development environment (using webpack-dev-s
 
 restart-dev: ## Restart all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_admin-dev
+<<<<<<< a618e7e8d8cc489fa24355625f776ec3c9a94f98
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
+=======
+    PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
+>>>>>>> [RFR] Use babel instead of reify
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	echo "All apps restarted"
 
