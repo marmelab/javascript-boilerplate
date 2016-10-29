@@ -39,6 +39,7 @@ Requirements:
 
 * Node.js V5
 * PostgreSQL
+* openjdk-8-jre (to install selenium-standalone)
 
 ```sh
 # install npm dependencies and Selenium (for tests)
