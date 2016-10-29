@@ -45,6 +45,8 @@ Requirements:
 make install
 ```
 
+**Tip**: Add `alias make='make -s'` to your bash profile (bashrc, zshrc) for a nicer display.
+
 ## Understand
 
 The project directory structure is as follows:
