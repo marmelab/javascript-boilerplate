@@ -23,7 +23,11 @@ export const getUserFromToken = (token) => {
 
 export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
     const { error, result } = yield call(fetchSaga, { payload });
-    const user = yield call(getUserFromToken, result.token);
+
+    let user = {};
+    if (result) {
+        user = yield call(getUserFromToken, result.token);
+    }
 
     if (!error) {
         yield put(signInActions.success(user));
