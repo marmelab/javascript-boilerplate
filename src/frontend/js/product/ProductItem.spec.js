@@ -45,7 +45,7 @@ describe('Component ProductItem', () => {
 
     it('should contain correct order link', () => {
         const wrapper = shallow(<ProductItem {...props} />);
-        const link = wrapper.find('a');
+        const link = wrapper.find('button');
         expect(link).toExist('ProductItem should contains a link to buy product');
 
         link.simulate('click');

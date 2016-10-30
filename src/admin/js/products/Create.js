@@ -1,7 +1,7 @@
 import React from 'react';
 import { Create, TextInput } from 'admin-on-rest/lib/mui';
 
-export default (props) => (
+export default props => (
     <Create title="Create a Post" {...props}>
         <TextInput label="Reference" source="reference" />
         <TextInput label="price" source="price" options={{ type: 'number' }} />

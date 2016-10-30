@@ -1,13 +1,13 @@
 import React from 'react';
 import { Datagrid, Filter, List, TextField, EditButton, TextInput } from 'admin-on-rest/lib/mui';
 
-export const ProductFilter = (props) => (
+export const ProductFilter = props => (
     <Filter {...props}>
         <TextInput label="Search" source="reference" alwaysOn />
     </Filter>
 );
 
-export default (props) => (
+export default props => (
     <List {...props} filter={ProductFilter}>
         <Datagrid>
             <TextField label="reference" source="reference" />

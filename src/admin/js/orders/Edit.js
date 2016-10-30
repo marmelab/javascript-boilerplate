@@ -4,10 +4,10 @@ import { Edit, EditButton, DateInput, TextInput, TextField, ReferenceManyField, 
 const Title = ({ record }) => <span>Order {record ? `"${record.reference}"` : ''}</span>;
 
 Title.propTypes = {
-    record: PropTypes.object,
+    record: PropTypes.object, // eslint-disable-line
 };
 
-export default (props) => (
+export default props => (
     <Edit title={Title} {...props}>
         <DateInput label="date" source="date" />
         <TextInput label="total" source="total" options={{ type: 'number' }} />

@@ -12,7 +12,7 @@ export default function myRequest(params, authToken = null, cookies = {}) {
         const headers = { origin: `http://localhost:${portOrigin}` };
 
         if (cookies) {
-            Object.keys(cookies).forEach(key => {
+            Object.keys(cookies).forEach((key) => {
                 const cookie = request.cookie(`${key}=${cookies[key]}`);
                 jar.setCookie(cookie, baseUrl);
             });

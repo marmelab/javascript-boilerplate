@@ -46,7 +46,7 @@ const ShoppingCart = ({ removeProductFromShoppingCart, products, total }) => (
 ShoppingCart.propTypes = {
     products: PropTypes.arrayOf(PropTypes.shape({
         ...ProductPropType,
-        quantity: PropTypes.number.isRequired,
+        quantity: PropTypes.number.isRequired, // eslint-disable-line
     })),
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     total: PropTypes.number.isRequired,

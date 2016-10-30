@@ -1,13 +1,13 @@
 import React from 'react';
 import { Datagrid, Filter, List, DateField, TextField, EditButton, TextInput } from 'admin-on-rest/lib/mui';
 
-export const OrderFilter = (props) => (
+export const OrderFilter = props => (
     <Filter {...props}>
         <TextInput label="Search" source="reference" alwaysOn />
     </Filter>
 );
 
-export default (props) => (
+export default props => (
     <List {...props} filter={OrderFilter}>
         <Datagrid>
             <DateField label="date" source="date" />

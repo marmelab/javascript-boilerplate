@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import ProductPropType from '../product/productPropTypes';
 
 class NewOrderItem extends Component {
-    setShoppingCartItemQuantity = event => {
+    setShoppingCartItemQuantity = (event) => {
         this.props.setShoppingCartItemQuantity(this.props.id, parseInt(event.target.value, 10));
     }
 

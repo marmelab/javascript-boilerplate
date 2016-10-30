@@ -27,7 +27,7 @@ const AppNavbar = ({ authenticated, signOut, user }) => (
 AppNavbar.propTypes = {
     authenticated: PropTypes.bool.isRequired,
     signOut: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired, // eslint-disable-line
 };
 
 export default AppNavbar;

@@ -60,10 +60,9 @@ export class AppComponent extends Component {
 AppComponent.propTypes = {
     authenticated: PropTypes.bool.isRequired,
     children: PropTypes.node,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired, // eslint-disable-line
     signOut: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired, // eslint-disable-line
 };
 
 const mapStateToProps = state => ({ user: state.user, authenticated: isAuthenticated(state) });
