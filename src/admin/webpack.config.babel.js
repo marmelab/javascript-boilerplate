@@ -72,6 +72,9 @@ export default {
         }, {
             test: /\.html$/,
             loader: 'html',
+        }, {
+            test: /\.css$/,
+            loader: 'css-loader',
         }],
     },
     output: {

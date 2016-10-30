@@ -4,7 +4,7 @@ A starter kit for new apps, based on:
 
 * ES6 everywhere (with some bits of ES7, e.g. spread operator on objects)
 * React.js, React Router, and Redux (for the frontend)
-* Angular.js and ng-admin (for the admin)
+* Admin-on-rest (for the admin)
 * Node.js, Koa.js and PostgreSQL (for the API server)
 * Makefile, webpack and Mocha (for the build and test)
 
@@ -25,7 +25,7 @@ Features:
 * SASS preprocessor (using `node-sass`)
 * Including a non-trivial example with several routes, Ajax calls, and functional tests
 * Fully automated build with `webpack`, including development (`webpack-dev-server`) and production target (minified)
-* Admin app built with Angular and `ng-admin`
+* Admin app built with React.js and `admin-on-rest`
 * Including a full-featured admin panel with references
 * Unified test build, running unit and functional tests on all apps, powered by `mocha` and `selenium`
 * AWS deployment automated by Fabric
@@ -72,7 +72,7 @@ The entire code (api, admin, and frontend) is written in ES6 and transpiled to E
 
 **Tip**: In production, the compiled JS and CSS files (under `build/`) are served by the Node.js server. In development, it's done by webpack-dev-server.
 
-The main entry point for understanding the code is probably `src/api/server.js`.
+The main entry point for understanding the code is probably `src/api/index.js`.
 
 ## Project Configuration
 
@@ -97,8 +97,8 @@ Before running the app in development, you must copy the `config/development-dis
 - [src/api](src/api)
 - [src/frontend](src/frontend)
 - [src/admin](src/admin)
-- [e2e/api](e2e/api)
-- [e2e/frontend](e2e/frontend)
+- [src/api/e2e](src/api/e2e)
+- [src/frontend/e2e](src/frontend/e2e)
 
 ## Develop
 
@@ -118,8 +118,8 @@ make restart-frontend
 
 Browse the app:
 
-* [http://localhost:8080/admin](http://localhost:8080/admin) for the admin app
-* [http://localhost:8080/frontend](http://localhost:8080/frontend) for the frontend app
+* [http://localhost:8081](http://localhost:8081) for the admin app
+* [http://localhost:8080](http://localhost:8080) for the frontend app
 * [http://localhost:3000](http://localhost:3000) for the API
 
 **Tip**: You can change the API port by running `NODE_PORT=3001 make run-dev`. Or, for persistent change, you can add this environment variable into the [PM2 configuration file](config/pm2_servers/dev.json).
@@ -128,10 +128,6 @@ Browse the app:
 # stop servers (node and webpack)
 make stop-dev
 ```
-
-**Note:** for stability purposes dependencies versions are *exact* and production dependencies are locked down using `npm shrinkwrap --dev`. To keep fixed version update npm configuration with `npm set save-exact 1` command or append your `npm install` command with `--save-exact`.
-
-**Tip:** because versions are *exact* you can run your `npm install` faster by running `npm set cache-min Infinity` (even without internet connection if packages are already cached).
 
 ## Test
 
