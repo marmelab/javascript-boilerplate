@@ -18,9 +18,9 @@ help:
 
 # Initialization ===============================================================
 copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
-    -cp -n ./config/${NODE_ENV}-dist.js ./config/${NODE_ENV}.js
+	-cp -n ./config/${NODE_ENV}-dist.js ./config/${NODE_ENV}.js
 ifeq ($(NODE_ENV), development)
-    -cp -n ./config/test-dist.js ./config/test.js
+	-cp -n ./config/test-dist.js ./config/test.js
 endif
 
 install-npm-dependencies:
@@ -56,7 +56,7 @@ build-frontend: clear-build-frontend ## Build frontend application
 	echo "Building frontend application"
 	./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
-        $(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
 build: build-frontend build-admin ## Build all front applications defined with webpack
@@ -157,37 +157,37 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-        --require=reify \
-        --require=async-to-gen/register \
-        --require=co-mocha \
-        "./src/api/{,!(e2e)/**/}*.spec*.js"
+		--require=reify \
+		--require=async-to-gen/register \
+		--require=co-mocha \
+		"./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-        --require=reify \
-        --require=async-to-gen/register \
-        --require=co-mocha \
-        --recursive \
-        ./src/api/e2e
+		--require=reify \
+		--require=async-to-gen/register \
+		--require=co-mocha \
+		--recursive \
+		./src/api/e2e
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-        --require=co-mocha \
-        --require='./src/frontend/js/test.spec.js' \
-        --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
-        "./src/frontend/js/**/*.spec.js"
+		--require=co-mocha \
+		--require='./src/frontend/js/test.spec.js' \
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/frontend/js/**/*.spec.js"
 
 test-common-unit: ## Run the common directory unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-        --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
-        "./src/common/{,**/}*.spec.js"
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/common/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	NODE_ENV=test make build-frontend
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-        --require=co-mocha \
+		--require=co-mocha \
 		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/frontend/e2e
@@ -207,12 +207,12 @@ test: ## Run all tests
 
 reset-test-database: ## Reset the test database and run all migrations
 	NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		reset
 	NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
@@ -220,14 +220,14 @@ reset-test-database: ## Reset the test database and run all migrations
 # Migrations ===================================================================
 migrate: ## Migrate the database defined in the configuration (you may define the NODE_ENV)
 	./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
 
 create-migration: ## Create a new migration (you may define the NODE_ENV to select a specific configuration)
 	./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		create migration
