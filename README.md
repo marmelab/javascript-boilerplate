@@ -44,6 +44,10 @@ Requirements:
 ```sh
 # install npm dependencies and Selenium (for tests)
 make install
+
+# create database based on env. variables defined in .envrc
+. envrc
+make createdb
 ```
 
 ## Understand

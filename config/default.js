@@ -14,14 +14,6 @@ module.exports = {
         },
         api: {
             allowedOrigins,
-            db: {
-                driver: 'pg',
-                host: 'DB_HOST',
-                port: 5432,
-                user: 'DB_USER',
-                password: 'DB_PASSWORD',
-                database: 'DB_NAME',
-            },
             healthcare: {
                 internetUrl: 'http://google.com',
                 apiUrl,

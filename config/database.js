@@ -1,7 +1,10 @@
-'use strict';
-
-var config = require('config');
-
 module.exports = {
-    api: config.apps.api.db, // "dev" is for default db-migrate environment, do not touch
+    api: {
+        driver: 'pg',
+        database: process.env.DB_DBNAME,
+        host: process.env.DB_HOST,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USERNAME,
+    },
 };

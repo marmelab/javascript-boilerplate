@@ -51,6 +51,22 @@ build-frontend: clear-build-frontend ## Build frontend application
 
 build: build-frontend build-admin ## Build all front applications defined with webpack
 
+createdb: ## Create DB
+	createdb \
+		--username=${DB_USERNAME} \
+		--host=${DB_HOST} \
+		$(if $(filter ,$(DB_PASSWORD)),--password) \
+		--port=${DB_PORT} \
+		${DB_DBNAME}
+
+dropdb: ## Drop DB
+	dropdb \
+		--username=${DB_USERNAME} \
+		--host=${DB_HOST} \
+		$(if $(filter ,$(DB_PASSWORD)),--password) \
+		--port=${DB_PORT} \
+		${DB_DBNAME}
+
 clean: ## Remove only files ignored by Git
 	git clean --force -d -X
 
