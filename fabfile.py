@@ -40,14 +40,14 @@ def check():
     run('supervisord --version')
 
 @task
-def deploy_api(branch='master'):
+def deploy_api():
     with cd('%s/%s' % (env.home, env.api_pwd)):
         # Git
         run('git fetch')
-        run('git checkout %s' % branch)
+        run('git checkout %s' % env.branch)
         run('git pull')
         # Install dependencies
-        run('make install-prod')
+        run('NODE_ENV=%s make install' % env.environment)
         # DB migrations
         run('NODE_ENV=%s make migrate' % env.environment)
         # Update supervisor configuration
@@ -57,9 +57,9 @@ def deploy_api(branch='master'):
     sudo('supervisorctl start %s' % env.api_name)
 
 @task
-def deploy_static(branch='master'):
+def deploy_static():
     local('git fetch')
-    local('git checkout %s' % branch)
+    local('git checkout %s' % env.branch)
     local('git pull')
     local('rm -rf build/*')
     local('NODE_ENV=%s make build' % env.environment)

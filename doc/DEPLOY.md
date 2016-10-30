@@ -11,11 +11,14 @@ RDS or whatever you need, apart migrations, we do not manage the database with d
 
 ## API
 
+Deployment is handled with [fabric](http://www.fabfile.org/).
+The configuration is done through files named `.fabricrc-[NODE_ENV]` where NODE_ENV is the environment you want to deploy (production, staging, whatever).
+
 ### First deployment
 
 The makefile offers you some functions to easily start an ubuntu server with all needed dependencies.
 
-Be sure to have the same `hosts` in your `.fabricrc` or `.fabricrc-staging` than in you `.ssh/config`.
+Be sure to have the same `hosts` in your `.fabricrc-[NODE_ENV]` (replace `NODE_ENV` with the NODE_ENV you want) than in you `.ssh/config`.
 Example :
 ```bash
 Host newapp-api.marmelab.com
@@ -24,13 +27,11 @@ Host newapp-api.marmelab.com
     User ubuntu
 ```
 
-In general, take a look at your `.fabricrc` and be sure to understand the behavior of all configurations by reading the `fabfile.py`.
+In general, take a look at your `.fabricrc-[NODE_ENV]` (replace `NODE_ENV` with the NODE_ENV you want) and be sure to understand the behavior of all configurations by reading the `fabfile.py`.
 
-Then, simply run:
+Then, simply run (replace `NODE_ENV` with the NODE_ENV you want):
 ```bash
-make setup-staging
-# or
-make setup-prod
+NODE_ENV=production make setup
 ```
 
 It updates system and installs all dependencies like: `Node.js`, `git`, `supervisor`...
@@ -39,19 +40,16 @@ At the end of the installation, you will see the version of what you have instal
 
 ### Deployment
 
-Run the following command:
+Run the following command (replace `NODE_ENV` with the NODE_ENV you want):
 ```bash
-make deploy-staging-api
-# or
-make deploy-prod-api
+NODE_ENV=production make deploy-api
 ```
 
 It:
-- Pulls the specified branch
+- Pulls the branch specified in the fabricrc file matching your NODE_ENV
 - Installs node dependencies (from your `package.json`)
 - Updates supervisor configuration file (from `config/supervisor`)
 - Restarts your app
-
 
 ## Frontend
 
@@ -66,17 +64,15 @@ make install-aws
 
 At the end, it will run `aws configure` to help you to configuring the client. But you can skip this part if you want.
 
-The deployment itself:
+The deployment itself (replace `NODE_ENV` with the NODE_ENV you want):
 ```bash
 # Staging deployment
-make deploy-staging-frontend
-# Prod deployment
-make deploy-prod-frontend
+NODE_ENV=production make deploy-frontend
 # Manual specification of AWS credentials if you have not configured aws-cli
 AWS_ACCESS_KEY_ID=XXXXXXXXXXXXX AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYY make deploy-prod-frontend
 ```
 
 All these commands:
-- :warning: Checkout on master branch (be sure to stash non-commited work)
-- Make a local production or staging build
-- Synchronize `build` folder with configured S3 bucket
+- :warning: Checkout on the branch specified in the fabricrc file matching your NODE_ENV (be sure to stash non-commited work)
+- Make a local build with the NODE_ENV you specified
+- Synchronize `build` folder with configured S3 bucket (as specified in the fabricrc file matching your NODE_ENV)

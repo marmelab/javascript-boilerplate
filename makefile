@@ -1,6 +1,8 @@
 .PHONY: build test help
 .DEFAULT_GOAL := help
 
+NODE_ENV ?= development
+
 ADMIN_NAME ?= sheldon
 ADMIN_EMAIL ?= sheldon@newapp.com
 ADMIN_PASSWORD ?= password
@@ -16,11 +18,17 @@ help:
 
 # Initialization ===============================================================
 copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
-	-cp -n ./config/development-dist.js ./config/development.js
+	-cp -n ./config/${NODE_ENV}-dist.js ./config/${NODE_ENV}.js
+ifeq ($(NODE_ENV), development)
+	-cp -n ./config/test-dist.js ./config/test.js
+endif
 
 install-npm-dependencies:
-	echo "Installing Node dependencies"
-	npm install
+	@echo "Installing Node dependencies for environment $(NODE_ENV)"
+	npm install $(if $(filter production staging,$(NODE_ENV)),--production,)
+ifeq ($(NODE_ENV), development)
+	make install-selenium
+endif
 
 install-selenium:
 	echo "Installing Selenium server"
@@ -46,7 +54,7 @@ build-frontend: clear-build-frontend ## Build frontend application
 	echo "Building frontend application"
 	./node_modules/.bin/webpack \
 		--config ./src/frontend/webpack.config.babel.js \
-        $(if $(filter production staging,$(NODE_ENV)),-p,-d) \
+		$(if $(filter production staging,$(NODE_ENV)),-p,-d) \
 		--progress
 
 build: build-frontend build-admin ## Build all front applications defined with webpack
@@ -61,33 +69,16 @@ install-aws: ## Install the aws cli
 	rm -rf ./awscli-bundle/ awscli-bundle.zip
 	aws configure
 
-install-prod: ## Install npm dependencies for the api, admin, and frontend apps in production environment
-	echo "Installing Node dependencies"
-	npm install --production
-	echo "Copy production conf"
-	-cp -n ./config/production-dist.js ./config/production.js
+setup-server: ## Setup the server before deployment (specify NODE_ENV for correct fabricrc file loading)
+	fab --config=.fabricrc-$(NODE_ENV) setup_api check
 
-setup-staging: ## Setup the staging environment
-	fab --config=.fabricrc-staging setup_api check
+deploy-api: ## Deploy the API (specify NODE_ENV for correct fabricrc file loading)
+	fab --config=.fabricrc-$(NODE_ENV) deploy_api
 
-setup-prod: ## Setup the production environment
-	fab --config=.fabricrc setup_api check
+deploy-frontends: ## Deploy the frontend (specify NODE_ENV for correct fabricrc file loading)
+	fab --config=.fabricrc-$(NODE_ENV) deploy_static
 
-deploy-staging-api: ## Deploy the API in staging environment
-	fab --config=.fabricrc-staging deploy_api
-
-deploy-staging-frontend: ## Deploy the frontend in staging environment
-	fab --config=.fabricrc-staging deploy_static
-
-deploy-staging: deploy-staging-api deploy-staging-frontend ## Deploy the staging environment
-
-deploy-prod-api: ## Deploy the API in production environment
-	fab --config=.fabricrc deploy_api
-
-deploy-prod-frontend: ## Deploy the frontend in production environment
-	fab --config=.fabricrc deploy_static
-
-deploy-prod: deploy-prod-api deploy-prod-frontend ## Deploy the production environment
+deploy: deploy-api deploy-frontends ## Deploy the apps (specify NODE_ENV for correct fabricrc file loading)
 
 # Development ==================================================================
 run-dev: ## Run all applications in development environment (using webpack-dev-server)
@@ -107,24 +98,20 @@ stop-dev: ## Stop all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
 	echo "All apps stopped"
 
-restart-frontend-dev: ## Restart all frontend applications in development environment
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
+restart-admin-dev: ## Restart the admin in development environment
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_admin-dev
 	echo "Webpack dev restarted"
 
 restart-api-dev: ## Restart the API in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
 	echo "API dev restarted"
 
+restart-frontend-dev: ## Restart the frontend in development environment
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
+	echo "Webpack dev restarted"
+
 run-api: ## Starts the API (you may define the NODE_ENV)
 	node ./src/api/index.js
-
-run-frontend: ## Starts the frontend applications using webpack-dev-server (you may define the NODE_ENV)
-	./node_modules/.bin/webpack-dev-server  \
-		--no-info \
-		--colors \
-		--devtool cheap-module-inline-source-map \
-		--hot  \
-		--inline
 
 servers-monitoring: ## Get an overview of your processes with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 monit
@@ -143,22 +130,22 @@ servers-clear-all: ## Delete all processes and flush the logs in PM2
 log-admin-dev: ## Display the logs of the frontend applications with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_admin-dev
 
-log-frontend-dev: ## Display the logs of the frontend applications with PM2
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-dev
-
 log-api-dev: ## Display the logs of the API with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_api-dev
 
-log-frontend-test: ## Display the logs of the frontend applications with PM2
+log-frontend-dev: ## Display the logs of the frontend applications with PM2
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-dev
+
+log-admin-test: ## Display the logs of the admin with PM2 in test environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
 
-log-api-test: ## Display the logs of the API with PM2
+log-api-test: ## Display the logs of the API with PM2 in test environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_api-test
 
-# Tests ========================================================================
-build-test: ## Build all front applications defined with webpack for test environment
-	NODE_ENV=test make build
+log-frontend-test: ## Display the logs of the frontend with PM2 in test environment
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
 
+# Tests ========================================================================
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
 		--require=co-mocha \
@@ -168,37 +155,37 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-        --require=reify \
-        --require=async-to-gen/register \
-        --require=co-mocha \
-        "./src/api/{,!(e2e)/**/}*.spec*.js"
+		--require=reify \
+		--require=async-to-gen/register \
+		--require=co-mocha \
+		"./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
-        --require=reify \
-        --require=async-to-gen/register \
-        --require=co-mocha \
-        --recursive \
-        ./src/api/e2e
+		--require=reify \
+		--require=async-to-gen/register \
+		--require=co-mocha \
+		--recursive \
+		./src/api/e2e
 
 test-frontend-unit: ## Run the frontend application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-        --require=co-mocha \
-        --require='./src/frontend/js/test.spec.js' \
-        --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
-        "./src/frontend/js/**/*.spec.js"
+		--require=co-mocha \
+		--require='./src/frontend/js/test.spec.js' \
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/frontend/js/**/*.spec.js"
 
 test-common-unit: ## Run the common directory unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
-        --compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
-        "./src/common/{,**/}*.spec.js"
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/common/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	NODE_ENV=test make build-frontend
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-        --require=co-mocha \
+		--require=co-mocha \
 		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/frontend/e2e
@@ -218,12 +205,12 @@ test: ## Run all tests
 
 reset-test-database: ## Reset the test database and run all migrations
 	NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		reset
 	NODE_ENV=test ./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
@@ -231,14 +218,14 @@ reset-test-database: ## Reset the test database and run all migrations
 # Migrations ===================================================================
 migrate: ## Migrate the database defined in the configuration (you may define the NODE_ENV)
 	./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		up
 
 create-migration: ## Create a new migration (you may define the NODE_ENV to select a specific configuration)
 	./node_modules/.bin/db-migrate \
-        --migrations-dir=./src/migrations \
+		--migrations-dir=./src/migrations \
 		--config=config/database.js \
 		-e api \
 		create migration

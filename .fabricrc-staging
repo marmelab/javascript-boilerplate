@@ -4,6 +4,7 @@ user=ubuntu
 home=/home/ubuntu
 api_name=newapp-staging
 api_pwd=newapp-staging
+branch=master
 
 # Supervisor configuration
 supervisord_source=config/supervisor/newapp_staging.conf
