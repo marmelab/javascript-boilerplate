@@ -1,9 +1,11 @@
+/* eslint no-param-reassign: off */
 import Koa from 'koa';
 import merge from 'lodash.merge';
 import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
 import { makeExecutableSchema } from 'graphql-tools';
 import koaMount from 'koa-mount';
 
+import tokenCheckerMiddleware from './lib/middlewares/tokenChecker';
 import { DateSchema, DateResolver } from './lib/graphql/date';
 
 import orderRepository from './orders/orderModel';
@@ -23,16 +25,27 @@ import OrderProductResolvers from './order-products/resolvers';
 
 const app = new Koa();
 
+app.use(tokenCheckerMiddleware(false));
+
 const rootQuery = `
 type Query {
+    product(id: ID!): Product
     products(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Product]
-    orders(customer_id: ID!): [Order]
+    order(id: ID!): Order
+    orders(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Order]
+}
+`;
+
+const rootMutation = `
+type Mutation {
+    postOrder(products: [PostOrderItem]): Order
 }
 `;
 
 const rootSchema = `
 schema {
     query: Query
+    mutation: Mutation
 }
 `;
 
@@ -40,6 +53,7 @@ const schema = makeExecutableSchema({
     typeDefs: [
         rootSchema,
         rootQuery,
+        rootMutation,
         UserSchema,
         ProductSchema,
         OrderSchema,
@@ -50,23 +64,21 @@ const schema = makeExecutableSchema({
 });
 
 app.use(async (ctx, next) => {
-    ctx.repositoriesMap = {
-        orderRepository: orderRepository(ctx.client),
-        orderProductRepository: orderProductRepository(ctx.client),
-        productRepository: productRepository(ctx.client),
-        userRepository: userRepository(ctx.client),
-    };
+    ctx.orderRepository = orderRepository(ctx.client);
+    ctx.orderProductRepository = orderProductRepository(ctx.client);
+    ctx.productRepository = productRepository(ctx.client);
+    ctx.userRepository = userRepository(ctx.client);
 
     await next();
 });
 
 app.use(koaMount('/graphql', async (ctx, next) => graphqlKoa({
-    context: ctx.repositoriesMap,
+    context: ctx,
     schema,
 })(ctx, next)));
 
 app.use(koaMount('/graphiql', graphiqlKoa({
-    endpointURL: '/graphql',
+    endpointURL: '/api/graphql',
 })));
 
 export default app;

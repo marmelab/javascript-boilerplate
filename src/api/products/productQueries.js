@@ -1,7 +1,8 @@
 import { crudQueries } from 'co-postgres-queries';
 
 const tableName = 'product';
-const fields = [
+const exposedFields = [
+    'id',
     'reference',
     'width',
     'height',
@@ -12,8 +13,6 @@ const fields = [
     'stock',
 ];
 
-const exposedFields = ['id'].concat(fields);
-
-const productQueries = crudQueries(tableName, fields, ['id'], exposedFields);
+const productQueries = crudQueries(tableName, exposedFields, ['id'], exposedFields);
 
 export default productQueries;

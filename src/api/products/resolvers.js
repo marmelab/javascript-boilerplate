@@ -1,5 +1,8 @@
 export default {
     Query: {
+        product(root, { id }, { productRepository }) {
+            return productRepository.selectOne({ id });
+        },
         products(root, { limit, offset, filter, sort, sortDir }, { productRepository }) {
             return productRepository.selectPage(limit, offset, filter, sort, sortDir);
         },

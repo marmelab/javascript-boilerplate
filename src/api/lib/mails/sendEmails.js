@@ -5,7 +5,7 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
 
     const defaultEmail = Object.assign({ attachments: [] }, defaultOptions);
 
-    const wrapMail = async (email) => {
+    const wrapMail = async email => {
         const cleanedEmail = Object.assign({}, defaultEmail, email);
 
         if (cleanedEmail.emitter) {
@@ -25,7 +25,7 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
      * @param {array} emails - List a emails with attrs `from`, `to`, `subject`, `body`, `attachments`
      *                         Only `to`, `subject` and `body` are required if default options specify others
      */
-    return async (emails) => {
+    return async emails => {
         const emailsToSend = (Array.isArray(emails)) ? emails : [emails];
 
         return await Promise.all(emailsToSend.map(wrapMail));

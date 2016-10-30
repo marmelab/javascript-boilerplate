@@ -1,6 +1,7 @@
 {
     "products" : [
         {
+            "id": "ad7cd2b8-9bf7-42ce-bad7-3f2ca39e072d",
             "reference": "abc",
             "width": 30,
             "height": 40,
@@ -11,6 +12,7 @@
             "stock": 10
         },
         {
+            "id": "c33d5737-1225-46a4-8a13-00d346b64885",
             "reference": "efg",
             "width": 30,
             "height": 40,
@@ -21,6 +23,7 @@
             "stock": 10
         },
         {
+            "id": "530c7fd4-c2dd-47b2-8c10-958b25f59a66",
             "reference": "hij",
             "width": 30,
             "height": 40,
@@ -33,10 +36,12 @@
     ],
     "users" : [
         {
+            "id": "543c7eae-ee59-4561-ac29-a2f3f9e1cdf7",
             "email": "user1@marmelab.io",
             "password": "password"
         },
         {
+            "id": "3cdd74e7-1a5e-4914-a987-9bd25463a71e",
             "email": "user2@marmelab.io",
             "password": "password"
         }

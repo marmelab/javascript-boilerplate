@@ -6,15 +6,16 @@ import sagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
-export default function configureStore(rootReducer, initialState) {
-    const middlewares = applyMiddleware(
+export default function configureStore(rootReducer, middlewares, initialState) {
+    const allMiddlewares = applyMiddleware(
+        ...middlewares,
         sagaMiddleware,
-        routerMiddleware(hashHistory),
+        routerMiddleware(hashHistory)
     );
 
     const devtools = window.devToolsExtension ? window.devToolsExtension() : f => f;
 
-    const store = createStore(rootReducer, initialState, compose(middlewares, devtools));
+    const store = createStore(rootReducer, initialState, compose(allMiddlewares, devtools));
     sagaMiddleware.run(sagas);
     return store;
 }

@@ -16,7 +16,7 @@ const FormGroup = ({ children, field: { meta: { touched, error } } }) => (
 
 FormGroup.propTypes = {
     children: PropTypes.node,
-    field: PropTypes.object.isRequired, // eslint-disable-line
+    field: PropTypes.object.isRequired,
 };
 
 export default FormGroup;

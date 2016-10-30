@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import Icon from 'react-fa';
 import { Link } from 'react-router';
-import ProductPropType from '../product/productPropTypes';
+import OrderItemPropType from './propTypes';
 
 class NewOrderItem extends Component {
     setShoppingCartItemQuantity = (event) => {
@@ -16,10 +16,12 @@ class NewOrderItem extends Component {
 
     render() {
         const {
-            id,
-            reference,
-            price,
-            quantity,
+            item: {
+                id,
+                reference,
+                price,
+                quantity,
+            },
         } = this.props;
 
         return (
@@ -54,8 +56,7 @@ class NewOrderItem extends Component {
 }
 
 NewOrderItem.propTypes = {
-    ...ProductPropType,
-    quantity: PropTypes.number.isRequired,
+    item: OrderItemPropType.item.isRequired,
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     setShoppingCartItemQuantity: PropTypes.func.isRequired,
 };

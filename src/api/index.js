@@ -126,7 +126,7 @@ if (env !== 'development') {
 
 app.use(koaBodyParser());
 
-app.use(koaMount('/', graphql));
+app.use(koaMount('/api', graphql));
 app.use(koaMount('/api', api));
 app.use(koaMount('/admin', admin));
 

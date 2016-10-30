@@ -8,13 +8,17 @@ import { render } from 'react-dom';
 
 import Root from './Root';
 import rootReducer from './reducers';
+import apolloClient from './graphql';
 import configureStore from './configureStore';
 
-const store = configureStore(rootReducer);
+const store = configureStore(
+    rootReducer({ apollo: apolloClient.reducer() }),
+    [apolloClient.middleware()]
+);
 
 FastClick.attach(document.body);
 
 render(
-    <Root {...{ store }} />,
+    <Root {...{ apolloClient, store }} />,
     document.getElementById('root')
 );

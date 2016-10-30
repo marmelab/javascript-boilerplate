@@ -7,13 +7,13 @@ export const OrderStatus = {
 };
 
 function orderProductModel(client) {
-    const orderProductModelClient = client.link(orderProductModel.queries);
+    const model = client.link(orderProductModel.queries);
 
-    const selectByOrderId = order_id => orderProductModelClient.selectPage(1, 0, { order_id });
+    const selectByOrderId = async order_id => await model.selectByOrderId(null, null, { order_id });
 
-    const selectByProductId = product_id => orderProductModelClient.selectPage(1, 0, { product_id });
+    const selectByProductId = async product_id => await model.selectByOrderId(null, null, { product_id });
 
-    return Object.assign({}, orderProductModelClient, {
+    return Object.assign({}, model, {
         selectByOrderId,
         selectByProductId,
     });

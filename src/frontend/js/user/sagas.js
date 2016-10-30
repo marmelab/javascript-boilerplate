@@ -26,9 +26,9 @@ export const getUserFromToken = (token) => {
 
 export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
     const { error, result } = yield call(fetchSaga, { payload });
-    const user = yield call(getUserFromToken, result.token);
 
     if (!error) {
+        const user = yield call(getUserFromToken, result.token);
         yield put(signInActions.success(user));
         yield call(storeLocalUser, user);
         yield put(routerActions.push(previousRoute));
@@ -37,9 +37,9 @@ export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payl
 
 export const signUp = (fetchSaga, storeLocalUser) => function* signUpSaga({ payload: { previousRoute, ...payload } }) {
     const { error, result } = yield call(fetchSaga, { payload });
-    const user = yield call(getUserFromToken, result.token);
 
     if (!error) {
+        const user = yield call(getUserFromToken, result.token);
         yield put(signUpActions.success(user));
         yield call(storeLocalUser, user);
         yield put(routerActions.push(previousRoute));
@@ -52,7 +52,8 @@ export const signOut = removeLocalUser => function* signOutSaga() {
     yield put(routerActions.push('/'));
 };
 
-export const getCurrentRoute = ({ routing: { locationBeforeTransitions: { pathname } } }) => pathname;
+export const getCurrentRoute = ({ routing }) =>
+    (routing.locationBeforeTransitions && routing.locationBeforeTransitions.pathname) || '/';
 
 export const handleUnauthorizedErrors = function* handleUnauthorizedErrorsSaga({ type, payload }) {
     if (!type.includes(FAILURE)) return;

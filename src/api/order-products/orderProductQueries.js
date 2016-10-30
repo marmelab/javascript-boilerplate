@@ -1,4 +1,4 @@
-import { crudQueries } from 'co-postgres-queries';
+import { crudQueries, selectPageQuery } from 'co-postgres-queries';
 
 const tableName = 'order_product';
 const exposedFields = [
@@ -17,4 +17,10 @@ const exposedFields = [
 
 const orderProductsQueries = crudQueries(tableName, exposedFields, exposedFields);
 
-export default orderProductsQueries;
+const selectByOrderId = selectPageQuery(tableName, ['order_id'], exposedFields);
+const selectByProductId = selectPageQuery(tableName, ['product_id'], exposedFields);
+
+export default Object.assign({
+    selectByOrderId,
+    selectByProductId,
+}, orderProductsQueries);

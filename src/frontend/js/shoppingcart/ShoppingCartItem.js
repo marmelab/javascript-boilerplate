@@ -3,7 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import Icon from 'react-fa';
 import { Link } from 'react-router';
-import ProductPropType from '../product/productPropTypes';
+
+import ShoppingCartItemPropType from './propTypes';
 
 class ShoppingCartItem extends Component {
     removeProductFromShoppingCart = () => {
@@ -11,15 +12,15 @@ class ShoppingCartItem extends Component {
     }
 
     render() {
-        const { id, reference, price, quantity } = this.props;
+        const { product: { id, reference, price, quantity } } = this.props;
 
         return (
             <div className="list-group-item">
-                <span className="label label-default float-xs-right">
+                <span className="tag tag-default float-xs-right">
                     {numeral(price * quantity).format('$0.00')}
                 </span>
                 {quantity > 1 &&
-                    <span className="label label-default float-xs-right">
+                    <span className="tag tag-default float-xs-right">
                         {quantity} x {numeral(price).format('$0.00')}
                     </span>
                 }
@@ -38,8 +39,7 @@ class ShoppingCartItem extends Component {
 }
 
 ShoppingCartItem.propTypes = {
-    ...ProductPropType,
-    quantity: PropTypes.number.isRequired,
+    product: ShoppingCartItemPropType.isRequired,
     removeProductFromShoppingCart: PropTypes.func.isRequired,
 };
 

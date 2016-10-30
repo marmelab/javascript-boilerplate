@@ -14,7 +14,7 @@ const app = new Koa();
 
 app.use(koaMount('/sign-in', authenticateAdminRoutes));
 app.use(rateLimiterMiddleware(config.apps.api.security.rateLimitOptions.api));
-app.use(tokenCheckerMiddleware);
+app.use(tokenCheckerMiddleware(true));
 
 app.use(koaMount('/products', productAdminApiRoutes));
 app.use(koaMount('/orders', orderAdminApiRoutes));

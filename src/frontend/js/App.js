@@ -2,6 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteTransition } from 'react-router-transition';
+
 import HelmetTitle from './app/HelmetTitle';
 import { signOut as signOutActions } from './user/actions';
 import AppNavbar from './app/AppNavbar';
@@ -60,9 +61,9 @@ export class AppComponent extends Component {
 AppComponent.propTypes = {
     authenticated: PropTypes.bool.isRequired,
     children: PropTypes.node,
-    location: PropTypes.object.isRequired, // eslint-disable-line
+    location: PropTypes.object.isRequired,
     signOut: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired, // eslint-disable-line
+    user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({ user: state.user, authenticated: isAuthenticated(state) });

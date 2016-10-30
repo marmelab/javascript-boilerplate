@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: off, max-len: off */
 import Koa from 'koa';
 import koaRoute from 'koa-route';
+import uuid from 'uuid';
 
 export const defaultMethods = {
     GET: 'managed',
@@ -58,7 +59,9 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     async post(ctx, next) {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await ctx.queries.insertOne(data);
+            data.id = data.id || generateId();
+
+            ctx.body = await queries.insertOne(data);
         }
 
         if (ctx.availableMethods.POST !== 'managed') {
@@ -69,7 +72,9 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     async postMulti(ctx, next) {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await ctx.queries.batchInsert(data);
+            ctx.body = await queries.batchInsert(data.map(d => Object.assign({}, d, {
+                id: d.id || generateId(),
+            })));
         }
 
         if (ctx.availableMethods.POST !== 'managed') {

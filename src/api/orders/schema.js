@@ -12,6 +12,11 @@ const OrderSchema = `
         status: String!,
         products: [OrderProduct]
     }
+
+    input PostOrderItem {
+        id: ID!
+        quantity: Int!
+    }
 `;
 
 export default () => [UserSchema, OrderProductSchema, OrderSchema];

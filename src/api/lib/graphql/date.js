@@ -10,7 +10,7 @@ export const DateResolver = {
             return new Date(value);
         },
         __serialize(value) { // value sent to the client
-            return value.toUTCString();
+            return value.toISOString();
         },
         __parseLiteral(ast) {
             if (ast.kind === Kind.OBJECT) {

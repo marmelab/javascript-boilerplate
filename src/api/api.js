@@ -19,7 +19,7 @@ app.use(koaMount('/products', productApiRoutes));
 app.use(koaMount('/orders', orderApiRoutes));
 
 app.use(methodFilter(['GET']));
-app.use(koaRoute.get('/', async (ctx) => {
+app.use(koaRoute.get('/', async ctx => {
     ctx.status = 200;
     ctx.body = { status: 'ok' };
 }));

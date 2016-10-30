@@ -3,7 +3,7 @@ import OrderList from './OrderList';
 import OrderDetails from './OrderDetails';
 import redirectIfNotAuthenticatedFactory from '../user/redirectIfNotAuthenticated';
 
-export default (store) => {
+export default store => {
     const redirectIfNotAuthenticated = redirectIfNotAuthenticatedFactory(store);
 
     return [{

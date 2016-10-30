@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
 
-import ProductPropType from './productPropTypes';
+import ProductPropType from './propTypes';
 
 class ProductItem extends Component {
     orderProduct = () => {
@@ -10,7 +10,7 @@ class ProductItem extends Component {
     }
 
     render() {
-        const { product: { id, reference, description, price, thumbnail }, orderProduct } = this.props;
+        const { product: { id, reference, description, price, thumbnail } } = this.props;
 
         return (
             <div className="card product-item">
@@ -25,9 +25,8 @@ class ProductItem extends Component {
                     <p className="card-text">{description}</p>
                     <Link to={`/products/${id}`} className="card-link">Details</Link>
                     <button
-                        onClick={orderProduct}
+                        onClick={this.orderProduct}
                         className="card-link btn btn-primary"
-                        type="button"
                     >
                         Buy
                     </button>
@@ -38,7 +37,7 @@ class ProductItem extends Component {
 }
 
 ProductItem.propTypes = {
-    product: PropTypes.shape(ProductPropType),
+    product: ProductPropType,
     orderProduct: PropTypes.func.isRequired,
 };
 

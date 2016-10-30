@@ -3,12 +3,12 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 import { Link } from 'react-router';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import HelmetTitle from '../app/HelmetTitle';
-import productActions from './actions';
-import ProductPropType from './productPropTypes';
+import ProductPropType from './propTypes';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
-import { getProductById } from './reducer';
-import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
 import withWindowTitle from '../app/withWindowTitle';
 
 class ProductDetails extends Component {
@@ -17,12 +17,17 @@ class ProductDetails extends Component {
     }
 
     render() {
-        const { product: { reference, description, price, image } } = this.props;
+        const { loading } = this.props;
+
+        if (loading) return <i className="fa fa-spinner fa-spin" />;
+
+        const { product: { reference, description, price, thumbnail } } = this.props;
+
         return (
             <div className="row product-details">
                 <HelmetTitle title={name} />
                 <div className="col-xs-12 col-md-4 col-lg-3">
-                    <img src={image} alt={name} className="img-thumbnail" />
+                    <img src={thumbnail} alt={name} className="img-thumbnail" />
                 </div>
                 <div className="col-xs-12 col-md-8 col-lg-9">
                     <h2>{reference}</h2>
@@ -44,39 +49,38 @@ class ProductDetails extends Component {
 }
 
 ProductDetails.propTypes = {
-    product: PropTypes.shape(ProductPropType),
+    loading: PropTypes.bool.isRequired,
+    product: ProductPropType,
     orderProduct: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => {
-    const productId = parseInt(ownProps.params.id, 10);
-    return {
-        product: state.product.item || getProductById(state, productId),
-    };
-};
+
+const productQuery = gql`
+    query product($id: ID!) {
+        product(id: $id) {
+            description
+            id
+            price
+            reference
+            thumbnail
+        }
+    }
+`;
 
 const mapDispatchToProps = ({
-    loadProduct: productActions.item.request,
     orderProduct: addProductToShoppingCart,
 });
 
-const dataSelector = (state, ownProps) => {
-    const productId = parseInt(ownProps.params.id, 10);
-    return state.product.item || getProductById(state, productId);
-};
-const paramsSelector = (state, ownProps) => ownProps.routeParams.id;
-const loadingSelector = state => state.product.loading;
-const titleSelector = (state, ownProps) => {
-    const productId = parseInt(ownProps.routeParams.id, 10);
-    const product = state.product.item || getProductById(state, productId);
-
+const titleSelector = (state, { product }) => {
     if (product) return product.name;
-
     return null;
 };
 
 export default compose(
-    withFetchingOnMount(productActions.item.request, { dataSelector, paramsSelector, loadingSelector }),
+    graphql(productQuery, {
+        options: ({ params: { id } }) => ({ variables: { id } }),
+        props: ({ data: { loading, product } }) => ({ loading, product }),
+    }),
     withWindowTitle(titleSelector),
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(undefined, mapDispatchToProps),
 )(ProductDetails);

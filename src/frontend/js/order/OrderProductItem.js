@@ -1,14 +1,14 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import numeral from 'numeral';
 import { Link } from 'react-router';
-import ProductPropType from '../product/productPropTypes';
+import OrderItemPropType from './propTypes';
 
-const OrderProductItem = ({ id, reference, price, quantity }) => (
+const OrderProductItem = ({ item: { id, reference, price, product_id, quantity } }) => (
     <div className="list-group-item">
         <div className="row">
             <div className="col-xs-8">
                 <h4 className="list-group-item-heading">
-                    <Link to={`/products/${id}`}>{reference}</Link>
+                    <Link to={`/products/${product_id}`}>{reference}</Link>
                 </h4>
             </div>
             <div className="col-xs-2 text-xs-right">
@@ -22,8 +22,7 @@ const OrderProductItem = ({ id, reference, price, quantity }) => (
 );
 
 OrderProductItem.propTypes = {
-    ...ProductPropType,
-    quantity: PropTypes.number.isRequired,
+    item: OrderItemPropType.item.isRequired,
 };
 
 export default OrderProductItem;
