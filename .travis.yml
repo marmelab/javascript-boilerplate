@@ -4,7 +4,11 @@ node_js:
     - "6.9.1"
 
 env:
-    - CXX=g++-4.8
+    global:
+        - CXX=g++-4.8
+        - NODE_ENV=test
+        - CHROME_BIN="chromium-browser"
+        - DISPLAY=:99.0
 
 dist: trusty
 sudo: required
@@ -27,12 +31,9 @@ cache:
 
 before_script:
     - psql -c 'create database travis_ci_test;' -U postgres
-    - cp -n ./config/test-dist.js ./config/test.js | true
-    - "export NODE_ENV=test"
+    - cp ./config/test-dist.js ./config/test.js
 
 before_install:
-    - export CHROME_BIN=chromium-browser
-    - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
     - sleep 3
 
