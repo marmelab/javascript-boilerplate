@@ -148,9 +148,6 @@ log-frontend-test: ## Display the logs of the frontend with PM2 in test environm
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
 
 # Tests ========================================================================
-build-test: ## Build all front applications defined with webpack for test environment
-	NODE_ENV=test make build
-
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
 		--require=co-mocha \

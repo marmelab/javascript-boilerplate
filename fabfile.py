@@ -47,7 +47,7 @@ def deploy_api():
         run('git checkout %s' % env.branch)
         run('git pull')
         # Install dependencies
-        run('make install-prod')
+        run('NODE_ENV=%s make install' % env.environment)
         # DB migrations
         run('NODE_ENV=%s make migrate' % env.environment)
         # Update supervisor configuration
