@@ -36,7 +36,7 @@ export default (queriesFactory, configuredMethods = {}) => {
             });
 
             ctx.body = await queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
-            const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await queries.countAll());
+            const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await queries.countAll()).count;
             ctx.set('X-Total-Count', totalCount);
             ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }

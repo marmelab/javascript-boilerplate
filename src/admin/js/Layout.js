@@ -8,7 +8,9 @@ import Notification from 'admin-on-rest/lib/mui/layout/Notification';
 import LayoutTitle from './LayoutTitle';
 
 const Layout = ({ isLoading, children }) => {
-    const RightElement = isLoading ? <CircularProgress color="#fff" size={0.5} /> : <span />;
+    const RightElement = isLoading
+        ? <CircularProgress color="#fff" size={30} thickness={2} style={{ margin: 8 }} />
+        : <span />;
 
     return (
         <MuiThemeProvider>
