@@ -12,7 +12,6 @@ export default {
         quiet: true,
         progress: false,
     },
-    devtool: 'cheap-module-inline-source-map',
     entry: {
         index: [
             resolve(__dirname, './js/main.js'),
