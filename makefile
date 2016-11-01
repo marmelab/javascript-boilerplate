@@ -153,6 +153,17 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/admin/js/**/*.spec.js"
 
+test-admin-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
+	NODE_ENV=test make build-admin
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
+		./node_modules/.bin/mocha \
+		--require=co-mocha \
+		--compilers="js:babel-core/register" \
+		--recursive \
+		./src/admin/e2e
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
 		--require=reify \
@@ -166,17 +177,17 @@ test-api-functional: reset-test-database ## Run the API functional tests with m
 		--recursive \
 		./src/api/e2e
 
+test-common-unit: ## Run the common directory unit tests with mocha
+	NODE_ENV=test ./node_modules/.bin/mocha \
+		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
+		"./src/common/{,**/}*.spec.js"
+
 test-frontend-unit: ## Run the frontend application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
 		--require=async-to-gen/register \
 		--require='./src/frontend/js/test.spec.js' \
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/frontend/js/**/*.spec.js"
-
-test-common-unit: ## Run the common directory unit tests with mocha
-	NODE_ENV=test ./node_modules/.bin/mocha \
-		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
-		"./src/common/{,**/}*.spec.js"
 
 test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	NODE_ENV=test make build-frontend
@@ -198,6 +209,7 @@ test: ## Run all tests
 	make test-frontend-unit
 	make test-admin-unit
 	make test-api-unit
+	make test-admin-functional
 	make test-api-functional
 	make test-frontend-functional
 

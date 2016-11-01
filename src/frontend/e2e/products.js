@@ -1,5 +1,6 @@
 /* eslint func-names: off */
 import { until, By } from 'selenium-webdriver';
+import { describe, it } from 'selenium-webdriver/testing';
 import expect from 'expect';
 import driver from '../../common/e2e/lib/chromeDriver';
 
