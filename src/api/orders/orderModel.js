@@ -12,7 +12,8 @@ function orderModel(client) {
     const orderClient = client.link(orderModel.queries);
     const orderProductsClient = orderProductsModel(client);
 
-    const selectByUserId = async userId => await orderClient.selectByUserId(null, null, { customer_id: userId });
+    const selectByUserId = async (limit, offset, userId, sort, sortDir) =>
+        await orderClient.selectByUserId(limit, offset, { customer_id: userId }, sort, sortDir);
 
     const selectOne = async ({ id }) => {
         const order = await orderClient.selectOne({ id });

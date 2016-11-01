@@ -92,6 +92,8 @@ export default {
             },
         }),
     ].concat(process.env.NODE_ENV === 'development' ? [
-        new SourceMapDevToolPlugin({ filename: '[file].map' }),
+        new SourceMapDevToolPlugin({
+            filename: '[file].map',
+        }),
     ] : []),
 };

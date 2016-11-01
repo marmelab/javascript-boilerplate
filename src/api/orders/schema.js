@@ -17,6 +17,20 @@ const OrderSchema = `
         id: ID!
         quantity: Int!
     }
+
+    type PostOrderResult {
+        order: Order
+        error: Error
+    }
+
+    extend type Query {
+        order(id: ID!): Order
+        orders(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Order]
+    }
+
+    extend type Mutation {
+        postOrder(products: [PostOrderItem]): PostOrderResult
+    }
 `;
 
 export default () => [UserSchema, OrderProductSchema, OrderSchema];

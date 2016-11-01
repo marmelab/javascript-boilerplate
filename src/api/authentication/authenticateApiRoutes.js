@@ -2,6 +2,7 @@
 import config from 'config';
 import Koa from 'koa';
 import koaRoute from 'koa-route';
+import uuid from 'uuid';
 
 import authenticate from './authenticate';
 import rateLimiterMiddleware from '../lib/middlewares/rateLimiter';
@@ -32,7 +33,7 @@ app.use(koaRoute.post('/sign-in', async (ctx) => {
 
 app.use(koaRoute.post('/sign-up', async (ctx) => {
     const { email, password } = ctx.request.body;
-    const user = await userRepository.insertOne({ email, password });
+    const user = await userRepository.insertOne({ id: uuid.v4(), email, password });
 
     if (!user) {
         ctx.status = 401;

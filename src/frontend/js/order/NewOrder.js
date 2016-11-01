@@ -14,6 +14,9 @@ import {
     removeProductFromShoppingCart as removeProductFromShoppingCartAction,
     setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
 } from '../shoppingcart/actions';
+
+import { navigateToSignIn as navigateToSignInAction } from '../user/actions';
+
 import withWindowTitle from '../app/withWindowTitle';
 import OrderItemPropType from './propTypes';
 
@@ -28,13 +31,18 @@ class NewOrder extends Component {
 
         this.setState({ submitting: true }, () => {
             placeNewOrder(this.props.items)
-                .then(({ data: { postOrder: { id: orderId } } }) => {
+                .then(({ data: { postOrder: { error, order } } }) => {
                     this.setState({ submitting: false });
+
+                    if (error) {
+                        this.setState({ error: true, submitting: false });
+                        return;
+                    }
+
                     clearShoppingCart();
-                    navigateToOrder(orderId);
+                    navigateToOrder(order.id);
                 })
-                .catch((error) => {
-                    console.error({ error });
+                .catch(() => {
                     this.setState({ error: true, submitting: false });
                 });
         });
@@ -92,6 +100,7 @@ NewOrder.propTypes = {
     clearShoppingCart: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(OrderItemPropType.item),
     navigateToOrder: PropTypes.func.isRequired,
+    navigateToSignIn: PropTypes.func.isRequired,
     placeNewOrder: PropTypes.func.isRequired,
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     setShoppingCartItemQuantity: PropTypes.func.isRequired,
@@ -101,7 +110,12 @@ NewOrder.propTypes = {
 const postOrderQuery = gql`
     mutation postOrder($products: [PostOrderItem]!) {
         postOrder(products: $products) {
-            id
+            order { id }
+            error {
+                code
+                message
+                status
+            }
         }
     }
 `;
@@ -112,9 +126,12 @@ const mapStateToProps = ({ shoppingCart: { products, total } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    clearShoppingCart: bindActionCreators(clearShoppingCartAction, dispatch),
-    removeProductFromShoppingCart: bindActionCreators(removeProductFromShoppingCartAction, dispatch),
-    setShoppingCartItemQuantity: bindActionCreators(setShoppingCartItemQuantityAction, dispatch),
+    ...bindActionCreators({
+        clearShoppingCart: clearShoppingCartAction,
+        navigateToSignIn: navigateToSignInAction,
+        removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+        setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
+    }, dispatch),
     navigateToOrder: orderId => dispatch(routerActions.push(`/orders/${orderId}`)),
 });
 

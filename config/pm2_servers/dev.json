@@ -5,7 +5,7 @@
                 "NODE_ENV": "development"
             },
             "instances": 1,
-            "name": "lpn_api-dev",
+            "name": "bpm_api-dev",
             "script": "./src/api/index.js",
             "node_args": "--harmony-async-await --require babel-register",
             "watch": [
@@ -25,7 +25,7 @@
                 "BABEL_ENV": "browser-development"
             },
             "instances": 1,
-            "name": "lpn_frontend-dev",
+            "name": "bpm_frontend-dev",
             "script": "./node_modules/.bin/webpack-dev-server"
         }, {
             "args": [
@@ -39,7 +39,7 @@
                 "BABEL_ENV": "browser-development"
             },
             "instances": 1,
-            "name": "lpn_admin-dev",
+            "name": "bpm_admin-dev",
             "script": "./node_modules/.bin/webpack-dev-server"
         }]
 }

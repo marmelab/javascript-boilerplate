@@ -12,30 +12,34 @@ export default {
             return orderRepository.selectOne({ id, customer_id: user.id });
         },
         orders(root, { limit, offset, filter, sort, sortDir }, { orderRepository, user }) {
-            return orderRepository.selectPage(limit, offset, filter, sort, sortDir, { customer_id: user.id });
+            return orderRepository.selectByUserId(limit, offset, user.id, sort, sortDir);
         },
     },
 
     Mutation: {
         async postOrder(root, { products }, { orderRepository, productRepository, user }) {
             if (!user) {
-                const error = new Error('Not authorized');
-                error.status = 401;
-                throw error;
+                return {
+                    error: {
+                        code: 'not_authorized',
+                        message: 'Not authorized',
+                        status: 401,
+                    },
+                };
             }
             const sanitizedProducts = await Promise.all(products.map(p => sanitizeProduct(p, productRepository)));
             const total = sanitizedProducts.reduce((t, p) => t + (p.price * (p.quantity || 1)), 0);
 
-            const order = {
+            const order = await orderRepository.insertOne({
                 customer_id: user.id,
                 date: new Date(),
                 products: sanitizedProducts,
                 reference: uuid.v4(),
                 status: OrderStatus.pending,
                 total,
-            };
+            });
 
-            return orderRepository.insertOne(order);
+            return { order };
         },
     },
 

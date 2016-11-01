@@ -6,6 +6,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import koaMount from 'koa-mount';
 
 import tokenCheckerMiddleware from './lib/middlewares/tokenChecker';
+import ErrorSchema from './lib/graphql/error';
 import { DateSchema, DateResolver } from './lib/graphql/date';
 
 import orderRepository from './orders/orderModel';
@@ -29,16 +30,13 @@ app.use(tokenCheckerMiddleware(false));
 
 const rootQuery = `
 type Query {
-    product(id: ID!): Product
-    products(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Product]
-    order(id: ID!): Order
-    orders(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Order]
+    dummy: Int
 }
 `;
 
 const rootMutation = `
 type Mutation {
-    postOrder(products: [PostOrderItem]): Order
+    dummy: Int
 }
 `;
 
@@ -59,6 +57,7 @@ const schema = makeExecutableSchema({
         OrderSchema,
         OrderProductSchema,
         DateSchema,
+        ErrorSchema,
     ],
     resolvers: merge(UserResolvers, ProductResolvers, OrderResolvers, OrderProductResolvers, DateResolver),
 });

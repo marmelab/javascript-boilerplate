@@ -11,4 +11,9 @@ export default `
         stock: Int!
         orderedTimes: Int
     }
+
+    extend type Query {
+        product(id: ID!): Product
+        products(limit: Int, offset: Int, filter: String, sort: String, sortDir: String): [Product]
+    }
 `;

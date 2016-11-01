@@ -18,11 +18,22 @@ import {
     userActionTypes,
 } from './actions';
 
+export const getCurrentRoute = ({ routing }) =>
+    (routing.locationBeforeTransitions && routing.locationBeforeTransitions.pathname) || '/';
+
 export const getUserFromToken = (token) => {
     const tokenData = decodeJwt(token);
 
     return { ...tokenData, token, expires: new Date(tokenData.exp * 1000) };
 };
+
+export function* navigateToSignInSaga() {
+    const previousRoute = yield select(getCurrentRoute);
+    yield put(routerActions.replace({
+        pathname: '/sign-in',
+        state: { nextPathname: previousRoute },
+    }));
+}
 
 export const signIn = (fetchSaga, storeLocalUser) => function* signInSaga({ payload: { previousRoute, ...payload } }) {
     const { error, result } = yield call(fetchSaga, { payload });
@@ -52,21 +63,18 @@ export const signOut = removeLocalUser => function* signOutSaga() {
     yield put(routerActions.push('/'));
 };
 
-export const getCurrentRoute = ({ routing }) =>
-    (routing.locationBeforeTransitions && routing.locationBeforeTransitions.pathname) || '/';
-
-export const handleUnauthorizedErrors = function* handleUnauthorizedErrorsSaga({ type, payload }) {
-    if (!type.includes(FAILURE)) return;
-
+export const handleUnauthorizedErrors = function* handleUnauthorizedErrorsSaga() {
     const nextPathname = yield select(getCurrentRoute);
 
-    if (payload.message === 'Unauthorized') {
-        yield put(routerActions.replace({
-            pathname: '/sign-in',
-            state: { nextPathname },
-        }));
-    }
+    yield put(routerActions.replace({
+        pathname: '/sign-in',
+        state: { nextPathname },
+    }));
 };
+
+function* watchNavigateToSignInRequest() {
+    yield takeEvery(userActionTypes.navigateToSignIn, navigateToSignInSaga);
+}
 
 function* watchSignInRequest() {
     const saga = signIn(fetchSagaFactory(signInActions, fetchSignInApi), storeLocalUserApi);
@@ -82,11 +90,24 @@ function* watchSignOutRequest() {
     yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi));
 }
 
+export const detectUnauthorizedErrorAction = ({ type, payload, result }) => {
+    if (type.includes(FAILURE) && payload.message === 'Unauthorized') return true;
+
+    if (type === 'APOLLO_MUTATION_RESULT' && result && result.data) {
+        return Object.keys(result.data).reduce((isUnauthorizedError, key) =>
+            isUnauthorizedError && result.data[key].error && result.data[key].error.status === 401
+        , true);
+    }
+
+    return false;
+};
+
 function* watchUnauthorizedErrors() {
-    yield takeEvery('*', handleUnauthorizedErrors);
+    yield takeEvery(detectUnauthorizedErrorAction, handleUnauthorizedErrors);
 }
 
 export default function* sagas() {
+    yield fork(watchNavigateToSignInRequest);
     yield fork(watchSignInRequest);
     yield fork(watchSignUpRequest);
     yield fork(watchSignOutRequest);
