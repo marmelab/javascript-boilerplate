@@ -32,8 +32,10 @@ function orderModel(client) {
                 total: data.total,
             });
 
-            const orderProducts = data.products
-            .map(product => Object.assign({}, product, { order_id: data.id, product_id: product.id }));
+            const orderProducts = data.products.map(product => Object.assign({}, product, {
+                order_id: data.id,
+                product_id: product.id,
+            }));
 
             if (orderProducts.length > 0) {
                 await orderProductsClient.batchInsert(orderProducts);

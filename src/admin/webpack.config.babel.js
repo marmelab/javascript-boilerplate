@@ -1,5 +1,5 @@
 import config from 'config';
-import { DefinePlugin, LoaderOptionsPlugin } from 'webpack';
+import { DefinePlugin, LoaderOptionsPlugin, SourceMapDevToolPlugin } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
 
@@ -104,5 +104,7 @@ export default {
                 minimize: process.env.NODE_ENV !== 'development',
             },
         }),
-    ],
+    ].concat(process.env.NODE_ENV === 'development' ? [
+        new SourceMapDevToolPlugin({ filename: '[file].map' }),
+    ] : []),
 };

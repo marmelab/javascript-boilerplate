@@ -15,11 +15,11 @@ class ShoppingCartItem extends Component {
 
         return (
             <div className="list-group-item">
-                <span className="label label-default pull-xs-right">
+                <span className="label label-default float-xs-right">
                     {numeral(price * quantity).format('$0.00')}
                 </span>
                 {quantity > 1 &&
-                    <span className="label label-default pull-xs-right">
+                    <span className="label label-default float-xs-right">
                         {quantity} x {numeral(price).format('$0.00')}
                     </span>
                 }

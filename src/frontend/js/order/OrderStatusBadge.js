@@ -8,7 +8,7 @@ const getLabel = status => ({
 });
 
 const OrderStatusBadge = ({ status }) => (
-    <span className={classNames('label label-default pull-xs-right', getLabel(status))}>
+    <span className={classNames('label label-default float-xs-right', getLabel(status))}>
         {status}
     </span>
 );

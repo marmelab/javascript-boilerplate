@@ -1,5 +1,5 @@
 import config from 'config';
-import { DefinePlugin, LoaderOptionsPlugin, ProvidePlugin } from 'webpack';
+import { DefinePlugin, LoaderOptionsPlugin, ProvidePlugin, SourceMapDevToolPlugin } from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolve } from 'path';
@@ -13,7 +13,6 @@ export default {
         quiet: true,
         progress: false,
     },
-    devtool: 'cheap-module-inline-source-map',
     entry: {
         index: [
             resolve(__dirname, './js/main.js'),
@@ -124,5 +123,7 @@ export default {
             Tether: 'tether',
             'window.Tether': 'tether',
         }),
-    ],
+    ].concat(process.env.NODE_ENV === 'development' ? [
+        new SourceMapDevToolPlugin({ filename: '[file].map' }),
+    ] : []),
 };
