@@ -123,7 +123,7 @@ describe('/api/orders/{id}', () => {
                 status: 'valid',
                 products: [],
             });
-            let userOrders = yield orderQueries.selectByUserId(user1.id);
+            let userOrders = yield orderQueries.selectByUserId(null, null, user1.id);
             expect(userOrders.length).toEqual(2);
             const { body, statusCode } = yield request({
                 method: 'DELETE',
@@ -131,7 +131,7 @@ describe('/api/orders/{id}', () => {
             }, user1Token, { token: user1CookieToken });
 
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = yield orderQueries.selectByUserId(user1.id);
+            userOrders = yield orderQueries.selectByUserId(null, null, user1.id);
             expect(userOrders.length).toEqual(1);
         });
     });
