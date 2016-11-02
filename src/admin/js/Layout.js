@@ -10,7 +10,7 @@ import LayoutTitle from './LayoutTitle';
 const Layout = ({ isLoading, children }) => {
     const RightElement = isLoading
         ? <CircularProgress color="#fff" size={30} thickness={2} style={{ margin: 8 }} />
-        : <span />;
+        : null;
 
     return (
         <MuiThemeProvider>
