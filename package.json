@@ -116,7 +116,6 @@
     "webpack-dev-server": "2.1.0-beta.9"
   },
   "scripts": {
-    "postinstall": "make install-selenium",
     "test": "make test"
   },
   "author": "marmelab <info@marmelab.com>",
