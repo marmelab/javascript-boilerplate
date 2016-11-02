@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 class UserNavbarItem extends Component {
-    signOut = (event) => {
-        event.preventDefault();
+    signOut = () => {
         this.props.signOut();
     }
 
@@ -22,7 +21,7 @@ class UserNavbarItem extends Component {
                         {user.email}
                     </a>
                     <div className="dropdown-menu">
-                        <a className="dropdown-item" href="/sign-out" onClick={this.signOut} role="button">Sign out</a>
+                        <button className="dropdown-item" onClick={this.signOut} role="button">Sign out</button>
                     </div>
                 </li>
             </ul>
