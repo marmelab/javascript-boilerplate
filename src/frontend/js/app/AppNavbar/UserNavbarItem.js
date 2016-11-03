@@ -1,23 +1,33 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-const UserNavbarItem = ({ user, signOut }) => (
-    <ul className="nav navbar-nav pull-xs-right">
-        <li className="nav-item dropdown">
-            <a
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-                role="button"
-            >
-                {user.email}
-            </a>
-            <div className="dropdown-menu">
-                <a className="dropdown-item" href="/sign-out" onClick={signOut} role="button">Sign out</a>
-            </div>
-        </li>
-    </ul>
-);
+class UserNavbarItem extends Component {
+    signOut = () => {
+        this.props.signOut();
+    }
+
+    render() {
+        const { user } = this.props;
+
+        return (
+            <ul className="nav navbar-nav float-xs-right">
+                <li className="nav-item dropdown">
+                    <a
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        className="nav-link dropdown-toggle"
+                        data-toggle="dropdown"
+                        role="button"
+                    >
+                        {user.email}
+                    </a>
+                    <div className="dropdown-menu">
+                        <button className="dropdown-item" onClick={this.signOut} role="button">Sign out</button>
+                    </div>
+                </li>
+            </ul>
+        );
+    }
+}
 
 UserNavbarItem.propTypes = {
     signOut: PropTypes.func.isRequired,

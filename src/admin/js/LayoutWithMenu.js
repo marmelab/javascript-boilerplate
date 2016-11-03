@@ -13,7 +13,9 @@ import Menu from './Menu';
 import { signOut as signOutAction } from './user/actions';
 
 const LayoutWithMenu = ({ isLoading, children, user: { email }, signOut }) => {
-    const LoadingIcon = isLoading ? <CircularProgress color="#fff" size={0.2} /> : <ActionExit />;
+    const LoadingIcon = isLoading
+        ? <CircularProgress color="#fff" size={30} thickness={2} style={{ margin: 8 }} />
+        : <ActionExit />;
     const RightElement = <FlatButton label="Sign out" onClick={signOut} icon={LoadingIcon} />;
 
     return (
