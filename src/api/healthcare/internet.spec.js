@@ -4,30 +4,30 @@ import internetCheck from './internet';
 
 describe('Healthcare', () => {
     describe('Internet access', () => {
-        it('should call fetch with url from config', function* () {
+        it('should call fetch with url from config', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
-            yield internetCheck({
+            await internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 
             expect(fetch).toHaveBeenCalledWith('foo');
         });
 
-        it('should return a valid result when fetch response is ok', function* () {
+        it('should return a valid result when fetch response is ok', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
-            const result = yield internetCheck({
+            const result = await internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 
             expect(result).toEqual(true);
         });
 
-        it('should return an invalid result when fetch response is not ok', function* () {
+        it('should return an invalid result when fetch response is not ok', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 500, statusText: 'foo' }));
 
-            const result = yield internetCheck({
+            const result = await internetCheck({
                 internetUrl: 'foo',
             }, fetch);
 

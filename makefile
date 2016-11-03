@@ -157,7 +157,6 @@ test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
 		--require=reify \
 		--require=async-to-gen/register \
-		--require=co-mocha \
 		"./src/api/{,!(e2e)/**/}*.spec*.js"
 
 test-api-functional: reset-test-database ## Run the API functional tests with mocha
