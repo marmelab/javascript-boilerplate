@@ -6,21 +6,21 @@ import driver from '../../common/e2e/lib/chromeDriver';
 describe('Products', function () {
     this.timeout(15000);
 
-    it('user should see the product list', function* () {
+    it('user should see the product list', async function () {
         driver.get('http://localhost:9080/#/products');
-        yield driver.wait(until.elementLocated(By.css('.product-item')));
-        const productItems = yield driver.findElements(By.css('.product-item'));
+        await driver.wait(until.elementLocated(By.css('.product-item')));
+        const productItems = await driver.findElements(By.css('.product-item'));
         expect(productItems.length).toEqual(3);
     });
 
-    it('user should see the product details', function* () {
+    it('user should see the product details', async function () {
         driver.get('http://localhost:9080/#/products/1');
-        yield driver.wait(until.elementLocated(By.css('.product-details')));
+        await driver.wait(until.elementLocated(By.css('.product-details')));
 
-        expect(yield driver.findElement(By.css('.img-thumbnail')).getAttribute('src')).toEqual('http://lorempixel.com/400/400/');
-        expect(yield driver.findElement(By.css('h2')).getText()).toEqual('abc');
-        expect(yield driver.findElement(By.css('.description')).getText()).toEqual('John the zoo');
-        expect(yield driver.findElement(By.css('.price')).getText()).toEqual('Price: $3.40');
+        expect(await driver.findElement(By.css('.img-thumbnail')).getAttribute('src')).toEqual('http://lorempixel.com/400/400/');
+        expect(await driver.findElement(By.css('h2')).getText()).toEqual('abc');
+        expect(await driver.findElement(By.css('.description')).getText()).toEqual('John the zoo');
+        expect(await driver.findElement(By.css('.price')).getText()).toEqual('Price: $3.40');
     });
 
     after(() => {

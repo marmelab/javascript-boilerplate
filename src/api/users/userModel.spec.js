@@ -20,7 +20,7 @@ describe('User Model', () => {
         ]);
     });
 
-    it('should correctly retrieve user by email', function* () {
+    it('should correctly retrieve user by email', async function () {
         client = {
             link: () => ({
                 findByEmail: (email) => {
@@ -31,7 +31,7 @@ describe('User Model', () => {
             }),
         };
 
-        const res = yield userModel(client).findByEmail('email@example.org');
+        const res = await userModel(client).findByEmail('email@example.org');
         expect(res).toEqual({ id: 42, email: 'email@example.org' });
     });
 });

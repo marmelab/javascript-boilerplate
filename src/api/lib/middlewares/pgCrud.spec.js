@@ -5,7 +5,7 @@ import { pgCrudFactory } from './pgCrud';
 
 describe('pgCrud middleware', () => {
     describe('get', () => {
-        it('should return the correct count', function* () {
+        it('should return the correct count', async function () {
             const pgCrud = pgCrudFactory();
 
             const ctx = {
@@ -18,7 +18,7 @@ describe('pgCrud middleware', () => {
                 set: createSpy(),
             };
 
-            yield pgCrud.get(ctx);
+            await pgCrud.get(ctx);
 
             expect(ctx.set).toHaveBeenCalledWith('X-Total-Count', 42);
         });

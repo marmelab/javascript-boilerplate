@@ -19,9 +19,9 @@ describe('Mails sendEmails', () => {
         expect(sendEmailsFactory).toThrow('Invalid transporter');
     });
 
-    it('should send correct emails', function* () {
+    it('should send correct emails', async function () {
         const sendEmails = sendEmailsFactory(transporter, defaultOptions);
-        const emails = yield sendEmails([{
+        const emails = await sendEmails([{
             subject: 'Mail 1',
             to: 'user@marmelab.com',
             body: 'Mail 1 Body',

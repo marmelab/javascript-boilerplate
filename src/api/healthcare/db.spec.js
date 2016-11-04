@@ -4,57 +4,55 @@ import dbCheck from './db';
 
 describe('Healthcare', () => {
     describe('DB', () => {
-        it('should call dbClientFactory with correct config', function* () {
+        it('should call dbClientFactory with correct config', async function () {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve({ rows: [] })),
             });
 
-            yield dbCheck({
+            await dbCheck({
                 foo: 'foo',
             }, dbClientFactory);
 
-            expect(dbClientFactory).toHaveBeenCalledWith({
-                foo: 'foo',
-            });
+            expect(dbClientFactory).toHaveBeenCalledWith({ foo: 'foo' });
         });
 
-        it('should return a valid result when db query response is ok', function* () {
+        it('should return a valid result when db query response is ok', async function () {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve(['valid response'])),
             });
 
-            const result = yield dbCheck({
+            const result = await dbCheck({
             }, dbClientFactory);
 
             expect(result).toEqual(true);
         });
 
-        it('should return an invalid result when db client factory fail', function* () {
+        it('should return an invalid result when db client factory fail', async function () {
             const dbClientFactory = createSpy().andThrow();
 
-            const result = yield dbCheck({
+            const result = await dbCheck({
             }, dbClientFactory);
 
             expect(result).toEqual(false);
         });
 
-        it('should return an invalid result when db client query fail', function* () {
+        it('should return an invalid result when db client query fail', async function () {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.reject()),
             });
 
-            const result = yield dbCheck({
+            const result = await dbCheck({
             }, dbClientFactory);
 
             expect(result).toEqual(false);
         });
 
-        it('should return an invalid result when db query does not return rows', function* () {
+        it('should return an invalid result when db query does not return rows', async function () {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve([])),
             });
 
-            const result = yield dbCheck({
+            const result = await dbCheck({
             }, dbClientFactory);
 
             expect(result).toEqual(false);

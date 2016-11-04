@@ -4,10 +4,10 @@ import apiCheck from './api';
 
 describe('Healthcare', () => {
     describe('API', () => {
-        it('should call fetch with url from config', function* () {
+        it('should call fetch with url from config', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
-            yield apiCheck({
+            await apiCheck({
                 apiUrl: 'foo',
                 endPoint: '/bar',
             }, fetch);
@@ -17,10 +17,10 @@ describe('Healthcare', () => {
             });
         });
 
-        it('should return a valid result when api response is ok', function* () {
+        it('should return a valid result when api response is ok', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
-            const result = yield apiCheck({
+            const result = await apiCheck({
                 apiUrl: 'foo',
                 endPoint: '/bar',
             }, fetch);
@@ -28,10 +28,10 @@ describe('Healthcare', () => {
             expect(result).toEqual(true);
         });
 
-        it('should return an invalid result when api response is not ok', function* () {
+        it('should return an invalid result when api response is not ok', async function () {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 500, statusText: 'foo' }));
 
-            const result = yield apiCheck({
+            const result = await apiCheck({
                 apiUrl: 'foo',
                 endPoint: '/bar',
             }, fetch);
