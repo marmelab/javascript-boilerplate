@@ -8,8 +8,8 @@ const baseUrl = 'http://localhost:8083';
 describe('Authentication', function () { // eslint-disable-line func-names
     this.timeout(15000);
 
-    it('user should see sign-in form', function* () {
+    it('user should see sign-in form', async () => {
         driver.get(`${baseUrl}`);
-        yield driver.wait(until.elementLocated(By.css('.sign-in')));
+        await driver.wait(until.elementLocated(By.css('.sign-in')));
     });
 });
