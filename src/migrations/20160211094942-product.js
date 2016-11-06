@@ -1,6 +1,8 @@
+'use strict';
+
 exports.up = function (db, callback) {
     db.createTable('product', {
-        id: { type: 'int', primaryKey: true, autoIncrement: true },
+        id: { type: 'uuid', primaryKey: true },
         reference: { type: 'string' },
         width: { type: 'real' },
         height: { type: 'real' },

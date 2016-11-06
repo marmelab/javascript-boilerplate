@@ -22,12 +22,13 @@ def install_swap():
 def setup_api():
     print(green('Installing dependencies ...'))
     sudo('apt --yes update && apt --yes upgrade')
-    sudo('curl -sL https://deb.nodesource.com/setup_6.x | bash -')
+    sudo('curl -sL https://deb.nodesource.com/setup_7.x | bash -')
     sudo('apt --yes install build-essential')
     sudo('apt --yes install libkrb5-dev')
     sudo('apt --yes install nodejs')
     sudo('apt --yes install supervisor')
     sudo('apt --yes install git htop vim')
+    run('npm install -g npm@3.10.9')
     run('npm set progress=false')
 
     run('git clone %s %s/%s' % (gitUrl, env.home, env.api_pwd))

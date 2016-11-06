@@ -119,7 +119,7 @@ describe('/api/orders', () => {
         });
 
         it('should create a order', function* () {
-            let userOrders = yield orderFactory(db).selectByUserId(user.id);
+            let userOrders = yield orderFactory(db).selectByUserId(null, null, user.id);
             expect(userOrders.length).toEqual(1);
             const { statusCode, body } = yield request({
                 method: 'POST',
@@ -131,7 +131,7 @@ describe('/api/orders', () => {
                 },
             }, userToken, { token: userCookieToken });
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = yield orderFactory(db).selectByUserId(user.id);
+            userOrders = yield orderFactory(db).selectByUserId(null, null, user.id);
             expect(userOrders.length).toEqual(2);
         });
     });

@@ -42,7 +42,8 @@ export default function (client) {
     function* addProduct(productData) {
         // const causes an error! don't know why
         const defaultProductData = {
-            reference: uuid.v1(),
+            id: uuid.v4(),
+            reference: uuid.v4(),
             width: 60,
             height: 40,
             price: faker.random.number(),

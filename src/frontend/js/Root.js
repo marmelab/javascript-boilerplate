@@ -1,23 +1,24 @@
 import React, { PropTypes } from 'react';
-import { Provider } from 'react-redux';
 import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { ApolloProvider } from 'react-apollo';
 
 import routesFactory from './routes';
 
-const Root = ({ store }) => {
+const Root = ({ apolloClient, store }) => {
     const history = syncHistoryWithStore(hashHistory, store);
     const routes = routesFactory(store);
 
     return (
-        <Provider {...{ store }}>
+        <ApolloProvider store={store} client={apolloClient}>
             <Router {...{ history, routes }} />
-        </Provider>
+        </ApolloProvider>
     );
 };
 
 Root.propTypes = {
-    store: PropTypes.object.isRequired, // eslint-disable-line
+    apolloClient: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired,
 };
 
 export default Root;

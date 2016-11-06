@@ -1,11 +1,11 @@
 /* globals APP_NAME */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ActionExit from 'material-ui/svg-icons/action/exit-to-app';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
-import ActionExit from 'material-ui/svg-icons/action/exit-to-app';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Notification from 'admin-on-rest/lib/mui/layout/Notification';
 
 import LayoutTitle from './LayoutTitle';
@@ -16,6 +16,7 @@ const LayoutWithMenu = ({ isLoading, children, user: { email }, signOut }) => {
     const LoadingIcon = isLoading
         ? <CircularProgress color="#fff" size={30} thickness={2} style={{ margin: 8 }} />
         : <ActionExit />;
+
     const RightElement = <FlatButton label="Sign out" onClick={signOut} icon={LoadingIcon} />;
 
     return (
@@ -35,8 +36,8 @@ const LayoutWithMenu = ({ isLoading, children, user: { email }, signOut }) => {
 LayoutWithMenu.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     children: PropTypes.node,
-    user: PropTypes.object.isRequired, // eslint-disable-line
     signOut: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import orderQueries from './orderQueries';
 import orderProductsModel from '../order-products/orderProductModel';
 
@@ -11,7 +12,8 @@ function orderModel(client) {
     const orderClient = client.link(orderModel.queries);
     const orderProductsClient = orderProductsModel(client);
 
-    const selectByUserId = async userId => await orderClient.selectByUserId(null, null, { customer_id: userId });
+    const selectByUserId = async (limit, offset, userId, sort, sortDir) =>
+        await orderClient.selectByUserId(limit, offset, { customer_id: userId }, sort, sortDir);
 
     const selectOne = async ({ id }) => {
         const order = await orderClient.selectOne({ id });
@@ -23,8 +25,11 @@ function orderModel(client) {
     const insertOne = async (data) => {
         await client.begin();
 
+        const id = uuid.v4();
+
         try {
             const result = await orderClient.insertOne({
+                id,
                 customer_id: data.customer_id,
                 date: data.date,
                 reference: data.reference,
@@ -32,8 +37,10 @@ function orderModel(client) {
                 total: data.total,
             });
 
-            const orderProducts = data.products.map(product => Object.assign({}, product, {
-                order_id: data.id,
+            const orderProducts = data.products
+            .map(product => Object.assign({}, product, {
+                id: uuid.v4(),
+                order_id: id,
                 product_id: product.id,
             }));
 

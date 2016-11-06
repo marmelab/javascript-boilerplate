@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import ProductItem from './ProductItem';
-import productActions from './actions';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
-import ProductPropType from './productPropTypes';
-import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
+import ProductPropType from './propTypes';
+import withLoading from '../app/withLoading';
 import withWindowTitle from '../app/withWindowTitle';
 
 const ProductList = ({ orderProduct, products }) => (
@@ -19,16 +21,21 @@ const ProductList = ({ orderProduct, products }) => (
 );
 
 ProductList.propTypes = {
-    products: PropTypes.arrayOf(PropTypes.shape(ProductPropType)),
+    products: PropTypes.arrayOf(ProductPropType),
     orderProduct: PropTypes.func.isRequired,
 };
 
-const dataSelector = state => state.product.list;
-const loadingSelector = state => state.product.loading;
-
-const mapStateToProps = state => ({
-    products: state.product.list,
-});
+const productListQuery = gql`
+    query products {
+        products {
+            description
+            id
+            price
+            reference
+            thumbnail
+        }
+    }
+`;
 
 const mapDispatchToProps = ({
     orderProduct: addProductToShoppingCart,
@@ -36,6 +43,9 @@ const mapDispatchToProps = ({
 
 export default compose(
     withWindowTitle('Products'),
-    withFetchingOnMount(productActions.list.request, { dataSelector, loadingSelector }),
-    connect(mapStateToProps, mapDispatchToProps)
+    graphql(productListQuery, {
+        props: ({ data: { loading, products } }) => ({ loading, products }),
+    }),
+    withLoading((state, { loading, products }) => loading || !products),
+    connect(undefined, mapDispatchToProps)
 )(ProductList);

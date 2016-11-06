@@ -1,8 +1,9 @@
+/* globals APP_NAME */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Notification from 'admin-on-rest/lib/mui/layout/Notification';
 
 import LayoutTitle from './LayoutTitle';

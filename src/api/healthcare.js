@@ -13,7 +13,7 @@ import apiCheck from './healthcare/api';
 const app = new Koa();
 
 app.use(methodFilter(['GET']));
-app.use(koaRoute.get('/', async (ctx) => {
+app.use(koaRoute.get('/', async ctx => {
     let internetAccess;
     let db;
     let api;

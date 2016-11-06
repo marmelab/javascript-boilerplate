@@ -5,7 +5,7 @@ import { pgCrudFactory } from './pgCrud';
 
 describe('pgCrud middleware', () => {
     describe('get', () => {
-        it('should return the correct count', async function () {
+        it('should return the correct count', async () => {
             const pgCrud = pgCrudFactory();
 
             const ctx = {

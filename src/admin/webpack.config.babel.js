@@ -27,19 +27,7 @@ export default {
             loader: 'babel',
             // Options to configure babel with
             query: {
-                babelrc: false,
                 cacheDirectory: true,
-                presets: [
-                    ['es2015', { loose: true, modules: false }],
-                    'react',
-                    'stage-1',
-                ].concat(process.env.NODE_ENV === 'development' ? ['react-hmre'] : []),
-                plugins: [
-                    ['transform-runtime', {
-                        polyfill: false,
-                        regenerator: true,
-                    }],
-                ],
             },
         }, {
             test: /\.json$/,
@@ -104,6 +92,8 @@ export default {
             },
         }),
     ].concat(process.env.NODE_ENV === 'development' ? [
-        new SourceMapDevToolPlugin({ filename: '[file].map' }),
+        new SourceMapDevToolPlugin({
+            filename: '[file].map',
+        }),
     ] : []),
 };

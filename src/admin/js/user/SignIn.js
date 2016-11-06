@@ -1,4 +1,3 @@
-/* eslint jsx-a11y/anchor-has-content: off */
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -38,7 +37,7 @@ const renderInput = (floatingLabelText, type, hintText) =>
         />;
 
 class SignIn extends Component {
-    signIn = (values) => {
+    signIn = values => {
         this.props.signIn(this.props.previousRoute, values);
     }
 

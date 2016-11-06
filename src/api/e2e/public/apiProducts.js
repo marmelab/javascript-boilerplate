@@ -44,6 +44,16 @@ describe('/api/products', () => {
 
             expect(requestedProducts).toEqual([
                 {
+                    reference: 'hij',
+                    width: 30,
+                    height: 40,
+                    price: 3.40,
+                    thumbnail: 'http://lorempixel.com/400/400/',
+                    image: 'http://lorempixel.com/400/400/',
+                    description: 'Miles in the kitchen',
+                    stock: 10,
+                },
+                {
                     reference: 'abc',
                     width: 30,
                     height: 40,
@@ -61,16 +71,6 @@ describe('/api/products', () => {
                     thumbnail: 'http://lorempixel.com/400/400/',
                     image: 'http://lorempixel.com/400/400/',
                     description: 'Frank on toilet',
-                    stock: 10,
-                },
-                {
-                    reference: 'hij',
-                    width: 30,
-                    height: 40,
-                    price: 3.40,
-                    thumbnail: 'http://lorempixel.com/400/400/',
-                    image: 'http://lorempixel.com/400/400/',
-                    description: 'Miles in the kitchen',
                     stock: 10,
                 },
             ]);

@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import numeral from 'numeral';
 import ShoppingCartItem from './ShoppingCartItem';
 import { removeProductFromShoppingCart as removeProductFromShoppingCartAction } from './actions';
-import ProductPropType from '../product/productPropTypes';
+import ShoppingCartItemPropType from './propTypes';
 
 export const EmptyShoppingCart = () => (
     <div className="list-group-item">Your shopping cart is empty...</div>
@@ -33,7 +33,7 @@ const ShoppingCart = ({ removeProductFromShoppingCart, products, total }) => (
         {products.map(product => (
             <ShoppingCartItem
                 key={product.id}
-                {...product}
+                product={product}
                 removeProductFromShoppingCart={removeProductFromShoppingCart}
             />
         ))}
@@ -44,10 +44,7 @@ const ShoppingCart = ({ removeProductFromShoppingCart, products, total }) => (
 );
 
 ShoppingCart.propTypes = {
-    products: PropTypes.arrayOf(PropTypes.shape({
-        ...ProductPropType,
-        quantity: PropTypes.number.isRequired, // eslint-disable-line
-    })),
+    products: PropTypes.arrayOf(ShoppingCartItemPropType),
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     total: PropTypes.number.isRequired,
 };

@@ -15,6 +15,7 @@ import httpLoggerMiddleware from './lib/middlewares/httpLogger';
 import healthcare from './healthcare';
 import api from './api';
 import admin from './admin';
+import graphql from './graphql';
 
 const pool = new PgPool(config.apps.api.db);
 
@@ -81,8 +82,8 @@ app.use(koaMount('/healthcare', healthcare));
 app.use(xdomainRoute);
 
 // Security headers
-app.use(koaHelmet());
-app.use(koaHelmet.contentSecurityPolicy({ directives: { defaultSrc: ["'self'"] } }));
+app.use(koaHelmet({ directives: { defaultSrc: ["'self'", 'cdn.jsdelivr.net'] } }));
+app.use(koaHelmet.contentSecurityPolicy());
 app.use(koaHelmet.frameguard('deny'));
 app.use(koaCors({
     credentials: true,
@@ -125,6 +126,7 @@ if (env !== 'development') {
 
 app.use(koaBodyParser());
 
+app.use(koaMount('/api', graphql));
 app.use(koaMount('/api', api));
 app.use(koaMount('/admin', admin));
 

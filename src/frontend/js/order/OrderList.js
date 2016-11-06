@@ -1,17 +1,31 @@
 import React, { PropTypes } from 'react';
 import compose from 'recompose/compose';
-import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import OrderItem from './OrderItem';
-import orderActions from './actions';
-import withFetchingOnMount from '../../../common/fetch/withFetchingOnMount';
+import withLoading from '../app/withLoading';
 import withWindowTitle from '../app/withWindowTitle';
+import OrderItemPropType from './propTypes';
+
+const orderListQuery = gql`
+query orders {
+    orders {
+        date
+        id
+        reference
+        status
+        total
+    }
+}
+`;
 
 const OrderList = ({ orders }) => (
     <div className="row orders-list">
         <div className="col-xs-12">
             <div className="list-group">
                 {orders.map(order => (
-                    <OrderItem key={order.id} {...order} />
+                    <OrderItem key={order.id} order={order} />
                 ))}
             </div>
         </div>
@@ -19,15 +33,13 @@ const OrderList = ({ orders }) => (
 );
 
 OrderList.propTypes = {
-    orders: PropTypes.arrayOf(PropTypes.shape(OrderItem.propTypes)),
+    orders: PropTypes.arrayOf(OrderItemPropType.order),
 };
-
-const dataSelector = state => state.order.list;
-const loadingSelector = state => state.order.loading;
-const mapStateToProps = state => ({ orders: state.order.list });
 
 export default compose(
     withWindowTitle('Orders'),
-    withFetchingOnMount(orderActions.list.request, { dataSelector, loadingSelector }),
-    connect(mapStateToProps)
+    graphql(orderListQuery, {
+        props: ({ data: { loading, orders } }) => ({ loading, orders }),
+    }),
+    withLoading((state, { loading, orders }) => loading || !orders)
 )(OrderList);

@@ -1,11 +1,11 @@
 import { PropTypes } from 'react';
 
-const ProductPropType = {
+export const ProductSchema = {
     description: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     reference: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
 };
 
-export default ProductPropType;
+export default PropTypes.shape(ProductSchema);

@@ -31,7 +31,7 @@ class UserNavbarItem extends Component {
 
 UserNavbarItem.propTypes = {
     signOut: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired, // eslint-disable-line
+    user: PropTypes.object.isRequired,
 };
 
 export default UserNavbarItem;

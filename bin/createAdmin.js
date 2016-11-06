@@ -1,9 +1,10 @@
-#!./node_modules/babel/bin/babel-node.js
-
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
 import co from 'co';
 import config from 'config';
 import { PgPool } from 'co-postgres-queries';
 import userRepositoryFactory from '../src/api/users/userModel';
+import uuid from 'uuid';
 
 const args = process.argv.slice(2);
 
@@ -12,6 +13,7 @@ co(function* () {
     const userRepository = userRepositoryFactory(pool);
 
     const user = yield userRepository.insertOne({
+        id: uuid.v4(),
         email: args[1],
         password: args[2],
     });

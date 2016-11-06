@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: off, max-len: off */
 import Koa from 'koa';
 import koaRoute from 'koa-route';
+import uuid from 'uuid';
 
 export const defaultMethods = {
     GET: 'managed',
@@ -9,15 +10,17 @@ export const defaultMethods = {
     DELETE: 'managed',
 };
 
+const generateId = () => uuid.v4();
+
 export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
-    initialize: async (ctx, next) => {
+    async initialize(ctx, next) {
         ctx.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
         ctx.queries = queriesFactory(ctx.client);
 
         await next();
     },
 
-    get: async (ctx, next) => {
+    async get(ctx, next) {
         if (ctx.availableMethods.GET) {
             const query = ctx.request.query;
             const excludedQueryParams = ['limit', 'offset', 'filter', '_sort', '_sortDir'];
@@ -29,6 +32,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
 
             ctx.body = await ctx.queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
             const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await ctx.queries.countAll()).count;
+
             ctx.set('X-Total-Count', totalCount);
             ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }
@@ -38,7 +42,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    getById: async (ctx, id, next) => {
+    async getById(ctx, id, next) {
         if (ctx.availableMethods.GET) {
             try {
                 ctx.body = await ctx.queries.selectOne({ id });
@@ -55,9 +59,11 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    post: async (ctx, next) => {
+    async post(ctx, next) {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
+            data.id = data.id || generateId();
+
             ctx.body = await ctx.queries.insertOne(data);
         }
 
@@ -66,10 +72,12 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    postMulti: async (ctx, next) => {
+    async postMulti(ctx, next) {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await ctx.queries.batchInsert(data);
+            ctx.body = await ctx.queries.batchInsert(data.map(d => Object.assign({}, d, {
+                id: d.id || generateId(),
+            })));
         }
 
         if (ctx.availableMethods.POST !== 'managed') {
@@ -77,7 +85,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    delete: async (ctx, id, next) => {
+    async delete(ctx, id, next) {
         if (ctx.availableMethods.DELETE) {
             try {
                 ctx.body = await ctx.queries.deleteOne(id);
@@ -95,7 +103,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    deleteMulti: async (ctx, next) => {
+    async deleteMulti(ctx, next) {
         if (ctx.availableMethods.DELETE) {
             const ids = ctx.query.id;
             ctx.body = await ctx.queries.batchDelete(ids);
@@ -105,7 +113,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
         }
     },
 
-    put: async (ctx, id, next) => {
+    async put(ctx, id, next) {
         if (ctx.availableMethods.PUT) {
             const data = ctx.data || ctx.request.body;
             let modifiedEntity;

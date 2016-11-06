@@ -23,7 +23,7 @@ const app = new Koa();
 
 app.use(methodFilter(['GET', 'POST', 'DELETE']));
 
-app.use(tokenCheckerMiddleware);
+app.use(tokenCheckerMiddleware(true));
 
 app.use(async (ctx, next) => {
     ctx.userData = await userFactory(ctx.client).findByEmail(ctx.user.email);
@@ -39,7 +39,7 @@ app.use(async (ctx, next) => {
 });
 
 const sanitizeProduct = async (p, productQueries) => {
-    const product = await productQueries.selectOneById({ id: p.id });
+    const product = await productQueries.selectOne({ id: p.id });
     return Object.assign({}, p, product);
 };
 
@@ -53,7 +53,7 @@ app.use(koaRoute.post('/', async (ctx, next) => {
         customer_id: ctx.userData.id,
         date: new Date(),
         products,
-        reference: uuid.v1(),
+        reference: uuid.v4(),
         status: OrderStatus.pending,
         total,
     };

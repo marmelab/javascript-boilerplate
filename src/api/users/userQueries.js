@@ -2,14 +2,13 @@ import { crudQueries } from 'co-postgres-queries';
 
 const tableName = 'user_account';
 
-const fields = [
+const exposedFields = [
+    'id',
     'email',
     'password',
 ];
 
-const exposedFields = ['id'].concat(fields);
-
-const userQueries = crudQueries(tableName, fields, ['id'], exposedFields);
+const userQueries = crudQueries(tableName, exposedFields, ['id'], exposedFields);
 
 const findByEmail = (email) => {
     const sql = `

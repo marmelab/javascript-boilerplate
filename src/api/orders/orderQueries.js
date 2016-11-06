@@ -2,7 +2,8 @@ import { crudQueries, selectPageQuery } from 'co-postgres-queries';
 
 const tableName = 'user_order';
 
-const fields = [
+const exposedFields = [
+    'id',
     'reference',
     'date',
     'customer_id',
@@ -10,9 +11,7 @@ const fields = [
     'status',
 ];
 
-const exposedFields = ['id'].concat(fields);
-
-const orderQueries = crudQueries(tableName, fields, ['id'], exposedFields);
+const orderQueries = crudQueries(tableName, exposedFields, ['id'], exposedFields);
 
 const selectByUserId = selectPageQuery(tableName, ['customer_id'], exposedFields);
 

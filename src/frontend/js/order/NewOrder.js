@@ -1,72 +1,95 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import numeral from 'numeral';
-import orderActions from './actions';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import { routerActions } from 'react-router-redux';
+
 import NewOrderItem from './NewOrderItem';
 import {
+    clearShoppingCart as clearShoppingCartAction,
     removeProductFromShoppingCart as removeProductFromShoppingCartAction,
     setShoppingCartItemQuantity as setShoppingCartItemQuantityAction,
 } from '../shoppingcart/actions';
-import ProductPropType from '../product/productPropTypes';
+
+import { navigateToSignIn as navigateToSignInAction } from '../user/actions';
+
 import withWindowTitle from '../app/withWindowTitle';
-
-const mapStateToProps = state => ({
-    ...state.shoppingCart,
-    loading: state.order.loading,
-});
-
-const mapDispatchToProps = ({
-    placeNewOrder: orderActions.order.request,
-    removeProductFromShoppingCart: removeProductFromShoppingCartAction,
-    setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
-});
+import OrderItemPropType from './propTypes';
 
 class NewOrder extends Component {
+    constructor() {
+        super();
+        this.state = { error: false, submitting: false };
+    }
+
     placeNewOrder = () => {
-        this.props.placeNewOrder(this.props.products);
+        const { clearShoppingCart, navigateToOrder, placeNewOrder } = this.props;
+
+        this.setState({ submitting: true }, () => {
+            placeNewOrder(this.props.items)
+                .then(({ data: { postOrder: { error, order } } }) => {
+                    this.setState({ submitting: false });
+
+                    if (error) {
+                        this.setState({ error: true, submitting: false });
+                        return;
+                    }
+
+                    clearShoppingCart();
+                    navigateToOrder(order.id);
+                })
+                .catch(() => {
+                    this.setState({ error: true, submitting: false });
+                });
+        });
     }
 
     render() {
         const {
-            loading,
-            products,
+            items,
             removeProductFromShoppingCart,
             setShoppingCartItemQuantity,
             total,
         } = this.props;
 
+        const { error, submitting } = this.state;
+
         return (
             <div className="shopping-cart list-group">
                 <h2>New order</h2>
-                {products.length === 0 &&
+                {items.length === 0 &&
                     <div className="list-group-item">Your shopping cart is empty</div>
                 }
-                {products.map(product => (
+                {items.map(item => (
                     <NewOrderItem
-                        key={product.id}
-                        {...product}
+                        key={item.id}
+                        item={item}
                         removeProductFromShoppingCart={removeProductFromShoppingCart}
                         setShoppingCartItemQuantity={setShoppingCartItemQuantity}
                     />
                 ))}
-                {products.length > 0 &&
+                {items.length > 0 &&
                     <div className="list-group-item text-xs-right lead">
                         TOTAL: {numeral(total).format('$0.00')}
                     </div>
                 }
                 <div className="list-group-item">
-                    {products.length > 0 && // bind is not cool but this will be fixed using recompose
+                    {items.length > 0 && // bind is not cool but this will be fixed using recompose
                         <button
                             onClick={this.placeNewOrder}
-                            disabled={loading}
+                            disabled={submitting}
                             className="btn btn-primary"
                         >
+                            {submitting && <i className="fa fa-spinner fa-spin" />}
                             Order
                         </button>
                     }
                     <Link to="/products" className="btn btn-link">Continue shopping</Link>
+                    {error && <p className="text-danger">An error occured while posting your order.</p>}
                 </div>
             </div>
         );
@@ -74,18 +97,57 @@ class NewOrder extends Component {
 }
 
 NewOrder.propTypes = {
-    loading: PropTypes.bool.isRequired,
+    clearShoppingCart: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(OrderItemPropType.item),
+    navigateToOrder: PropTypes.func.isRequired,
+    navigateToSignIn: PropTypes.func.isRequired,
     placeNewOrder: PropTypes.func.isRequired,
-    products: PropTypes.arrayOf(PropTypes.shape({
-        ...ProductPropType,
-        quantity: PropTypes.number.isRequired, // eslint-disable-line
-    })),
     removeProductFromShoppingCart: PropTypes.func.isRequired,
     setShoppingCartItemQuantity: PropTypes.func.isRequired,
     total: PropTypes.number.isRequired,
 };
 
+const postOrderQuery = gql`
+    mutation postOrder($products: [PostOrderItem]!) {
+        postOrder(products: $products) {
+            order { id }
+            error {
+                code
+                message
+                status
+            }
+        }
+    }
+`;
+
+const mapStateToProps = ({ shoppingCart: { products, total } }) => ({
+    items: products,
+    total,
+});
+
+const mapDispatchToProps = dispatch => ({
+    ...bindActionCreators({
+        clearShoppingCart: clearShoppingCartAction,
+        navigateToSignIn: navigateToSignInAction,
+        removeProductFromShoppingCart: removeProductFromShoppingCartAction,
+        setShoppingCartItemQuantity: setShoppingCartItemQuantityAction,
+    }, dispatch),
+    navigateToOrder: orderId => dispatch(routerActions.push(`/orders/${orderId}`)),
+});
+
 export default compose(
     withWindowTitle('New order'),
+    graphql(postOrderQuery, {
+        props: ({ mutate }) => ({
+            placeNewOrder: products => mutate({
+                variables: {
+                    products: products.map(p => ({
+                        id: p.id,
+                        quantity: p.quantity,
+                    })),
+                },
+            }),
+        }),
+    }),
     connect(mapStateToProps, mapDispatchToProps),
 )(NewOrder);

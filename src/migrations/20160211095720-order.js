@@ -1,9 +1,11 @@
+'use strict';
+
 exports.up = function (db, callback) {
     db.createTable('user_order', {
-        id: { type: 'int', primaryKey: true, autoIncrement: true },
+        id: { type: 'uuid', primaryKey: true },
         reference: { type: 'string' },
         date: { type: 'date' },
-        customer_id: { type: 'int' },
+        customer_id: { type: 'uuid' },
         total: { type: 'real' },
         status: { type: 'string' },
     }, callback);

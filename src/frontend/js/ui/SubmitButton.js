@@ -16,7 +16,7 @@ const SubmitButton = ({ children, className, error, submitting }) => (
 SubmitButton.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.node,
-    error: PropTypes.any, // eslint-disable-line
+    error: PropTypes.any,
     submitting: PropTypes.bool.isRequired,
 };
 

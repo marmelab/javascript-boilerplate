@@ -13,7 +13,7 @@ co(function* () {
 }).then(() => {
     console.log('Fixtures successfully loaded!');
     process.exit(0);
-}).catch((error) => {
+}).catch(error => {
     console.error(error, { trace: error.stack });
     process.exit(1);
 });

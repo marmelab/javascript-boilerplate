@@ -5,8 +5,10 @@ export const userActionTypes = {
     signIn: createFetchActionTypes('SIGN_IN'),
     signUp: createFetchActionTypes('SIGN_UP'),
     signOut: createFetchActionTypes('SIGN_OUT'),
-    storeUser: 'STORE_USER',
+    navigateToSignIn: 'NAVIGATE_TO_SIGN_IN',
 };
+
+export const navigateToSignIn = createAction(userActionTypes.navigateToSignIn);
 
 export const signIn = {
     request: createAction(userActionTypes.signIn.REQUEST, (previousRoute, credentials) => ({
