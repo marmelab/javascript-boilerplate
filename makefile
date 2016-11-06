@@ -158,7 +158,7 @@ test-admin-functional: reset-test-database load-test-fixtures ## Run the fronten
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-		--require=co-mocha \
+        --require=async-to-gen/register \
 		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/admin/e2e
