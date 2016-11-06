@@ -8,11 +8,13 @@ import { render } from 'react-dom';
 
 import Root from './Root';
 import rootReducer from './reducers';
+import sagas from './sagas';
 import apolloClient from './graphql';
 import configureStore from './configureStore';
 
 const store = configureStore(
     rootReducer({ apollo: apolloClient.reducer() }),
+    sagas(apolloClient),
     [apolloClient.middleware()]
 );
 

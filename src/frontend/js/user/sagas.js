@@ -1,5 +1,5 @@
 import { routerActions } from 'react-router-redux';
-import { takeEvery, takeLatest } from 'redux-saga';
+import { delay, takeEvery, takeLatest } from 'redux-saga';
 import { call, fork, put, select } from 'redux-saga/effects';
 import decodeJwt from 'jwt-decode';
 import { FAILURE } from '../../../common/fetch/createFetchActionTypes';
@@ -57,10 +57,12 @@ export const signUp = (fetchSaga, storeLocalUser) => function* signUpSaga({ payl
     }
 };
 
-export const signOut = removeLocalUser => function* signOutSaga() {
+export const signOut = (removeLocalUser, apolloClient) => function* signOutSaga() {
     yield call(removeLocalUser);
     yield put(signOutActions.success());
     yield put(routerActions.push('/'));
+    yield delay(50);
+    yield call(apolloClient.resetStore.bind(apolloClient));
 };
 
 export const handleUnauthorizedErrors = function* handleUnauthorizedErrorsSaga() {
@@ -86,8 +88,10 @@ function* watchSignUpRequest() {
     yield takeLatest(userActionTypes.signUp.REQUEST, saga);
 }
 
-function* watchSignOutRequest() {
-    yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi));
+function watchSignOutRequest(apolloClient) {
+    return function* () {
+        yield takeLatest(userActionTypes.signOut.REQUEST, signOut(removeLocalUserApi, apolloClient));
+    };
 }
 
 export const detectUnauthorizedErrorAction = ({ type, payload, result }) => {
@@ -106,10 +110,12 @@ function* watchUnauthorizedErrors() {
     yield takeEvery(detectUnauthorizedErrorAction, handleUnauthorizedErrors);
 }
 
-export default function* sagas() {
-    yield fork(watchNavigateToSignInRequest);
-    yield fork(watchSignInRequest);
-    yield fork(watchSignUpRequest);
-    yield fork(watchSignOutRequest);
-    yield fork(watchUnauthorizedErrors);
+export default function (apolloClient) {
+    return function* () {
+        yield fork(watchNavigateToSignInRequest);
+        yield fork(watchSignInRequest);
+        yield fork(watchSignUpRequest);
+        yield fork(watchSignOutRequest(apolloClient));
+        yield fork(watchUnauthorizedErrors);
+    };
 }

@@ -7,12 +7,12 @@ import gql from 'graphql-tag';
 import ProductItem from './ProductItem';
 import { addProductToShoppingCart } from '../shoppingcart/actions';
 import ProductPropType from './propTypes';
+import withLoading from '../app/withLoading';
 import withWindowTitle from '../app/withWindowTitle';
 
-const ProductList = ({ loading, orderProduct, products }) => (
+const ProductList = ({ orderProduct, products }) => (
     <div className="row product-list">
-        {loading && <i className="fa fa-spinner fa-spin" />}
-        {!loading && products.map(product => (
+        {products.map(product => (
             <div key={product.id} className="col-xs-12 col-md-6 col-lg-3">
                 <ProductItem {... { product, orderProduct }} />
             </div>
@@ -21,7 +21,6 @@ const ProductList = ({ loading, orderProduct, products }) => (
 );
 
 ProductList.propTypes = {
-    loading: PropTypes.bool.isRequired,
     products: PropTypes.arrayOf(ProductPropType),
     orderProduct: PropTypes.func.isRequired,
 };
@@ -47,5 +46,6 @@ export default compose(
     graphql(productListQuery, {
         props: ({ data: { loading, products } }) => ({ loading, products }),
     }),
+    withLoading((state, { loading, products }) => loading || !products),
     connect(undefined, mapDispatchToProps)
 )(ProductList);

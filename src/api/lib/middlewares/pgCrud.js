@@ -10,6 +10,8 @@ export const defaultMethods = {
     DELETE: 'managed',
 };
 
+const generateId = () => uuid.v4();
+
 export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     async initialize(ctx, next) {
         ctx.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
@@ -30,6 +32,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
 
             ctx.body = await ctx.queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
             const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await ctx.queries.countAll()).count;
+
             ctx.set('X-Total-Count', totalCount);
             ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }
@@ -61,7 +64,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
             const data = ctx.data || ctx.request.body;
             data.id = data.id || generateId();
 
-            ctx.body = await queries.insertOne(data);
+            ctx.body = await ctx.queries.insertOne(data);
         }
 
         if (ctx.availableMethods.POST !== 'managed') {
@@ -72,7 +75,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     async postMulti(ctx, next) {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await queries.batchInsert(data.map(d => Object.assign({}, d, {
+            ctx.body = await ctx.queries.batchInsert(data.map(d => Object.assign({}, d, {
                 id: d.id || generateId(),
             })));
         }

@@ -1,14 +1,14 @@
 /* globals APP_NAME */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ActionExit from 'material-ui/svg-icons/action/exit-to-app';
 import AppBar from 'material-ui/AppBar';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
-import ActionExit from 'material-ui/svg-icons/action/exit-to-app';
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Notification from 'admin-on-rest/lib/mui/layout/Notification';
+
+import LayoutTitle from './LayoutTitle';
 import Menu from './Menu';
 import { signOut as signOutAction } from './user/actions';
 
@@ -17,18 +17,12 @@ const LayoutWithMenu = ({ isLoading, children, user: { email }, signOut }) => {
         ? <CircularProgress color="#fff" size={30} thickness={2} style={{ margin: 8 }} />
         : <ActionExit />;
 
-    const Title = (
-        <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>
-            {`${APP_NAME} - Administration`} - {email}
-        </Link>
-    );
-
     const RightElement = <FlatButton label="Sign out" onClick={signOut} icon={LoadingIcon} />;
 
     return (
         <MuiThemeProvider>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                <AppBar title={Title} iconElementRight={RightElement} />
+                <AppBar title={<LayoutTitle subtitle={email} />} iconElementRight={RightElement} />
                 <div className="body" style={{ display: 'flex', flex: '1', backgroundColor: '#edecec' }}>
                     <div style={{ flex: 1 }}>{children}</div>
                     <Menu />
@@ -42,9 +36,8 @@ const LayoutWithMenu = ({ isLoading, children, user: { email }, signOut }) => {
 LayoutWithMenu.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     children: PropTypes.node,
-    route: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
     signOut: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

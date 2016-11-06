@@ -2,11 +2,10 @@ import { hashHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import sagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
-export default function configureStore(rootReducer, middlewares, initialState) {
+export default function configureStore(rootReducer, sagas, middlewares, initialState) {
     const allMiddlewares = applyMiddleware(
         ...middlewares,
         sagaMiddleware,

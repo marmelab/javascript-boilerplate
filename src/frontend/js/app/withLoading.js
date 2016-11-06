@@ -2,27 +2,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import createEagerFactory from 'recompose/createEagerFactory';
-import Helmet from 'react-helmet';
 
-export default titleSelector => (BaseComponent) => {
+export default loadingSelector => (BaseComponent) => {
     // This will return the component correctly initialized
     const factory = createEagerFactory(BaseComponent);
 
     const mapStateToProps = (state, ownProps) => ({
-        title: (typeof titleSelector === 'function') ? titleSelector(state, ownProps) : titleSelector,
+        loading: (typeof loadingSelector === 'function') ? loadingSelector(state, ownProps) : loadingSelector,
     });
 
-    const WithWindowTitle = ({ title, ...props }) => (
+    const WithWindowTitle = ({ loading, ...props }) => (loading ? (
         <div className="row">
             <div className="col-xs-12">
-                <Helmet title={APP_NAME + (title ? ` - ${title}` : '')} />
-                {factory({ ...props })}
+                <i className="fa fa-spinner fa-spin" />
             </div>
         </div>
-    );
+    ) : factory({ ...props }));
 
     WithWindowTitle.propTypes = {
-        title: PropTypes.string,
+        loading: PropTypes.bool,
     };
 
     return connect(mapStateToProps)(WithWindowTitle);

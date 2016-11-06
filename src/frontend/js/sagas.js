@@ -1,6 +1,8 @@
 import { fork } from 'redux-saga/effects';
 import userSagas from './user/sagas';
 
-export default function* () {
-    yield fork(userSagas);
+export default function (apolloClient) {
+    return function* () {
+        yield fork(userSagas(apolloClient));
+    };
 }
