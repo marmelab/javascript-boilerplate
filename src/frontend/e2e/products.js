@@ -15,7 +15,7 @@ describe('Products', function () {
     });
 
     it('user should see the product details', async () => {
-        driver.get('http://localhost:9080/#/products/1');
+        driver.get('http://localhost:9080/#/products/ad7cd2b8-9bf7-42ce-bad7-3f2ca39e072d');
         await driver.wait(until.elementLocated(By.css('.product-details')));
 
         expect(await driver.findElement(By.css('.img-thumbnail')).getAttribute('src')).toEqual('http://lorempixel.com/400/400/');
