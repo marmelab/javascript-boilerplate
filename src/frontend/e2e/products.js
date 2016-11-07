@@ -6,14 +6,14 @@ import driver from '../../common/e2e/lib/chromeDriver';
 describe('Products', function () {
     this.timeout(15000);
 
-    it('user should see the product list', async function () {
+    it('user should see the product list', async () => {
         driver.get('http://localhost:9080/#/products');
         await driver.wait(until.elementLocated(By.css('.product-item')));
         const productItems = await driver.findElements(By.css('.product-item'));
         expect(productItems.length).toEqual(3);
     });
 
-    it('user should see the product details', async function () {
+    it('user should see the product details', async () => {
         driver.get('http://localhost:9080/#/products/1');
         await driver.wait(until.elementLocated(By.css('.product-details')));
 

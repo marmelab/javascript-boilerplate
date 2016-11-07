@@ -46,7 +46,7 @@ class SignIn extends Component {
         const { signInError, handleSubmit, submitting } = this.props;
 
         return (
-            <Card style={{ margin: '2em' }}>
+            <Card className="sign-in" style={{ margin: '2em' }}>
                 <CardTitle title="Sign in" />
                 {signInError && <Snackbar open autoHideDuration={4000} message={signInError.message} />}
 
