@@ -155,14 +155,12 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 
 test-admin-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
 	NODE_ENV=test make build-admin
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
+        --require=reify \
         --require=async-to-gen/register \
-		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/admin/e2e
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
