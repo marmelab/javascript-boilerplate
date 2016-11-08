@@ -4,11 +4,10 @@ import expect from 'expect';
 import driver from '../../common/e2e/lib/chromeDriver';
 
 describe('Products', function () {
-    this.timeout(15000);
+    this.timeout(150000);
 
     it('user should see the product list', async () => {
-        driver.get('http://localhost:9080/#/products');
-        await driver.wait(until.elementLocated(By.css('.product-item')));
+        await driver.get('http://localhost:9080/#/products');
         const productItems = await driver.findElements(By.css('.product-item'));
         expect(productItems.length).toEqual(3);
     });

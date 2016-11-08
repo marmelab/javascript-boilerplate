@@ -7,9 +7,7 @@ import staticServer from '../../common/e2e/lib/staticServer';
 
 before(async () => {
     this.apiServer = http.createServer(api.callback());
-    await function startApi(cb) {
-        this.apiServer.listen(3010, cb);
-    };
+    this.apiServer.listen(3010);
     staticServer(
         path.join(__dirname, '../../../build/frontend'),
         9080

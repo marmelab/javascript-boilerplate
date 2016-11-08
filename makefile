@@ -31,7 +31,7 @@ ifeq ($(NODE_ENV), development)
 endif
 
 install-selenium:
-	echo "Installing Selenium server"
+	@echo "Installing Selenium server"
 	./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.24
 
 install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
@@ -83,32 +83,32 @@ deploy: deploy-api deploy-frontends ## Deploy the apps (specify NODE_ENV for cor
 # Development ==================================================================
 run-dev: ## Run all applications in development environment (using webpack-dev-server)
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
-	echo "All apps started and running"
-	echo "  API:          http://localhost:3000"
-	echo "  Frontend App: http://localhost:8080"
-	echo "  Admin app:    http://localhost:8081"
-	echo "Type 'make stop-dev' to stop the apps"
+	@echo "All apps started and running"
+	@echo "  API:          http://localhost:3000"
+	@echo "  Frontend App: http://localhost:8080"
+	@echo "  Admin app:    http://localhost:8081"
+	@echo "Type 'make stop-dev' to stop the apps"
 
 restart-dev: ## Restart all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
-	echo "All apps restarted"
+	@echo "All apps restarted"
 
 stop-dev: ## Stop all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
-	echo "All apps stopped"
+	@echo "All apps stopped"
 
 restart-admin-dev: ## Restart the admin in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_admin-dev
-	echo "Webpack dev restarted"
+	@echo "Webpack dev restarted"
 
 restart-api-dev: ## Restart the API in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
-	echo "API dev restarted"
+	@echo "API dev restarted"
 
 restart-frontend-dev: ## Restart the frontend in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
-	echo "Webpack dev restarted"
+	@echo "Webpack dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
 	node ./src/api/index.js
@@ -146,6 +146,22 @@ log-frontend-test: ## Display the logs of the frontend with PM2 in test environm
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
 
 # Tests ========================================================================
+
+run-debug-functionnal: reset-test-database ## Run all applications in test environment
+	NODE_ENV=test ${MAKE} build-admin
+	NODE_ENV=test ${MAKE} build-frontend
+	NODE_ENV=test ${MAKE} load-fixtures
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+	@echo "All apps for tests started and running"
+	@echo "  API:          http://localhost:3010"
+	@echo "  Frontend App: http://localhost:9080"
+	@echo "  Admin app:    http://localhost:9081"
+	@echo "Type 'make stop-debug-functionnal' to stop the apps"
+
+stop-debug-functionnal: ## Stop all applications in development environment
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+	@echo "All apps stopped"
+
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
 		--require=async-to-gen/register \
@@ -153,12 +169,14 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/admin/js/**/*.spec.js"
 
-test-admin-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
-	NODE_ENV=test make build-admin
+test-admin-functional: ## Run the frontend applications functional tests
+	NODE_ENV=test ${MAKE} build-admin
+	NODE_ENV=test ${MAKE} reset-test-database
+	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-        --require=reify \
-        --require=async-to-gen/register \
+		--require=reify \
+		--require=async-to-gen/register \
 		--recursive \
 		./src/admin/e2e
 
@@ -187,17 +205,16 @@ test-frontend-unit: ## Run the frontend application unit tests with mocha
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/frontend/js/**/*.spec.js"
 
-test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
-	NODE_ENV=test make build-frontend
+test-frontend-functional: ## Run the frontend applications functional tests
+	NODE_ENV=test ${MAKE} build-frontend
+	NODE_ENV=test ${MAKE} reset-test-database
+	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-        --require=reify \
+		--require=reify \
 		--require=async-to-gen/register \
 		--recursive \
 		./src/frontend/e2e
-
-load-test-fixtures: ## Initialize the test database with fixtures
-	NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 
 test: ## Run all tests
 	-cp -n ./config/test-dist.js ./config/test.js
