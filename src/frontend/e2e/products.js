@@ -4,7 +4,7 @@ import expect from 'expect';
 import driver from '../../common/e2e/lib/chromeDriver';
 
 describe('Products', function () {
-    this.timeout(150000);
+    this.timeout(15000);
 
     it('user should see the product list', async () => {
         await driver.get('http://localhost:9080/#/products');

@@ -24,14 +24,14 @@ ifeq ($(NODE_ENV), development)
 endif
 
 install-npm-dependencies:
-	@echo "Installing Node dependencies for environment $(NODE_ENV)"
+	echo "Installing Node dependencies for environment $(NODE_ENV)"
 	npm install $(if $(filter production staging,$(NODE_ENV)),--production,)
 ifeq ($(NODE_ENV), development)
 	make install-selenium
 endif
 
 install-selenium:
-	@echo "Installing Selenium server"
+	echo "Installing Selenium server"
 	./node_modules/.bin/selenium-standalone install --version=2.50.1 --drivers.chrome.version=2.24
 
 install: copy-conf install-npm-dependencies install-selenium ## Install npm dependencies for the api, admin, and frontend apps
@@ -83,32 +83,32 @@ deploy: deploy-api deploy-frontends ## Deploy the apps (specify NODE_ENV for cor
 # Development ==================================================================
 run-dev: ## Run all applications in development environment (using webpack-dev-server)
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/dev.json
-	@echo "All apps started and running"
-	@echo "  API:          http://localhost:3000"
-	@echo "  Frontend App: http://localhost:8080"
-	@echo "  Admin app:    http://localhost:8081"
-	@echo "Type 'make stop-dev' to stop the apps"
+	echo "All apps started and running"
+	echo "  API:          http://localhost:3000"
+	echo "  Frontend App: http://localhost:8080"
+	echo "  Admin app:    http://localhost:8081"
+	echo "Type 'make stop-dev' to stop the apps"
 
 restart-dev: ## Restart all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
-	@echo "All apps restarted"
+	echo "All apps restarted"
 
 stop-dev: ## Stop all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/dev.json
-	@echo "All apps stopped"
+	echo "All apps stopped"
 
 restart-admin-dev: ## Restart the admin in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_admin-dev
-	@echo "Webpack dev restarted"
+	echo "Webpack dev restarted"
 
 restart-api-dev: ## Restart the API in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_api-dev
-	@echo "API dev restarted"
+	echo "API dev restarted"
 
 restart-frontend-dev: ## Restart the frontend in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 restart bpm_frontend-dev
-	@echo "Webpack dev restarted"
+	echo "Webpack dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
 	node ./src/api/index.js
@@ -152,15 +152,15 @@ run-debug-functionnal: reset-test-database ## Run all applications in test envir
 	NODE_ENV=test ${MAKE} build-frontend
 	NODE_ENV=test ${MAKE} load-fixtures
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
-	@echo "All apps for tests started and running"
-	@echo "  API:          http://localhost:3010"
-	@echo "  Frontend App: http://localhost:9080"
-	@echo "  Admin app:    http://localhost:9081"
-	@echo "Type 'make stop-debug-functionnal' to stop the apps"
+	echo "All apps for tests started and running"
+	echo "  API:          http://localhost:3010"
+	echo "  Frontend App: http://localhost:9080"
+	echo "  Admin app:    http://localhost:9081"
+	echo "Type 'make stop-debug-functionnal' to stop the apps"
 
 stop-debug-functionnal: ## Stop all applications in development environment
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
-	@echo "All apps stopped"
+	echo "All apps stopped"
 
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
