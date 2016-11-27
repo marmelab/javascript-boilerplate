@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 import FormGroup from '../ui/FormGroup';
 
-export default (id, label) => (field) => {
-    const { meta: { touched, error } } = field;
+export default (field) => {
+    const { meta: { touched, error }, id, label } = field;
 
     return (
         <FormGroup key={field.name} field={field}>
