@@ -27,14 +27,13 @@ const signInSchema = buildSchema({
     },
 });
 
-const renderInput = (field) => {
-    const { meta: { touched, error } = {}, input: { ...inputProps }, ...props } = field;
-    return(<TextField
+const renderInput = ({ meta: { touched, error } = {}, input: { ...inputProps }, ...props }) =>
+    <TextField
         errorText={touched && error}
         {...inputProps}
         {...props}
-        fullWidth/>);
-};
+        fullWidth
+    />;
 
 class SignIn extends Component {
     signIn = (values) => {
