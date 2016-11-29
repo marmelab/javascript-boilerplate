@@ -27,15 +27,13 @@ const signInSchema = buildSchema({
     },
 });
 
-const renderInput = (floatingLabelText, type, hintText) =>
-    ({ meta: { touched, error } = {}, input: { ...inputProps }, ...props }) => // eslint-disable-line react/prop-types
-        <TextField
-            errorText={touched && error}
-            {...{ floatingLabelText, type, hintText }}
-            {...inputProps}
-            {...props}
-            fullWidth
-        />;
+const renderInput = ({ meta: { touched, error } = {}, input: { ...inputProps }, ...props }) =>
+    <TextField
+        errorText={touched && error}
+        {...inputProps}
+        {...props}
+        fullWidth
+    />;
 
 class SignIn extends Component {
     signIn = (values) => {
@@ -55,13 +53,19 @@ class SignIn extends Component {
                         <div>
                             <Field
                                 name="email"
-                                component={renderInput('Email', 'email', 'john@doe.me')}
+                                component={renderInput}
+                                floatingLabelText="Email"
+                                type="email"
+                                hintText="john@doe.me"
                             />
                         </div>
                         <div>
                             <Field
                                 name="password"
-                                component={renderInput('Password', 'password', '5upa_dupa_pwd')}
+                                component={renderInput}
+                                floatingLabelText="Password"
+                                type="password"
+                                hintText="5upa_dupa_pwd"
                             />
                         </div>
                     </div>

@@ -49,13 +49,17 @@ class SignIn extends Component {
                             <form onSubmit={handleSubmit(this.signIn)}>
                                 <Field
                                     name="email"
-                                    component={renderInput('signin_email', 'Email')}
+                                    component={renderInput}
                                     type="email"
+                                    id="signin_email"
+                                    label="Email"
                                 />
                                 <Field
                                     name="password"
-                                    component={renderInput('signin_password', 'Password')}
+                                    component={renderInput}
                                     type="password"
+                                    id="signin_password"
+                                    label="Password"
                                 />
                                 <BigSubmitButton error={signInError || submitFailed} submitting={submitting}>
                                     Sign in

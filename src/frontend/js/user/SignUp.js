@@ -61,16 +61,22 @@ class SignUp extends Component {
                                     name="email"
                                     component={renderInput}
                                     type="email"
+                                    id="signup-email"
+                                    label="Email"
                                 />
                                 <Field
                                     name="password"
                                     component={renderInput}
                                     type="password"
+                                    id="signup-password"
+                                    label="Password"
                                 />
                                 <Field
                                     name="confirmPassword"
                                     component={renderInput}
                                     type="password"
+                                    id="signup-confirm-password"
+                                    label="Confirm password"
                                 />
 
                                 <BigSubmitButton error={signUpError || submitFailed} submitting={submitting}>
