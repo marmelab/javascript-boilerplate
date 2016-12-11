@@ -16,17 +16,17 @@ describe('/api/orders', () => {
     let db;
     let pool;
 
-    before(function* addFixtures() {
+    before(async () => {
         pool = new PgPool(config.apps.api.db);
-        db = yield pool.connect();
+        db = await pool.connect();
         fixtureLoader = fixturesFactory(db);
 
-        yield fixtureLoader.loadDefaultFixtures();
+        await fixtureLoader.loadDefaultFixtures();
         const userRepository = userFactory(db);
-        user = yield userRepository.findByEmail('user1@marmelab.io');
-        userToken = yield fixtureLoader.getTokenFor('user1@marmelab.io');
-        userCookieToken = yield fixtureLoader.getCookieTokenFor('user1@marmelab.io');
-        yield orderFactory(db).insertOne({
+        user = await userRepository.findByEmail('user1@marmelab.io');
+        userToken = await fixtureLoader.getTokenFor('user1@marmelab.io');
+        userCookieToken = await fixtureLoader.getCookieTokenFor('user1@marmelab.io');
+        await orderFactory(db).insertOne({
             reference: 'ref1',
             date: new Date(),
             customer_id: user.id,
@@ -37,32 +37,32 @@ describe('/api/orders', () => {
     });
 
     describe('GET', () => {
-        it('should require authentification', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/api/orders',
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification without cookie token', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification without cookie token', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/api/orders',
             }, userToken);
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification with only cookie token', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification with only cookie token', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/api/orders',
             }, null, { token: userCookieToken });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should return all connected user\'s orders', function* () {
-            const { statusCode, body } = yield request({
+        it('should return all connected user\'s orders', async () => {
+            const { statusCode, body } = await request({
                 url: '/api/orders',
             }, userToken, { token: userCookieToken });
 
@@ -81,8 +81,8 @@ describe('/api/orders', () => {
     });
 
     describe('POST', () => {
-        it('should require authentification', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -94,8 +94,8 @@ describe('/api/orders', () => {
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification without cookie token', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification without cookie token', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -106,8 +106,8 @@ describe('/api/orders', () => {
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification with only cookie token', function* () {
-            const { statusCode, body } = yield request({
+        it('should require authentification with only cookie token', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -118,10 +118,10 @@ describe('/api/orders', () => {
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should create a order', function* () {
-            let userOrders = yield orderFactory(db).selectByUserId(user.id);
+        it('should create a order', async () => {
+            let userOrders = await orderFactory(db).selectByUserId(user.id);
             expect(userOrders.length).toEqual(1);
-            const { statusCode, body } = yield request({
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/orders',
                 body: {
@@ -131,14 +131,14 @@ describe('/api/orders', () => {
                 },
             }, userToken, { token: userCookieToken });
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = yield orderFactory(db).selectByUserId(user.id);
+            userOrders = await orderFactory(db).selectByUserId(user.id);
             expect(userOrders.length).toEqual(2);
         });
     });
 
     describe('PUT', () => {
-        it('should not allow PUT request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow PUT request', async () => {
+            const { statusCode, body } = await request({
                 method: 'PUT',
                 url: '/api/orders',
             });
@@ -146,8 +146,8 @@ describe('/api/orders', () => {
         });
     });
 
-    after(function* removeFixtures() {
-        yield fixtureLoader.removeAllFixtures();
+    after(async () => {
+        await fixtureLoader.removeAllFixtures();
         db.release();
         pool.end();
     });

@@ -11,17 +11,17 @@ describe('/api/sign-in', () => {
     let db;
     let pool;
 
-    before(function* addFixtures() {
+    before(async () => {
         pool = new PgPool(config.apps.api.db);
-        db = yield pool.connect();
+        db = await pool.connect();
         fixtureLoader = fixturesFactory(db);
 
-        yield fixtureLoader.loadDefaultFixtures();
+        await fixtureLoader.loadDefaultFixtures();
     });
 
     describe('GET', () => {
-        it('should not allow GET request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow GET request', async () => {
+            const { statusCode, body } = await request({
                 method: 'PUT',
                 url: '/api/sign-in',
             });
@@ -30,8 +30,8 @@ describe('/api/sign-in', () => {
     });
 
     describe('POST', () => {
-        it('should return 401 with an empty email and password', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 401 with an empty email and password', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -41,8 +41,8 @@ describe('/api/sign-in', () => {
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
-        it('should return 401 with an empty email', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 401 with an empty email', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -52,8 +52,8 @@ describe('/api/sign-in', () => {
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
-        it('should return 401 with an empty password', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 401 with an empty password', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -63,8 +63,8 @@ describe('/api/sign-in', () => {
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
-        it('should return 401 with a wrong email', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 401 with a wrong email', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -74,8 +74,8 @@ describe('/api/sign-in', () => {
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
-        it('should return 401 with a wrong password', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 401 with a wrong password', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -85,8 +85,8 @@ describe('/api/sign-in', () => {
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
-        it('should return 200 with a valid email and password', function* () {
-            const { statusCode, body } = yield request({
+        it('should return 200 with a valid email and password', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api/sign-in',
                 body: {
@@ -98,8 +98,8 @@ describe('/api/sign-in', () => {
         });
     });
     describe('PUT', () => {
-        it('should not allow PUT request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow PUT request', async () => {
+            const { statusCode, body } = await request({
                 method: 'PUT',
                 url: '/api/sign-in',
             });
@@ -107,8 +107,8 @@ describe('/api/sign-in', () => {
         });
     });
     describe('DELETE', () => {
-        it('should not allow DELETE request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow DELETE request', async () => {
+            const { statusCode, body } = await request({
                 method: 'DELETE',
                 url: '/api/sign-in',
             });
@@ -116,8 +116,8 @@ describe('/api/sign-in', () => {
         });
     });
 
-    after(function* clearFixtures() {
-        yield fixtureLoader.removeAllFixtures();
+    after(async () => {
+        await fixtureLoader.removeAllFixtures();
         db.release();
         pool.end();
     });

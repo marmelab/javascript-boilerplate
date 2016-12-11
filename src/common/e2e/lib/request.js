@@ -3,7 +3,7 @@ import request from 'request';
 import app from '../../../api';
 
 export default function myRequest(params, authToken = null, cookies = {}) {
-    return (callback) => {
+    return new Promise((resolve, reject) => {
         const port = process.env.NODE_PORT || 3010;
         const portOrigin = process.env.NODE_PORT_ORIGIN || 8081;
         const baseUrl = `http://localhost:${port}`;
@@ -29,7 +29,9 @@ export default function myRequest(params, authToken = null, cookies = {}) {
         baseRequest(params, (error, response) => {
             server.close();
 
-            callback(error, response);
+            if (error) return reject(error);
+
+            return resolve(response);
         });
-    };
+    });
 }
