@@ -1,4 +1,4 @@
-import { crudQueries } from 'co-postgres-queries';
+import { crudQueries, selectOneQuery } from 'co-postgres-queries';
 
 const tableName = 'user_account';
 
@@ -21,4 +21,6 @@ const findByEmail = (email) => {
     return { sql, parameters: { email } };
 };
 
-export default Object.assign(userQueries, { findByEmail });
+const selectOneById = selectOneQuery(tableName, ['id'], exposedFields);
+
+export default Object.assign(userQueries, { findByEmail, selectOneById });

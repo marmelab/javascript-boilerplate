@@ -8,7 +8,7 @@ import tokenCheckerMiddleware from './lib/middlewares/tokenChecker';
 import authenticateAdminRoutes from './authentication/authenticateAdminRoutes';
 import productAdminApiRoutes from './products/productAdminApiRoutes';
 import orderAdminApiRoutes from './orders/orderAdminApiRoutes';
-import orderProductAdminApiRoutes from './order-products/orderAdminApiRoutes';
+import orderProductAdminApiRoutes from './order-products/orderProductAdminApiRoutes';
 
 const app = new Koa();
 

@@ -5,16 +5,16 @@ import uuid from 'uuid';
 import crypto from 'crypto';
 
 import data from '../fixtures/demo_fixtures.json';
-import productFactory from '../../../api/products/productModel';
-import userFactory from '../../../api/users/userModel';
+import productRepositoryFactory from '../../../api/products/productRepository';
+import userRepositoryFactory from '../../../api/users/userRepository';
 
 export default function (client) {
-    const productQueries = productFactory(client);
-    const userQueries = userFactory(client);
+    const productRepository = productRepositoryFactory(client);
+    const userRepository = userRepositoryFactory(client);
 
     async function loadDefaultFixtures() {
-        await productQueries.batchInsert(data.products);
-        await userQueries.batchInsert(data.users);
+        await productRepository.batchInsert(data.products);
+        await userRepository.batchInsert(data.users);
     }
 
     async function removeAllFixtures() {
@@ -24,8 +24,7 @@ export default function (client) {
     }
 
     async function getTokenFor(email) {
-        // const causes an error! don't know why
-        const user = await userQueries.findByEmail(email);
+        const user = await userRepository.findByEmail(email);
         delete user.password;
 
         return jwt.sign(user, config.apps.api.security.jwt.privateKey);
@@ -40,7 +39,6 @@ export default function (client) {
     }
 
     async function addProduct(productData) {
-        // const causes an error! don't know why
         const defaultProductData = {
             reference: uuid.v1(),
             width: 60,
@@ -52,8 +50,7 @@ export default function (client) {
             stock: faker.random.number(),
         };
 
-        // ES7, in Babel it is experimental stage 2 and enabled by default
-        return await productQueries.insertOne(Object.assign({}, defaultProductData, productData));
+        return await productRepository.insertOne(Object.assign({}, defaultProductData, productData));
     }
 
     return {

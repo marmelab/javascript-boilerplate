@@ -5,7 +5,8 @@ import koaRoute from 'koa-route';
 
 import authenticate from './authenticate';
 import rateLimiterMiddleware from '../lib/middlewares/rateLimiter';
-import userRepositoryFactory from '../users/userModel';
+import userRepositoryFactory from '../users/userRepository';
+import sendAuthenticatedResponse from './sendAuthenticatedResponse';
 
 const app = new Koa();
 let userRepository;
@@ -20,14 +21,14 @@ app.use(async (ctx, next) => {
 
 app.use(koaRoute.post('/sign-in', async (ctx) => {
     const { email, password } = ctx.request.body;
-    const user = await userRepository.authenticate(email, password);
+    const user = await authenticate(userRepository)(email, password);
     if (!user) {
         ctx.status = 401;
         ctx.body = 'Invalid credentials.';
         return;
     }
 
-    authenticate(ctx, user, config.apps.api.security);
+    sendAuthenticatedResponse(ctx, user, config.apps.api.security);
 }));
 
 app.use(koaRoute.post('/sign-up', async (ctx) => {

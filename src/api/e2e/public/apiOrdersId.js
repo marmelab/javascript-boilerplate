@@ -7,14 +7,14 @@ import { PgPool } from 'co-postgres-queries';
 import request from '../../../common/e2e/lib/request';
 import fixturesFactory from '../../../common/e2e/lib/fixturesLoader';
 
-import userFactory from '../../users/userModel';
-import orderFactory from '../../orders/orderModel';
+import userRepositoryFactory from '../../users/userRepository';
+import orderRepositoryFactory from '../../orders/orderRepository';
 
 describe('/api/orders/{id}', () => {
     let fixtureLoader;
     let db;
     let pool;
-    let orderQueries;
+    let orderRepository;
     let user1;
     let user2;
     let orderUser1;
@@ -28,29 +28,15 @@ describe('/api/orders/{id}', () => {
         fixtureLoader = fixturesFactory(db);
 
         await fixtureLoader.loadDefaultFixtures();
-        const userRepository = userFactory(db);
-        orderQueries = orderFactory(db);
+        const userRepository = userRepositoryFactory(db);
+        orderRepository = orderRepositoryFactory(db);
         user1 = await userRepository.findByEmail('user1@marmelab.io');
         user2 = await userRepository.findByEmail('user2@marmelab.io');
         user1Token = await fixtureLoader.getTokenFor('user1@marmelab.io');
         user1CookieToken = await fixtureLoader.getCookieTokenFor('user1@marmelab.io');
         [orderUser1, orderUser2] = await Promise.all([
-            orderQueries.insertOne({
-                reference: 'ref1',
-                date: new Date(),
-                customer_id: user1.id,
-                total: 6.8,
-                status: 'valid',
-                products: [],
-            }),
-            orderQueries.insertOne({
-                reference: 'ref1',
-                date: new Date(),
-                customer_id: user2.id,
-                total: 6.8,
-                status: 'valid',
-                products: [],
-            }),
+            orderRepository.saveNewOrder(user1.id, []),
+            orderRepository.saveNewOrder(user2.id, []),
         ]);
     });
 
@@ -116,7 +102,7 @@ describe('/api/orders/{id}', () => {
         }, null, { token: user1CookieToken });
 
         it('should delete a specific order', async () => {
-            const newOrder = await orderQueries.insertOne({
+            const newOrder = await orderRepository.insertOne({
                 reference: 'ref1',
                 date: new Date(),
                 customer_id: user1.id,
@@ -124,7 +110,7 @@ describe('/api/orders/{id}', () => {
                 status: 'valid',
                 products: [],
             });
-            let userOrders = await orderQueries.selectByUserId(user1.id);
+            let userOrders = await orderRepository.selectByUserId(user1.id);
             expect(userOrders.length).toEqual(2);
             const { body, statusCode } = await request({
                 method: 'DELETE',
@@ -132,7 +118,7 @@ describe('/api/orders/{id}', () => {
             }, user1Token, { token: user1CookieToken });
 
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = await orderQueries.selectByUserId(user1.id);
+            userOrders = await orderRepository.selectByUserId(user1.id);
             expect(userOrders.length).toEqual(1);
         });
     });

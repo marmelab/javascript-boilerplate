@@ -9,10 +9,10 @@ export const defaultMethods = {
     DELETE: 'managed',
 };
 
-export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
+export const pgCrudFactory = (repositoryFactory, configuredMethods = {}) => ({
     initialize: async (ctx, next) => {
         ctx.availableMethods = Object.assign({}, defaultMethods, configuredMethods);
-        ctx.queries = queriesFactory(ctx.client);
+        ctx.repository = repositoryFactory(ctx.client);
 
         await next();
     },
@@ -27,8 +27,8 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
                 other[key] = query[key];
             });
 
-            ctx.body = await ctx.queries.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
-            const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await ctx.queries.countAll()).count;
+            ctx.body = await ctx.repository.selectPage(query.limit, query.offset, query.filter, query._sort, query._sortDir, other); // eslint-disable-line no-underscore-dangle
+            const totalCount = (ctx.body[0]) ? ctx.body[0].totalcount : (await ctx.repository.countAll()).count;
             ctx.set('X-Total-Count', totalCount);
             ctx.set('Access-Control-Expose-Headers', 'X-Total-Count');
         }
@@ -41,7 +41,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     getById: async (ctx, id, next) => {
         if (ctx.availableMethods.GET) {
             try {
-                ctx.body = await ctx.queries.selectOne({ id });
+                ctx.body = await ctx.repository.selectOne({ id });
             } catch (e) {
                 if (e.message === 'not found') {
                     ctx.status = 404;
@@ -58,7 +58,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     post: async (ctx, next) => {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await ctx.queries.insertOne(data);
+            ctx.body = await ctx.repository.insertOne(data);
         }
 
         if (ctx.availableMethods.POST !== 'managed') {
@@ -69,7 +69,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     postMulti: async (ctx, next) => {
         if (ctx.availableMethods.POST) {
             const data = ctx.data || ctx.request.body;
-            ctx.body = await ctx.queries.batchInsert(data);
+            ctx.body = await ctx.repository.batchInsert(data);
         }
 
         if (ctx.availableMethods.POST !== 'managed') {
@@ -80,7 +80,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     delete: async (ctx, id, next) => {
         if (ctx.availableMethods.DELETE) {
             try {
-                ctx.body = await ctx.queries.deleteOne(id);
+                ctx.body = await ctx.repository.deleteOne(id);
             } catch (e) {
                 if (e.message === 'not found') {
                     ctx.status = 404;
@@ -98,7 +98,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     deleteMulti: async (ctx, next) => {
         if (ctx.availableMethods.DELETE) {
             const ids = ctx.query.id;
-            ctx.body = await ctx.queries.batchDelete(ids);
+            ctx.body = await ctx.repository.batchDelete(ids);
         }
         if (ctx.availableMethods.DELETE !== 'managed') {
             await next();
@@ -110,7 +110,7 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
             const data = ctx.data || ctx.request.body;
             let modifiedEntity;
             try {
-                modifiedEntity = await ctx.queries.updateOne(id, data);
+                modifiedEntity = await ctx.repository.updateOne(id, data);
             } catch (e) {
                 if (e.message === 'not found') {
                     ctx.status = 404;
@@ -128,10 +128,10 @@ export const pgCrudFactory = (queriesFactory, configuredMethods = {}) => ({
     },
 });
 
-export default (queriesFactory, configuredMethods = {}) => {
+export default (repositoryFactory, configuredMethods = {}) => {
     const app = new Koa();
 
-    const pgCrud = pgCrudFactory(queriesFactory, configuredMethods);
+    const pgCrud = pgCrudFactory(repositoryFactory, configuredMethods);
 
     app.use(pgCrud.initialize);
 

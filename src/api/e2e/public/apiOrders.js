@@ -5,8 +5,8 @@ import { PgPool } from 'co-postgres-queries';
 
 import request from '../../../common/e2e/lib/request';
 import fixturesFactory from '../../../common/e2e/lib/fixturesLoader';
-import userFactory from '../../users/userModel';
-import orderFactory from '../../orders/orderModel';
+import userRepositoryFactory from '../../users/userRepository';
+import orderRepositoryFactory from '../../orders/orderRepository';
 
 describe('/api/orders', () => {
     let user;
@@ -22,11 +22,11 @@ describe('/api/orders', () => {
         fixtureLoader = fixturesFactory(db);
 
         await fixtureLoader.loadDefaultFixtures();
-        const userRepository = userFactory(db);
+        const userRepository = userRepositoryFactory(db);
         user = await userRepository.findByEmail('user1@marmelab.io');
         userToken = await fixtureLoader.getTokenFor('user1@marmelab.io');
         userCookieToken = await fixtureLoader.getCookieTokenFor('user1@marmelab.io');
-        await orderFactory(db).insertOne({
+        await orderRepositoryFactory(db).insertOne({
             reference: 'ref1',
             date: new Date(),
             customer_id: user.id,
@@ -119,7 +119,7 @@ describe('/api/orders', () => {
         });
 
         it('should create a order', async () => {
-            let userOrders = await orderFactory(db).selectByUserId(user.id);
+            let userOrders = await orderRepositoryFactory(db).selectByUserId(user.id);
             expect(userOrders.length).toEqual(1);
             const { statusCode, body } = await request({
                 method: 'POST',
@@ -131,7 +131,7 @@ describe('/api/orders', () => {
                 },
             }, userToken, { token: userCookieToken });
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = await orderFactory(db).selectByUserId(user.id);
+            userOrders = await orderRepositoryFactory(db).selectByUserId(user.id);
             expect(userOrders.length).toEqual(2);
         });
     });

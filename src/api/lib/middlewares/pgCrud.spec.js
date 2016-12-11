@@ -5,12 +5,12 @@ import { pgCrudFactory } from './pgCrud';
 
 describe('pgCrud middleware', () => {
     describe('get', () => {
-        it('should return the correct count', async function () {
+        it('should return the correct count', async () => {
             const pgCrud = pgCrudFactory();
 
             const ctx = {
                 availableMethods: { GET: 'managed' },
-                queries: {
+                repository: {
                     selectPage: createSpy().andReturn(Promise.resolve([])),
                     countAll: createSpy().andReturn(Promise.resolve({ count: 42 })),
                 },
