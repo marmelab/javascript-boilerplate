@@ -12,24 +12,24 @@ describe('/api/products', () => {
         let db;
         let pool;
 
-        before(function* addFixtures() {
+        before(async () => {
             pool = new PgPool(config.apps.api.db);
-            db = yield pool.connect();
+            db = await pool.connect();
             fixtureLoader = fixturesFactory(db);
 
-            yield fixtureLoader.loadDefaultFixtures();
+            await fixtureLoader.loadDefaultFixtures();
         });
 
-        it('should not require authentification', function* () {
-            const { statusCode, body } = yield request({
+        it('should not require authentification', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/api/products',
             });
             expect(statusCode).toEqual(200, JSON.stringify(body));
         });
 
-        it('should return a list of all products', function* () {
-            const { body } = yield request({
+        it('should return a list of all products', async () => {
+            const { body } = await request({
                 method: 'GET',
                 url: '/api/products',
             });
@@ -76,16 +76,16 @@ describe('/api/products', () => {
             ]);
         });
 
-        after(function* removeFixtures() {
-            yield fixtureLoader.removeAllFixtures();
+        after(async () => {
+            await fixtureLoader.removeAllFixtures();
             db.release();
             pool.end();
         });
     });
 
     describe('POST', () => {
-        it('should not allow POST request', function* () {
-            const { body, statusCode } = yield request({
+        it('should not allow POST request', async () => {
+            const { body, statusCode } = await request({
                 method: 'POST',
                 url: '/api/products',
             });
@@ -94,8 +94,8 @@ describe('/api/products', () => {
     });
 
     describe('PUT', () => {
-        it('should not allow PUT request', function* () {
-            const { body, statusCode } = yield request({
+        it('should not allow PUT request', async () => {
+            const { body, statusCode } = await request({
                 method: 'PUT',
                 url: '/api/products',
             });
@@ -104,8 +104,8 @@ describe('/api/products', () => {
     });
 
     describe('DELETE', () => {
-        it('should not allow DELETE request', function* () {
-            const { body, statusCode } = yield request({
+        it('should not allow DELETE request', async () => {
+            const { body, statusCode } = await request({
                 method: 'DELETE',
                 url: '/api/products',
             });

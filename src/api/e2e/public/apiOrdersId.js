@@ -15,26 +15,27 @@ describe('/api/orders/{id}', () => {
     let db;
     let pool;
     let orderQueries;
-    let orders;
     let user1;
     let user2;
+    let orderUser1;
+    let orderUser2;
     let user1Token;
     let user1CookieToken;
 
-    before(function* addFixtures() {
+    before(async () => {
         pool = new PgPool(config.apps.api.db);
-        db = yield pool.connect();
+        db = await pool.connect();
         fixtureLoader = fixturesFactory(db);
 
-        yield fixtureLoader.loadDefaultFixtures();
+        await fixtureLoader.loadDefaultFixtures();
         const userRepository = userFactory(db);
         orderQueries = orderFactory(db);
-        user1 = yield userRepository.findByEmail('user1@marmelab.io');
-        user2 = yield userRepository.findByEmail('user2@marmelab.io');
-        user1Token = yield fixtureLoader.getTokenFor('user1@marmelab.io');
-        user1CookieToken = yield fixtureLoader.getCookieTokenFor('user1@marmelab.io');
-        orders = yield {
-            orderUser1: orderQueries.insertOne({
+        user1 = await userRepository.findByEmail('user1@marmelab.io');
+        user2 = await userRepository.findByEmail('user2@marmelab.io');
+        user1Token = await fixtureLoader.getTokenFor('user1@marmelab.io');
+        user1CookieToken = await fixtureLoader.getCookieTokenFor('user1@marmelab.io');
+        [orderUser1, orderUser2] = await Promise.all([
+            orderQueries.insertOne({
                 reference: 'ref1',
                 date: new Date(),
                 customer_id: user1.id,
@@ -42,7 +43,7 @@ describe('/api/orders/{id}', () => {
                 status: 'valid',
                 products: [],
             }),
-            orderUser2: orderQueries.insertOne({
+            orderQueries.insertOne({
                 reference: 'ref1',
                 date: new Date(),
                 customer_id: user2.id,
@@ -50,72 +51,72 @@ describe('/api/orders/{id}', () => {
                 status: 'valid',
                 products: [],
             }),
-        };
+        ]);
     });
 
     describe('GET', () => {
-        it('should require authentification', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification', async () => {
+            const { body, statusCode } = await request({
                 method: 'GET',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification without cookie token', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification without cookie token', async () => {
+            const { body, statusCode } = await request({
                 method: 'GET',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             }, user1Token);
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification with only cookie token', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification with only cookie token', async () => {
+            const { body, statusCode } = await request({
                 method: 'GET',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             }, null, { token: user1CookieToken });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should return data about a specific order', function* () {
-            const { body, statusCode } = yield request({
-                url: `/api/orders/${orders.orderUser1.id}`,
+        it('should return data about a specific order', async () => {
+            const { body, statusCode } = await request({
+                url: `/api/orders/${orderUser1.id}`,
             }, user1Token, { token: user1CookieToken });
 
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            expect(Object.assign({}, omit(body, 'date'))).toEqual(Object.assign({}, omit(orders.orderUser1, 'date')));
-            expect(new Date(body.date)).toEqual(new Date(orders.orderUser1.date));
+            expect(Object.assign({}, omit(body, 'date'))).toEqual(Object.assign({}, omit(orderUser1, 'date')));
+            expect(new Date(body.date)).toEqual(new Date(orderUser1.date));
         });
     });
 
     describe('DELETE', () => {
-        it('should require authentification', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification', async () => {
+            const { body, statusCode } = await request({
                 method: 'DELETE',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         });
 
-        it('should require authentification without cookie token', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification without cookie token', async () => {
+            const { body, statusCode } = await request({
                 method: 'DELETE',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         }, user1Token);
 
-        it('should require authentification with onlycookie token', function* () {
-            const { body, statusCode } = yield request({
+        it('should require authentification with onlycookie token', async () => {
+            const { body, statusCode } = await request({
                 method: 'DELETE',
-                url: `/api/orders/${orders.orderUser1.id}`,
+                url: `/api/orders/${orderUser1.id}`,
             });
             expect(statusCode).toEqual(401, JSON.stringify(body));
         }, null, { token: user1CookieToken });
 
-        it('should delete a specific order', function* () {
-            const newOrder = yield orderQueries.insertOne({
+        it('should delete a specific order', async () => {
+            const newOrder = await orderQueries.insertOne({
                 reference: 'ref1',
                 date: new Date(),
                 customer_id: user1.id,
@@ -123,21 +124,21 @@ describe('/api/orders/{id}', () => {
                 status: 'valid',
                 products: [],
             });
-            let userOrders = yield orderQueries.selectByUserId(user1.id);
+            let userOrders = await orderQueries.selectByUserId(user1.id);
             expect(userOrders.length).toEqual(2);
-            const { body, statusCode } = yield request({
+            const { body, statusCode } = await request({
                 method: 'DELETE',
                 url: `/api/orders/${newOrder.id}`,
             }, user1Token, { token: user1CookieToken });
 
             expect(statusCode).toEqual(200, JSON.stringify(body));
-            userOrders = yield orderQueries.selectByUserId(user1.id);
+            userOrders = await orderQueries.selectByUserId(user1.id);
             expect(userOrders.length).toEqual(1);
         });
     });
 
-    after(function* removeFixtures() {
-        yield fixtureLoader.removeAllFixtures();
+    after(async () => {
+        await fixtureLoader.removeAllFixtures();
         db.release();
         pool.end();
     });

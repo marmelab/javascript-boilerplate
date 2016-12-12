@@ -5,8 +5,8 @@ import request from '../../../common/e2e/lib/request';
 
 describe('/healthcare', () => {
     describe('GET', () => {
-        it('should return an object describing the API health', function* () {
-            const { statusCode, body } = yield request({
+        it('should return an object describing the API health', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/healthcare',
             });

@@ -5,8 +5,8 @@ import request from '../../../common/e2e/lib/request';
 
 describe('/api', () => {
     describe('GET', () => {
-        it('should not require authentification', function* () {
-            const { statusCode, body } = yield request({
+        it('should not require authentification', async () => {
+            const { statusCode, body } = await request({
                 method: 'GET',
                 url: '/api',
             });
@@ -15,8 +15,8 @@ describe('/api', () => {
     });
 
     describe('POST', () => {
-        it('should not allow POST request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow POST request', async () => {
+            const { statusCode, body } = await request({
                 method: 'POST',
                 url: '/api',
             });
@@ -25,8 +25,8 @@ describe('/api', () => {
     });
 
     describe('PUT', () => {
-        it('should not allow PUT request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow PUT request', async () => {
+            const { statusCode, body } = await request({
                 method: 'PUT',
                 url: '/api',
             });
@@ -35,8 +35,8 @@ describe('/api', () => {
     });
 
     describe('DELETE', () => {
-        it('should not allow DELETE request', function* () {
-            const { statusCode, body } = yield request({
+        it('should not allow DELETE request', async () => {
+            const { statusCode, body } = await request({
                 method: 'DELETE',
                 url: '/api',
             });
