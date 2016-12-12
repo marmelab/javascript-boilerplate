@@ -24,7 +24,7 @@ ifeq ($(NODE_ENV), development)
 endif
 
 install-npm-dependencies:
-	@echo "Installing Node dependencies for environment $(NODE_ENV)"
+	echo "Installing Node dependencies for environment $(NODE_ENV)"
 	npm install $(if $(filter production staging,$(NODE_ENV)),--production,)
 ifeq ($(NODE_ENV), development)
 	make install-selenium
@@ -146,6 +146,22 @@ log-frontend-test: ## Display the logs of the frontend with PM2 in test environm
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 logs bpm_frontend-test
 
 # Tests ========================================================================
+
+run-debug-functionnal: reset-test-database ## Run all applications in test environment
+	NODE_ENV=test ${MAKE} build-admin
+	NODE_ENV=test ${MAKE} build-frontend
+	NODE_ENV=test ${MAKE} load-fixtures
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+	echo "All apps for tests started and running"
+	echo "  API:          http://localhost:3010"
+	echo "  Frontend App: http://localhost:9080"
+	echo "  Admin app:    http://localhost:9081"
+	echo "Type 'make stop-debug-functionnal' to stop the apps"
+
+stop-debug-functionnal: ## Stop all applications in development environment
+	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
+	echo "All apps stopped"
+
 test-admin-unit: ## Run the admin application unit tests with mocha
 	NODE_ENV=test ./node_modules/.bin/mocha \
 		--require=async-to-gen/register \
@@ -153,16 +169,16 @@ test-admin-unit: ## Run the admin application unit tests with mocha
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/admin/js/**/*.spec.js"
 
-test-admin-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
-	NODE_ENV=test make build-admin
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+test-admin-functional: ## Run the frontend applications functional tests
+	NODE_ENV=test ${MAKE} build-admin
+	NODE_ENV=test ${MAKE} reset-test-database
+	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
-        --require=async-to-gen/register \
-		--compilers="js:babel-core/register" \
+		--require=reify \
+		--require=async-to-gen/register \
 		--recursive \
 		./src/admin/e2e
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
 
 test-api-unit: ## Run the API unit tests with mocha
 	NODE_ENV=test NODE_PORT=3010 ./node_modules/.bin/mocha \
@@ -189,19 +205,16 @@ test-frontend-unit: ## Run the frontend application unit tests with mocha
 		--compilers="css:./src/common/e2e/lib/webpack-null-compiler,js:babel-core/register" \
 		"./src/frontend/js/**/*.spec.js"
 
-test-frontend-functional: reset-test-database load-test-fixtures ## Run the frontend applications functional tests with nightwatch
-	NODE_ENV=test make build-frontend
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 start ./config/pm2_servers/test.json
+test-frontend-functional: ## Run the frontend applications functional tests
+	NODE_ENV=test ${MAKE} build-frontend
+	NODE_ENV=test ${MAKE} reset-test-database
+	NODE_ENV=test ${MAKE} load-fixtures
 	NODE_ENV=test SELENIUM_BROWSER_BINARY_PATH="./node_modules/selenium-standalone/.selenium/chromedriver/2.24-x64-chromedriver" \
 		./node_modules/.bin/mocha \
+		--require=reify \
 		--require=async-to-gen/register \
-		--compilers="js:babel-core/register" \
 		--recursive \
 		./src/frontend/e2e
-	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 delete ./config/pm2_servers/test.json
-
-load-test-fixtures: ## Initialize the test database with fixtures
-	NODE_ENV=test ./node_modules/.bin/babel-node ./bin/loadFixtures.js
 
 test: ## Run all tests
 	-cp -n ./config/test-dist.js ./config/test.js
