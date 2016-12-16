@@ -9,12 +9,12 @@ export const hashUserPassword = user => Object.assign({}, user, {
 
 export const insertOne = userClient =>
     async (user, isWhitelisted) =>
-        await userClient.insertOne(hashUserPassword(user), isWhitelisted);
+        userClient.insertOne(hashUserPassword(user), isWhitelisted);
 
 export const batchInsert = userClient =>
     async (users) => {
         const preparedUsers = users.map(hashUserPassword);
-        return await userClient.batchInsert(preparedUsers);
+        return userClient.batchInsert(preparedUsers);
     };
 
 export const findByEmail = userClient =>

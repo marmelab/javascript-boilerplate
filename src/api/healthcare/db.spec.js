@@ -4,7 +4,7 @@ import dbCheck from './db';
 
 describe('Healthcare', () => {
     describe('DB', () => {
-        it('should call dbClientFactory with correct config', async function () {
+        it('should call dbClientFactory with correct config', async () => {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve({ rows: [] })),
             });
@@ -16,7 +16,7 @@ describe('Healthcare', () => {
             expect(dbClientFactory).toHaveBeenCalledWith({ foo: 'foo' });
         });
 
-        it('should return a valid result when db query response is ok', async function () {
+        it('should return a valid result when db query response is ok', async () => {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve(['valid response'])),
             });
@@ -27,7 +27,7 @@ describe('Healthcare', () => {
             expect(result).toEqual(true);
         });
 
-        it('should return an invalid result when db client factory fail', async function () {
+        it('should return an invalid result when db client factory fail', async () => {
             const dbClientFactory = createSpy().andThrow();
 
             const result = await dbCheck({
@@ -36,7 +36,7 @@ describe('Healthcare', () => {
             expect(result).toEqual(false);
         });
 
-        it('should return an invalid result when db client query fail', async function () {
+        it('should return an invalid result when db client query fail', async () => {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.reject()),
             });
@@ -47,7 +47,7 @@ describe('Healthcare', () => {
             expect(result).toEqual(false);
         });
 
-        it('should return an invalid result when db query does not return rows', async function () {
+        it('should return an invalid result when db query does not return rows', async () => {
             const dbClientFactory = createSpy().andReturn({
                 query: createSpy().andReturn(Promise.resolve([])),
             });

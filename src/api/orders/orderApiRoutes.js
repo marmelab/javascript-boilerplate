@@ -28,7 +28,7 @@ export const postOrder = async (ctx) => {
     const saveNewOrder = saveNewOrderFactory(
         orderRepositoryFactory(ctx.client),
         userRepositoryFactory(ctx.client),
-        sendEmails
+        sendEmails,
     );
 
     ctx.body = await saveNewOrder(ctx.user.id, ctx.request.body.products);

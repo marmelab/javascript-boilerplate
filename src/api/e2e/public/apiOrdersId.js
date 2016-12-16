@@ -18,7 +18,7 @@ describe('/api/orders/{id}', () => {
     let user1;
     let user2;
     let orderUser1;
-    let orderUser2;
+    let orderUser2; // eslint-disable-line
     let user1Token;
     let user1CookieToken;
 
