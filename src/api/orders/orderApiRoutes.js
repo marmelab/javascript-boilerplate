@@ -24,8 +24,8 @@ app.use(methodFilter(['GET', 'POST', 'DELETE']));
 
 app.use(tokenCheckerMiddleware);
 
-export const postOrder = async (ctx) => {
-    const saveNewOrder = saveNewOrderFactory(
+export const postOrder = saveNewOrderFactoryImpl => async (ctx) => {
+    const saveNewOrder = saveNewOrderFactoryImpl(
         orderRepositoryFactory(ctx.client),
         userRepositoryFactory(ctx.client),
         sendEmails,
@@ -34,13 +34,13 @@ export const postOrder = async (ctx) => {
     ctx.body = await saveNewOrder(ctx.user.id, ctx.request.body.products);
 };
 
-export const getOrdersForUser = async (ctx) => {
-    ctx.body = await orderRepositoryFactory(ctx.client).selectByUserId(ctx.user.id);
+export const getOrdersForUser = orderRepositoryFactoryimpl => async (ctx) => {
+    ctx.body = await orderRepositoryFactoryimpl(ctx.client).selectByUserId(ctx.user.id);
 };
 
-app.use(koaRoute.post('/', postOrder));
+app.use(koaRoute.post('/', postOrder(saveNewOrderFactory)));
 
-app.use(koaRoute.get('/', getOrdersForUser));
+app.use(koaRoute.get('/', getOrdersForUser(orderRepositoryFactory)));
 
 app.use(koaMount('/', crud(orderRepositoryFactory, {
     GET: 'managed',
