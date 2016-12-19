@@ -111,7 +111,7 @@ restart-frontend-dev: ## Restart the frontend in development environment
 	echo "Webpack dev restarted"
 
 run-api: ## Starts the API (you may define the NODE_ENV)
-	node ./src/api/index.js
+	node --require reify --require async-to-gen/register ./src/api/index.js
 
 servers-monitoring: ## Get an overview of your processes with PM2
 	PM2_HOME=$(PM2_HOME) node_modules/.bin/pm2 monit

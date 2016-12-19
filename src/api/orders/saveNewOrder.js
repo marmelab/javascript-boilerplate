@@ -5,10 +5,7 @@ export default (orderRepository, userRepository, sendEmails) => async (customerI
     const customer = await userRepository.selectOneById(customerId);
 
     // Don't wait for the email promise to resolve so that we return the new order asap
-    sendEmails(prepareNewOrderMail(
-        customer,
-        newOrder,
-    ));
+    sendEmails(prepareNewOrderMail(customer, newOrder));
 
     return newOrder;
 };
