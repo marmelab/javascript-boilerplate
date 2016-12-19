@@ -15,7 +15,6 @@ export default {
     },
     entry: {
         index: [
-            'babel-polyfill',
             resolve(__dirname, './js/main.js'),
             resolve(__dirname, './css/main.scss'),
         ],
