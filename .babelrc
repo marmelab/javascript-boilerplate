@@ -1,13 +1,75 @@
 {
     "presets": [
-        "es2015",
-        "react",
-        "stage-1",
+        ["env", {
+            "targets": {
+                "node": "current"
+            },
+            "include": ["transform-es2015-spread"],
+            "useBuiltIns": true
+        }]
     ],
-    "plugins": [
-        ["transform-runtime", {
-            "polyfill": false,
-            "regenerator": true,
-        }],
-    ],
+    "plugins": ["transform-object-rest-spread"],
+    "env": {
+        "browser-development": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions", "safari 7"]
+                    },
+                    "useBuiltIns": true
+                }],
+                "react",
+                "react-hmre",
+            ],
+            "plugins": [
+                "transform-class-properties",
+                "transform-object-rest-spread"
+            ],
+        },
+        "browser-production": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions", "safari 7"]
+                    },
+                    "useBuiltIns": true
+                }],
+                "react",
+            ],
+            "plugins": [
+                "transform-class-properties",
+                "transform-object-rest-spread"
+            ],
+        },
+        "browser-staging": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions", "safari 7"]
+                    },
+                    "useBuiltIns": true
+                }],
+                "react",
+            ],
+            "plugins": [
+                "transform-class-properties",
+                "transform-object-rest-spread"
+            ],
+        },
+        "browser-test": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions", "safari 7"]
+                    },
+                    "useBuiltIns": true
+                }],
+                "react",
+            ],
+            "plugins": [
+                "transform-class-properties",
+                "transform-object-rest-spread"
+            ],
+        }
+    }
 }

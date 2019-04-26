@@ -21,8 +21,4 @@ describe('Products', function () {
         expect(await driver.findElement(By.css('.description')).getText()).toEqual('John the zoo');
         expect(await driver.findElement(By.css('.price')).getText()).toEqual('Price: $3.40');
     });
-
-    after(() => {
-        driver.quit();
-    });
 });

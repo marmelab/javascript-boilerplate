@@ -1,5 +1,4 @@
-/* global angular APP_NAME ADMIN_API_URL */
-/* eslint max-len: off */
+import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 
