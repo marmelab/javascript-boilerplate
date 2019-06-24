@@ -14,7 +14,7 @@ import {
 } from './actions';
 
 describe('userSagas', () => {
-    const fetchSaga = function* () { return; };
+    const fetchSaga = () => Promise.resolve();
 
     describe('signIn', () => {
         const storeLocalUser = createSpy();

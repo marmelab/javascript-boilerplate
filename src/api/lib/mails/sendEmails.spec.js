@@ -19,7 +19,7 @@ describe('Mails sendEmails', () => {
         expect(sendEmailsFactory).toThrow('Invalid transporter');
     });
 
-    it('should send correct emails', async function () {
+    it('should send correct emails', async () => {
         const sendEmails = sendEmailsFactory(transporter, defaultOptions);
         const emails = await sendEmails([{
             subject: 'Mail 1',

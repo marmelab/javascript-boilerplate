@@ -18,7 +18,7 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
         cleanedEmail.html = cleanedEmail.body;
         delete cleanedEmail.body;
 
-        return await transporter.sendMailPromise(cleanedEmail);
+        return transporter.sendMailPromise(cleanedEmail);
     };
 
     /**
@@ -28,6 +28,6 @@ export default function sendEmailsFactory(transporter, defaultOptions = {}) {
     return async (emails) => {
         const emailsToSend = (Array.isArray(emails)) ? emails : [emails];
 
-        return await Promise.all(emailsToSend.map(wrapMail));
+        return Promise.all(emailsToSend.map(wrapMail));
     };
 }

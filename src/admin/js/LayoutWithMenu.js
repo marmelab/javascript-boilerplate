@@ -48,5 +48,5 @@ const mapDispatchToProps = ({ signOut: signOutAction.request });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayoutWithMenu);

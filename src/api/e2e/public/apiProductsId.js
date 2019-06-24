@@ -69,6 +69,7 @@ describe('/api/products/{id}', () => {
             expect(statusCode).toEqual(405, JSON.stringify(body));
         });
     });
+
     after(async () => {
         await fixtureLoader.removeAllFixtures();
         db.release();

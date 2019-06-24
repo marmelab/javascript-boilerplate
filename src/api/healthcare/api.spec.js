@@ -4,7 +4,7 @@ import apiCheck from './api';
 
 describe('Healthcare', () => {
     describe('API', () => {
-        it('should call fetch with url from config', async function () {
+        it('should call fetch with url from config', async () => {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
             await apiCheck({
@@ -17,7 +17,7 @@ describe('Healthcare', () => {
             });
         });
 
-        it('should return a valid result when api response is ok', async function () {
+        it('should return a valid result when api response is ok', async () => {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 200 }));
 
             const result = await apiCheck({
@@ -28,7 +28,7 @@ describe('Healthcare', () => {
             expect(result).toEqual(true);
         });
 
-        it('should return an invalid result when api response is not ok', async function () {
+        it('should return an invalid result when api response is not ok', async () => {
             const fetch = createSpy().andReturn(Promise.resolve({ status: 500, statusText: 'foo' }));
 
             const result = await apiCheck({

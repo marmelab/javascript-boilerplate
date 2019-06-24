@@ -1,9 +1,7 @@
-/* eslint func-names:0 */
-
 import expect from 'expect';
-import userModel from './userModel';
+import userRepository from './userRepository';
 
-describe('User Model', () => {
+describe('User repository', () => {
     let client;
 
     beforeEach(() => {
@@ -12,15 +10,15 @@ describe('User Model', () => {
     });
 
     it('should show basic infos', () => {
-        expect(userModel.queries.selectOne.table()).toEqual('user_account');
-        expect(userModel.queries.selectOne.returnFields()).toEqual([
+        expect(userRepository.queries.selectOne.table()).toEqual('user_account');
+        expect(userRepository.queries.selectOne.returnFields()).toEqual([
             'id',
             'email',
             'password',
         ]);
     });
 
-    it('should correctly retrieve user by email', async function () {
+    it('should correctly retrieve user by email', async () => {
         client = {
             link: () => ({
                 findByEmail: (email) => {
@@ -31,7 +29,7 @@ describe('User Model', () => {
             }),
         };
 
-        const res = await userModel(client).findByEmail('email@example.org');
+        const res = await userRepository(client).findByEmail('email@example.org');
         expect(res).toEqual({ id: 42, email: 'email@example.org' });
     });
 });

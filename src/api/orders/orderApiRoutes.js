@@ -3,17 +3,16 @@ import config from 'config';
 import Koa from 'koa';
 import koaMount from 'koa-mount';
 import koaRoute from 'koa-route';
-import uuid from 'uuid';
 
 import crud from '../lib/middlewares/pgCrud';
 import methodFilter from '../lib/middlewares/methodFilter';
-import orderFactory, { OrderStatus } from './orderModel';
-import prepareNewOrderMail from './mails/newOrderMail';
-import productFactory from '../products/productModel';
+import orderRepositoryFactory from './orderRepository';
+import userRepositoryFactory from '../users/userRepository';
+import saveNewOrderFactory from './saveNewOrder';
+
 import sendEmailsFactory from '../lib/mails/sendEmails';
 import tokenCheckerMiddleware from '../lib/middlewares/tokenChecker';
 import transporterFactory from '../lib/mails/transporter';
-import userFactory from '../users/userModel';
 
 const mailConfig = config.apps.api.mails;
 const transporter = transporterFactory(mailConfig.transporter);
@@ -25,56 +24,26 @@ app.use(methodFilter(['GET', 'POST', 'DELETE']));
 
 app.use(tokenCheckerMiddleware);
 
-app.use(async (ctx, next) => {
-    ctx.userData = await userFactory(ctx.client).findByEmail(ctx.user.email);
+export const postOrder = saveNewOrderFactoryImpl => async (ctx) => {
+    const saveNewOrder = saveNewOrderFactoryImpl(
+        orderRepositoryFactory(ctx.client),
+        userRepositoryFactory(ctx.client),
+        sendEmails
+    );
 
-    await next();
-});
-
-app.use(async (ctx, next) => {
-    ctx.orderQueries = orderFactory(ctx.client);
-    ctx.productQueries = productFactory(ctx.client);
-
-    await next();
-});
-
-const sanitizeProduct = async (p, productQueries) => {
-    const product = await productQueries.selectOneById({ id: p.id });
-    return Object.assign({}, p, product);
+    ctx.body = await saveNewOrder(ctx.user.id, ctx.request.body.products);
 };
 
-app.use(koaRoute.post('/', async (ctx, next) => {
-    const orderData = ctx.request.body;
+export const getOrdersForUser = orderRepositoryFactoryimpl => async (ctx) => {
+    ctx.body = await orderRepositoryFactoryimpl(ctx.client).selectByUserId(ctx.user.id);
+};
 
-    const products = await Promise.all(orderData.products.map(p => sanitizeProduct(p, ctx.productQueries)));
-    const total = products.reduce((t, p) => t + (p.price * (p.quantity || 1)), 0);
+app.use(koaRoute.post('/', postOrder(saveNewOrderFactory)));
 
-    ctx.data = {
-        customer_id: ctx.userData.id,
-        date: new Date(),
-        products,
-        reference: uuid.v1(),
-        status: OrderStatus.pending,
-        total,
-    };
+app.use(koaRoute.get('/', getOrdersForUser(orderRepositoryFactory)));
 
-    await next();
-
-    await sendEmails(prepareNewOrderMail(
-        ctx.userData,
-        ctx.data
-    ));
-}));
-
-app.use(koaRoute.get('/', async (ctx) => {
-    ctx.body = await ctx.orderQueries.selectByUserId(ctx.userData.id);
-}));
-
-app.use(koaMount('/', crud(orderFactory, {
+app.use(koaMount('/', crud(orderRepositoryFactory, {
     GET: 'managed',
-    PUT: false,
-    POST: 'managed',
-    DELETE: 'managed',
 })));
 
 export default app;

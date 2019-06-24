@@ -9,7 +9,7 @@ export const OrderStatus = {
 function orderProductModel(client) {
     const orderProductModelClient = client.link(orderProductModel.queries);
 
-    const selectByOrderId = orderId => orderProductModelClient.selectPage(1, 0, { orderId });
+    const selectByOrderId = orderId => orderProductModelClient.selectByOrderId(1, 0, { orderId });
 
     return Object.assign({}, orderProductModelClient, {
         selectByOrderId,

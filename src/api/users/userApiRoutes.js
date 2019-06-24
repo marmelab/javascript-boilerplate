@@ -1,4 +1,4 @@
-import User from './userModel';
+import userRepositoryFactory from './userRepository';
 import crud from '../lib/middlewares/pgCrud';
 
-export default crud(User, ['GET']);
+export default crud(userRepositoryFactory, ['GET']);

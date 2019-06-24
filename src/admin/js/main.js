@@ -7,5 +7,5 @@ import Admin from './Admin';
 
 render(
     <Admin />,
-    document.getElementById('root')
+    document.getElementById('root'),
 );
